@@ -500,7 +500,7 @@ function build(p, days, magic, nr, hc, feed){
   /* premios ganhos (so conta depois do inicio) */
   m.earned = [];
   if (S.live && (m.res || m.desk)){
-    m.months.forEach(function(x){ if (x.ym >= S.liveFrom.slice(0, 7) && lookKeys(m, x.ym).n >= KEYS) m.earned.push({ key: 'look-' + x.ym + '-' + p.person, reason: '🔑 ' + KEYS + ' keys · ' + mName(x.ym), size: 'M', prize: lookGift(x.ym) }); });
+    m.months.forEach(function(x){ if (x.ym >= S.liveFrom.slice(0, 7) && lookKeys(m, x.ym).n >= keysNeed(x.ym)) m.earned.push({ key: 'look-' + x.ym + '-' + p.person, reason: '🔑 ' + keysNeed(x.ym) + ' keys · ' + mName(x.ym), size: 'M', prize: lookGift(x.ym) }); });
     m.pits.forEach(function(x){ if (x.st === 'done') m.earned.push({ key: 'pit-' + x.id, reason: '🔧 Pit stop finished', size: 'S' }); });
     S.levelups.forEach(function(x){ if (x.person === p.person) m.earned.push({ key: 'level-' + x.level + '-' + p.person, reason: '🔓 ' + ((L[x.level - 1] || {}).name || 'New level'), size: 'L' }); });
   } else if (S.live){
@@ -643,6 +643,8 @@ function lookGift(ym){ return ((S.set.look_gift || {})[ym]) || ''; }
 /* chaves: cada semana com o look impecavel em todos os dias trabalhados = 1 chave. 4 chaves abrem o bau do mes.
    Semana que nao fecha nao da chave, mas chave ganha nunca se perde. */
 var KEYS = 4;
+/* Ligia 22/10: "se o mes tem 5 semanas, poe 5 chaves": uma chave por semana do mes (semana que tem dia de salao, ter a sab, dentro do mes) */
+function keysNeed(ym){ var d = new Date(ym + '-01T12:00:00Z'), seen = {}, n = 0; while (d.toISOString().slice(0, 7) === ym){ var wd = d.getUTCDay(); if (wd >= 2 && wd <= 6){ var mon = new Date(d); mon.setUTCDate(d.getUTCDate() - ((wd + 6) % 7)); var k = mon.toISOString().slice(0, 10); if (!seen[k]){ seen[k] = 1; n++; } } d.setUTCDate(d.getUTCDate() + 1); } return n || KEYS; }
 function lookKeys(m, ym){
   var wk = {}; m.days.forEach(function(d){ if (d.d.slice(0, 7) !== ym || !d.w) return; var dt = new Date(d.d + 'T12:00:00Z'), mon = new Date(dt); mon.setUTCDate(dt.getUTCDate() - ((dt.getUTCDay() + 6) % 7));
     var k = mon.toISOString().slice(0, 10), w = wk[k] || (wk[k] = { n: 0, ok: 0, last: d.d }); w.n++; if (d.look) w.ok++; if (d.d > w.last) w.last = d.d; });
@@ -650,9 +652,9 @@ function lookKeys(m, ym){
   return { list: ks, n: ks.filter(function(x){ return x === 'key'; }).length };
 }
 function lookStrip(m){
-  var ym = TODAY.slice(0, 7), g = lookGift(ym), k = lookKeys(m, ym), done = k.n >= KEYS;
-  var slots = []; for (var i = 0; i < Math.max(KEYS, k.list.length); i++){ var st = k.list[i] || 'open'; slots.push('<i class="ky ' + st + '">' + (st === 'key' ? '🔑' : st === 'miss' ? '·' : '') + '</i>'); }
-  return '<div class="lookgift' + (done ? ' ok' : '') + '"><span>🎁 ' + (g ? e(g) : 'This month\'s make-up gift') + '</span><span class="kys">' + slots.join('') + '</span><b>' + (done ? 'Chest unlocked ✨' : k.n + ' / ' + KEYS + ' keys') + '</b></div>';
+  var ym = TODAY.slice(0, 7), g = lookGift(ym), k = lookKeys(m, ym), NK = keysNeed(ym), done = k.n >= NK;
+  var slots = []; for (var i = 0; i < Math.max(NK, k.list.length); i++){ var st = k.list[i] || 'open'; slots.push('<i class="ky ' + st + '">' + (st === 'key' ? '🔑' : st === 'miss' ? '·' : '') + '</i>'); }
+  return '<div class="lookgift' + (done ? ' ok' : '') + '"><span>🎁 ' + (g ? e(g) : 'This month\'s make-up gift') + '</span><span class="kys">' + slots.join('') + '</span><b>' + (done ? 'Chest unlocked ✨' : k.n + ' / ' + NK + ' keys') + '</b></div>';
 }
 function stdCheck(m){
   var tm = m.thisMonth, cl = 0, co = 0;
