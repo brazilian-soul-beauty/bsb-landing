@@ -136,8 +136,8 @@ input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);b
 .mimg{width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(120,80,40,.3))}
 .mc:not(.done) .mimg{filter:grayscale(.15) drop-shadow(0 6px 10px rgba(120,80,40,.25))}
 @media (max-width:760px){.mimg{width:40px;height:40px}}
-.mapc{padding:0;overflow:hidden;aspect-ratio:2.416;flex:none;max-height:330px;position:relative;background:#FBF7F3}
-.mapin{position:absolute;inset:0;margin:0 auto;aspect-ratio:2.416;max-width:100%;background:url(medals/map_full.webp) center/100% 100% no-repeat}
+.mapc{padding:0;overflow:hidden;aspect-ratio:2.416;flex:none;max-height:min(44vh,420px);position:relative;background:#FBF7F3}
+.mapin{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);height:100%;aspect-ratio:2.416;max-width:100%;background:url(medals/map_full.webp) center/100% 100% no-repeat;z-index:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}.mapc::before{content:'';position:absolute;inset:-30px;background:url(medals/map_full.webp) center/cover no-repeat;filter:blur(22px) saturate(1.1);opacity:.85}.mapc::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(251,247,243,.55),rgba(251,247,243,0) 25%,rgba(251,247,243,0) 75%,rgba(251,247,243,.55))}
 @supports not (aspect-ratio:1){.mapc{height:300px}}
 .pin{position:absolute;transform:translate(-50%,-78%);display:flex;flex-direction:column;align-items:center;gap:4px}
 .pin .lk{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 14px rgba(120,80,40,.35)}
@@ -330,7 +330,7 @@ var DREAM = { master: { ic: '💎', name: 'Master', sub: 'the top specialist' },
 function dreamOf(p){ return DREAM[p && p.dream] || { ic: '🌟', name: 'My dream', sub: 'you choose it with Ligia' }; }
 /* pay_from: quem ainda nao entra no dinheiro (Joana pelo contrato, Sana depois de 2028) ve o caminho sem £ */
 function gbp(p, v){ if (!v || (S.role !== 'admin' && !S.set.show_pay) || (p && p.pay_from && p.pay_from > TODAY)) return ''; return '+£' + Number(v).toFixed(2) + '/h'; }
-var AV = { Michelle: 'avatars/michelle.webp', Dania: 'avatars/dania.webp', Anukis: 'avatars/anukis.webp', Aluana: 'avatars/aluana.webp', Ligia: 'avatars/ligia.webp', Joana: 'avatars/joana.webp' };
+var AV = { Michelle: 'avatars/michelle.webp', Dania: 'avatars/dania.webp', Anukis: 'avatars/anukis.webp', Aluana: 'avatars/aluana.webp', Ligia: 'avatars/ligia.webp', Joana: 'avatars/joana.webp', Sana: 'avatars/sana.webp' };
 function av(name, size){ var f = AV[name]; return f ? '<img class="av" src="' + f + '" style="width:' + size + 'px;height:' + size + 'px" alt="">' : '<span class="av ini" style="width:' + size + 'px;height:' + size + 'px;font-size:' + Math.round(size / 2.4) + 'px">' + e(String(name || '?')[0]) + '</span>'; }
 var MOT = { progress: '🚀 Progress', stability: '🏛 Stability', reference: '🎓 Reference' };
 
