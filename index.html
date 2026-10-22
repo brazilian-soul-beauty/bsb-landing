@@ -363,7 +363,7 @@ var DREAM = { master: { ic: '💎', name: 'Master', sub: 'the top specialist' },
 function dreamOf(p){ return DREAM[p && p.dream] || { ic: '🌟', name: 'My dream', sub: 'you choose it with Ligia' }; }
 /* pay_from: quem ainda nao entra no dinheiro (Joana pelo contrato, Sana depois de 2028) ve o caminho sem £ */
 function gbp(p, v){ if (!v || (S.role !== 'admin' && !S.set.show_pay) || (p && p.pay_from && p.pay_from > TODAY)) return ''; return '+£' + Number(v).toFixed(2) + '/h'; }
-var AV = { Michelle: 'avatars/michelle.webp', Dania: 'avatars/dania.webp', Anukis: 'avatars/anukis.webp', Aluana: 'avatars/aluana.webp', Ligia: 'avatars/ligia.webp', Joana: 'avatars/joana.webp', Sana: 'avatars/sana.webp' };
+var AV = { Michelle: 'avatars/michelle.webp', Dania: 'avatars/dania.webp', Anukis: 'avatars/anukis.webp', Aluana: 'avatars/aluana.webp', Ligia: 'avatars/ligia.webp', Joana: 'avatars/joana.webp?v=2', Sana: 'avatars/sana.webp' };
 function av(name, size){ var f = AV[name]; return f ? '<img class="av" src="' + f + '" style="width:' + size + 'px;height:' + size + 'px" alt="">' : '<span class="av ini" style="width:' + size + 'px;height:' + size + 'px;font-size:' + Math.round(size / 2.4) + 'px">' + e(String(name || '?')[0]) + '</span>'; }
 var MOT = { progress: '🚀 Progress', stability: '🏛 Stability', reference: '🎓 Reference' };
 
