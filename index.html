@@ -730,9 +730,7 @@ function pgBonus(m){
   if (m.hc) X = X.filter(function(x){ return x.ic !== '🧴'; });
   /* Ligia 22/10: a Joana nao vende homecare; o extra dela e drink pago e membership (toda membership nova do salao conta) */
   if (m.desk){ var db = m.db || { drinks_n: 0, drinks_gbp: 0, members: 0 }, dp = +S.set.desk_drink_pct || 10, mg = +S.set.desk_member_gbp || 10;
-    X = [ { ic:'🥂', t:'Paid drinks', v: '£' + (db.drinks_gbp * dp / 100).toFixed(2), u: Math.round(db.drinks_n) + ' drinks · £' + Math.round(db.drinks_gbp) + ' sold', how: dp + '% of every paid drink' },
-          { ic:'💎', t:'Memberships', v: '£' + (db.members * mg), u: db.members + ' new member' + (db.members === 1 ? '' : 's') + ' this month', how: '£' + mg + ' for each new member' },
-          X[0], X[2] ]; }
+    X = [ X[0], X[2] ]; }   /* Ligia 22/10: drinks e membership viram comissao so quando ela for Manager (aparecem no My path) */
   var xCard = function(x){ return '<div class="card grow"><div class="h">' + x.ic + ' ' + x.t + '</div><div class="big">' + x.v + '</div><div class="mut" style="font-weight:700">' + x.u + '</div><div class="chip" style="margin-top:10px;display:inline-block">' + x.how + '</div></div>'; };
   var surp = '<div class="card grow" style="flex:2;min-height:0"><div class="h">🎁 My surprises</div>' + (boxes.length ? '<div class="boxes">' + boxes.slice(0, m.hc ? 3 : 6).map(function(b){
       var st = b.status === 'opened' || b.status === 'given' ? 'open' : b.status === 'ready' ? 'ready' : 'wait';
@@ -973,7 +971,10 @@ function pgPath(m){
       line(cert >= NM, '💜 Experience Leader', cert >= NM ? '✓ ready' : 'the next step') +
       line(cert >= NM, '📚 My study', cert + ' / ' + NM + ' modules') + bar(cert, NM, cert >= NM ? 'var(--grn)' : '') +
       (curN ? line(curS === 'practising', '📖 Now', 'Module ' + curN + ' · ' + SL[curS]) : '') +
-      line(false, '🏆 Manager', 'after Experience Leader') +
+      /* Ligia 22/10: membership nao paga agora; mostra que ela lidera a experiencia. Comissao so quando for Manager */
+      line((m.db || {}).drinks_gbp > 0, '🥂 Paid drinks', '£' + Math.round((m.db || {}).drinks_gbp || 0) + ' this month') +
+      line((m.db || {}).members > 0, '💎 Memberships', ((m.db || {}).members || 0) + ' this month') +
+      line(false, '🏆 Manager', '🔓 commission on drinks + memberships') +
       '<a class="btn" style="margin-top:14px;display:inline-block;text-decoration:none" href="https://bsb-joana-path.vercel.app" target="_blank">📚 Open my study</a></div>';
     road = road2;
   }
