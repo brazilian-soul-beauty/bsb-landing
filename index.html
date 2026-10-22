@@ -272,6 +272,11 @@ input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);b
 .blk .bw{font-size:18px;font-weight:800}.blk.g .bw{color:var(--grn)}.blk.y .bw{color:#B07F17}
 .blk .bs{font-size:14px;font-weight:600;color:var(--mut)}.blk .bt{margin-top:6px;font-size:13px;font-weight:800;color:var(--pur)}
 @media(max-width:700px){.blks{grid-template-columns:1fr}.blk .bv{font-size:40px}}
+.blks.five{grid-template-columns:repeat(6,1fr)}.blks.five .blk{grid-column:span 2}.blks.five .blk:nth-child(-n+2){grid-column:span 3}
+.blks.five .blk .bv{font-size:44px}
+.blk .up{color:var(--grn);font-weight:800}.blk .dn{color:#B07F17;font-weight:800}
+.nudge{background:linear-gradient(90deg,var(--pur2),#FFF0F6);border-radius:16px;padding:16px 22px;font-size:20px;font-weight:800;color:var(--pur)}
+@media(max-width:700px){.blks.five{grid-template-columns:1fr}.blks.five .blk,.blks.five .blk:nth-child(-n+2){grid-column:auto}}
 </style>
 <style>/*ANIM-GAME 22/10: bau abre como jogo, chave nova pulsa, numeros sobem*/
 @keyframes shake{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-8deg) scale(1.05)}30%{transform:rotate(8deg) scale(1.08)}45%{transform:rotate(-10deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.12)}75%{transform:rotate(-6deg) scale(1.1)}}
@@ -392,7 +397,8 @@ function loadModel(name){
   if (pp && pp.role === 'desk'){
     var bTo = addDays((S.liveFrom < TODAY ? S.liveFrom : TODAY), -1), bFrom = addDays(bTo, -183);
     return Promise.all([rpc('bsb_sp_desk_days', { p_person: name, p_from: fr, p_to: TODAY }), rpc('bsb_sp_desk_days', { p_person: name, p_from: bFrom, p_to: bTo }).catch(function(){ return []; })]).then(function(r){
-      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); S.M[name] = m; return Promise.all([tipsP, rpc('bsb_sp_desk_bonus', { p_from: TODAY.slice(0, 7) + '-01' }).then(function(b){ m.db = (b || []).filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || null; }).catch(function(){}),
+      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); m.base = r[1] || []; S.M[name] = m; return Promise.all([tipsP,
+      rpc('bsb_sp_desk_bookings', { p_from: addDays(TODAY, -100).slice(0, 7) + '-01' }).then(function(b){ m.bk = {}; (b || []).forEach(function(x){ m.bk[String(x.d)] = x.n; }); }).catch(function(){ m.bk = null; }), rpc('bsb_sp_desk_bonus', { p_from: TODAY.slice(0, 7) + '-01' }).then(function(b){ m.db = (b || []).filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || null; }).catch(function(){}),
       /* Ligia 22/10: o estudo dela (Joana · My Path, bsb_lab career_joana) aparece aqui, e a Ligia ve onde ela esta */
       get('bsb_lab?select=content,updated_at&id=eq.career_' + name.toLowerCase()).then(function(r){ try { m.study = JSON.parse((r[0] || {}).content || '{}'); m.study.at = (r[0] || {}).updated_at; } catch (x) { m.study = null; } }).catch(function(){})]).then(function(){ return m; }); });
   }
@@ -641,7 +647,6 @@ function pgTodayDesk(m){
   var lst = !look.make || !look.hair || !look.uniform ? lkWait()
     : '<span class="chip g">✓ Checked in</span>';
   var rows = [
-    { ic:'⏰', t:'On time', ok: tm.known && !tm.late, v: !tm.known ? '·' : tm.late ? tm.late + ' late' : '✓' },
     { ic:'👋', t:'Welcome', ok: t.clients && t.pe >= t.clients, v: t.pe + ' / ' + t.clients },
     { ic:'🥂', t:'Drink', ok: t.clients && t.co >= t.clients, v: t.co + ' / ' + t.clients },
     { ic:'📅', t:'Next visit offered', ok: t.clients && t.pr >= t.clients, v: t.pr + ' / ' + t.clients }
@@ -664,10 +669,10 @@ function pgTodayDesk(m){
       '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
     homeOrDetail(m, {
       res: '<div class="mis" style="grid-template-columns:1fr 1fr">' + r2 + r1 + '</div>',
-      care: '<div class="mis">' + stdCard + '</div>',
+      care: '<div class="mis" style="grid-template-columns:1fr">' + stdCard + '</div>',
       basics: '<div class="card rise"><div class="h">💄 My look today</div><div class="look">' + lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
         '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + basicsRows(m),
-      resV: tm.reviews || 0, resUp: up1 || up2, resWord: up2 ? 'More than usual' : up1 ? '📅 Bookings up ▲' : 'Keep going', resSub: 'you usually get ' + Math.round(m.aRev5) + ' · 📅 ' + (tm.rate || 0) + '% booked next visit', resT: '5★ reviews'
+      resV: tm.reviews || 0, resUp: up2, resWord: up2 ? 'More than usual' : 'Keep going', resSub: 'you usually get ' + Math.round(m.aRev5) + ' · 📅 ' + (tm.rate || 0) + '% booked next visit', resSub2: '📅 ' + (tm.rate || 0) + '% booked next visit', resT: '5★ reviews'
     });
 }
 
@@ -682,22 +687,55 @@ function careMonth(m){
   m.days.forEach(function(d){ if (d.d.slice(0, 7) !== ym) return; if (m.desk){ c += 3 * d.clients; a += d.pe + d.co + d.pr; } else { c += d.clients; a += d.co; } });
   return c ? Math.round(a * 100 / c) : null;
 }
+/* Ligia 22/10: comparar com o mes passado ATE O MESMO DIA (justo) + um empurrao quando ela toca */
+function prevYm(ym){ var d = new Date(ym + '-15T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() - 1); return d.toISOString().slice(0, 7); }
+function dom(){ return +TODAY.slice(8, 10); }
+function inWin(ds, ym){ return String(ds).slice(0, 7) === ym && +String(ds).slice(8, 10) <= dom(); }
+function cmpTxt(cur, prv, ym, unit){ if (prv == null) return ''; var d = cur - prv, mn = mName(prevYm(ym)), u = unit || '';
+  if (d > 0) return '<span class="up">▲ ' + (u === '£' ? '£' + d : d) + ' vs ' + mn + '</span>';
+  if (d < 0) return '<span class="dn">▼ ' + (u === '£' ? '£' + (-d) : -d) + ' vs ' + mn + '</span>';
+  return '<span class="mut">= ' + mn + '</span>'; }
 function homeOrDetail(m, P){
-  var D = { res: '⭐ Results', care: '💛 Client care', basics: '🧱 My basics' };
-  if (S.det && P[S.det]) return '<div class="row" style="align-items:center"><button class="btn ghost sm" onclick="S.det=null;render()">‹ Back</button><div class="big" style="font-size:22px">' + D[S.det] + '</div><span class="mut" style="margin-left:auto;font-weight:700">' + mName(TODAY.slice(0, 7)) + '</span></div>' + P[S.det];
-  var ym = TODAY.slice(0, 7), MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym];
-  var prev = new Date(ym + '-15T12:00:00Z'); prev.setUTCMonth(prev.getUTCMonth() - 1); var mq = MT[prev.toISOString().slice(0, 7)];
-  var tipV = mt && mt.tips != null ? Math.round(mt.tips) : null, tipUp = tipV != null && mq && mq.tips != null && tipV >= Math.round(mq.tips);
-  var cp = careMonth(m), tm = m.thisMonth, k = lookKeys(m, ym), NK = keysNeed(ym);
+  var ym = TODAY.slice(0, 7), py = prevYm(ym), pmn = mName(py);
+  var D = { res: '⭐ Results', care: '💛 Client care', basics: '🧱 My basics', book: '📞 Bookings I made' };
+  /* bookings feitos na mao (Salonized, nao online) */
+  var bkC = null, bkP = null, bkPT = null;
+  if (m.desk && m.bk){ bkC = 0; bkP = 0; bkPT = 0; Object.keys(m.bk).forEach(function(d){ if (inWin(d, ym)) bkC += m.bk[d]; if (inWin(d, py)) bkP += m.bk[d]; if (d.slice(0, 7) === py) bkPT += m.bk[d]; }); }
+  var tm = m.thisMonth, k = lookKeys(m, ym), NK = keysNeed(ym), cp = careMonth(m);
+  /* mes passado ate o mesmo dia */
+  var revP = null, careP = null;
+  if (m.desk){ var b5 = 0, cc = 0, ca = 0, seen = 0; (m.base || []).forEach(function(d){ if (!inWin(d.d, py)) return; seen++; b5 += d.reviews5 || 0; if (d.worked){ cc += 3 * d.clients; ca += (d.pe || 0) + (d.co || 0) + (d.pr || 0); } }); if (seen){ revP = b5; careP = cc ? Math.round(ca * 100 / cc) : null; } }
+  else if (m.feed && m.feed.length){ revP = m.feed.filter(function(x){ return x.kind === 'review' && inWin(x.d, py); }).length; }
+  var MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym], mq = MT[py];
+  var tipV = mt && mt.tips != null ? Math.round(mt.tips) : null;
+  var pDays = new Date(Date.UTC(+py.slice(0, 4), +py.slice(5, 7), 0)).getUTCDate(), tipP = mq && mq.tips != null ? Math.round(mq.tips * Math.min(1, dom() / pDays)) : null;
+  /* o empurrao: uma frase so, calculada na hora */
+  var t = m.today || {}, N = {};
+  if (revP != null) N.res = P.resV < revP ? (revP - P.resV + 1) + ' more 5★ and you beat ' + pmn + ' ⭐' : P.resV > revP ? 'You are ' + (P.resV - revP) + ' ahead of ' + pmn + '. Keep it up 🎉' : 'One more 5★ and you beat ' + pmn + ' ⭐';
+  if (bkC != null){ var left = bkPT - bkC + 1; N.book = left > 0 ? left + ' more and you pass all of ' + pmn + ' (' + bkPT + ') 🏆' : 'New record: more than all of ' + pmn + ' 🏆'; }
+  if (t.clients){ var gap = m.desk ? [['pr', 'Offer next visit to', '📅'], ['co', 'Offer a drink to', '🥂'], ['pe', 'Welcome', '👋']] : [['co', 'Check-out', '📋'], ['pe', 'Personalise', '💜']];
+    gap.some(function(g){ var n = t.clients - (t[g[0]] || 0); if (n > 0){ N.care = g[2] + ' ' + g[1] + ' ' + n + ' more client' + (n > 1 ? 's' : '') + ' today'; return true; } });
+    if (!N.care) N.care = 'Every client cared for today 💛'; }
+  N.basics = k.n >= NK ? 'Chest unlocked ✨' : '💄 Look ready every day this week = 🔑 ' + (k.n + 1) + ' of ' + NK;
+  if (S.det && (P[S.det] || S.det === 'book')){
+    var body = S.det === 'book' ? '<div class="card rise"><div class="kv" style="font-size:18px"><span>📞 ' + mName(ym) + ' · up to day ' + dom() + '</span><b>' + bkC + '</b></div>' +
+        '<div class="kv" style="margin-top:12px;font-size:18px"><span>' + pmn + ' · up to day ' + dom() + '</span><b>' + bkP + '</b></div>' +
+        '<div class="kv" style="margin-top:12px;font-size:18px"><span>All of ' + pmn + '</span><b>' + bkPT + '</b></div>' +
+        '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">Visits booked by the desk in Salonized (not online)</div></div>' : P[S.det];
+    return '<div class="row" style="align-items:center"><button class="btn ghost sm" onclick="S.det=null;render()">‹ Back</button><div class="big" style="font-size:22px">' + D[S.det] + '</div><span class="mut" style="margin-left:auto;font-weight:700">' + mName(ym) + '</span></div>' +
+      (N[S.det] ? '<div class="nudge rise">👉 ' + N[S.det] + '</div>' : '') + body;
+  }
   var bOk = tm.worked && tm.look >= tm.worked && !tm.late;
   function col(ok, warn){ return ok ? 'g' : warn ? 'y' : ''; }
-  function blk(id, ic, t, v, word, c, sub){
-    return '<button class="card blk ' + c + ' rise"' + (id ? ' onclick="S.det=\'' + id + '\';render()"' : ' onclick="go(\'month\')"') + '><div class="bh">' + ic + ' ' + t + '</div><div class="bv">' + v + '</div><div class="bw">' + word + '</div><div class="bs">' + sub + '</div><div class="bt">' + (id ? 'Tap to see ›' : 'My month ›') + '</div></button>';
+  function blk(id, ic, t2, v, word, c, sub){
+    return '<button class="card blk ' + c + ' rise"' + (id ? ' onclick="S.det=\'' + id + '\';render()"' : ' onclick="go(\'month\')"') + '><div class="bh">' + ic + ' ' + t2 + '</div><div class="bv">' + v + '</div><div class="bw">' + word + '</div><div class="bs">' + sub + '</div><div class="bt">' + (id ? 'Tap to see ›' : 'My month ›') + '</div></button>';
   }
-  return '<div class="blks">' +
-    blk('res', '⭐', P.resT, '<span class="cnt" data-to="' + P.resV + '">0</span>', P.resWord || (P.resUp ? 'More than usual' : 'Keep going'), col(P.resUp, P.resV > 0), P.resSub) +
-    blk('', '💷', 'My tips', tipV != null ? '£<span class="cnt" data-to="' + tipV + '">0</span>' : '·', mt && mt.final ? 'Paid' : 'This month so far', 'p', mq && mq.tips != null ? 'last month £' + Math.round(mq.tips) : '') +
-    blk('care', '💛', 'Client care', cp == null ? '·' : '<span class="cnt" data-to="' + cp + '">0</span>%', cp == null ? 'No clients yet' : cp >= 90 ? 'Great' : cp >= 60 ? 'Almost' : 'Needs care', col(cp >= 90, cp >= 60), m.desk ? 'welcome · drink · next visit' : 'check-out every client') +
+  var bkPct = bkP ? Math.round((bkC - bkP) * 100 / bkP) : null;
+  return '<div class="blks' + (bkC != null ? ' five' : '') + '">' +
+    blk('res', '⭐', P.resT, '<span class="cnt" data-to="' + P.resV + '">0</span>', P.resWord || (P.resUp ? 'More than usual' : 'Keep going'), col(P.resUp, P.resV > 0), (cmpTxt(P.resV, revP, ym) || P.resSub) + (revP != null ? '<br>' + P.resSub2 : '')) +
+    blk('', '💷', 'My tips', tipV != null ? '£<span class="cnt" data-to="' + tipV + '">0</span>' : '·', mt && mt.final ? 'Paid' : 'This month so far', 'p', tipV != null ? cmpTxt(tipV, tipP, ym, '£') : '') +
+    (bkC != null ? blk('book', '📞', 'Bookings I made', '<span class="cnt" data-to="' + bkC + '">0</span>', bkPct == null ? 'This month' : bkPct > 0 ? '▲ ' + bkPct + '% vs ' + pmn : bkPct < 0 ? '▼ ' + (-bkPct) + '% vs ' + pmn : 'Same as ' + pmn, col(bkC >= bkP, bkC > 0), pmn + ' at this point: ' + bkP) : '') +
+    blk('care', '💛', 'Client care', cp == null ? '·' : '<span class="cnt" data-to="' + cp + '">0</span>%', cp == null ? 'No clients yet' : cp >= 90 ? 'Great' : cp >= 60 ? 'Almost' : 'Needs care', col(cp >= 90, cp >= 60), careP && cp != null ? pmn + ' at this point: ' + careP + '%' : (m.desk ? 'welcome · drink · next visit' : 'check-out every client')) +
     blk('basics', '🧱', 'My basics', tm.look + ' / ' + tm.worked, 'days ready', col(bOk, tm.look > 0), '🔑 ' + k.n + ' / ' + NK + ' keys' + (lookGift(ym) ? ' · 🎁 ' + e(lookGift(ym)) : '')) +
   '</div>';
 }
@@ -753,11 +791,11 @@ function pgTodayRes(m){
         '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
     homeOrDetail(m, {
       res: '<div class="mis" style="grid-template-columns:1fr 1fr">' + resCard('reviews', 'New clients who left 5★', fy.rev.length, m.aRev, fy.rev.slice().reverse(), 1) + resCard('magic', 'New clients who came back', fy.back.length, m.aBack, fy.back.slice().reverse(), 2) + '</div>' + goalCard(m),
-      care: '<div class="mis">' + stdCard + '</div>',
+      care: '<div class="mis" style="grid-template-columns:1fr">' + stdCard + '</div>',
       basics: '<div class="card rise" style="animation-delay:.08s"><div class="h">💄 My look today</div><div class="look">' +
         lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
         '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + basicsRows(m),
-      resV: fy.rev.length, resUp: fy.rev.length >= Math.ceil(m.aRev), resSub: 'you usually get ' + m.aRev + ' · 🔁 ' + fy.back.length + ' came back', resT: 'New clients 5★'
+      resV: fy.rev.length, resUp: fy.rev.length >= Math.ceil(m.aRev), resSub: 'you usually get ' + m.aRev + ' · 🔁 ' + fy.back.length + ' came back', resSub2: '🔁 ' + fy.back.length + ' came back', resT: 'New clients 5★'
     });
 }
 var RES = [
