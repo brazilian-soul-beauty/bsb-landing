@@ -965,10 +965,16 @@ function pgPath(m){
       line(t2.worked && t2.full >= t2.worked, '🎯 Days 100%', t2.full + ' / ' + t2.worked + ' days') +
       line(t2.cl && t2.rate >= m.aRate, '📅 Left with next visit', (t2.rate || 0) + '% · avg ' + m.aRate + '%') +
       line(t2.reviews >= Math.ceil(m.aRev5), '⭐ 5★ reviews', (t2.reviews || 0) + ' · avg ' + m.aRev5) + '</div>';
-    midC = '<div class="card grow"><div class="h">🌿 Review · December ' + m.review.year + '</div><div class="mut" style="font-weight:600">What decides your raise</div>' +
-      line(m.stdMonths >= 10, '🧱 Basics done well', m.stdMonths + ' / 12 months') +
-      line(m.aboveN >= 8, '📅 Better than your usual', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
-      '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Basics every month → yearly raise<br>📅 8 good months → raise + more responsibility</div></div>';
+    /* Ligia 22/10: o path dela mostra grande quanto ela ganha por hora, com as gorjetas, e o proximo degrau */
+    var BR = S.set.base_rate || {}, base = +BR[p.person] || 0, sen = +BR[p.person + '_senior'] || 0;
+    var MTp = (S.myTips || {})[p.person] || {}, ymk = Object.keys(MTp).sort(), tph = 0;
+    for (var ti = ymk.length - 1; ti >= 0; ti--){ var tr = MTp[ymk[ti]]; if (tr && tr.hours > 20 && tr.tips != null){ tph = tr.tips / tr.hours; break; } }
+    var nowH = base + tph, senH = sen + tph;
+    midC = '<div class="card grow" style="background:linear-gradient(135deg,#F1EDFF,#FFF2F7)"><div class="h">💷 What you earn</div>' +
+      '<div style="font-size:64px;font-weight:800;color:#3F2FB8;line-height:1.05;margin-top:6px">£' + nowH.toFixed(2) + '<span style="font-size:22px;font-weight:700"> /hour</span></div>' +
+      '<div class="mut" style="font-weight:700;font-size:15px">£' + base.toFixed(2) + ' + £' + tph.toFixed(2) + ' tips</div>' +
+      '<div class="kv" style="margin-top:18px;font-size:17px"><span>💜 Senior</span><b>£' + senH.toFixed(2) + ' /hour</b></div>' +
+      '<div class="kv" style="margin-top:8px;font-size:17px"><span>🏆 Manager</span><b>set by results</b></div></div>';
     var st = m.study || {}, mods = st.modules || {}, NM = 12, cert = 0, curN = 0, curS = 'todo';
     for (var mi = 1; mi <= NM; mi++){ var ms = (mods[mi] || {}).s || 'todo'; if (ms === 'certified') cert++; else if (!curN){ curN = mi; curS = ms; } }
     var SL = { todo: 'not started', studying: 'reading', practising: 'practice', certified: 'done' };
