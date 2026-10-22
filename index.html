@@ -532,7 +532,7 @@ function topbar(tabs){
   var p = S.view ? personOf(S.view) : null, m = S.view ? S.M[S.view] : null;
   return '<div class="top"><span class="logo">✨ Soul Path</span>' +
     (S.role === 'admin' && S.view ? '<button class="btn ghost sm" onclick="go(\'team\',null)">‹ Team</button>' : '') +
-    (p ? av(p.person, 36) + '<span class="who">' + e(p.person) + '</span>' + (m && !m.desk ? '<span class="chip">' + e(m.level.name) + '</span>' : m ? '<span class="chip">Customer Experience</span>' : '') : '<span class="who">' + e(S.who) + '</span>') +
+    (p ? av(p.person, 36) + '<span class="who">' + e(p.person) + '</span>' + (m && !m.desk ? '<span class="chip">' + e(m.level.name) + '</span>' : m ? '<span class="chip">Front of House</span>' : '') : '<span class="who">' + e(S.who) + '</span>') +
     '<div class="tabs">' + tabs.map(function(t){ return '<button class="tab' + (S.tab === t[0] ? ' on' : '') + '" onclick="go(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') + '</div>' +
     '<button class="out" onclick="logout()">Exit</button></div>';
 }
@@ -634,7 +634,7 @@ function pgTodayDesk(m){
   var need = 8, rv = m.review;
   return (S.live ? '' : '<div class="prac">🧪 Practice · only you see this · counting starts ' + dShort(S.liveFrom) + '</div>') +
     '<div class="hero2 rise">' + av(p.person, 96) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div><div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
-      '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months above your average</div>' +
+      '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months better than usual</div>' +
       '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
     '<div class="card rise"><div class="h">💄 My look today</div><div class="look">' + lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
       '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' +
@@ -687,7 +687,7 @@ function pgTodayRes(m){
   return (S.live ? '' : '<div class="prac">🧪 Practice · only you see this · counting starts ' + dShort(S.liveFrom) + '</div>') +
     '<div class="hero2 rise">' + av(p.person, 96) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div>' +
       '<div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
-      '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months above your average</div>' +
+      '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months better than usual</div>' +
         '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
     '<div class="card rise" style="animation-delay:.08s"><div class="h">💄 My look today</div><div class="look">' +
       lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
@@ -862,29 +862,29 @@ function pgMonth(m){
   var tp = S.tips[ym], prevYm = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() - 1, 15)).toISOString().slice(0, 7), tq = S.tips[prevYm];
   var tpc = tp && tp.clients ? tp.tips / tp.clients : null, tqc = tq && tq.clients ? tq.tips / tq.clients : null;
   var MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym], mq = MT[prevYm];
-  var myTip = mt && mt.tips != null ? '£' + Math.round(mt.tips) : '·', myTipSub = (mt && mt.final ? 'paid' : 'so far') + (mq && mq.tips != null ? ' · last month £' + Math.round(mq.tips) : '') + (tpc != null ? ' · team £' + tpc.toFixed(2) + '/client' : '');
+  var myTip = mt && mt.tips != null ? '£' + Math.round(mt.tips) : '·', myTipSub = (mt && mt.final ? 'paid' : 'this month so far') + (mq && mq.tips != null ? ' · last month £' + Math.round(mq.tips) : '');
   var arrow = tpc != null && tqc != null ? (tpc > tqc ? ' <span style="color:var(--grn)">▲</span>' : tpc < tqc ? ' <span style="color:var(--red)">▼</span>' : '') : '';
   function tile(ic, t, v, sub, ok){ return '<div class="card' + (ok ? ' gate ok' : '') + '" style="display:flex;flex-direction:column;gap:4px"><div class="h" style="margin:0;font-size:11px">' + ic + ' ' + t + '</div><div class="big" style="font-size:24px">' + v + '</div><div class="mut" style="font-size:12px;font-weight:600">' + sub + '</div></div>'; }
   if (m.hide) return '<div class="welcome"><div class="hero2">' + av(m.p.person, 110) + '<div style="z-index:1"><div class="hi serif">Your first month starts ' + dShort(S.liveFrom) + '</div><div class="sub">Every full day turns gold ⭐ here</div></div></div></div>';
   return '<div class="row" style="align-items:center"><button class="btn ghost sm" ' + (i > 0 ? 'onclick="S.mi=' + (i - 1) + ';render()"' : 'disabled style="opacity:.3"') + '>‹</button>' +
     '<div class="big" style="font-size:22px">' + mName(ym) + ' ' + ym.slice(0, 4) + '</div>' +
     '<button class="btn ghost sm" ' + (i < ms.length - 1 ? 'onclick="S.mi=' + (i + 1) + ';render()"' : 'disabled style="opacity:.3"') + '>›</button>' +
-    '<span class="chip ' + ((m.res ? x.closed && x.above : x.star) ? 'g' : x.closed ? 'k' : '') + '" style="margin-left:auto">' + (m.res ? (x.closed ? (x.above ? '▲ Above your average' : 'Month closed') : 'In progress') : (x.star ? '⭐ Star month' : x.closed ? 'Month closed' : 'In progress')) + '</span></div>' +
+    '<span class="chip ' + ((m.res ? x.closed && x.above : x.star) ? 'g' : x.closed ? 'k' : '') + '" style="margin-left:auto">' + (m.res ? (x.closed ? (x.above ? '▲ Better than your usual' : 'Month closed') : 'In progress') : (x.star ? '⭐ Star month' : x.closed ? 'Month closed' : 'In progress')) + '</span></div>' +
     '<div class="card" style="flex:1;min-height:0;display:flex;flex-direction:column">' + wk + '<div class="cal">' + cells + '</div></div>' +
       (m.res ? '<div class="strip">' + (function(){
         var cl = 0, co = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ cl += d.clients; co += d.co; } });
-        return tile('⏰', 'On time', x.onTimePct + '%', x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
-          tile('💄', 'Look', x.look + ' / ' + x.worked, 'confirmed', x.worked && x.look >= x.worked) +
-          tile('📋', 'Check-out', co + ' / ' + cl, 'clients', cl && co >= cl) +
-          tile('⭐', 'New clients 5★', x.rev || 0, 'your average ' + m.aRev, (x.rev || 0) >= Math.ceil(m.aRev)) +
-          tile('🔁', 'Came back', x.back || 0, 'your average ' + m.aBack, (x.back || 0) >= Math.ceil(m.aBack)) +
+        return tile('⏰', 'On time', x.known ? x.onTimePct + '%' : '·', !x.known ? 'no data yet' : x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
+          tile('💄', 'Look', x.look + ' / ' + x.worked, 'days ready', x.worked && x.look >= x.worked) +
+          tile('📋', 'Check-out', co + ' / ' + cl, 'clients done', cl && co >= cl) +
+          tile('⭐', 'New clients 5★', x.rev || 0, 'you usually get ' + m.aRev, (x.rev || 0) >= Math.ceil(m.aRev)) +
+          tile('🔁', 'Came back', x.back || 0, 'you usually get ' + m.aBack, (x.back || 0) >= Math.ceil(m.aBack)) +
           tile('💛', 'Your tips', myTip, myTipSub, false); })() + '</div>' :
       '<div class="strip">' +
-        tile('🎯', 'Full days', x.full + ' / ' + x.worked, 'all 3 missions · star at ' + starPct + '%', x.worked && x.missionPct >= starPct) +
-        tile('💄', 'Ready', x.look + ' / ' + x.worked, 'look confirmed', x.worked && x.look >= x.worked) +
-        tile('⏰', 'On time', x.onTimePct + '%', x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
+        tile('🎯', 'Days 100%', x.full + ' / ' + x.worked, 'welcome + drink + next visit to all', x.worked && x.missionPct >= starPct) +
+        tile('💄', 'Look', x.look + ' / ' + x.worked, 'days ready', x.worked && x.look >= x.worked) +
+        tile('⏰', 'On time', x.known ? x.onTimePct + '%' : '·', !x.known ? 'no data yet' : x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
         (m.desk ? (function(){ var c = 0, b = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ c += d.clients; b += d.booked || 0; } });
-          return tile('📅', 'Left with next visit', b + ' of ' + c, (c ? pct(b, c) + '% · ' : '') + 'booked the same day', false) + tile('⭐', '5★ reviews', x.reviews, 'the whole house', false); })() : '') +
+          return tile('📅', 'Next visit booked', b + ' of ' + c, (c ? pct(b, c) + '% of clients' : 'clients'), false) + tile('⭐', '5★ reviews', x.reviews, 'the whole team', false); })() : '') +
         (m.desk ? '' : tile('📸', 'Videos', x.content, 'goal ' + (+S.set.content_goal || 8), x.content >= (+S.set.content_goal || 8))) +
         (m.desk ? '' : tile('⭐', 'New clients who reviewed', nr.new_reviews + ' of ' + nr.new_clients, (nr.new_clients ? pct(nr.new_reviews, nr.new_clients) + '% · ' : '') + 'they loved the first visit', false)) +
         (m.hc ? (function(){ var h = m.hc[ym] || { facial_clients: 0, homecare_clients: 0, gbp: 0 }; return tile('🧴', 'Éminence at home', h.homecare_clients + ' of ' + h.facial_clients, (h.facial_clients ? pct(h.homecare_clients, h.facial_clients) + '% of facial clients' : 'facial clients') + (ym === TODAY.slice(0, 7) ? ' · products land when the invoice closes' : ''), false); })() : '') +
@@ -913,7 +913,7 @@ function pgPath(m){
       return '<div class="pin' + (now ? ' cur' : done ? ' done' : '') + '" style="left:' + sp[0] + '%;top:' + sp[1] + '%">' +
         (now ? av(p.person, 70) : '<span class="lk">' + (done ? '✓' : '🔒') + '</span>') + '<span class="lbl">' + lbl + '</span></div>';
     }).join('') + '<div class="pin gate" style="left:' + GATE[0] + '%;top:' + GATE[1] + '%"><span class="lk">💷</span><span class="lbl">Review · Dec ' + rv.year + '</span></div>' +
-      '<div class="chap">⭐ ' + m.aboveN + ' / 8 months above your average</div></div></div>';
+      '<div class="chap">⭐ ' + m.aboveN + ' / 8 months better than usual</div></div></div>';
   }
   var road = '<div class="card mapc"><div class="mapin">' + L.map(function(l, i){
     var n = i + 1, sp = SPOTS[i] || SPOTS[SPOTS.length - 1], cur = n === p.level;
@@ -948,10 +948,10 @@ function pgPath(m){
       line(fy.back.length >= Math.ceil(m.aBack), '🔁 Came back', fy.back.length + ' · avg ' + m.aBack) +
       (m.goal ? line(m.goal.rate >= m.goal.g.target, '🎯 ' + e(m.goal.g.title), m.goal.rate + '% / ' + m.goal.g.target + '%') : '') + '</div>';
     midC = '<div class="card grow"><div class="h">🌿 Review · December ' + m.review.year + '</div><div class="mut" style="font-weight:600">What decides your raise</div>' +
-      line(m.stdMonths >= 10, '🧱 Standard in place', m.stdMonths + ' / 12 months') +
-      line(m.aboveN >= 8, '⭐ Above your average', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
+      line(m.stdMonths >= 10, '🧱 Basics done well', m.stdMonths + ' / 12 months') +
+      line(m.aboveN >= 8, '⭐ Better than your usual', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
       ((m.steps || []).length ? line(m.steps.every(function(x){ return x.done_at; }), '🔑 Steps from Ligia', m.steps.filter(function(x){ return x.done_at; }).length + ' / ' + m.steps.length) : '') +
-      '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Standard → yearly raise<br>⭐ 8 months above → ' + e(m.next ? m.next.name : 'top level') + '</div></div>';
+      '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Basics every month → yearly raise<br>⭐ 8 good months → ' + e(m.next ? m.next.name : 'top level') + '</div></div>';
     road = road2;
   }
   if (m.deskRes){
@@ -959,16 +959,16 @@ function pgPath(m){
     shortC = '<div class="card grow"><div class="h">🌱 Now · ' + mName(TODAY.slice(0, 7)) + '</div><div class="mut" style="font-weight:600">Your month so far</div>' +
       line(!t2.late, '⏰ On time', t2.late ? t2.late + ' late' : '✓') +
       line(t2.worked && t2.look >= t2.worked, '💄 Look', t2.look + ' / ' + t2.worked) +
-      line(t2.worked && t2.full >= t2.worked, '👋🥂📅 Every client, every day', t2.full + ' / ' + t2.worked + ' days') +
+      line(t2.worked && t2.full >= t2.worked, '🎯 Days 100%', t2.full + ' / ' + t2.worked + ' days') +
       line(t2.cl && t2.rate >= m.aRate, '📅 Left with next visit', (t2.rate || 0) + '% · avg ' + m.aRate + '%') +
       line(t2.reviews >= Math.ceil(m.aRev5), '⭐ 5★ for the house', (t2.reviews || 0) + ' · avg ' + m.aRev5) + '</div>';
     midC = '<div class="card grow"><div class="h">🌿 Review · December ' + m.review.year + '</div><div class="mut" style="font-weight:600">What decides your raise</div>' +
-      line(m.stdMonths >= 10, '🧱 Standard in place', m.stdMonths + ' / 12 months') +
-      line(m.aboveN >= 8, '📅 Above your average', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
-      '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Standard → yearly raise<br>📅 8 months above → raise + more responsibility</div></div>';
+      line(m.stdMonths >= 10, '🧱 Basics done well', m.stdMonths + ' / 12 months') +
+      line(m.aboveN >= 8, '📅 Better than your usual', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
+      '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Basics every month → yearly raise<br>📅 8 good months → raise + more responsibility</div></div>';
     var st = m.study || {}, mods = st.modules || {}, NM = 12, cert = 0, curN = 0, curS = 'todo';
     for (var mi = 1; mi <= NM; mi++){ var ms = (mods[mi] || {}).s || 'todo'; if (ms === 'certified') cert++; else if (!curN){ curN = mi; curS = ms; } }
-    var SL = { todo: 'to start', studying: 'studying', practising: 'practising', certified: 'certified' };
+    var SL = { todo: 'not started', studying: 'reading', practising: 'practice', certified: 'done' };
     longC = '<div class="card grow"><div class="h">🌳 Next · your goal is Manager</div><div class="mut" style="font-weight:600">Front of House → Experience Leader → Manager</div>' +
       line(cert >= NM, '💜 Experience Leader', cert >= NM ? '✓ ready' : 'the next step') +
       line(cert >= NM, '📚 My study', cert + ' / ' + NM + ' modules') + bar(cert, NM, cert >= NM ? 'var(--grn)' : '') +
@@ -977,7 +977,8 @@ function pgPath(m){
       '<a class="btn" style="margin-top:14px;display:inline-block;text-decoration:none" href="https://bsb-joana-path.vercel.app" target="_blank">📚 Open my study</a></div>';
     road = road2;
   }
-  return road + '<div class="row" style="flex:1;min-height:0">' + shortC + midC + longC + '</div>';
+  /* Ligia 22/10 "ta muito poluido": o My path so responde onde estou e para onde vou; o mes fica em My performance e My month */
+  return road + '<div class="row" style="flex:1;min-height:0">' + midC + longC + '</div>';
 }
 
 /* ===== MY WINS ===== */
