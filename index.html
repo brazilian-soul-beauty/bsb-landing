@@ -263,6 +263,15 @@ input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);b
   .st{width:90px}.st .o{width:52px;height:52px;font-size:22px}.st .nm{font-size:12px}
   .team{grid-template-columns:1fr 1fr}
 }
+.blks{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0}
+.blk{border:0;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:22px 26px;font:inherit;background:#fff;border:2px solid var(--line)}
+.blk.p{background:var(--pur2);border-color:#D9D2FA}.blk.p .bw{color:var(--pur)}
+.blk.g{background:var(--grn2);border-color:#BFE5CC}.blk.y{background:#FFF7E0;border-color:#F1DFB2}
+.blk .bh{font-size:15px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.blk .bv{font-size:54px;font-weight:800;line-height:1.05;color:var(--ink,#1E1B3A)}
+.blk .bw{font-size:18px;font-weight:800}.blk.g .bw{color:var(--grn)}.blk.y .bw{color:#B07F17}
+.blk .bs{font-size:14px;font-weight:600;color:var(--mut)}.blk .bt{margin-top:6px;font-size:13px;font-weight:800;color:var(--pur)}
+@media(max-width:700px){.blks{grid-template-columns:1fr}.blk .bv{font-size:40px}}
 </style>
 <style>/*ANIM-GAME 22/10: bau abre como jogo, chave nova pulsa, numeros sobem*/
 @keyframes shake{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-8deg) scale(1.05)}30%{transform:rotate(8deg) scale(1.08)}45%{transform:rotate(-10deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.12)}75%{transform:rotate(-6deg) scale(1.1)}}
@@ -554,7 +563,7 @@ function topbar(tabs){
 var GIRL_TABS = [['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins']];
 var DESK_TABS = [['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins'],['look','Look']];
 var ADMIN_TABS = [['team','Team'],['steps','Steps'],['look','Look'],['shelf','Prizes'],['pits','Pit stops'],['set','Settings']];
-function go(t, v){ if (v !== undefined) S.view = v; S.tab = t; render(); }
+function go(t, v){ if (v !== undefined) S.view = v; S.tab = t; S.det = null; render(); }
 function render(){
   if (!S.who) return renderLogin();
   if (S.view){
@@ -653,9 +662,44 @@ function pgTodayDesk(m){
     '<div class="hero2 rise">' + av(p.person, 96) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div><div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
       '<div class="revbox"><div class="rl">💷 Next raise · Senior</div><div class="rn"><b>' + jc + '</b> / 12</div><div class="rl">training steps done</div>' +
       '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
-    '<div class="card rise"><div class="h">💄 My look today</div><div class="look">' + lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
-      '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' +
-    '<div class="mis">' + stdCard + r1 + r2 + '</div>';
+    homeOrDetail(m, {
+      res: '<div class="mis" style="grid-template-columns:1fr 1fr">' + r2 + r1 + '</div>',
+      care: '<div class="mis">' + stdCard + '</div>',
+      basics: '<div class="card rise"><div class="h">💄 My look today</div><div class="look">' + lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
+        '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + basicsRows(m),
+      resV: tm.reviews || 0, resUp: up1 || up2, resWord: up2 ? 'More than usual' : up1 ? '📅 Bookings up ▲' : 'Keep going', resSub: 'you usually get ' + Math.round(m.aRev5) + ' · 📅 ' + (tm.rate || 0) + '% booked next visit', resT: '5★ reviews'
+    });
+}
+
+/* Ligia 22/10 "tela 1": My performance = 4 blocos (o que importa: reviews e tips). Tocar abre o detalhe. */
+function basicsRows(m){
+  var tm = m.thisMonth, ym = TODAY.slice(0, 7), k = lookKeys(m, ym);
+  return '<div class="card rise"><div class="kv" style="font-size:16px"><span>⏰ On time</span><b>' + (!tm.known ? '·' : tm.late ? tm.late + ' late day' + (tm.late > 1 ? 's' : '') : '✓') + '</b></div>' +
+    '<div class="kv" style="margin-top:10px;font-size:16px"><span>💄 Look · days ready</span><b>' + tm.look + ' / ' + tm.worked + '</b></div></div>';
+}
+function careMonth(m){
+  var ym = TODAY.slice(0, 7), c = 0, a = 0;
+  m.days.forEach(function(d){ if (d.d.slice(0, 7) !== ym) return; if (m.desk){ c += 3 * d.clients; a += d.pe + d.co + d.pr; } else { c += d.clients; a += d.co; } });
+  return c ? Math.round(a * 100 / c) : null;
+}
+function homeOrDetail(m, P){
+  var D = { res: '⭐ Results', care: '💛 Client care', basics: '🧱 My basics' };
+  if (S.det && P[S.det]) return '<div class="row" style="align-items:center"><button class="btn ghost sm" onclick="S.det=null;render()">‹ Back</button><div class="big" style="font-size:22px">' + D[S.det] + '</div><span class="mut" style="margin-left:auto;font-weight:700">' + mName(TODAY.slice(0, 7)) + '</span></div>' + P[S.det];
+  var ym = TODAY.slice(0, 7), MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym];
+  var prev = new Date(ym + '-15T12:00:00Z'); prev.setUTCMonth(prev.getUTCMonth() - 1); var mq = MT[prev.toISOString().slice(0, 7)];
+  var tipV = mt && mt.tips != null ? Math.round(mt.tips) : null, tipUp = tipV != null && mq && mq.tips != null && tipV >= Math.round(mq.tips);
+  var cp = careMonth(m), tm = m.thisMonth, k = lookKeys(m, ym), NK = keysNeed(ym);
+  var bOk = tm.worked && tm.look >= tm.worked && !tm.late;
+  function col(ok, warn){ return ok ? 'g' : warn ? 'y' : ''; }
+  function blk(id, ic, t, v, word, c, sub){
+    return '<button class="card blk ' + c + ' rise"' + (id ? ' onclick="S.det=\'' + id + '\';render()"' : ' onclick="go(\'month\')"') + '><div class="bh">' + ic + ' ' + t + '</div><div class="bv">' + v + '</div><div class="bw">' + word + '</div><div class="bs">' + sub + '</div><div class="bt">' + (id ? 'Tap to see ›' : 'My month ›') + '</div></button>';
+  }
+  return '<div class="blks">' +
+    blk('res', '⭐', P.resT, '<span class="cnt" data-to="' + P.resV + '">0</span>', P.resWord || (P.resUp ? 'More than usual' : 'Keep going'), col(P.resUp, P.resV > 0), P.resSub) +
+    blk('', '💷', 'My tips', tipV != null ? '£<span class="cnt" data-to="' + tipV + '">0</span>' : '·', mt && mt.final ? 'Paid' : 'This month so far', 'p', mq && mq.tips != null ? 'last month £' + Math.round(mq.tips) : '') +
+    blk('care', '💛', 'Client care', cp == null ? '·' : '<span class="cnt" data-to="' + cp + '">0</span>%', cp == null ? 'No clients yet' : cp >= 90 ? 'Great' : cp >= 60 ? 'Almost' : 'Needs care', col(cp >= 90, cp >= 60), m.desk ? 'welcome · drink · next visit' : 'check-out every client') +
+    blk('basics', '🧱', 'My basics', tm.look + ' / ' + tm.worked, 'days ready', col(bOk, tm.look > 0), '🔑 ' + k.n + ' / ' + NK + ' keys' + (lookGift(ym) ? ' · 🎁 ' + e(lookGift(ym)) : '')) +
+  '</div>';
 }
 /* o presente do look do mes (a Ligia escolhe em Settings: base, rimel, blush...) */
 function lookGift(ym){ return ((S.set.look_gift || {})[ym]) || ''; }
@@ -707,10 +751,14 @@ function pgTodayRes(m){
       '<div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
       '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months better than usual</div>' +
         '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
-    '<div class="card rise" style="animation-delay:.08s"><div class="h">💄 My look today</div><div class="look">' +
-      lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
-      '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + goalCard(m) +
-    '<div class="mis">' + stdCard + resCard('reviews', 'New clients who left 5★', fy.rev.length, m.aRev, fy.rev.slice().reverse(), 1) + resCard('magic', 'New clients who came back', fy.back.length, m.aBack, fy.back.slice().reverse(), 2) + '</div>';
+    homeOrDetail(m, {
+      res: '<div class="mis" style="grid-template-columns:1fr 1fr">' + resCard('reviews', 'New clients who left 5★', fy.rev.length, m.aRev, fy.rev.slice().reverse(), 1) + resCard('magic', 'New clients who came back', fy.back.length, m.aBack, fy.back.slice().reverse(), 2) + '</div>' + goalCard(m),
+      care: '<div class="mis">' + stdCard + '</div>',
+      basics: '<div class="card rise" style="animation-delay:.08s"><div class="h">💄 My look today</div><div class="look">' +
+        lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
+        '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + basicsRows(m),
+      resV: fy.rev.length, resUp: fy.rev.length >= Math.ceil(m.aRev), resSub: 'you usually get ' + m.aRev + ' · 🔁 ' + fy.back.length + ' came back', resT: 'New clients 5★'
+    });
 }
 var RES = [
   { img:'ready', t:'My Standard', why:'On time, look and check-out, every day' },
