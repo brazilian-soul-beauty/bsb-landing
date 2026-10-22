@@ -352,7 +352,8 @@ function loadBase(){
     S.people = r[1]; S.pits = r[2]; S.refresh = r[3]; S.rewards = r[4]; S.levelups = r[5]; S.prizes = r[6];
     S.liveFrom = S.set.live_from || '2026-11-01';
     S.live = TODAY >= S.liveFrom;
-    S.from = S.live ? S.liveFrom : addDays(TODAY, -34);
+    /* Ligia 22/10: "colocar a leitura toda para eu ver": a tela mostra o mes inteiro do inicio do jogo (historico); a revisao conta so do inicio */
+    S.from = S.live ? S.liveFrom.slice(0, 7) + '-01' : addDays(TODAY, -34);
   });
 }
 function therapists(){ return S.people.filter(function(p){ return p.role === 'therapist' && p.active; }); }
@@ -362,10 +363,13 @@ function loadModel(name){
   /* a menina nao ve o treino: antes do inicio ela comeca do zero, limpo */
   var hide = !S.live && S.role !== 'admin', fr = hide ? S.liveFrom : S.from;
   var pp = personOf(name);
+  /* Ligia 22/10: a gorjeta DELA no mes (parte do pote por horas; meses fechados = o que foi pago) */
+  S.myTips = S.myTips || {};
+  var tipsP = rpc('bsb_sp_my_tips', { p_person: name, p_from: addDays(TODAY, -200).slice(0, 7) + '-01' }).then(function(r){ S.myTips[name] = {}; (r || []).forEach(function(x){ S.myTips[name][x.ym] = x; }); }).catch(function(){});
   if (pp && pp.role === 'desk'){
     var bTo = addDays((S.liveFrom < TODAY ? S.liveFrom : TODAY), -1), bFrom = addDays(bTo, -183);
     return Promise.all([rpc('bsb_sp_desk_days', { p_person: name, p_from: fr, p_to: TODAY }), rpc('bsb_sp_desk_days', { p_person: name, p_from: bFrom, p_to: bTo }).catch(function(){ return []; })]).then(function(r){
-      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); S.M[name] = m; return m; });
+      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); S.M[name] = m; return tipsP.then(function(){ return m; }); });
   }
   return Promise.all([
     rpc('bsb_sp_days', { p_person: name, p_from: fr, p_to: TODAY }),
@@ -380,7 +384,7 @@ function loadModel(name){
     var g = S.goals[name]; if (g){ var ms = r[3] || [], cur = ms.filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || { clients: 0, back: 0, pending: [] };
       var past = ms.filter(function(x){ return x.ym < TODAY.slice(0, 7); }).slice(-3), pc = past.reduce(function(a, x){ return a + x.clients; }, 0), pb = past.reduce(function(a, x){ return a + x.back; }, 0);
       m.goal = { g: g, cur: cur, rate: pct(cur.back, cur.clients), before: pc ? pct(pb, pc) : null, months: ms }; }
-    S.M[name] = m; return m; });
+    S.M[name] = m; return tipsP.then(function(){ return m; }); });
 }
 
 /* ---------- o motor ---------- */
@@ -848,6 +852,8 @@ function pgMonth(m){
   var nr = m.nr[ym] || { new_clients: 0, new_reviews: 0 };
   var tp = S.tips[ym], prevYm = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() - 1, 15)).toISOString().slice(0, 7), tq = S.tips[prevYm];
   var tpc = tp && tp.clients ? tp.tips / tp.clients : null, tqc = tq && tq.clients ? tq.tips / tq.clients : null;
+  var MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym], mq = MT[prevYm];
+  var myTip = mt && mt.tips != null ? '£' + Math.round(mt.tips) : '·', myTipSub = (mt && mt.final ? 'paid' : 'so far') + (mq && mq.tips != null ? ' · last month £' + Math.round(mq.tips) : '') + (tpc != null ? ' · team £' + tpc.toFixed(2) + '/client' : '');
   var arrow = tpc != null && tqc != null ? (tpc > tqc ? ' <span style="color:var(--grn)">▲</span>' : tpc < tqc ? ' <span style="color:var(--red)">▼</span>' : '') : '';
   function tile(ic, t, v, sub, ok){ return '<div class="card' + (ok ? ' gate ok' : '') + '" style="display:flex;flex-direction:column;gap:4px"><div class="h" style="margin:0;font-size:11px">' + ic + ' ' + t + '</div><div class="big" style="font-size:24px">' + v + '</div><div class="mut" style="font-size:12px;font-weight:600">' + sub + '</div></div>'; }
   if (m.hide) return '<div class="welcome"><div class="hero2">' + av(m.p.person, 110) + '<div style="z-index:1"><div class="hi serif">Your first month starts ' + dShort(S.liveFrom) + '</div><div class="sub">Every full day turns gold ⭐ here</div></div></div></div>';
@@ -863,7 +869,7 @@ function pgMonth(m){
           tile('📋', 'Check-out', co + ' / ' + cl, 'clients', cl && co >= cl) +
           tile('⭐', 'New clients 5★', x.rev || 0, 'your average ' + m.aRev, (x.rev || 0) >= Math.ceil(m.aRev)) +
           tile('🔁', 'Came back', x.back || 0, 'your average ' + m.aBack, (x.back || 0) >= Math.ceil(m.aBack)) +
-          tile('💛', 'Team tips per client', tpc != null ? '£' + tpc.toFixed(2) + arrow : '·', tqc != null ? 'last month £' + tqc.toFixed(2) : 'the whole house', false); })() + '</div>' :
+          tile('💛', 'Your tips', myTip, myTipSub, false); })() + '</div>' :
       '<div class="strip">' +
         tile('🎯', 'Full days', x.full + ' / ' + x.worked, 'all 3 missions · star at ' + starPct + '%', x.worked && x.missionPct >= starPct) +
         tile('💄', 'Ready', x.look + ' / ' + x.worked, 'look confirmed', x.worked && x.look >= x.worked) +
@@ -873,7 +879,7 @@ function pgMonth(m){
         (m.desk ? '' : tile('📸', 'Videos', x.content, 'goal ' + (+S.set.content_goal || 8), x.content >= (+S.set.content_goal || 8))) +
         (m.desk ? '' : tile('⭐', 'New clients who reviewed', nr.new_reviews + ' of ' + nr.new_clients, (nr.new_clients ? pct(nr.new_reviews, nr.new_clients) + '% · ' : '') + 'they loved the first visit', false)) +
         (m.hc ? (function(){ var h = m.hc[ym] || { facial_clients: 0, homecare_clients: 0, gbp: 0 }; return tile('🧴', 'Éminence at home', h.homecare_clients + ' of ' + h.facial_clients, (h.facial_clients ? pct(h.homecare_clients, h.facial_clients) + '% of facial clients' : 'facial clients') + (ym === TODAY.slice(0, 7) ? ' · products land when the invoice closes' : ''), false); })() : '') +
-        tile('💛', 'Team tips per client', tpc != null ? '£' + tpc.toFixed(2) + arrow : '·', tqc != null ? 'last month £' + tqc.toFixed(2) : 'the whole house', false) +
+        tile('💛', 'Your tips', myTip, myTipSub, false) +
       '</div>');
 }
 
