@@ -369,7 +369,9 @@ function loadModel(name){
   if (pp && pp.role === 'desk'){
     var bTo = addDays((S.liveFrom < TODAY ? S.liveFrom : TODAY), -1), bFrom = addDays(bTo, -183);
     return Promise.all([rpc('bsb_sp_desk_days', { p_person: name, p_from: fr, p_to: TODAY }), rpc('bsb_sp_desk_days', { p_person: name, p_from: bFrom, p_to: bTo }).catch(function(){ return []; })]).then(function(r){
-      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); S.M[name] = m; return Promise.all([tipsP, rpc('bsb_sp_desk_bonus', { p_from: TODAY.slice(0, 7) + '-01' }).then(function(b){ m.db = (b || []).filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || null; }).catch(function(){})]).then(function(){ return m; }); });
+      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); S.M[name] = m; return Promise.all([tipsP, rpc('bsb_sp_desk_bonus', { p_from: TODAY.slice(0, 7) + '-01' }).then(function(b){ m.db = (b || []).filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || null; }).catch(function(){}),
+      /* Ligia 22/10: o estudo dela (Joana · My Path, bsb_lab career_joana) aparece aqui, e a Ligia ve onde ela esta */
+      get('bsb_lab?select=content,updated_at&id=eq.career_' + name.toLowerCase()).then(function(r){ try { m.study = JSON.parse((r[0] || {}).content || '{}'); m.study.at = (r[0] || {}).updated_at; } catch (x) { m.study = null; } }).catch(function(){})]).then(function(){ return m; }); });
   }
   return Promise.all([
     rpc('bsb_sp_days', { p_person: name, p_from: fr, p_to: TODAY }),
@@ -964,10 +966,15 @@ function pgPath(m){
       line(m.stdMonths >= 10, '🧱 Standard in place', m.stdMonths + ' / 12 months') +
       line(m.aboveN >= 8, '📅 Above your average', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
       '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Standard → yearly raise<br>📅 8 months above → raise + more responsibility</div></div>';
-    longC = '<div class="card grow"><div class="h">🌳 Later · 2 to 3 years</div><div class="mut" style="font-weight:600">Lead the client experience</div>' +
-      line(false, '💜 Customer Experience lead', 'the next step') +
-      line(m.refreshN >= 3, '🎓 Trainings', m.refreshN + ' / 3') +
-      line(false, dreamOf(p).ic + ' ' + e(dreamOf(p).name), e(dreamOf(p).sub)) + '</div>';
+    var st = m.study || {}, mods = st.modules || {}, NM = 12, cert = 0, curN = 0, curS = 'todo';
+    for (var mi = 1; mi <= NM; mi++){ var ms = (mods[mi] || {}).s || 'todo'; if (ms === 'certified') cert++; else if (!curN){ curN = mi; curS = ms; } }
+    var SL = { todo: 'to start', studying: 'studying', practising: 'practising', certified: 'certified' };
+    longC = '<div class="card grow"><div class="h">🌳 Next · your goal is Manager</div><div class="mut" style="font-weight:600">Front of House → Experience Leader → Manager</div>' +
+      line(cert >= NM, '💜 Experience Leader', cert >= NM ? '✓ ready' : 'the next step') +
+      line(cert >= NM, '📚 My study', cert + ' / ' + NM + ' modules') + bar(cert, NM, cert >= NM ? 'var(--grn)' : '') +
+      (curN ? line(curS === 'practising', '📖 Now', 'Module ' + curN + ' · ' + SL[curS]) : '') +
+      line(false, '🏆 Manager', 'after Experience Leader') +
+      '<a class="btn" style="margin-top:14px;display:inline-block;text-decoration:none" href="https://bsb-joana-path.vercel.app" target="_blank">📚 Open my study</a></div>';
     road = road2;
   }
   return road + '<div class="row" style="flex:1;min-height:0">' + shortC + midC + longC + '</div>';
