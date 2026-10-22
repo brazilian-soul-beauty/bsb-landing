@@ -277,6 +277,11 @@ input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);b
 .blk .up{color:var(--grn);font-weight:800}.blk .dn{color:#B07F17;font-weight:800}
 .nudge{background:linear-gradient(90deg,var(--pur2),#FFF0F6);border-radius:16px;padding:16px 22px;font-size:20px;font-weight:800;color:var(--pur)}
 @media(max-width:700px){.blks.five{grid-template-columns:1fr}.blks.five .blk,.blks.five .blk:nth-child(-n+2){grid-column:auto}}
+.wk{display:flex;gap:10px;flex:1}.wd{flex:1;background:#F6F5FB;border-radius:14px;padding:10px 6px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.wd b{font-size:13px;color:var(--mut)}.wd .ws{font-size:26px;line-height:1.1}.wd .wp{font-size:12px;font-weight:700;color:var(--mut)}
+.wd.now{outline:3px solid var(--pur);background:var(--pur2)}.wd.star{background:var(--grn2)}
+.scard{min-width:150px;border:2px dashed #E9C8DA;border-radius:16px;padding:10px 14px;text-align:center;display:flex;flex-direction:column;background:#FFF5FA}
+.scard b{font-size:17px}.scard span{font-size:12px;font-weight:700;color:var(--mut)}.scard.on{border-style:solid;border-color:var(--grn);background:var(--grn2)}
 </style>
 <style>/*ANIM-GAME 22/10: bau abre como jogo, chave nova pulsa, numeros sobem*/
 @keyframes shake{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-8deg) scale(1.05)}30%{transform:rotate(8deg) scale(1.08)}45%{transform:rotate(-10deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.12)}75%{transform:rotate(-6deg) scale(1.1)}}
@@ -398,6 +403,7 @@ function loadModel(name){
     var bTo = addDays((S.liveFrom < TODAY ? S.liveFrom : TODAY), -1), bFrom = addDays(bTo, -183);
     return Promise.all([rpc('bsb_sp_desk_days', { p_person: name, p_from: fr, p_to: TODAY }), rpc('bsb_sp_desk_days', { p_person: name, p_from: bFrom, p_to: bTo }).catch(function(){ return []; })]).then(function(r){
       var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); m.base = r[1] || []; S.M[name] = m; return Promise.all([tipsP,
+      rpc('bsb_sp_desk_drinks', { p_from: addDays(TODAY, -40), p_to: TODAY }).then(function(b){ m.dr = {}; (b || []).forEach(function(x){ m.dr[String(x.d)] = x; }); }).catch(function(){ m.dr = {}; }),
       rpc('bsb_sp_desk_bookings', { p_from: addDays(TODAY, -100).slice(0, 7) + '-01' }).then(function(b){ m.bk = {}; (b || []).forEach(function(x){ m.bk[String(x.d)] = x.n; }); }).catch(function(){ m.bk = null; }), rpc('bsb_sp_desk_bonus', { p_from: TODAY.slice(0, 7) + '-01' }).then(function(b){ m.db = (b || []).filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || null; }).catch(function(){}),
       /* Ligia 22/10: o estudo dela (Joana · My Path, bsb_lab career_joana) aparece aqui, e a Ligia ve onde ela esta */
       get('bsb_lab?select=content,updated_at&id=eq.career_' + name.toLowerCase()).then(function(r){ try { m.study = JSON.parse((r[0] || {}).content || '{}'); m.study.at = (r[0] || {}).updated_at; } catch (x) { m.study = null; } }).catch(function(){})]).then(function(){ return m; }); });
@@ -567,7 +573,7 @@ function topbar(tabs){
     '<button class="out" onclick="logout()">Exit</button></div>';
 }
 var GIRL_TABS = [['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins']];
-var DESK_TABS = [['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins'],['look','Look']];
+var DESK_TABS = [['day','My day'],['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins'],['look','Look']];
 var ADMIN_TABS = [['team','Team'],['steps','Steps'],['look','Look'],['shelf','Prizes'],['pits','Pit stops'],['set','Settings']];
 function go(t, v){ if (v !== undefined) S.view = v; S.tab = t; S.det = null; render(); }
 function render(){
@@ -576,7 +582,7 @@ function render(){
     var m = S.M[S.view];
     if (!m){ A.innerHTML = topbar(GIRL_TABS) + '<div class="load">Loading…</div>'; loadModel(S.view).then(function(mm){ if (S.live && S.role === 'admin') syncRewards(mm); render(); }).catch(function(){ A.innerHTML = '<div class="load">Could not load. Check the internet and try again.</div>'; }); return; }
     var tabs = m.desk ? DESK_TABS : GIRL_TABS;
-    var body = { today: pgToday, month: pgMonth, path: pgPath, wins: pgWins, prizes: pgPrizes, bonus: pgBonus, look: function(){ return pgLook(); } }[S.tab] || pgToday;
+    var body = { day: pgDay, today: pgToday, month: pgMonth, path: pgPath, wins: pgWins, prizes: pgPrizes, bonus: pgBonus, look: function(){ return pgLook(); } }[S.tab] || pgToday;
     A.innerHTML = topbar(tabs) + '<div class="pg">' + body(m) + '</div>';
     return;
   }
@@ -608,7 +614,7 @@ function key(k){
       A.innerHTML = '<div class="load">Loading…</div>';
       return loadBase().then(function(){
         if (S.role === 'therapist'){ S.view = S.who; S.tab = 'today'; }
-        else if (S.role === 'desk'){ S.view = S.who; S.tab = 'today'; return Promise.all([loadLook(), loadMyLook()]).then(render); }
+        else if (S.role === 'desk'){ S.view = S.who; S.tab = 'day'; return Promise.all([loadLook(), loadMyLook()]).then(render); }
         else if (S.role === 'ops'){ S.view = null; S.tab = 'look'; return loadLook().then(render); }
         else { S.view = null; S.tab = 'team'; return adminLoad(); }
         render();
@@ -618,6 +624,45 @@ function key(k){
 }
 function logout(){ S.who = null; S.view = null; S.M = {}; renderLogin(); }
 
+
+/* ===== MY DAY (Joana) · Ligia 22/10: o que ela faz hoje, cliente por cliente; o dia bom vira ⭐ e anda na semana ===== */
+var STAR_DAY = 80, CARD_DAYS = 4;
+function dayScore(m, d){
+  if (!d || !d.w || !d.clients) return null;
+  var dr = (m.dr || {})[d.d] || { nails: 0, paid: 0 }, nails = dr.nails || 0, drinks = Math.min(nails, (d.co || 0) + (dr.paid || 0));
+  var parts = [Math.min(1, d.pe / d.clients), Math.min(1, d.pr / d.clients)]; if (nails) parts.push(drinks / nails);
+  return { pct: Math.round(parts.reduce(function(a, x){ return a + x; }, 0) / parts.length * 100), nails: nails, free: d.co || 0, paid: dr.paid || 0, drinks: drinks };
+}
+function pgDay(m){
+  if (!m.desk) return pgToday(m);
+  var dm = {}; m.days.forEach(function(d){ dm[d.d] = d; });
+  var t = dm[TODAY] || { clients: 0, pe: 0, co: 0, pr: 0, booked: 0, w: false, d: TODAY }, sc = dayScore(m, t) || { pct: 0, nails: 0, free: 0, paid: 0, drinks: 0 };
+  /* sequencia de dias ⭐ (dias de trabalho seguidos, sem contar hoje se ainda nao fechou) */
+  var streak = 0; for (var i = 1; i < 40; i++){ var dd = dm[addDays(TODAY, -i)]; if (!dd || !dd.w) continue; var s2 = dayScore(m, dd); if (s2 && s2.pct >= STAR_DAY) streak++; else break; }
+  if (sc.pct >= STAR_DAY) streak++;
+  var cl = t.clients, missW = cl - t.pe, missD = sc.nails - sc.drinks, missN = cl - t.pr;
+  var nudge = !cl ? 'Clients will show here as they arrive' : missN >= missW && missN >= missD && missN > 0 ? '📅 Offer the next visit to ' + missN + ' more client' + (missN > 1 ? 's' : '')
+    : missW >= missD && missW > 0 ? '✨ Warm welcome for ' + missW + ' more client' + (missW > 1 ? 's' : '') : missD > 0 ? '🥂 Offer a drink to ' + missD + ' more at the chair' : 'Every client cared for today ⭐';
+  function tile(ic, t2, v, of, sub, ok){ var p2 = of ? Math.round(v * 100 / of) : 0;
+    return '<div class="card blk ' + (of && v >= of ? 'g' : p2 >= 50 ? 'y' : '') + ' rise"><div class="bh">' + ic + ' ' + t2 + '</div><div class="bv">' + v + '<span style="font-size:26px;color:var(--mut)"> / ' + of + '</span></div><div class="bs">' + sub + '</div>' + bar(v, of || 1, of && v >= of ? 'var(--grn)' : '') + '</div>'; }
+  /* a semana: ter a sab */
+  var dt = new Date(TODAY + 'T12:00:00Z'), mon = addDays(TODAY, -((dt.getUTCDay() + 6) % 7)), wk = '', stars = 0;
+  ['Tue','Wed','Thu','Fri','Sat'].forEach(function(nm, k){ var ds = addDays(mon, k + 1), d = dm[ds], s3 = dayScore(m, d), fut = ds > TODAY, isT = ds === TODAY;
+    var st = fut ? '' : s3 && s3.pct >= STAR_DAY ? '⭐' : isT ? '⏳' : s3 ? '·' : '';
+    if (s3 && s3.pct >= STAR_DAY) stars++;
+    wk += '<div class="wd' + (isT ? ' now' : '') + (st === '⭐' ? ' star' : '') + '"><b>' + nm + '</b><span class="ws">' + (st || '&nbsp;') + '</span><span class="wp">' + (fut || !s3 ? '' : s3.pct + '%') + '</span></div>'; });
+  var card = stars >= CARD_DAYS;
+  return '<div class="row" style="align-items:center"><div class="big" style="font-size:24px">🌅 My day · ' + new Date(TODAY + 'T12:00:00Z').toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', timeZone: 'UTC' }) + '</div>' +
+      '<span class="chip" style="margin-left:auto;font-size:15px">' + (streak ? '🔥 ' + streak + ' ⭐ day' + (streak === 1 ? '' : 's') + ' in a row' : '🔥 Start your streak today') + '</span></div>' +
+    '<div class="blks" style="grid-template-columns:repeat(3,1fr);flex:0 0 auto">' +
+      tile('✨', 'Warm welcome', t.pe, cl, 'every client', 0) +
+      tile('🥂', 'Drink at the chair', sc.drinks, sc.nails, 'free ' + sc.free + ' · paid ' + sc.paid, 0) +
+      tile('📅', 'Next visit booked', t.booked || 0, cl, 'offered to ' + t.pr + ' of ' + cl, 0) + '</div>' +
+    '<div class="nudge rise">👉 ' + nudge + '</div>' +
+    '<div class="card rise" style="display:flex;align-items:center;gap:22px"><div><div class="h" style="margin:0">🗓️ My week</div><div class="mut" style="font-weight:700;font-size:13px">' + STAR_DAY + '% care = ⭐ day</div></div>' +
+      '<div class="wk">' + wk + '</div>' +
+      '<div class="scard' + (card ? ' on' : '') + '"><div style="font-size:30px">🃏</div><b>' + (card ? 'Soul Card won!' : stars + ' / ' + CARD_DAYS + ' ⭐') + '</b><span>' + (card ? 'see My wins' : 'Soul Card this week') + '</span></div></div>';
+}
 /* ===== TODAY ===== */
 function greet(){ var h = +new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: 'numeric', hour12: false }).format(new Date()); return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; }
 var MIS = [
