@@ -69,7 +69,7 @@ input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);b
 .mc.done .bar i{background:var(--grn)}
 .miss{display:flex;flex-wrap:wrap;gap:5px}
 .miss span{background:var(--pink2);color:var(--pink);font-size:12px;font-weight:700;border-radius:99px;padding:3px 9px}
-.look{display:flex;gap:10px;align-items:center}
+.look{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.look .lk.ro{flex:none;height:34px;padding:0 12px;font-size:13px;border-width:1.5px;border-radius:99px}.lookgift{padding:12px 16px!important;font-size:15px!important;margin-top:10px!important}.lookgift .ky{width:44px!important;height:44px!important;font-size:24px!important;border-radius:12px!important}.lookgift .kys{gap:8px!important}
 .lk{flex:1;height:64px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}
 .lk.on{border-color:var(--pink);background:var(--pink2);color:var(--pink)}.lk.ro{cursor:default;opacity:.75}.lk.ro.on{opacity:1}
 .lkst{min-width:170px;text-align:center;font-weight:700;font-size:14px}
@@ -475,7 +475,8 @@ function build(p, days, magic, nr, hc, feed){
   /* conquistas */
   m.booked = days.reduce(function(a, d){ return a + (d.booked || 0); }, 0);
   var ACHP = m.desk ? ACH_DESK : m.hc ? ACH.concat([{ k:'glow', ic:'🧴', name:'Glow at Home', unit:'clients took Éminence home', t:[5,20,50], v:function(mm){ return mm.hcTotal || 0; } }]) : ACH;
-  m.ach = ACHP.map(function(a){ var v = a.v(m), t = 0; a.t.forEach(function(th){ if (v >= th) t++; }); return { a: a, v: v, tier: t, next: a.t[t] }; });
+  var anyKnown = m.months.some(function(x){ return x.known > 0; });
+  m.ach = ACHP.filter(function(a){ return a.k !== 'ontime' || anyKnown; }).map(function(a){ var v = a.v(m), t = 0; a.t.forEach(function(th){ if (v >= th) t++; }); return { a: a, v: v, tier: t, next: a.t[t] }; });
   m.silver = m.ach.filter(function(x){ return x.tier >= 2; }).length;
   m.gold = m.ach.filter(function(x){ return x.tier >= 3; }).length;
   /* nivel */
@@ -617,24 +618,26 @@ function pgTodayDesk(m){
   var lst = !look.make || !look.hair || !look.uniform ? lkWait()
     : '<span class="chip g">✓ Checked in</span>';
   var rows = [
-    { ic:'⏰', t:'On time', ok: !tm.late, v: tm.late ? tm.late + ' late' : '✓' },
+    { ic:'⏰', t:'On time', ok: tm.known && !tm.late, v: !tm.known ? '·' : tm.late ? tm.late + ' late' : '✓' },
     { ic:'👋', t:'Welcome', ok: t.clients && t.pe >= t.clients, v: t.pe + ' / ' + t.clients },
     { ic:'🥂', t:'Drink', ok: t.clients && t.co >= t.clients, v: t.co + ' / ' + t.clients },
     { ic:'📅', t:'Next visit offered', ok: t.clients && t.pr >= t.clients, v: t.pr + ' / ' + t.clients }
   ], allOk = rows.every(function(x){ return x.ok; });
   var miss = []; MIS_DESK.forEach(function(x){ (t[x.miss] || []).forEach(function(nm){ if (miss.indexOf(nm) < 0) miss.push(nm); }); });
-  var stdCard = '<div class="card mc rise' + (allOk ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/welcome.webp" alt=""></div><div class="grow"><div class="t">My Standard · today</div>' +
+  var stdCard = '<div class="card mc rise' + (allOk ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/welcome.webp" alt=""></div><div class="grow"><div class="t">Client care · today</div>' +
     rows.map(function(x){ return '<div class="kv" style="margin-top:8px;font-size:15px"><span>' + (x.ok ? '✅' : '◻️') + ' ' + x.ic + ' ' + x.t + '</span><b>' + x.v + '</b></div>'; }).join('') +
     (miss.length && !allOk ? '<div class="miss" style="margin-top:8px">' + miss.slice(0, 4).map(function(nm){ return '<span>' + e(nm) + '</span>'; }).join('') + (miss.length > 4 ? '<span>+' + (miss.length - 4) + '</span>' : '') + '</div>' : '') + '</div></div>';
   var up1 = tm.cl && tm.rate >= m.aRate, up2 = tm.reviews >= Math.ceil(m.aRev5);
-  var r1 = '<div class="card mc rise' + (up1 ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/booked.webp" alt=""></div><div class="grow"><div class="t">Left with the next visit booked</div>' +
-    '<div class="n">' + (tm.rate || 0) + '%</div><div class="why" style="margin-top:0">' + (tm.bk || 0) + ' of ' + (tm.cl || 0) + ' clients · your average ' + m.aRate + '%' + (up1 ? ' · ▲ above' : '') + '</div>' + bar(tm.rate || 0, Math.max(1, m.aRate)) + '</div></div>';
-  var r2 = '<div class="card mc rise' + (up2 ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/reviews.webp" alt=""></div><div class="grow"><div class="t">5★ reviews for the house</div>' +
-    '<div class="n">' + (tm.reviews || 0) + '</div><div class="why" style="margin-top:0">your average · ' + m.aRev5 + (up2 ? ' · ▲ above' : '') + '</div>' + bar(tm.reviews || 0, Math.max(1, Math.ceil(m.aRev5))) + '</div></div>';
+  var r1 = '<div class="card mc rise' + (up1 ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/booked.webp" alt=""></div><div class="grow"><div class="t">Next visit booked</div>' +
+    '<div class="n">' + (tm.rate || 0) + '%</div><div class="why" style="margin-top:0">' + (tm.bk || 0) + ' of ' + (tm.cl || 0) + ' clients · you usually get ' + m.aRate + '%' + (up1 ? ' · ▲ more than usual' : '') + '</div>' + bar(tm.rate || 0, Math.max(1, m.aRate)) + '</div></div>';
+  var r2 = '<div class="card mc rise' + (up2 ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/reviews.webp" alt=""></div><div class="grow"><div class="t">5★ reviews · the whole team</div>' +
+    '<div class="n">' + (tm.reviews || 0) + '</div><div class="why" style="margin-top:0">you usually get ' + m.aRev5 + (up2 ? ' · ▲ more than usual' : '') + '</div>' + bar(tm.reviews || 0, Math.max(1, Math.ceil(m.aRev5))) + '</div></div>';
   var need = 8, rv = m.review;
+  /* Ligia 22/10: o proximo aumento da Joana vem do treino (Senior quando os 12 passos estiverem feitos, contrato), nao dos meses */
+  var jm = (m.study || {}).modules || {}, jc = 0; for (var ji = 1; ji <= 12; ji++){ if ((jm[ji] || {}).s === 'certified') jc++; }
   return (S.live ? '' : '<div class="prac">🧪 Practice · only you see this · counting starts ' + dShort(S.liveFrom) + '</div>') +
     '<div class="hero2 rise">' + av(p.person, 96) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div><div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
-      '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months better than usual</div>' +
+      '<div class="revbox"><div class="rl">💷 Next raise · Senior</div><div class="rn"><b>' + jc + '</b> / 12</div><div class="rl">training steps done</div>' +
       '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
     '<div class="card rise"><div class="h">💄 My look today</div><div class="look">' + lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
       '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' +
@@ -677,7 +680,7 @@ function pgTodayRes(m){
   function resCard(img, title, v, a, names, i){
     var up = v >= Math.ceil(a);
     return '<div class="card mc rise' + (up ? ' done' : '') + '" style="animation-delay:' + (0.16 + i * 0.08) + 's"><div class="ic"><img class="mimg" src="medals/' + img + '.webp" alt=""></div><div class="grow"><div class="t">' + title + '</div>' +
-      '<div class="n">' + v + '</div><div class="why" style="margin-top:0">your average · ' + a + (up ? ' · ▲ above' : '') + '</div>' + bar(v, Math.max(1, Math.ceil(a))) +
+      '<div class="n">' + v + '</div><div class="why" style="margin-top:0">you usually get ' + a + (up ? ' · ▲ more than usual' : '') + '</div>' + bar(v, Math.max(1, Math.ceil(a))) +
       (names.length ? '<div class="miss ok" style="margin-top:10px">' + names.slice(0, 4).map(function(nm){ return '<span>' + e(nm) + '</span>'; }).join('') + (names.length > 4 ? '<span>+' + (names.length - 4) + '</span>' : '') + '</div>' : '') + '</div></div>';
   }
   var stdCard = '<div class="card mc rise' + (allStd ? ' done' : '') + '" style="animation-delay:.32s"><div class="ic"><img class="mimg" src="medals/ready.webp" alt=""></div><div class="grow"><div class="t">My Standard</div>' +
@@ -851,7 +854,9 @@ function pgMonth(m){
       ic = (stdOk ? '✓ ' : '') + (nr2 ? '⭐' + (nr2 > 1 ? nr2 : '') : '') + (nb ? '🔁' + (nb > 1 ? nb : '') : '');
     } else if (d && d.w){
       var n = (d.m1 ? 1 : 0) + (d.m2 ? 1 : 0) + (d.m3 ? 1 : 0);
-      if (d.full){ bg = 'var(--grn2)'; fg = 'var(--grn)'; ic = '⭐'; } else if (ds === TODAY){ bg = 'var(--pur2)'; fg = 'var(--pur)'; ic = n + '/3'; } else { bg = 'var(--pink2)'; fg = 'var(--pink)'; ic = n + '/3'; }
+      /* Ligia 22/10: sem "0/3" (so desanima); o dia mostra o cuidado com a cliente em % e o 💄 */
+      var cp = d.clients ? Math.round((d.pe + d.co + d.pr) / (3 * d.clients) * 100) : 0;
+      if (d.full){ bg = 'var(--grn2)'; fg = 'var(--grn)'; ic = '⭐ '; } else if (ds === TODAY){ bg = 'var(--pur2)'; fg = 'var(--pur)'; ic = cp + '% '; } else { bg = cp >= 70 ? 'var(--grn2)' : cp >= 40 ? '#FFF7E0' : '#F6F5FB'; fg = cp >= 70 ? 'var(--grn)' : cp >= 40 ? '#B07F17' : 'var(--mut)'; ic = cp + '% '; }
       if (d.look) ic += '💄';
     } else if (ds > TODAY || !d) { bg = '#fff'; }
     cells += '<div style="background:' + bg + ';color:' + fg + ';border-radius:10px;padding:4px;text-align:center;font-weight:700;font-size:12px;"><div class="dn">' + dd + '</div><div style="font-size:11px">' + ic + '</div></div>';
@@ -878,7 +883,7 @@ function pgMonth(m){
           tile('🔁', 'Came back', x.back || 0, 'you usually get ' + m.aBack, (x.back || 0) >= Math.ceil(m.aBack)) +
           tile('💛', 'Your tips', myTip, myTipSub, false); })() + '</div>' :
       '<div class="strip">' +
-        tile('🎯', 'Days 100%', x.full + ' / ' + x.worked, 'welcome + drink + next visit to all', x.worked && x.missionPct >= starPct) +
+        (function(){ var c = 0, a = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ c += d.clients; a += d.pe + d.co + d.pr; } }); var cp = c ? Math.round(a / (3 * c) * 100) : 0; return tile('💛', 'Client care', cp + '%', 'welcome · drink · next visit', cp >= 90); })() +
         tile('💄', 'Look', x.look + ' / ' + x.worked, 'days ready', x.worked && x.look >= x.worked) +
         tile('⏰', 'On time', x.known ? x.onTimePct + '%' : '·', !x.known ? 'no data yet' : x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
         (m.desk ? (function(){ var c = 0, b = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ c += d.clients; b += d.booked || 0; } });
@@ -959,7 +964,7 @@ function pgPath(m){
       line(t2.worked && t2.look >= t2.worked, '💄 Look', t2.look + ' / ' + t2.worked) +
       line(t2.worked && t2.full >= t2.worked, '🎯 Days 100%', t2.full + ' / ' + t2.worked + ' days') +
       line(t2.cl && t2.rate >= m.aRate, '📅 Left with next visit', (t2.rate || 0) + '% · avg ' + m.aRate + '%') +
-      line(t2.reviews >= Math.ceil(m.aRev5), '⭐ 5★ for the house', (t2.reviews || 0) + ' · avg ' + m.aRev5) + '</div>';
+      line(t2.reviews >= Math.ceil(m.aRev5), '⭐ 5★ reviews', (t2.reviews || 0) + ' · avg ' + m.aRev5) + '</div>';
     midC = '<div class="card grow"><div class="h">🌿 Review · December ' + m.review.year + '</div><div class="mut" style="font-weight:600">What decides your raise</div>' +
       line(m.stdMonths >= 10, '🧱 Basics done well', m.stdMonths + ' / 12 months') +
       line(m.aboveN >= 8, '📅 Better than your usual', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
@@ -967,16 +972,21 @@ function pgPath(m){
     var st = m.study || {}, mods = st.modules || {}, NM = 12, cert = 0, curN = 0, curS = 'todo';
     for (var mi = 1; mi <= NM; mi++){ var ms = (mods[mi] || {}).s || 'todo'; if (ms === 'certified') cert++; else if (!curN){ curN = mi; curS = ms; } }
     var SL = { todo: 'not started', studying: 'reading', practising: 'practice', certified: 'done' };
-    longC = '<div class="card grow"><div class="h">🌳 Next · your goal is Manager</div><div class="mut" style="font-weight:600">Front of House → Experience Leader → Manager</div>' +
-      line(cert >= NM, '💜 Experience Leader', cert >= NM ? '✓ ready' : 'the next step') +
+    longC = '<div class="card grow"><div class="h">🌳 Next · your goal is Manager</div><div class="mut" style="font-weight:600">Front of House → Senior → Manager</div>' +
+      line(cert >= NM, '💜 Senior Front of House', cert >= NM ? '✓ ready' : 'the next step') +
       line(cert >= NM, '📚 My study', cert + ' / ' + NM + ' modules') + bar(cert, NM, cert >= NM ? 'var(--grn)' : '') +
       (curN ? line(curS === 'practising', '📖 Now', 'Module ' + curN + ' · ' + SL[curS]) : '') +
       /* Ligia 22/10: membership nao paga agora; mostra que ela lidera a experiencia. Comissao so quando for Manager */
       line((m.db || {}).drinks_gbp > 0, '🥂 Paid drinks', '£' + Math.round((m.db || {}).drinks_gbp || 0) + ' this month') +
       line((m.db || {}).members > 0, '💎 Memberships', ((m.db || {}).members || 0) + ' this month') +
-      line(false, '🏆 Manager', '🔓 commission on drinks + memberships') +
+      line(false, '🏆 Manager', '🔓 drinks + memberships pay') +
       '<a class="btn" style="margin-top:14px;display:inline-block;text-decoration:none" href="https://bsb-joana-path.vercel.app" target="_blank">📚 Open my study</a></div>';
-    road = road2;
+    /* Ligia 22/10: o mapa da Joana segue o caminho do treino dela (Joana · My Path): estacoes, nao trimestres */
+    var JST = [['Front of House', 'started'], ['In training', 'Step ' + Math.min(cert + 1, NM) + ' of ' + NM], ['Senior Front of House', 'all 12 steps done'], ['Manager', 'when results show']];
+    road = '<div class="card mapc"><div class="mapin">' + STONES.map(function(sp, i){ var done = i === 0 || (i === 1 && cert >= NM), now = i === 1 && cert < NM;
+      return '<div class="pin' + (now ? ' cur' : done ? ' done' : '') + '" style="left:' + sp[0] + '%;top:' + sp[1] + '%">' + (now ? av(p.person, 70) : '<span class="lk">' + (done ? '✓' : '🔒') + '</span>') + '<span class="lbl">' + JST[i][0] + (now ? ' · ' + JST[i][1] : '') + '</span></div>'; }).join('') +
+      '<div class="pin gate" style="left:' + GATE[0] + '%;top:' + GATE[1] + '%"><span class="lk">' + dreamOf(p).ic + '</span><span class="lbl">' + e(dreamOf(p).name) + '</span></div>' +
+      '<div class="chap">📚 ' + cert + ' / ' + NM + ' steps done</div></div></div>';
   }
   /* Ligia 22/10 "ta muito poluido": o My path so responde onde estou e para onde vou; o mes fica em My performance e My month */
   return road + '<div class="row" style="flex:1;min-height:0">' + midC + longC + '</div>';
