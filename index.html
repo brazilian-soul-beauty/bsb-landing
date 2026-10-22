@@ -264,6 +264,20 @@ input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);b
   .team{grid-template-columns:1fr 1fr}
 }
 </style>
+<style>/*ANIM-GAME 22/10: bau abre como jogo, chave nova pulsa, numeros sobem*/
+@keyframes shake{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-8deg) scale(1.05)}30%{transform:rotate(8deg) scale(1.08)}45%{transform:rotate(-10deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.12)}75%{transform:rotate(-6deg) scale(1.1)}}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}40%{opacity:1}100%{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
+@keyframes prizein{0%{transform:translateY(30px) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+@keyframes keyglow{0%,100%{box-shadow:0 0 0 0 rgba(255,196,64,.0)}50%{box-shadow:0 0 0 8px rgba(255,196,64,.45)}}
+.reveal .stage2{position:relative;height:200px;display:flex;align-items:center;justify-content:center}
+.reveal .stage2 img{width:180px;height:180px;object-fit:contain;position:relative;z-index:2}
+.reveal .stage2 img.sh{animation:shake 1.1s ease-in-out}
+.reveal .stage2 .glow{position:absolute;left:50%;top:50%;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,150,.95),rgba(255,180,220,.5) 45%,transparent 70%);animation:burst 1.2s ease-out forwards;z-index:1}
+.reveal .prize{animation:prizein .6s ease-out both}
+.reveal .tap{font-weight:800;color:var(--pur);margin-top:6px}
+.ky.key.new{animation:keyglow 1.4s ease-in-out 3}
+.bx.ready .bi img{animation:wig 2.2s ease-in-out infinite}
+</style>
 </head>
 <body>
 <div id="app"><div class="load">Loading…</div></div>
@@ -658,7 +672,8 @@ function lookKeys(m, ym){
 }
 function lookStrip(m){
   var ym = TODAY.slice(0, 7), g = lookGift(ym), k = lookKeys(m, ym), NK = keysNeed(ym), done = k.n >= NK;
-  var slots = []; for (var i = 0; i < Math.max(NK, k.list.length); i++){ var st = k.list[i] || 'open'; slots.push('<i class="ky ' + st + '">' + (st === 'key' ? '🔑' : st === 'miss' ? '·' : '') + '</i>'); }
+  var lastK = k.list.lastIndexOf('key'), fresh = lastK >= 0 && lastK >= k.list.length - 2;
+  var slots = []; for (var i = 0; i < Math.max(NK, k.list.length); i++){ var st = k.list[i] || 'open'; slots.push('<i class="ky ' + st + (i === lastK && fresh ? ' new' : '') + '">' + (st === 'key' ? '🔑' : st === 'miss' ? '·' : '') + '</i>'); }
   return '<div class="lookgift' + (done ? ' ok' : '') + '"><span>🎁 ' + (g ? e(g) : 'This month\'s make-up gift') + '</span><span class="kys">' + slots.join('') + '</span><b>' + (done ? 'Chest unlocked ✨' : k.n + ' / ' + NK + ' keys') + '</b></div>';
 }
 function stdCheck(m){
@@ -971,7 +986,7 @@ function pgPath(m){
     for (var ti = ymk.length - 1; ti >= 0; ti--){ var tr = MTp[ymk[ti]]; if (tr && tr.hours > 20 && tr.tips != null){ tph = tr.tips / tr.hours; break; } }
     var nowH = base + tph, senH = sen + tph;
     midC = '<div class="card grow" style="background:linear-gradient(135deg,#F1EDFF,#FFF2F7)"><div class="h">💷 What you earn</div>' +
-      '<div style="font-size:64px;font-weight:800;color:#3F2FB8;line-height:1.05;margin-top:6px">£' + nowH.toFixed(2) + '<span style="font-size:22px;font-weight:700"> /hour</span></div>' +
+      '<div style="font-size:64px;font-weight:800;color:#3F2FB8;line-height:1.05;margin-top:6px">£<span class="cnt" data-to="' + nowH.toFixed(2) + '">' + nowH.toFixed(2) + '</span>' + '<span style="font-size:22px;font-weight:700"> /hour</span></div>' +
       '<div class="mut" style="font-weight:700;font-size:15px">£' + base.toFixed(2) + ' + £' + tph.toFixed(2) + ' tips</div>' +
       '<div class="kv" style="margin-top:18px;font-size:17px"><span>💜 Senior</span><b>£' + senH.toFixed(2) + ' /hour</b></div>' +
       '<div class="kv" style="margin-top:8px;font-size:17px"><span>🏆 Manager</span><b>set by results</b></div></div>';
@@ -1026,12 +1041,18 @@ function pgPrizes(m){
 }
 function openBox(id){
   var b = S.rewards.filter(function(x){ return x.id === id; })[0]; if (!b) return;
+  /* jogo: o bau treme, abre com luz, o premio sobe e cai confete */
   var d = document.createElement('div'); d.className = 'reveal';
-  d.innerHTML = '<div class="card"><div class="bi"><img src="medals/chest_open.webp" alt=""></div><div class="big" style="font-size:24px;margin:14px 0 6px">' + e(b.prize_name || 'A surprise') + '</div><div class="mut" style="font-weight:600">' + e(b.reason || '') + '</div><button class="btn" style="margin-top:18px" onclick="this.closest(\'.reveal\').remove()">Lovely ✨</button></div>';
+  d.innerHTML = '<div class="card"><div class="stage2"><img class="sh" src="medals/chest_closed.webp" alt=""></div><div class="tap">✨ Opening…</div></div>';
   document.body.appendChild(d);
-  b.status = 'opened';
+  setTimeout(function(){
+    var st = d.querySelector('.stage2'); st.innerHTML = '<div class="glow"></div><img src="medals/chest_open.webp" alt="">';
+    var c = d.querySelector('.card'); var t = d.querySelector('.tap'); if (t) t.remove();
+    c.insertAdjacentHTML('beforeend', '<div class="prize"><div class="big" style="font-size:26px;margin:10px 0 6px">🎁 ' + e(b.prize_name || 'A surprise') + '</div><div class="mut" style="font-weight:600">' + e(b.reason || '') + '</div><button class="btn" style="margin-top:18px" onclick="this.closest(\'.reveal\').remove()">Lovely ✨</button></div>');
+    try { confetti(); } catch (x) {}
+    b.status = 'opened'; render();
+  }, 1150);
   patch('bsb_sp_rewards', 'id=eq.' + id, { status: 'opened' }).catch(function(){});
-  render();
 }
 
 /* ===== ADMIN: TEAM ===== */
@@ -1256,5 +1277,6 @@ render = function(){
 };
 renderLogin();
 </script>
+<script>/*ANIM-COUNT*/(function(){var seen={};new MutationObserver(function(){document.querySelectorAll('.cnt[data-to]').forEach(function(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,dec=(el.dataset.to.split('.')[1]||'').length,t0=null;function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/900),v=to*(1-Math.pow(1-p,3));el.textContent=v.toFixed(dec);if(p<1)requestAnimationFrame(f);}el.textContent=(0).toFixed(dec);requestAnimationFrame(f);});}).observe(document.body,{childList:true,subtree:true});})();</script>
 </body>
 </html>
