@@ -420,7 +420,8 @@ function calHtml(m){const y=CALY,n=new Date(y,m,0).getDate(),first=(new Date(y,m
 function calNote(m){if(!CALSEL)return '<div class="calnote"><b>Tap a day</b>Each colour has a meaning.</div>';const t=dayType(CALY,m,CALSEL);const k=t?KEY4[t]:null;return `<div class="calnote"><b>${CALSEL} ${new Date(CALY,m-1,1).toLocaleDateString('en-GB',{month:'long'})}</b>${k?k[1]+'. '+k[2]:'Open. You can ask for a holiday if you have days.'}</div>`}
 
 /* ---------- RENDER ---------- */
-function frame(pic,cap,cnt,pct){if(isPrev())cnt='PREVIEW · '+cnt;$('pic').style.backgroundImage=`url(${IMG[pic]})`;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
+const POS={vg_cover:'50% 18%',vg_brunette:'50% 12%',vg_uniform:'50% 6%',vg_coat:'50% 30%',vg_hair:'50% 12%',vg_hair2:'50% 12%',vg_curls:'50% 15%',vg_selfie:'50% 30%',vg_mk1:'50% 35%',vg_mk2:'25% 40%'};
+function frame(pic,cap,cnt,pct){$('pic').style.backgroundPosition=POS[pic]||'center';if(isPrev())cnt='PREVIEW · '+cnt;$('pic').style.backgroundImage=`url(${IMG[pic]})`;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
 function render(){if(view=='home')return home();if(view=='tr')return train();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
 
 function home(){
