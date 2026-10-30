@@ -457,7 +457,7 @@ const COVER={'01-welcome':'stations','02-this-house':'bath','03-words':'nails'};
 function picRule(pic){if(view=='home')return 'paper';if(view!='ch')return null;const C=CH[ci],sc=C.S[si];if(C.id=='08-image'){return C.S.findIndex(x=>x.pic==pic)==si?pic:null}if(sc.t=='open'&&COVER[C.id])return COVER[C.id];return null}
 function renderSteps(){const el=$('steps');if(!el)return;const inCh=view=='ch'||view=='pol'||view=='ps';
  if(inCh||view=='tr'){const L=CH.filter(c=>!c.soon);el.innerHTML=L.map(c=>{const k=CH.indexOf(c),d=chDone(c),cur=inCh&&k==ci;return `<span class="${d&&!cur?'d':''} ${cur?'c':''}" title="${c.title}">${d&&!cur?'✓':c.n}</span>`}).join('<i></i>')+(inCh?`<b>${CH[ci].title}</b>`:'<b>The BSB Way</b>');return}
- if(view=='home'){const cur=curStep(),sel=PSEL==null?cur:PSEL;el.innerHTML=PATH.map((p,i)=>`<span data-s="${i}" class="${pDone(i)&&i!=sel?'d':''} ${i==sel?'c':''}" style="${i<=cur||pDone(i)?'cursor:pointer':''}">${pDone(i)&&i!=sel?'✓':i+1}</span>`).join('<i></i>')+`<b>${PATH[sel].t}</b>`;return}
+ if(view=='home'){const cur=curStep(),sel=PSEL==null?cur:PSEL;el.innerHTML=PATH.map((p,i)=>`<span data-s="${i}" class="${pDone(i)&&i!=sel?'d':''} ${i==sel?'c':''}" style="${i==cur||pDone(i)||pOpen(i)?'cursor:pointer':''}">${pDone(i)&&i!=sel?'✓':i+1}</span>`).join('<i></i>')+`<b>${PATH[sel].t}</b>`;return}
  el.innerHTML=''}
 function frame(pic,cap,cnt,pct){$('bk').textContent=view=='home'&&ADMIN?'Team answers':'Back';$('main').classList.toggle('ph',view=='home');const use=picRule(pic);const C=CH[ci];const inCh=view=='ch'||view=='pol'||view=='ps';
  $('pic').classList.toggle('paper',use=='paper');if(use){titlePanel(false);$('pic').style.backgroundPosition=POS[use]||'center';$('pic').style.backgroundImage=`url(${IMG[use]})`}
@@ -466,7 +466,7 @@ function frame(pic,cap,cnt,pct){$('bk').textContent=view=='home'&&ADMIN?'Team an
 function render(){if(view=='home')return home();if(view=='tr')return train();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
 
 let PSEL=null;
-function curStep(){let i=PATH.findIndex((p,k)=>!pDone(k));return i<0?PATH.length-1:i}
+function curStep(){for(let k=PATH.length-1;k>=0;k--)if(!PATH[k].soon&&pOpen(k)&&!pDone(k))return k;let i=PATH.findIndex((p,k)=>!pDone(k));return i<0?PATH.length-1:i}
 function home(){
  const cur=curStep(),i=PSEL==null?cur:PSEL,p=PATH[i];frame('team','','',PATH.filter((x,k)=>pDone(k)).length/PATH.length*100);
  const d=pDone(i),o=pOpen(i);let body='';
@@ -478,7 +478,7 @@ function home(){
  $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
  document.querySelectorAll('.path button[data-p]').forEach(b=>b.onclick=()=>{if(+b.dataset.p==0)location.href='details.html'+location.search});
  document.querySelectorAll('.path button[data-k]').forEach(b=>b.onclick=()=>{PSEL=null;ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
- document.querySelectorAll('#steps span[data-s]').forEach(x=>x.onclick=()=>{const k=+x.dataset.s;if(k<=cur||pDone(k)){PSEL=k==cur?null:k;home()}});
+ document.querySelectorAll('#steps span[data-s]').forEach(x=>x.onclick=()=>{const k=+x.dataset.s;if(k==cur||pDone(k)||pOpen(k)){PSEL=k==cur?null:k;home()}});
 }
 function train(){view='home';return home()}
 
