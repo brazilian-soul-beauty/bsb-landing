@@ -127,6 +127,9 @@ h1 em{font-style:italic}
 .calnote{min-height:44px;border-left:2px solid var(--bronze);padding:4px 0 4px 14px;font-size:14.5px;color:var(--ink2)}.calnote b{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);font-weight:400}
 .golink{align-self:flex-start;border:1px solid var(--bronze);padding:9px 16px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:#fff}
 .pal{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.pal div{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}.pal i{width:100%;aspect-ratio:1;border-radius:50%;border:1px solid var(--line)}
+.relrow{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink3)}.relrow .ok{color:var(--ok)}.relrow button{border:1px solid var(--bronze);background:#fff;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;cursor:pointer;color:var(--ink)}
+#print section.cr{break-inside:auto}#print .okk{color:#5E7A45}#print .no{color:#A4553F}#print td small{color:#857A6E}
+.ck{color:var(--ok);font-size:19px;font-weight:400;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -154,10 +157,8 @@ const PREVQ=QS.get('preview')=='1';const isPrev=()=>PREVQ&&typeof ADMIN!='undefi
 const CH=[
 {id:'01-welcome',n:'I',title:'Welcome',min:5,S:[
  {pic:'reception',cap:'Clapham Old Town',t:'open',h:'Welcome to<br>the <em>House</em>@@FIRST@@.',lede:'Before your first day, we want you to feel at home. Here you will learn how we work, how we care for every client, and what makes a visit to Brazilian Soul so special.',meta:'Chapter by chapter · Paid time'},
- {id:'about',pic:'room',cap:'About you',t:'form',h:'About you',f:[{id:'full_name',l:'Full name'},{id:'birthday',l:'Birthday',ty:'date'},{two:[{id:'emerg_name',l:'Emergency contact'},{id:'emerg_phone',l:'Their phone',ty:'tel'}]}]},
- {id:'uniform',pic:'stations',cap:'The nail studio',t:'form',h:'Your uniform',f:[{id:'top',l:'Top',o:['XS','S','M','L','XL']},{id:'trousers',l:'Trousers',o:['6','8','10','12','14','16']},{id:'shoes',l:'Trainers',o:['3','4','5','6','7','8']}]},
- {id:'p_ready',pic:'hall',cap:'Guess first',t:'choose',h:'Guess first',q:'Your first client is at 10:00. What time should you be ready, in uniform, at your station?',o:['10:00','9:45','9:30'],c:1,why:'Always 15 minutes before your first client. If she is at 10:30, you are ready at 10:15.'},
- {id:'before',pic:'sink',cap:'The details',t:'form',h:'Before you begin',f:[{id:'allergy',l:'Any allergy or sensitivity to products',ty:'area'},{id:'hope',l:'What would you most like to learn here',ty:'area'}]},
+ {id:'p_ready',pic:'hall',cap:'Guess first',t:'choose',h:'Guess first',q:'Your first client is at 10:00. What time do you start in the salon, changed and ready to prep?',o:['10:00','9:45','9:30'],c:1,why:'9:45. You start 15 minutes before your first client, to prep. At 10:00 you are at your station with her.'},
+ {id:'before',pic:'sink',cap:'The details',t:'form',h:'Before you begin',f:[{id:'hope',l:'What would you most like to learn here',ty:'area'}]},
  {pic:'hall',cap:'Until your first day',t:'done',h:'Thank you@@FIRST@@.',lede:'Your answers are kept with us. Next, the story of this House.',sign:true}
 ]},
 {id:'02-this-house',n:'II',title:'This House',min:12,S:[
@@ -205,8 +206,8 @@ const CH=[
  {pic:'hall',cap:'Our calendar',t:'open',h:'Our <em>calendar</em>',lede:'Our week, your hours, and how our holiday calendar works.',meta:'About 10 minutes'},
  {id:'p_closed',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'Which days is the salon closed?',o:['Saturday and Sunday','Sunday and Monday','Only Sunday'],c:1,why:'Sunday and Monday. We open Tuesday to Saturday.'},
  {pic:'reception',cap:'Our week',t:'week',h:'Our <em>week</em>'},
- {pic:'stations',cap:'Your start time',t:'read',h:'Your start time',lines:['<b>Ready</b> 15 minutes before your first client.','<b>Ready means</b> in uniform, look checked, station set.','Getting ready happens <b>before</b>, never on the clock.']},
- {id:'c_ready',pic:'stations',cap:'Check',t:'choose',h:'Check',q:'Today your first client is at 10:30. What time are you ready at your station?',o:['9:45','10:15','10:30'],c:1,why:'10:15. It is always your first client minus 15 minutes, not a fixed time.'},
+ {pic:'stations',cap:'Your start time',t:'read',h:'Your start time',lines:['<b>Start</b> in the salon 15 minutes before your first client.','Those 15 minutes are for <b>prep</b>: station, products, agenda.','At your client’s time, you are <b>at your station</b> with her.','Changing and breakfast happen <b>before</b> you clock in.']},
+ {id:'c_ready',pic:'stations',cap:'Check',t:'choose',h:'Check',q:'Your first client is at 10:30. What time do you start in the salon, changed and ready to prep?',o:['9:45','10:15','10:30'],c:1,why:'10:15. You start 15 minutes before your first client of the day, to prep. At 10:30 you are at your station with her.'},
  {pic:'sink',cap:'Your day',t:'read',h:'Your day',lines:['<b>Clock in</b> only when you are ready.','<b>30 minute break</b> on the rota. Clock out and in.','<b>Clock out</b> at the end of your shift.']},
  {pic:'hall',cap:'Holiday calendar',t:'key',h:'How to read our <em>calendar</em>'},
  {pic:'hall',cap:'December',t:'cal',m:12,h:'December',lede:'Tap a day to see what it means.'},
@@ -279,7 +280,12 @@ async function rpc(fn,body){return fetch(SBU+'rpc/'+fn,{method:'POST',headers:H,
 async function load(){if(!person||!CODE)return 'nolink';try{const r=await rpc('onb_load',{p_person:person,p_code:CODE});if(!r.ok)return r.status==400||r.status==401||r.status==403?'badcode':'offline';(await r.json()).forEach(x=>{let v=x.answer;try{if(v&&v[0]=='{')v=JSON.parse(v)}catch(e){}A[key(x.module,x.field)]=v});AUTH=true;return 'ok'}catch(e){return 'offline'}}
 async function save(c,fields){if(isPrev()){$('sv').textContent='Preview · not saved';return true}if(!AUTH)return false;$('sv').textContent='Saving';try{const rows=fields.map(f=>{const v=get(c,f);return{module:c,field:f,answer:typeof v=='object'?JSON.stringify(v):String(v)}});const r=await rpc('onb_save',{p_person:person,p_code:CODE,p_rows:rows});if(!r.ok)throw 0;$('sv').textContent='Saved';return true}catch(e){$('sv').textContent='Not saved · check your internet and try again';return false}}
 const chDone=c=>c.pol?POL.every((p,i)=>!pLive(i)||pSigned(i)):!!get(c.id,'__done');
+const detDone=()=>!!get('00-details','__done');
 const unlocked=k=>isPrev()||CH.slice(0,k).every(c=>c.soon||chDone(c));
+const PATH=[{t:'My details',m:'5 min'},{t:'The BSB Way',m:'Training'},{t:'Treatments',soon:1},{t:'My apps',soon:1},{t:'The team',soon:1},{t:'First week',soon:1}];
+const pDone=i=>i==0?detDone():i==1?CH.filter(c=>!c.soon).every(chDone):false;
+const released=i=>i==0||!!get('00-path','rel_'+(i+1))||(i==1&&CH.some(chDone));
+const pOpen=i=>!PATH[i].soon&&(isPrev()||released(i));
 const shuffle=(a,seed)=>{const r=a.map((x,i)=>[x,i]);let s=seed;for(let i=r.length-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r};
 
 /* ---------- POLICIES (Chapter V) ---------- */
@@ -302,13 +308,13 @@ function polHome(){
  frame('room','Policies',n+' / '+POL.length+' signed',n/POL.length*100);
  const per=7,pages=Math.ceil(POL.length/per);PV.pg=Math.min(PV.pg,pages-1);
  const rows=POL.slice(PV.pg*per,PV.pg*per+per).map((p,j)=>{const i=PV.pg*per+j,s=pSigned(i),u=pUnlocked(i);
-  const st=s?'Signed':!pLive(i)?'Soon':u?pMin(p)+' min':`<img src="${LOCK}" alt="">`;
+  const st=s?'<b class="ck">✓</b>':!pLive(i)?'Soon':u?pMin(p)+' min':`<img src="${LOCK}" alt="">`;
   return `<button data-pi="${i}" class="${s?'done':''}" ${u||s?'':'disabled'}><span class="r">${String(i+1).padStart(2,'0')}</span><span class="t">${esc(p.title)}</span><span class="s">${st}</span></button>`}).join('');
  $('main').innerHTML=`<div class="num">Chapter V</div><h1>Our <em>policies</em></h1><p class="lede pl-lede">Read each step and confirm. Sign at the end of every policy.</p><div class="chap pol">${rows}</div>${pages>1?`<div class="pager"><button id="pp" ${PV.pg?'':'disabled'}>‹</button>${PV.pg+1} / ${pages}<button id="pn" ${PV.pg<pages-1?'':'disabled'}>›</button></div>`:''}`;
  $('bk').style.visibility='visible';
  const nx=POL.findIndex((p,i)=>pUnlocked(i)&&!pSigned(i));
- $('nx').textContent=nx<0?'Chapters':'Start '+String(nx+1).padStart(2,'0');$('nx').disabled=false;
- $('nx').onclick=()=>{if(nx<0){view='home';return render()}openPol(nx)};
+ $('nx').textContent=nx<0?'Next chapter':'Start '+String(nx+1).padStart(2,'0');$('nx').disabled=false;
+ $('nx').onclick=()=>{if(nx<0){return goNext()}openPol(nx)};
  document.querySelectorAll('[data-pi]').forEach(b=>b.onclick=()=>openPol(+b.dataset.pi));
  if($('pp')){$('pp').onclick=()=>{PV.pg--;polHome()};$('pn').onclick=()=>{PV.pg++;polHome()}}
 }
@@ -375,20 +381,33 @@ function report(){
   ${sg?`<div class="rep-sig"><div class="sigbox done">${sigSvg(sg)}</div><small>${esc(sg.name)} · ${fmtT(sg.at)} · ${sg.min} min</small></div>`:'<p class="meta">Not signed yet</p>'}`;
   $('nx').textContent='All policies';$('nx').disabled=false;$('nx').onclick=()=>{RP.open=null;report()};return}
  const per=7,pages=Math.ceil(POL.length/per);const n=POL.filter(p=>rg(p.id+'_sign')).length;
- $('main').innerHTML=`<div class="num">Team answers</div><h1>${esc(RP.who)}</h1><p class="meta">${n} / ${POL.length} policies signed</p>
+ $('main').innerHTML=`<div class="num">Team answers</div><h1>${esc(RP.who)}</h1><div class="relrow">${PATH.map((p,i)=>{const r=RP.A['00-path|rel_'+(i+1)];const d=i==0?RP.A['00-details|__done']:i==1?CH.filter(c=>!c.soon).every(c=>c.pol?POL.every((q,k)=>!pLive(k)||RP.A['05-policies|'+q.id+'_sign']):RP.A[c.id+'|__done']):0;return `<span class="${d?'ok':''}">${i+1} ${p.t}${d?' ✓':''}${i>0&&!p.soon?(r?` · released <button data-rel="${i+1}" data-on="0">undo</button>`:` <button data-rel="${i+1}" data-on="1">Release</button>`):''}</span>`}).join('')}</div><p class="meta">${n} / ${POL.length} policies signed</p>
  <div class="chap pol">${POL.slice(RP.pg*per,RP.pg*per+per).map((p,j)=>{const i=RP.pg*per+j,sg=rg(p.id+'_sign'),k=p.steps.filter((t,x)=>rg(p.id+'_s'+(x+1))).length;
   return `<button data-o="${i}" class="${sg?'done':''}"><span class="r">${String(i+1).padStart(2,'0')}</span><span class="t">${esc(p.title)}</span><span class="s">${sg?fmtD(sg.at):k?k+' / '+p.steps.length:'·'}</span></button>`}).join('')}</div>
  <div class="pager"><button id="pp" ${RP.pg?'':'disabled'}>‹</button>${RP.pg+1} / ${pages}<button id="pn" ${RP.pg<pages-1?'':'disabled'}>›</button><button id="pdf" class="pdfb">Download PDF</button></div>`;
  $('nx').textContent='Other person';$('nx').disabled=false;$('nx').onclick=()=>{RP.who=null;report()};
  document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{RP.open=+b.dataset.o;report()});
+ document.querySelectorAll('[data-rel]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const r=await rpc('onb_release',{p_person:person,p_code:CODE,p_target:RP.who,p_step:+b.dataset.rel,p_on:b.dataset.on=='1'});if(!r.ok)throw 0}catch(e){b.textContent='Not saved';return}repLoad(RP.who)});
  $('pp').onclick=()=>{RP.pg--;report()};$('pn').onclick=()=>{RP.pg++;report()};$('pdf').onclick=printReport}
+function ansTxt(C,sc){const st=RP.A[C.id+'|'+sc.id];if(sc.t=='form')return (sc.f.flatMap(x=>x.two||[x])).map(f=>`<b>${esc(f.l)}</b>: ${esc(RP.A[C.id+'|'+f.id]||'-')}`).join('<br>');
+ if(st==null||st==='')return '<i>Not answered</i>';
+ if(sc.t=='choose'&&st.v!=null)return `${esc(sc.o[st.v])} ${sc.c!=null?(st.v==sc.c?'<span class="okk">✓</span>':`<span class="no">✗</span> <small>Right: ${esc(sc.o[sc.c])}</small>`):''}${st.conf?` <small>· ${st.conf=='sure'?'Was sure':'Guessed'}</small>`:''}`;
+ if(sc.t=='match'&&st.sel)return sc.pairs.map((p,i)=>`${esc(p[0])} → ${esc(st.sel[i]||'-')} ${st.sel[i]==p[1]?'<span class="okk">✓</span>':'<span class="no">✗</span>'}`).join('<br>');
+ if(sc.t=='order'&&st.ord)return st.ord.map((k,i)=>`${i+1}. ${esc((sc.items.find(x=>x[1]==k)||[k])[0])}`).join('<br>');
+ if(sc.t=='sign'&&st.pts)return `<div class="psig">${sigSvg(st)}</div><small>${esc(st.name)} · ${fmtT(st.at)}</small>`;
+ if(typeof st=='object')return esc(st.v!=null?String(st.v):st.text||JSON.stringify(st));return esc(String(st))}
+function chapRep(){return CH.filter(c=>!c.soon&&!c.pol).map(C=>{const d=RP.A[C.id+'|__done'],mi=RP.A[C.id+'|__minutes'];const rows=C.S.filter(sc=>sc.id&&sc.t!='open'&&sc.t!='done').map(sc=>`<tr><td>${esc((sc.q||sc.h||'').replace(/<[^>]+>/g,' '))}</td><td class="d">${ansTxt(C,sc)}</td></tr>`).join('');
+ return `<section class="cr"><h2>Chapter ${C.n} · ${esc(C.title)}</h2><p class="ns">${d?'Completed '+fmtT(d)+(mi?' · '+mi+' min':''):'Not completed'}</p>${rows?`<table>${rows}</table>`:''}</section>`}).join('')}
 function printReport(){
  const pol=POL.map((p,i)=>{const sg=rg(p.id+'_sign');const k=p.steps.filter((t,x)=>rg(p.id+'_s'+(x+1))).length;if(!sg&&!k)return '';
   return `<section><h2>${String(i+1).padStart(2,'0')} · ${esc(p.title)}</h2><table>${p.steps.map((t,x)=>{const a=rg(p.id+'_s'+(x+1));return `<tr><td class="c">${a?'✓':''}</td><td>${esc(t)}</td><td class="d">${a?'Read and understood · '+fmtT(a.at):'Not confirmed'}</td></tr>`}).join('')}</table>
   ${sg?`<div class="ps"><div class="psig">${sigSvg(sg)}</div><div><b>${esc(sg.name)}</b><br>Signed ${fmtT(sg.at)}<br>I confirm I have read and understood this policy, and I will follow it.</div></div>`:'<p class="ns">Not signed</p>'}</section>`}).join('');
  const n=POL.filter(p=>rg(p.id+'_sign')).length;
- $('print').innerHTML=`<header><img src="${$('logo').src}"><div><h1>Staff Policies · Acknowledgement</h1><p>${esc(RP.who)} · ${n} of ${POL.length} policies signed · Printed ${fmtT(new Date().toISOString())}</p></div></header>${pol||'<p>No answers yet.</p>'}`;
- document.title='BSB Policies · '+RP.who;window.print();setTimeout(()=>document.title='The BSB Way',1500)}
+ const dd=RP.A['00-details|__done'];
+ $('print').innerHTML=`<header><img src="${$('logo').src}"><div><h1>The BSB Way · Onboarding report</h1><p>${esc(RP.who)} · ${n} of ${POL.length} policies signed · Printed ${fmtT(new Date().toISOString())}</p></div></header>
+ <section><h2>Step 1 · My details</h2><p class="ns">${dd?'Sent '+fmtT(dd)+'. Full form and documents saved in Staff docs.':'Not sent yet'}</p></section>
+ ${chapRep()}<section><h2>Chapter V · Policies</h2></section>${pol||'<p>No policies signed yet.</p>'}`;
+ document.title='BSB Onboarding · '+RP.who;window.print();setTimeout(()=>document.title='The BSB Way',1500)}
 
 
 /* ---------- CALENDAR (teaching) ---------- */
@@ -402,14 +421,22 @@ function calNote(m){if(!CALSEL)return '<div class="calnote"><b>Tap a day</b>Each
 
 /* ---------- RENDER ---------- */
 function frame(pic,cap,cnt,pct){if(isPrev())cnt='PREVIEW · '+cnt;$('pic').style.backgroundImage=`url(${IMG[pic]})`;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
-function render(){if(view=='home')return home();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
+function render(){if(view=='home')return home();if(view=='tr')return train();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
 
 function home(){
- frame('hall','Your onboarding','',CH.filter(chDone).length/CH.length*100);
- $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${first?esc(first)+',<br>your <em>chapters</em>':'Your <em>chapters</em>'}</h1>
- <div class="chap">${CH.map((c,k)=>{const d=chDone(c),u=unlocked(k)&&!c.soon;return `<button data-k="${k}" class="${d?'done':''}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${d?'Done':c.soon?'Soon':c.pol&&u?POL.filter((p,i)=>pSigned(i)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}</div>${ADMIN?'<button class="adm" id="adm">Team answers</button>':''}`;
+ const nd=PATH.filter((p,i)=>pDone(i)).length;frame('hall','Your path','',nd/PATH.length*100);
+ $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
+ <div class="chap path">${PATH.map((p,i)=>{const d=pDone(i),o=pOpen(i),w=!o&&!p.soon&&(i==0||pDone(i-1));return `<button data-p="${i}" class="${d?'done':''}" ${o&&!(i==0&&d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:w?'Waiting for approval':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}</div>${ADMIN?'<button class="adm" id="adm">Team answers</button>':''}`;
  if(ADMIN)$('adm').onclick=()=>{view='rep';RP.who=null;report()};
  $('bk').style.visibility='hidden';$('nx').textContent='What if…';$('nx').disabled=false;
+ $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
+ document.querySelectorAll('.path button').forEach(b=>b.onclick=()=>{const i=+b.dataset.p;if(i==0){location.href='details.html'+location.search;return}if(i==1){view='tr';train()}});
+}
+function train(){
+ frame('hall','The BSB Way','',CH.filter(chDone).length/CH.length*100);
+ $('main').innerHTML=`<div class="num">Step 2 · The BSB Way</div><h1>Your <em>chapters</em></h1>
+ <div class="chap">${CH.map((c,k)=>{if(c.soon)return '';const d=chDone(c),u=unlocked(k)&&!c.soon;return `<button data-k="${k}" class="${d?'done':''}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${d?'<b class="ck">✓</b>':c.soon?'Soon':c.pol&&u?POL.filter((p,i)=>pSigned(i)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}</div>`;
+ $('bk').style.visibility='visible';$('nx').textContent='What if…';$('nx').disabled=false;
  $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
  document.querySelectorAll('.chap button').forEach(b=>b.onclick=()=>{ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
 }
@@ -481,11 +508,12 @@ async function next(){
  let okSave=true;
  if(s.t=='form')okSave=await save(c,ff(s).map(x=>x.id));
  else if(id)okSave=await save(c,[id]);
- if(s.t=='done'){const mins=Math.max(1,Math.round((Date.now()-T0)/60000));setv(c,'__done',new Date().toISOString());setv(c,'__minutes',String(mins));okSave=await save(c,['__done','__minutes']);if(!okSave){setv(c,'__done',undefined);$('nx').disabled=false;return}view='home';return render()}
+ if(s.t=='done'){const mins=Math.max(1,Math.round((Date.now()-T0)/60000));setv(c,'__done',new Date().toISOString());setv(c,'__minutes',String(mins));okSave=await save(c,['__done','__minutes']);if(!okSave){setv(c,'__done',undefined);$('nx').disabled=false;return}return goNext()}
  if(!okSave){$('nx').disabled=false;return}
  if(si<C.S.length-1){si++;CALSEL=null;screen()}
 }
-function back(){if(view=='pol'){view='home';return render()}if(view=='ps')return polBack();if(view=='rep'){if(RP.open!=null){RP.open=null;return report()}if(RP.who){RP.who=null;return report()}view='home';return render()}if(view=='wi'){if(WI.open!=null){WI.open=null;return whatif()}view='home';return render()}if(view=='ch'){CALSEL=null;if(si>0){si--;screen()}else{view='home';render()}}}
+function goNext(){const nk=CH.findIndex((x,k)=>k>ci&&!x.soon&&!chDone(x));if(nk<0){view='home';return render()}if(!unlocked(nk)){view='tr';return render()}ci=nk;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';return render()}
+function back(){if(view=='tr'){view='home';return render()}if(view=='pol'){view='tr';return render()}if(view=='ps')return polBack();if(view=='rep'){if(RP.open!=null){RP.open=null;return report()}if(RP.who){RP.who=null;return report()}view='home';return render()}if(view=='wi'){if(WI.open!=null){WI.open=null;return whatif()}view='home';return render()}if(view=='ch'){CALSEL=null;if(si>0){si--;screen()}else{view='tr';render()}}}
 
 /* ---------- WHAT IF ---------- */
 async function loadWI(){if(!WI.rows.length){try{WI.rows=await (await fetch(SBU+'bsb_onb_whatif?active=is.true&order=sort',{headers:H})).json()}catch(e){WI.rows=[]}}whatif()}
