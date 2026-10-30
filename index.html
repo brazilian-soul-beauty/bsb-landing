@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The BSB Way</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ivory:#FAF8F4;--paper:#F4EFE7;--ink:#2E2A25;--ink2:#5A5249;--ink3:#857A6E;--line:#D9CFC2;--bronze:#8A6D4A;--ok:#5E7A45;--no:#A4553F}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--ivory);color:var(--ink);font-family:Inter,sans-serif;font-weight:300}
+button{font:inherit;color:inherit}
+.wrap{display:grid;grid-template-columns:1fr 1fr;height:100%}
+.pic{background-size:cover;background-position:center;position:relative}
+.pic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(46,42,37,0) 60%,rgba(46,42,37,.28))}
+.pic .cap{position:absolute;left:40px;bottom:34px;z-index:1;color:#FAF8F4;font-size:11px;letter-spacing:.3em;text-transform:uppercase}
+.side{display:flex;flex-direction:column;padding:36px 7vw 32px 6vw;min-height:0}
+.head{display:flex;justify-content:space-between;align-items:center;flex:none;position:relative;z-index:2;background:var(--ivory)}
+.logo{height:54px;cursor:pointer}
+.count{font-size:12px;letter-spacing:.2em;color:var(--ink3)}
+.main{flex:1;display:flex;flex-direction:column;justify-content:safe center;gap:22px;min-height:0;max-width:470px;overflow-y:auto;padding:8px 2px}
+.num{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:17px;letter-spacing:.3em;color:var(--bronze);text-transform:uppercase}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,3.8vw,52px);line-height:1.04;letter-spacing:-.01em}
+h1 em{font-style:italic}
+.lede{font-size:17px;line-height:1.7;color:var(--ink2);font-weight:300}
+.meta{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3)}
+.q{font-family:'Cormorant Garamond',serif;font-size:25px;line-height:1.25;color:var(--ink)}
+.lines{display:flex;flex-direction:column;gap:12px}
+.lines p{font-size:16.5px;line-height:1.6;color:var(--ink2);animation:in .45s ease both}
+.lines p b{font-weight:400;color:var(--ink)}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.vals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px 20px}.vals div{border-top:1px solid var(--line);padding-top:7px}.vals b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:20px}.vals span{font-size:13px;line-height:1.4;color:var(--ink2)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{text-align:left;background:#fff;border:1px solid var(--line);padding:13px 16px;font-size:15.5px;line-height:1.45;color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s}
+.opt:hover{border-color:var(--bronze)}
+.opt.pick{border-color:var(--ink)}
+.opt.right{border-color:var(--ok);background:rgba(94,122,69,.07)}
+.opt.wrong{border-color:var(--no);background:rgba(164,85,63,.06)}
+.opt[disabled]{cursor:default}
+.opt .say{font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.3}
+.conf{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--ink);background:var(--paper);padding:12px 14px;border-left:2px solid var(--bronze)}
+.conf button{background:#fff;border:1px solid var(--bronze);padding:9px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.conf button.on{border-color:var(--ok);background:var(--ok);color:#fff}
+.why{border-left:2px solid var(--bronze);padding:4px 0 4px 16px;font-size:15px;line-height:1.6;color:var(--ink2);animation:in .4s ease both}
+.why b{display:block;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--bronze);font-weight:400;margin-bottom:4px}
+.mrow{display:grid;grid-template-columns:1fr 1.2fr;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0}
+.mrow span{font-size:15px;color:var(--ink)}
+.mrow select{font:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--bronze);padding:6px 8px!important;padding:4px 0;outline:none;cursor:pointer;width:100%}
+.mrow.right{border-bottom-color:var(--ok)}.mrow.wrong{border-bottom-color:var(--no)}
+.mrow small{grid-column:2;font-size:12.5px;color:var(--ok)}
+.ord{display:flex;flex-direction:column;gap:8px}
+.ord div{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:11px 14px;font-size:15.5px}
+.ord div.right{border-color:var(--ok)}.ord div.wrong{border-color:var(--no)}
+.ord .n{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--bronze);width:18px}
+.ord .t{flex:1}
+.ord button{background:none;border:0;cursor:pointer;font-size:16px;color:var(--ink3);padding:0 4px}
+.fl label{display:block;font-size:13px;letter-spacing:.04em;color:var(--ink2);margin-bottom:6px;font-weight:400}
+.fl input,.fl textarea{width:100%;border:1px solid var(--bronze);background:#fff;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ink);padding:10px 14px;outline:none;resize:none;border-radius:0}.fl input::placeholder,.fl textarea::placeholder{color:#B9AC9C;font-style:italic}
+.fl textarea{height:96px}
+.fl input:focus,.fl textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(138,109,74,.12)}
+.f{display:flex;flex-direction:column;gap:20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.sz{display:flex;gap:20px;flex-wrap:wrap}
+.sz button{background:#fff;border:1px solid var(--line);border-bottom:2px solid var(--line);font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--ink3);cursor:pointer;padding:2px 4px 4px}
+.sz button.on{color:var(--ink);border-bottom-color:var(--bronze)}
+.foot{flex:none;position:relative;z-index:2;background:var(--ivory);display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--line)}
+.cta,.bk{background:none;border:0;font-size:12px;letter-spacing:.24em;font-weight:400;text-transform:uppercase;cursor:pointer}
+.cta{display:flex;align-items:center;gap:14px}
+.cta::after{content:"";width:46px;height:1px;background:currentColor;transition:width .3s}
+.cta:hover::after{width:70px}
+.cta:disabled{color:var(--ink3);cursor:default}.cta:disabled::after{width:46px;opacity:.4}.cta:disabled::before{content:attr(data-hint);font-size:10.5px;letter-spacing:.14em;color:var(--bronze);text-transform:none;margin-right:4px}
+.bk{color:var(--ink3)}
+.bar{height:1px;background:var(--line);position:relative;margin-top:20px}.bar b{position:absolute;left:0;top:0;height:1px;background:var(--ink);transition:width .5s}
+.sv{font-size:11px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase}
+.sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px}
+.sign small{display:block;font-family:Inter,sans-serif;font-style:normal;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink3);margin-top:6px}
+.chap{display:flex;flex-direction:column}
+.chap button{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;background:none;border:0;border-bottom:1px solid var(--line);padding:13px 0;text-align:left;cursor:pointer}
+.chap .r{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--bronze)}
+.chap .t{font-family:'Cormorant Garamond',serif;font-size:22px}
+.chap .s{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3)}
+.chap button.done .s{color:var(--ok)}
+.chap button[disabled]{cursor:default;opacity:.55}
+.chap img{width:22px;height:22px;vertical-align:middle}
+.wi-chips{display:flex;gap:8px;flex-wrap:wrap}
+.wi-chips button{background:none;border:1px solid var(--line);padding:6px 12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--ink2)}
+.wi-chips button.on{border-color:var(--ink);color:var(--ink)}
+.wi-search{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;font-family:'Cormorant Garamond',serif;font-size:22px;padding:4px 0 8px;outline:none}
+.wi-list{display:flex;flex-direction:column}
+.wi-list button{background:none;border:0;border-bottom:1px solid var(--line);padding:12px 0;text-align:left;cursor:pointer;font-size:15.5px;line-height:1.4;display:flex;justify-content:space-between;gap:12px}
+.wi-list button small{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;padding-top:3px}
+.pager{display:flex;gap:16px;align-items:center;font-size:12px;letter-spacing:.2em;color:var(--ink3)}
+.pager button{background:none;border:1px solid var(--line);cursor:pointer;font-size:18px;line-height:1;padding:6px 14px;color:var(--ink)}.pager button[disabled]{opacity:.3;cursor:default}
+@media(max-height:900px) and (min-width:821px){.side{padding-top:22px;padding-bottom:20px}.logo{height:44px}.main{gap:14px}h1{font-size:clamp(30px,3.2vw,42px)}.q{font-size:21px}.opt{padding:9px 14px;font-size:14.5px}.opt .say{font-size:18px}.why{font-size:14px;line-height:1.5}.lede,.lines p{font-size:15.5px}.fl textarea{height:48px}.bar{margin-top:12px}.foot{padding-top:12px}}
+@media(max-width:820px){.wrap{grid-template-columns:1fr;grid-template-rows:18vh 1fr}.chap button{padding:9px 0}.chap .t{font-size:19px}.why{font-size:14px;line-height:1.5}.conf{font-size:12px;flex-wrap:wrap}.bar{margin-top:12px}.foot{padding-top:12px}.pic .cap{left:20px;bottom:12px}.side{padding:16px 20px;min-height:0}.logo{height:38px}.main{gap:14px}h1{font-size:32px}.lede,.lines p{font-size:15.5px}.q{font-size:21px}.vals{grid-template-columns:1fr 1fr 1fr;gap:8px 12px}.vals span{display:none}.opt{padding:9px 12px;font-size:14px}.opt .say{font-size:16.5px}h1{font-size:29px}}
+.pl-lede{font-size:15px}
+.chap.pol button{padding:10px 0}.chap.pol .t{font-size:20px}
+.step-n{font-family:'Cormorant Garamond',serif;font-size:64px;line-height:1;color:var(--bronze)}.step-n small{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-left:10px;font-family:Inter,sans-serif}
+.step{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.6vw,34px);line-height:1.25;color:var(--ink)}
+.ack{display:flex;align-items:center;gap:14px;background:none;border:1px solid var(--line);padding:14px 18px;font-size:15px;cursor:pointer;text-align:left;transition:border-color .2s,background .2s}
+.ack:hover{border-color:var(--bronze)}.ack .box{width:24px;height:24px;border:1px solid var(--ink3);display:grid;place-items:center;font-size:15px;flex:none}
+.ack.on{border-color:var(--ok);background:rgba(94,122,69,.07)}.ack.on .box{background:var(--ok);border-color:var(--ok);color:#fff}.ack[disabled]{cursor:default}
+.sv-at{font-size:12px;letter-spacing:.12em;color:var(--ok)}
+.decl{font-size:16px;line-height:1.6;color:var(--ink2)}.decl b{font-weight:400;color:var(--ink)}
+.sigwrap{display:flex;flex-direction:column;gap:6px}.siglab{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2)}.siglab button{background:none;border:0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);cursor:pointer}
+.sigbox{width:100%;height:140px;border:1px solid var(--line);background:#fff;touch-action:none;display:block}.sigbox.done{display:flex;align-items:center;justify-content:center}.sigbox svg{width:100%;height:100%}
+.rep-h{font-size:clamp(28px,2.6vw,38px)}
+.rep-steps{display:flex;flex-direction:column}.rep-steps div{display:grid;grid-template-columns:20px 1fr auto;gap:10px;border-bottom:1px solid var(--line);padding:6px 0;font-size:13.5px;line-height:1.4;color:var(--ink3)}.rep-steps div.ok{color:var(--ink)}.rep-steps span{color:var(--ok)}.rep-steps small{font-size:11px;color:var(--ink3);white-space:nowrap}
+.rep-sig .sigbox{height:90px}.rep-sig small{font-size:12px;color:var(--ink2)}
+.pdfb{margin-left:auto;border:1px solid var(--ink)!important;padding:7px 12px!important;color:var(--ink)}
+.adm{background:none;border:0;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);cursor:pointer;text-align:left}
+#print{display:none}
+@media print{html,body{height:auto;overflow:visible;background:#fff}.wrap{display:none}#print{display:block;font-family:Inter,sans-serif;color:#2E2A25;font-size:11px}
+#print header{display:flex;gap:18px;align-items:center;border-bottom:1px solid #D9CFC2;padding-bottom:12px;margin-bottom:14px}#print header img{height:44px}#print h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400}
+#print section{break-inside:avoid;margin-bottom:18px}#print h2{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;margin-bottom:6px;color:#8A6D4A}
+#print table{width:100%;border-collapse:collapse}#print td{border-bottom:1px solid #EEE7DC;padding:4px 6px;vertical-align:top}#print td.c{width:14px;color:#5E7A45}#print td.d{width:235px;white-space:nowrap;color:#857A6E;font-size:10px}
+#print .ps{display:flex;gap:16px;align-items:center;margin-top:8px}#print .psig{width:220px;height:70px;border:1px solid #D9CFC2}#print .psig svg{width:100%;height:100%}#print .ns{color:#A4553F;margin-top:6px}}
+.sz button{padding:6px 14px!important}.sz button.on{border-color:var(--bronze)!important;background:var(--paper)!important}
+.tap{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);margin-bottom:-12px}
+.wk{display:flex;flex-direction:column}.wk div{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:10px;border-bottom:1px solid var(--line);padding:10px 0;font-size:14.5px}.wk div.hd{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);padding-top:0}.wk div.off{color:var(--ink3)}.wk b{font-weight:400;font-family:'Cormorant Garamond',serif;font-size:19px}
+.key{display:flex;flex-direction:column;gap:12px}.key div{display:flex;gap:14px;align-items:center;font-size:15px}.key i,.cal i.d{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-style:normal;flex:none}
+.c-red{background:#C9725F;color:#fff}.c-green{background:#7E9B67;color:#fff}.c-yel{background:#EBCB7E;color:var(--ink)}.c-grey{background:#CFC6BA;color:var(--ink)}.c-off{background:transparent;color:#C4BAAE;border:1px dashed #D9CFC2}
+.key small{display:block;font-size:12.5px;color:var(--ink3)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}.cal span{font-size:10px;letter-spacing:.15em;color:var(--ink3)}.cal i.d{width:100%;max-width:40px;height:auto;aspect-ratio:1;margin:auto;font-size:14px;cursor:pointer;border:1px solid transparent}.cal i.d.sel{outline:2px solid var(--ink);outline-offset:2px}.cal i.n{color:var(--ink)}
+.calnote{min-height:44px;border-left:2px solid var(--bronze);padding:4px 0 4px 14px;font-size:14.5px;color:var(--ink2)}.calnote b{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);font-weight:400}
+.golink{align-self:flex-start;border:1px solid var(--bronze);padding:9px 16px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:#fff}
+.pal{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.pal div{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}.pal i{width:100%;aspect-ratio:1;border-radius:50%;border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="pic" id="pic"><span class="cap" id="cap"></span></div>
+ <div class="side">
+  <div class="head"><img class="logo" id="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAABbCAMAAADUZu4MAAAAkFBMVEUAAACJbEmKbEmLakmKbUqKbUqKbUqLbUqLbUqPcUyMckuMcUuOcEyNcEuPcEx/fz5/f395aUp9fFWOcUuTaDlVVVWNcEuqVVV/XDr/AAB+VVV1aTn//wB/fwB/Pz+NXEmLcjmZZmb///+qqlW/fz9/AACqf1X/f38A/wBVVQB/AH9mZmaNVTgAAAAAAAAAAADct6dEAAAAMHRSTlMALk4Tj69v8M/7EiyvTZIEAgsHbQoDzwMHAQYJAQIECwsFAQMEAgYCAQMCBQkAAABNWfXcAAAH0UlEQVR42u1aZ5PjOA4lAJKiSGVZjp17Zvdu9/7/7zuAcpBk+dtoSlNlVFd3mwp8BhEeQCr1q4RQuySKMy2QWq2AdmlqLLK0JkkTp/OPdQIVdK2/fPTWCdp2harFJE1dGFmDgE3bNSJN3ESDJ2tNYle3+uxICUxH92jd2qCSS4zT9+Perk6rmBh9r1S5sDqtGme1o1nDaNe2/tqabTNzpVubVsEhGjcHVbUrg4oGOAHMBntYG1RLjU7n3ErVp5UZAEoQ0OoPEGCFHs28WlcmJ8n9mJrdH4DVfyr1rVP7J0AV769diuuHeng/lJEJrMNc88KcRWsd/1i8hdKf0b3S7SxWKvRZbq9AvxzUkJs0Vk3nSYU3JxluRgE23W7moOYF38y3m/OzSfyw4BJ0iEB0CZ9lsDJlBmOsWT2fJRghXsERxm9qm+VsgBfcm9vKEaBO0wlWM59guX7dOBhUMyZJUv26FFTLU5EZqwLTMfuzqdk/yBIwgMpVo+FFwSWhgvl7kOFJsJ3Dafl+xqrL+dw7gqqs1knq6kWhdreBDQ/Uxp3VSP6CdTMPdRQfQDwzCYtCrQahH9V/mKhcrLehC9bXe6if91AXtIAe6tttoLGq4nW9GutZrzrV91Brrl5GUJ1odSmoOkIdVaRlOYSqKNpedU8HAKuJrWLsbcHvgkr6RWqAlwH4iPXdTFeWbbWauBUnlNQt1SfSQaAehoFdfo1QfUQbOE6xMtRXGkI9xZbhYsFKtBqGWjV4OHgc1yS9vXo3Tg2ApdoM3UqUumDhoGlsAJrTQQeTyPTS22tInB9B3TBLhIGlOuf0XqnfYqtUiFOU3fSuyvs+jekR1JOiq1aDTpi6LMkY5eWkQQRRJ+7BXDvw/RLjsMiu1D6zUTRTFWOhW5KyiltVTAVT4X/OYqEtzCRRtSdJE0c3MAHELwKzdc5kJuOImjHdhf2yWlUYtQq+Y+Yi7V9LDwqYkQmgDcAk8HDRe2wTO1zUrWhgge9MAl26nZmQSJXqZdAdRLGbIZn2Vpv0AWP8RVDRTNonNpmpVF9AFEu3nitoBDvKTV7MfSmsXwI1jKHSgfPlTLOCgI4vyl4bWWBhApWxWmtSs1mkLp3RqiQnSN0M64O6UnRtWuM9VB5DNMtwq9c7DqDUf6H6hynT/XxlLBCNq262OoVKEriSIan81Rxgoj0JSMbM8f6SOCmFC1TEKdRKa9mDCUtBnbqV0HuFM31gb4k8XtCxAeDddoE2AhV/VwQAPAjUzRwR/+a0b292aWeg6qWg+hmoNpaf/5sp/a36bIy92SreQXXGLNM8KsWtplAxQp1jc6A7TyOoE9LwYhhqsgi7LucMQONrN2HX1xKBOO3fDOA+AggRXIaz7magMrN/e2nmeABDRdYqXiPAnQHY5aqr3UxctaY8R4E7qQ3QtZySFIDjPmEQoOkyhcDf5i6uIvtvQ7NMkIkXEF6a7vYuBZCTOjBbhgM0ZuJWZBPtNwTzaRzNR9BWDaHeov1n7mJxtVAv0Do4voGhDR3L8kigt4lQu0c9Xa1r0HRRobHIz6uyLLuSmK5KhzVbqA0EOjXoG2CndSLSFcb6+LA/Ro59vlfqCbdOjrTE59yWH+UiwtjFaitAoPK783iRx/q8rAFaf6Gmof44ecivz/rfv0tIj1QTEkt2VZtu+IBv1s4QrmtvKJ9v5nCFCLCyjUypA++xBpdgCGplUC26NJ9WhukW/OrOghHVjNUMzv9R/Fy+qhXKF3BB77TsaXF4Mol0MSq1VsG4NSjsI+XQXqs1y45zpQiCV095yqLyZrXue5KyxRwjDRRv6jyg2VNaDumhPzbn+xO1GD/9Jadpb8epiF8U42yutQ1xQLhLkCg26Fa02hZyNfDL+3KnjU/FGRB6PAwIefRlfF73XaoLoeR8PRRtX6XHhz2RlqZ95NVZT+oid/dZ3MTebw0NaoOipSCvLwrwKIQUnLRfcFzWUgYUTKzViaiMqTg22vIslpbS88osR2viV2AxomHe5CGXZ4Vi5kWs7SE79nm+kPAjUCE7TyQY2d9FYVToorrB0Dom1JDJ5nCrzxWOnkA9ZjlADxVC34638UweXKDyl46awgwmjc29KYpMxqzJ2yyPiqD+ZujrnynUTebj36agwt5gbLCQx3s15+YB1DLLirgouC3iGpKhCD2fQmXei9PyUhafv5fO8kxHxqGtll1qMj3vEKjhAlW+07bQmY1Qq6LQI7LiZYWjNZz35GIBObinjrbWikWfiXhWFIIpzlBETpb1UCGbHN9qtjlaMS02gI8C2dZy1VX89fZGA8rxCoGab5nBU9Sq1KMnYkU0PCub7cVfrA22X9mcHYv/qQqd237HCzE/Z4jPrMXWxG4d5Px2EpMNrK43dkrbH+TI8Az1cwy1whzzoPrjED6o73ikn4lcLfWFzCBHeDzfxVD3+U7u6VuWVWCv8HBjK0VfpoS2zU/9SBuP/3i8QT3kPB3Ei/2Xj88L6dnz870Xhd5EKbw+A/RTnvKUpzzlKU95ylP+ECE63vXDuuteVPXFv35+VlW5q1RFx/N19UVNHFJf/1YVFyX8s1O77qjqbt+87jZvTOypKX3pN7ShQ/djXzdduWuO/KnblTyrf99QQ76hw2739mPTEX3v94fmtfuhdp7+4ivv3pP3H3VT1vR+bE7/B0p/SfU9n9sYAAAAAElFTkSuQmCC" alt="Brazilian Soul Beauty"><span class="count" id="cnt"></span></div>
+  <div class="main" id="main"></div>
+  <div class="foot"><button class="bk" id="bk">Back</button><span class="sv" id="sv"></span><button class="cta" id="nx" data-hint="Answer to continue">Continue</button></div>
+  <div class="bar"><b id="bar"></b></div>
+ </div>
+</div>
+<script>
+const IMG={reception:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/Sunlit_Minimalist_Pedicure_Spa.png?width=1100",room:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/Warm_Minimalist_Spa_Treatment_Room.png?width=1100",stations:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/Warm_Minimalist_Manicure_Salon.png?width=1100",sink:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/bef37606-1264-49a2-8ba9-3ecde8dcdeed.png?width=1100",hall:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/ChatGPT_Image_Oct_1_2026_04_11_22_PM.png?width=1100",bath:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/Warm_Minimalist_Spa_Corridor.png?width=1100",nails:"https://cdn.shopify.com/s/files/1/0349/7243/4565/files/Glossy_Iridescent_French_Manicure.png?width=1100",vg_cover:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_cover.jpg",vg_brunette:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_brunette.jpg",vg_uniform:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_uniform.jpg",vg_coat:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_coat.jpg",vg_knit:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_knit.jpg",vg_bag:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_bag.jpg",vg_curls:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_curls.jpg",vg_ears:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_ears.jpg",vg_mk1:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_mk1.jpg",vg_mk2:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_mk2.jpg",vg_nails1:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_nails1.jpg",vg_nails2:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_nails2.jpg",vg_hair:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_hair.jpg",vg_hair2:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_hair2.jpg",vg_selfie:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_selfie.jpg",vg_cafe:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_cafe.jpg"};
+const LOCK="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAkFBMVEXrzar006/r4c3Tr6Hz0KvQlWXYoXfxyqfhso326dO4r6vXm2zkt5XptIe2tnbbn3CxYiyscEa6iWT/AADhemb//wD//3/85sT97cwAAP9/KgB///+rdVAAAAD259br2Mb01rfsyavnt5H68+b47eHaxbXww5vp2MjWqof///9/f3+qqqrLmXXRybTV1bLcs5Hmdz99AAAAMHRSTlMg3yEPZCHuoun1BVtSqwSnEwz9AQcBAmChAQYC/QD8/Pz8/Pz8/PsT/QECA/0NCP0qyAhNAAACOUlEQVR42o3U53arMAwAYA9WgCTd7R3YkglmJMD7v10FxEDStI1+weE7ki0bsewq6jq7GexSxZ24AzYdK5lMPc9LU/97WMeyZB63xhhrEcL08TbctSULuQlOQU/UABie3oKyEx4HY1BrNQaYwIQvX6AsRUhJwLGJmtC/hp342IB17JAPoZS13L+Eu9Lb5PzsDocJUgCG/tsadiwEPudbSQQvbhZYixSX9R0OC1WoWbyCPjcIbh8Dmiw9AITsuJRO1gmVBsJjYno1yLoFbhGXxiB1k7ganbLGK48O+hzmwqqqEBHOL1qDCUs2Q1BzQjihUlHvHMGItfUE/6QqnxPqilYBqB3UxrCyOWdMkGt1cEscCqNxTlvruYyZvzQHyD1ZqCo9OdBcjbuZIbgtI/43eKr0FKDy/L118CECOPeHIDz1fW8dBMVFV899pJIFDh9wuLJVBdSvydHRlGI5GcWxKIrhU0T/QlX16BKCTUQzw4doSFkUG/pWjKHn0oHcrS5uQj1xchVKcZOIlxX8u0ercJ1q7MFGwX59zcbidBM0Il64fBPJtrn8Xf1g+AM1rMoqao1XxtcDwA+i4YBmTGdkt+Rev4yUxyQwNCKGQKQWGRuKUta3hpS/p7tAPR/mxSkI3wWb3dU0y/yt0qYaWOCJspXfjb3nf/4W+ugURHsmpHz7dj5mrx3bGlrdnrWy+WGQ0oxkjAPnjO1+nLjn6TJd1V/gsxSbDyGzX2F2bIWQ9R0wOx7jJrsH3o5PquSwLr1x0MUAAAAASUVORK5CYII=";
+const SBU='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/';
+const KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+const QS=new URLSearchParams(location.search);
+const person=(QS.get('p')||'').trim();const CODE=(QS.get('c')||'').trim();const first=person.split(' ')[0];let AUTH=false;
+const ROLE=(QS.get('r')||'all').toLowerCase();
+const PREVQ=QS.get('preview')=='1';const isPrev=()=>PREVQ&&typeof ADMIN!='undefined'&&ADMIN;
+
+/* ---------- CONTENT ---------- */
+const CH=[
+{id:'01-welcome',n:'I',title:'Welcome',min:5,S:[
+ {pic:'reception',cap:'Clapham Old Town',t:'open',h:'Welcome to<br>the <em>House</em>@@FIRST@@.',lede:'Before your first day, we want you to feel at home. Here you will learn how we work, how we care for every client, and what makes a visit to Brazilian Soul so special.',meta:'Chapter by chapter · Paid time'},
+ {id:'about',pic:'room',cap:'About you',t:'form',h:'About you',f:[{id:'full_name',l:'Full name'},{id:'birthday',l:'Birthday',ty:'date'},{two:[{id:'emerg_name',l:'Emergency contact'},{id:'emerg_phone',l:'Their phone',ty:'tel'}]}]},
+ {id:'uniform',pic:'stations',cap:'The nail studio',t:'form',h:'Your uniform',f:[{id:'top',l:'Top',o:['XS','S','M','L','XL']},{id:'trousers',l:'Trousers',o:['6','8','10','12','14','16']},{id:'shoes',l:'Trainers',o:['3','4','5','6','7','8']}]},
+ {id:'p_ready',pic:'hall',cap:'Guess first',t:'choose',h:'Guess first',q:'Your first client is at 10:00. What time should you be ready, in uniform, at your station?',o:['10:00','9:45','9:30'],c:1,why:'Always 15 minutes before your first client. If she is at 10:30, you are ready at 10:15.'},
+ {id:'before',pic:'sink',cap:'The details',t:'form',h:'Before you begin',f:[{id:'allergy',l:'Any allergy or sensitivity to products',ty:'area'},{id:'hope',l:'What would you most like to learn here',ty:'area'}]},
+ {pic:'hall',cap:'Until your first day',t:'done',h:'Thank you@@FIRST@@.',lede:'Your answers are kept with us. Next, the story of this House.',sign:true}
+]},
+{id:'02-this-house',n:'II',title:'This House',min:12,S:[
+ {pic:'hall',cap:'36 Bromell’s Road',t:'open',h:'This <em>House</em>',lede:'Who we are, why we exist, and how we live together, inside and out.',meta:'About 12 minutes'},
+ {id:'p_year',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'When did Brazilian Soul open its doors?',o:['2012','2016','2019'],c:0,why:'In 2012, in Stockwell. Since November 2025, our home is 36 Bromell’s Road, Clapham Old Town.'},
+ {pic:'reception',cap:'Since 2012',t:'read',h:'Our story',lines:['In 2012, Ligia opened Brazilian Soul with one idea: bring the beauty secrets of Brazil to London.','Many clients have been with us for years.','They come back for the results, and for the feeling of being at home.']},
+ {pic:'sink',cap:'Why we exist',t:'read',h:'Why we exist',lines:['<b>Our mission</b><br>To bring the beauty secrets of Brazil to London, and make every person feel good about themselves.','<b>Our vision</b><br>To be London’s reference in Brazilian beauty, the first and only choice for our clients.']},
+ {id:'c_mission',pic:'sink',cap:'Check',t:'choose',h:'Without looking back',q:'Our mission is to…',o:['Be the cheapest salon in Clapham','Bring the beauty secrets of Brazil to London, and make every person feel good about themselves','Do as many treatments a day as possible'],c:1},
+ {pic:'room',cap:'What we believe',t:'vals',h:'What we believe',vals:[['Teamwork','We win together'],['Honesty','Be transparent. Keep your word'],['Good humour','Harmony makes a good place to work'],['Recognition','We invest in everyone’s growth'],['Commitment','Body and soul, in every task'],['Respect','With clients and with each other'],['Excellence','Care for the details that delight'],['Quality','Always impeccable'],['Flexibility','Feedback is how we get better']]},
+ {id:'c_value',pic:'room',cap:'Check',t:'choose',h:'Which value is this?',q:'Your colleague’s next client arrives early. You are free, so you prepare her station and bring the client a drink.',o:['Quality','Teamwork','Flexibility'],c:1,why:'Teamwork. We win together, and nobody is left alone on a busy day.'},
+ {id:'w_value',pic:'room',cap:'Your turn',t:'write',h:'Your turn',q:'Which value feels most like you? Why?'},
+ {pic:'stations',cap:'Our culture',t:'read',h:'Brazilian warmth.<br><em>London standards.</em>',lines:['Every client should feel at home, and leave feeling cared for.','We never rush. We never do half a job.','One standard for everyone, every day.','We are a team, not a group of stars.']},
+ {id:'c_culture',pic:'stations',cap:'Check',t:'choose',h:'Which one is NOT us?',q:'Pick the sentence that does not belong in this House.',o:['We never do half a job','We rush to fit everything in','One standard for everyone, every day'],c:1,why:'We never rush. A smaller service done perfectly is better than a big one done badly.'},
+ {id:'w_cared',pic:'stations',cap:'Your turn',t:'write',h:'Your turn',q:'Think of a time you felt truly cared for somewhere. What did they do?'},
+ {pic:'hall',cap:'Behind the scenes',t:'read',h:'How we work together',lines:['We arrive ready. We put the phone away.','We speak through Connecteam, not personal chats.','We share: tips, help, and the hard days.','We record what happens, to protect you and the House.','What happens here, stays here.','Feedback is how we grow, and growth is rewarded.']},
+ {id:'m_work',pic:'hall',cap:'Check',t:'match',h:'Match them',q:'Where does each one go?',pairs:[['A message about work','Connecteam'],['Your phone','Only on your break'],['A client’s private story','Stays here'],['Something went wrong','Record it the same day']]},
+ {id:'w_hard',pic:'hall',cap:'Your turn',t:'write',h:'Your turn',q:'Which of these will be the hardest for you, and why?'},
+ {pic:'bath',cap:'The five senses',t:'read',h:'A visit you can <em>feel</em>',lines:['<b>Smell</b> Cuticle oil, candles, a fresh room.','<b>Sound</b> Calm music, soft voices.','<b>Sight</b> Warm light, a tidy station, a clean uniform.','<b>Touch</b> A short massage in every treatment.','<b>Taste</b> Our cappuccino, always served the same way.']},
+ {id:'m_senses',pic:'bath',cap:'Check',t:'match',h:'Match the senses',q:'Which sense does each moment belong to?',pairs:[['Cuticle oil and candles','Smell'],['A short massage','Touch'],['Our cappuccino','Taste'],['Warm light, tidy station','Sight']]},
+ {pic:'reception',cap:'Who is who',t:'read',h:'Who to ask',lines:['<b>Clients, bookings, the day’s agenda</b> Front of House','<b>Technique and standards on the floor</b> Salon Manager','<b>Rota, holidays, pay, Connecteam</b> Operations Manager','<b>Anything serious</b> Founder']},
+ {id:'m_who',pic:'reception',cap:'Check',t:'match',h:'Who do you ask?',q:'Match each question to the right person.',pairs:[['I want to book a holiday','Operations Manager'],['A client wants to change her time','Front of House'],['I am unsure about a technique','Salon Manager'],['Something serious happened','Founder']]},
+ {id:'case1',pic:'stations',cap:'Case',t:'case',h:'Case 1',q:'A colleague is running late and her next client has arrived. You have 10 free minutes. What do you do?',a:'Help her. Prepare her station, offer her client a drink, and let Front of House know. We are a team, not a group of stars.'},
+ {id:'case2',pic:'room',cap:'Case',t:'case',h:'Case 2',q:'During a treatment, a client shares something private. Later, a friend asks you about her. What do you say?',a:'Nothing. What happens here, stays here. Clients trust us with their stories.'},
+ {id:'case3',pic:'sink',cap:'Case',t:'case',h:'Case 3',q:'You will be late tomorrow. How do you let us know?',a:'Through Connecteam and by telling Front of House, as early as possible and before your shift starts. Never by personal message only.'},
+ {pic:'hall',cap:'Chapter II complete',t:'done',h:'Welcome to the <em>House</em>@@FIRST@@.',lede:'Now you know who we are. Next: the words we use with every client.'}
+]},
+{id:'03-words',n:'III',title:'The Words of the House',min:15,S:[
+ {pic:'nails',cap:'The words of the House',t:'open',h:'The <em>Words</em><br>of the House',lede:'In this House, words are part of the treatment. The same care, the same phrases, from every one of us.',meta:'About 15 minutes · Say them out loud'},
+ {id:'p_name',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'How often should a client hear her own name during one visit?',o:['Once is enough','In every interaction we can, above all when she arrives and when she leaves','Never, it is too personal'],c:1,why:'The brain hears its own name through any noise. It is the fastest way to say “I see you, not a booking”. Use her name every time you can, and always in your first and your last sentence.'},
+ {id:'s_new',pic:'reception',cap:'Welcome',t:'choose',say:1,h:'A new client walks in',q:'Which one do we say?',o:['Hi, do you have a booking?','Emma! Welcome in, we’re so happy you found us. I’m [your name], come with me, let me take your coat.','Hello. Take a seat, someone will be with you soon.'],c:1,why:'Her name in the first breath, your name right after, and one act of care: the coat. A new client decides in ten minutes if she returns, and minute one is yours.'},
+ {id:'s_reg',pic:'reception',cap:'Welcome',t:'choose',say:1,h:'A regular arrives',q:'Which one do we say?',o:['Hi, welcome to Brazilian Soul Beauty.','Sofia! Good to see you. [Therapist] is just getting your seat ready, come on in.'],c:1,why:'A regular never hears “hi, welcome” like a stranger. She hears her name and who is waiting for her. That is belonging.'},
+ {id:'s_drink_new',pic:'sink',cap:'The drink',t:'choose',say:1,h:'Offering a drink to a new client',q:'Which one do we say?',o:['Do you want something to drink?','Can I make your moment a bit more enjoyable? I can serve you a cappuccino, a herbal tea, a glass of water or a glass of wine.'],c:1,why:'We are not giving her a drink. We are giving her a moment. Naming the options makes it feel generous and easy to say yes.'},
+ {id:'s_drink_who',pic:'sink',cap:'The drink',t:'choose',h:'Who is this for?',q:'“Can I serve you your favourite drink? You usually get a cappuccino with oat milk, right?”',o:['A new client','A returning client'],c:1,why:'Only a returning client. Check her card before you say it: remembering her drink before she asks is the strongest “you belong here” we have.'},
+ {id:'s_drink_no',pic:'room',cap:'The drink',t:'choose',h:'When do we NOT offer a drink?',q:'In which treatment do we never offer a drink?',o:['Manicure','Waxing','Facial'],c:1,why:'Waxing. Never.'},
+ {id:'m_never',pic:'stations',cap:'Never say',t:'match',h:'Never say',q:'Match each phrase we never say to what we say instead.',pairs:[['No problem.','My pleasure.'],['I do not know.','Let me find out for you.'],['That is not my job.','Let me get the right person for you.'],['Sorry for the wait.','Thank you for your patience, you have my full attention now.']]},
+ {id:'s_checkout',pic:'nails',cap:'Checkout',t:'choose',say:1,h:'She arrives at the desk after her treatment',q:'Which one do we say first?',o:['That’s £46. Card or cash?','Look at those, Emma! Beautiful. Did you enjoy your time with [therapist]?'],c:1,why:'The checkout opens with her result, never with the card machine. Money is the last thing we mention.'},
+ {id:'w_next',pic:'nails',cap:'From memory',t:'case',h:'From memory',q:'Her treatment is finished. Write how you offer her next visit.',a:'“Shall I hold your favourite slot for your next visit?”'},
+ {id:'s_goodbye',pic:'hall',cap:'Goodbye',t:'choose',say:1,h:'She leaves without booking',q:'Which one do we say?',o:['Are you sure you don’t want to book now?','Take wonderful care of yourself, Laura. We’re here whenever you’re ready, it was a joy having you.','Bye, see you!'],c:1,why:'No pressure at the door, ever. The goodbye becomes her memory of us.'},
+ {id:'o_late',pic:'reception',cap:'She is late',t:'order',h:'She arrives late',q:'Put the three steps in the right order.',items:['Reassure first: “You’re here, that’s what matters.”','Let it settle: a seat, some water, a moment.','Then adjust: focus on what makes the biggest difference today.'],why:'A late client walks in stressed. One word of blame keeps the stress firing. Warmth first, then a pause, and only then the plan, framed as a gain, never a loss.'},
+ {id:'case_late',pic:'reception',cap:'Case',t:'case',h:'Case',q:'She arrives 20 minutes late and the treatment must be adapted. Write what you say to her.',a:'“You’re here, that’s what matters. Sit down for one second. So you don’t feel rushed at all, we will focus today on what makes the biggest difference, and it will look just as beautiful.”'},
+ {id:'w_practise',pic:'nails',cap:'Your turn',t:'write',h:'Your turn',q:'Which phrase will you practise out loud this week?'},
+ {pic:'hall',cap:'Chapter III complete',t:'done',h:'Now you speak<br>our <em>language</em>@@FIRST@@.',lede:'Say these phrases out loud until they feel like yours. Next: our calendar, hours and holidays.'}
+]},
+{id:'04-calendar',n:'IV',title:'Calendar',min:10,S:[
+ {pic:'hall',cap:'Our calendar',t:'open',h:'Our <em>calendar</em>',lede:'Our week, your hours, and how our holiday calendar works.',meta:'About 10 minutes'},
+ {id:'p_closed',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'Which days is the salon closed?',o:['Saturday and Sunday','Sunday and Monday','Only Sunday'],c:1,why:'Sunday and Monday. We open Tuesday to Saturday.'},
+ {pic:'reception',cap:'Our week',t:'week',h:'Our <em>week</em>'},
+ {pic:'stations',cap:'Your start time',t:'read',h:'Your start time',lines:['<b>Ready</b> 15 minutes before your first client.','<b>Ready means</b> in uniform, look checked, station set.','Getting ready happens <b>before</b>, never on the clock.']},
+ {id:'c_ready',pic:'stations',cap:'Check',t:'choose',h:'Check',q:'Today your first client is at 10:30. What time are you ready at your station?',o:['9:45','10:15','10:30'],c:1,why:'10:15. It is always your first client minus 15 minutes, not a fixed time.'},
+ {pic:'sink',cap:'Your day',t:'read',h:'Your day',lines:['<b>Clock in</b> only when you are ready.','<b>30 minute break</b> on the rota. Clock out and in.','<b>Clock out</b> at the end of your shift.']},
+ {pic:'hall',cap:'Holiday calendar',t:'key',h:'How to read our <em>calendar</em>'},
+ {pic:'hall',cap:'December',t:'cal',m:12,h:'December',lede:'Tap a day to see what it means.'},
+ {id:'c_dec',pic:'hall',cap:'Check',t:'choose',h:'Check',q:'A day is grey on the calendar. Can you ask for a holiday on it?',o:['Yes, if I have days','No, it is blocked'],c:1,why:'No. Grey days are our busiest days, so they are blocked.'},
+ {id:'c_xmas',pic:'hall',cap:'Check',t:'choose',h:'Check',q:'The salon is closed on a green day. Does it come out of your 28?',o:['Yes','No, green days do not'],c:1,why:'Green days are closed and not taken from your holidays. Red days are closed and do count.'},
+ {pic:'bath',cap:'Summer',t:'cal',m:7,h:'Summer',lede:'Yellow is the summer window. You get 5 working days in summer.'},
+ {id:'c_summer',pic:'bath',cap:'Check',t:'choose',h:'Check',q:'Which one can you ask for?',o:['One week in July','Two weeks in August','One week in May'],c:0,why:'One week inside the yellow window. Two weeks in summer is not possible, and May has blocked days.'},
+ {pic:'room',cap:'Easter',t:'cal',m:4,h:'Easter',lede:'Red days: the salon is closed and they count as holiday.'},
+ {pic:'room',cap:'Your holidays',t:'read',h:'Your <em>holidays</em>',lines:['<b>28 days</b> a year for full time, bank holidays included.','<b>January to December</b> is our holiday year.','<b>Always closed:</b> the first weeks of January and Easter. These days count as holiday.','<b>1 December</b> requests open for the next year.']},
+ {pic:'room',cap:'Fair for everyone',t:'read',h:'Fair for <em>everyone</em>',lines:['Every year, around November, we plan the new calendar.','<b>Between Christmas and New Year</b> it changes every year. Some years we work, some years we close <b>green</b> days, so everyone rests more.','Green days do not give you extra days.','Days right after key holidays go by <b>rotation</b>.','You cannot go over your allowance.']},
+ {pic:'bath',cap:'Longer breaks',t:'read',h:'Longer <em>breaks</em>',lines:['More than 2 weeks? Only in <b>January</b>, if there is space.','It goes by <b>rotation</b>: if you had it last year, someone who has not goes first.','Two people who have not had it? <b>Time with us</b> decides.']},
+ {id:'c_jan',pic:'bath',cap:'Check',t:'choose',h:'Check',q:'You took 3 weeks last January. This year a colleague who never had it asks for the same weeks. Who goes first?',o:['Me, I asked first','My colleague','Whoever has more days left'],c:1,why:'Your colleague. It goes by rotation, so everyone gets a turn. If neither had it, time with us decides.'},
+ {pic:'sink',cap:'Unpaid leave',t:'read',h:'No unpaid <em>leave</em>',lines:['Full time is <b>43 hours</b> a week. That gives you <b>28 paid days</b>.','We do not offer unpaid days on top.','Need one more day? Ask for a <b>paid extra day</b>, well in advance.','It is approved only if the team is covered. Nobody works alone.']},
+ {id:'c_extra',pic:'sink',cap:'Check',t:'choose',h:'Check',q:'Your holidays are finished and you need one more day. What happens?',o:['I take an unpaid day','I ask for a paid extra day, early, and it depends on cover','It is never possible'],c:1,why:'A paid extra day, planned well in advance, and only if the team is covered.'},
+ {pic:'reception',cap:'Before you ask',t:'read',h:'Before you <em>ask</em>',lines:['<b>✓</b> The dates are not blocked.','<b>✓</b> You still have days left.','<b>✓</b> You still have days for that weekday.','<b>✓</b> You signed the Holiday Policy.']},
+ {pic:'reception',cap:'Where to see it',t:'read',h:'Where to <em>see it</em>',lines:['<b>1</b> Check the Holidays calendar.','<b>2</b> Ask on Connecteam: Request Time Off.','<b>3</b> January, or no calendar yet? Talk to management.','<b>4</b> Wait for approval before you book any travel.'],link:['Open Holidays','https://bsb-holidays.vercel.app']},
+ {id:'case_trip',pic:'reception',cap:'Case',t:'case',h:'Case',q:'You found cheap flights for July. What do you do?',a:'Check the Holidays calendar, ask on Connecteam, and only buy the flights after it is approved.'},
+ {pic:'hall',cap:'Chapter IV complete',t:'done',h:'Now you know<br>our <em>rhythm</em>@@FIRST@@.',lede:'Next: our policies.'}
+]},
+{id:'05-policies',n:'V',title:'Policies',pol:1,min:60},
+{id:'07-etiquette',n:'VI',title:'Etiquette',min:12,S:[
+ {pic:'room',cap:'Etiquette',t:'open',h:'<em>Etiquette</em>',lede:'How we move, speak and care in this House, from the first hello to the last goodbye.',meta:'About 12 minutes'},
+ {id:'w_name',pic:'reception',cap:'Her name',t:'case',h:'Her name, every time',q:'She sits down at your station. Write what you say, using her name.',a:'“Emma, can I serve you a nice cappuccino, herbal tea, or a glass of water?” Her name in every interaction, above all at the start and at the end.'},
+ {pic:'stations',cap:'Clean first',t:'read',h:'Clean <em>first</em>',lines:['Every manicure starts by cleaning her hands with <b>alcohol</b>.','Files, buffers and towels are <b>single use</b>.','Metal tools are <b>sterilised and sealed</b>. Open them in front of her.','Wax: <b>never double dip</b>.']},
+ {id:'m_clean',pic:'stations',cap:'Check',t:'match',h:'Match them',q:'What happens to each one?',pairs:[['Nail file','Single use'],['Metal tools','Sterilised and sealed'],['Wax spatula','Never double dip'],['Her hands','Alcohol first']]},
+ {pic:'bath',cap:'A quiet House',t:'read',h:'A quiet <em>House</em>',lines:['Put things down gently. Never throw tools or rubbish.','Never push things with your foot.','Walk softly near the rooms and in front of clients.','In the kitchen, keep your voice low. No loud calls with earphones.','Always remember: a client may be in the massage room.']},
+ {id:'c_bin',pic:'stations',cap:'Check',t:'choose',h:'Check',q:'Your client is sitting with you. You need to throw away some rubbish. What do you do?',o:['Throw it into the bin from my seat','Get up, walk to the bin and put it in gently','Pull the bin closer with my foot'],c:1,why:'In front of a client, every gesture is part of the service. Walk there and put it in gently.'},
+ {id:'c_tools',pic:'stations',cap:'Check',t:'choose',h:'Check',q:'You finish with a tool. How does it go back in the box?',o:['Dropped in quickly, I am busy','Placed gently, without noise'],c:1,why:'Placed gently. Throwing tools makes noise and looks careless to the client.'},
+ {id:'c_kitchen',pic:'sink',cap:'Check',t:'choose',h:'Check',q:'On your break in the kitchen, you are on a call with earphones. What do you do?',o:['Talk as usual','Keep my voice low, a client may be in the massage room'],c:1,why:'Keep your voice low. Earphones make us speak louder without noticing.'},
+ {pic:'reception',cap:'Voice and topics',t:'read',h:'Voice and <em>topics</em>',lines:['Cordial, always. With clients and with each other.','A calm, low voice.','No politics, personal problems or team matters in front of clients.']},
+ {pic:'room',cap:'Discretion',t:'read',h:'<em>Discretion</em>',lines:['What a client tells you stays here.','No gossip about clients or colleagues.','Worried about something? Talk to management.']},
+ {pic:'stations',cap:'Your station',t:'read',h:'Your <em>station</em>',lines:['Clean and ready before every client.','Phone in your locker.','No eating on the salon floor.']},
+ {pic:'nails',cap:'The finish',t:'read',h:'The <em>finish</em>',lines:['Recommend the <b>cuticle oil</b>.','It keeps the cuticle hydrated, so the manicure lasts longer.','Use it every day.']},
+ {id:'c_bye',pic:'nails',cap:'Check',t:'choose',say:1,h:'Which is our goodbye?',q:'The treatment is finished.',o:['Thank you so much for coming, see you soon!','Emma, it was a pleasure to look after your hands today. I hope to see you soon.'],c:1,why:'Her name, the care you gave, and an invitation to come back.'},
+ {id:'c_hand',pic:'reception',cap:'Check',t:'choose',say:1,h:'Handover',q:'You finish and your next client is waiting. What do you say?',o:['Ok, you can go now.','Emma, Joana will look after you now at reception.','Nothing, I just go to my next client.'],c:1,why:'She always knows who looks after her next and where to go.'},
+ {id:'case_pol',pic:'room',cap:'Case',t:'case',h:'Case',q:'A client starts talking about politics. What do you do?',a:'Listen kindly, do not share your view, and gently bring the talk back to her and her treatment.'},
+ {pic:'hall',cap:'Chapter VI complete',t:'done',h:'Grace in every<br><em>detail</em>@@FIRST@@.',lede:'Next: our image and uniform.'}
+]},
+{id:'08-image',n:'VII',title:'Image & Uniform',min:9,S:[
+ {pic:'vg_cover',cap:'Vanilla Girl',t:'open',h:'The <em>Vanilla Girl</em>',lede:'Our look is minimal, neutral and elegant. Simple pieces, impeccable care, every day.',meta:'About 9 minutes'},
+ {id:'p_vanilla',pic:'vg_brunette',cap:'Guess first',t:'choose',h:'Guess first',q:'Which colours make the Vanilla Girl look?',o:['Bright and neon','White, nude, beige and soft neutrals','Black only'],c:1,why:'White, nude, beige, grey and soft pastels. Clean, calm and elegant.'},
+ {pic:'vg_uniform',cap:'Your uniform',t:'read',h:'Your <em>uniform</em>',lines:['<b>We give you</b> cardigan, long sleeve top, trousers, belt and trainers.','<b>In summer</b> a short sleeve top.','Only what we give you. Nothing from home.','Clean and ironed, every shift.']},
+ {pic:'vg_coat',cap:'Look after it',t:'read',h:'Look <em>after it</em>',lines:['Your trainers <b>stay at the salon</b>. Always clean.','Polish or paint stains come from carelessness. Look after your uniform.','<b>Repeated carelessness</b> means a written warning, and then the cost <b>comes from your salary</b>.','Worn out with time and use? <b>We replace it.</b>']},
+ {id:'c_stain',pic:'vg_coat',cap:'Check',t:'choose',h:'Check',q:'You keep staining your trousers with nail polish. What happens?',o:['BSB keeps giving me new ones','A written warning, and then the cost comes from my salary','Nothing happens'],c:1,why:'Repeated carelessness means a warning, and then the cost is taken from your salary. Wear from time and use is on us.'},
+ {pic:'vg_knit',cap:'The small details',t:'read',h:'The small <em>details</em>',lines:['Our uniform is light.','<b>No coloured socks. No coloured bra.</b>','Nude, white, beige or pastel only.','Deodorant always. Only a soft perfume.']},
+ {pic:'vg_bag',cap:'Our palette',t:'pal',h:'Our <em>palette</em>',lede:'Watch, scrunchie, clip, headband, bracelet: anything you wear must match our palette and our style.'},
+ {id:'c_tie',pic:'vg_curls',cap:'Check',t:'choose',h:'Check',q:'Which hair tie can you wear?',o:['A red velvet scrunchie','A caramel hair tie','A neon pink clip'],c:1,why:'Caramel is in our palette. Red and neon are not.'},
+ {pic:'vg_ears',cap:'Jewellery',t:'read',h:'<em>Jewellery</em>',lines:['Small and discreet.','<b>Silver, gold or pearl.</b>','Earrings, necklace and bracelet, all simple.']},
+ {pic:'vg_mk1',cap:'Makeup',t:'read',h:'<em>Makeup</em>',lines:['Glowing, well cared skin. Light foundation, a touch of highlighter.','<b>Eyes</b> neutral shadow, beige, brown or grey. Mascara. No heavy false lashes.','<b>Cheeks</b> a soft, natural blush.','<b>Lips</b> nude, light pink or soft brown. Balm or gloss.']},
+ {id:'m_look',pic:'vg_mk2',cap:'Check',t:'match',h:'Match them',q:'What is our standard for each one?',pairs:[['Lips','Nude or soft pink'],['Eyes','Neutral shadow and mascara'],['Earrings','Small and discreet'],['Perfume','Soft, never strong']]},
+ {pic:'vg_nails1',cap:'Nails',t:'read',h:'<em>Nails</em>',lines:['Clean girl aesthetic.','Short to medium length, a neat shape.','<b>One elegant colour</b> nude, pink, mauve, chocolate or burgundy.','Glazed, pearl or a fine French. A tiny detail, at most.','Always fresh. No chips, no regrowth.']},
+ {id:'c_nails',pic:'vg_nails2',cap:'Check',t:'choose',h:'Check',q:'Which nails are ready for work?',o:['Long stiletto with glitter and charms','Short almond in a glossy mauve','Chipped polish with regrowth'],c:1,why:'One elegant colour, a neat shape, always fresh. Clean girl.'},
+ {pic:'vg_hair',cap:'Hair',t:'read',h:'<em>Hair</em>',lines:['Low bun, sleek ponytail, neat braids, defined curls or natural waves.','Every hair type is welcome.','Always <b>neat and aligned</b>.','Healthy and cared for.']},
+ {id:'c_ready_look',pic:'vg_hair2',cap:'Check',t:'choose',h:'Ready for the floor?',q:'Which look is ready?',o:['Messy loose hair and bold red lips','Sleek low bun, nude lips, small gold earrings','Big hoops and bright blue eyeshadow'],c:1,why:'Neat hair, soft makeup, discreet jewellery. Ready before you clock in.'},
+ {id:'sign_image',pic:'vg_cafe',cap:'Declaration',t:'sign',h:'Your <em>signature</em>',decl:'I declare I have received the uniform and personal image standard of Brazilian Soul Beauty, and I will follow it.'},
+ {pic:'vg_selfie',cap:'Chapter VII complete',t:'done',h:'Simple, neutral,<br><em>impeccable</em>@@FIRST@@.',lede:'Next: our treatments.'}
+]},
+{id:'06-treatments',n:'VIII',title:'Treatments',soon:1}
+];
+
+/* ---------- STATE ---------- */
+let A={};let view='home',ci=0,si=0,T0=Date.now(),WI={rows:[],area:'All',qq:'',pg:0,open:null};
+const $=s=>document.getElementById(s);
+const esc=v=>(v==null?'':String(v)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const nm=s=>s.replace(/@@FIRST@@/g,first?', '+esc(first):'');
+const key=(c,f)=>c+'|'+f;
+const get=(c,f)=>A[key(c,f)];
+function setv(c,f,v){A[key(c,f)]=v}
+async function rpc(fn,body){return fetch(SBU+'rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(body)})}
+async function load(){if(!person||!CODE)return 'nolink';try{const r=await rpc('onb_load',{p_person:person,p_code:CODE});if(!r.ok)return r.status==400||r.status==401||r.status==403?'badcode':'offline';(await r.json()).forEach(x=>{let v=x.answer;try{if(v&&v[0]=='{')v=JSON.parse(v)}catch(e){}A[key(x.module,x.field)]=v});AUTH=true;return 'ok'}catch(e){return 'offline'}}
+async function save(c,fields){if(isPrev()){$('sv').textContent='Preview · not saved';return true}if(!AUTH)return false;$('sv').textContent='Saving';try{const rows=fields.map(f=>{const v=get(c,f);return{module:c,field:f,answer:typeof v=='object'?JSON.stringify(v):String(v)}});const r=await rpc('onb_save',{p_person:person,p_code:CODE,p_rows:rows});if(!r.ok)throw 0;$('sv').textContent='Saved';return true}catch(e){$('sv').textContent='Not saved · check your internet and try again';return false}}
+const chDone=c=>c.pol?POL.every((p,i)=>!pLive(i)||pSigned(i)):!!get(c.id,'__done');
+const unlocked=k=>isPrev()||CH.slice(0,k).every(c=>c.soon||chDone(c));
+const shuffle=(a,seed)=>{const r=a.map((x,i)=>[x,i]);let s=seed;for(let i=r.length-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r};
+
+/* ---------- POLICIES (Chapter V) ---------- */
+const POL=[{"id": "p01", "title": "Uniform & Appearance", "steps": ["Wear the BSB uniform on every shift. Only the uniform we give you, nothing from home.", "Winter: cardigan, long sleeve top, trousers, belt, trainers. Summer: short sleeve top.", "Keep it clean and ironed. Ask for a new piece when it is damaged.", "Hair, makeup, nails and accessories follow the Vanilla Girl Magazine. Arrive ready.", "Deodorant always. Only soft perfume.", "Trainers stay at the salon, always clean. No coloured socks or bra.", "Stains or damage from carelessness, again and again = written warning, then the cost comes from your salary. Wear from use, we replace.", "No uniform = you may be sent home to change. Repeated = warnings."]}, {"id": "p02", "title": "Data Protection (GDPR)", "steps": ["Client and team data is private. Look at it only when you need it for work.", "Never keep client data on your phone or share it outside BSB systems.", "Never talk about clients where others can hear.", "Photos in the salon have personal data. Never post them on your own social media.", "Lock your screen. Paper records go in locked storage.", "Someone asks for their data? Pass it to management the same day. Don't answer yourself.", "Something lost or shared by mistake? Tell management the same day."]}, {"id": "p03", "title": "Social Media & Confidentiality", "steps": ["Don't add or follow clients on your personal accounts. Send them to the salon channels.", "BSB photos and videos belong to BSB. Don't use them to promote yourself.", "You can repost BSB content only if BSB is shown as the source.", "Never post about colleagues without their OK.", "Never share pay, prices, suppliers, numbers or internal decisions. This continues after you leave.", "Never post about a client situation, even without a name.", "The rules also apply to WhatsApp groups and private messages."]}, {"id": "p04", "title": "Grievance (how to complain)", "steps": ["First, talk to your manager. Most things are solved in a conversation.", "Not solved? Send a written complaint on Connecteam with what happened, dates and evidence.", "You will be invited to a meeting. You can bring a colleague or a union rep.", "You receive the answer in writing.", "Don't agree? Appeal on Connecteam within 5 working days.", "Harassment or bullying goes through the Anti-Harassment Policy.", "Nobody is punished for complaining in good faith."]}, {"id": "p05", "title": "Attendance & Absence", "steps": ["Come to every shift, on time, ready to work.", "Late time is not paid. Repeated lateness = disciplinary.", "Can't come? Tell your manager on Connecteam and reception before your shift starts.", "No message by the start of your shift = unauthorised and unpaid.", "No unpaid days off when your holidays are finished.", "Doctor and dentist appointments outside work hours. If impossible, ask before.", "Strikes and travel problems: plan ahead. Missed time is unpaid."]}, {"id": "p06", "title": "Holiday", "steps": ["Full time: 28 days a year, bank holidays included.", "Red closed days (Christmas, January, Easter) come out of your 28. Green closed days do not.", "Notice: up to 1 week = 4 weeks before. 1 to 2 weeks = 2 months before. 2 to 3 weeks = only in January, 3 months before.", "Full days only. Summer: max 1 week, in the weeks on the calendar.", "You can only take days you already earned.", "Spread your days across the week. Not all on Fridays or Saturdays.", "Ask on Connecteam: Request Time Off. Check the calendar first.", "Don't book travel before written approval."]}, {"id": "p07", "title": "IT & Phone", "steps": ["Phone stays in your locker during the whole shift.", "Use it only on your break. Back in the locker before you return.", "Waiting for an urgent call? Tell reception before the shift. They keep the phone.", "No photo or video of a client without asking first and explaining where it goes.", "Delete client photos from your phone after sending them to BSB.", "Clients message you privately? Send them to the salon channels. Don't answer about prices or bookings.", "Work messages only on Connecteam."]}, {"id": "p08", "title": "Anti-Harassment", "steps": ["Zero tolerance for harassment, sexual harassment and bullying.", "This includes insults, offensive jokes, unwanted touching, rumours, leaving someone out, humiliating someone.", "See it or live it? Report to management, by voice, in writing or on Connecteam.", "If it involves a manager, write directly to the owner.", "Reports are confidential. Nobody is punished for reporting.", "Treat colleagues, clients and visitors with respect."]}, {"id": "p09", "title": "Smoking & Vaping", "steps": ["Only in the outdoor area agreed with management.", "Never at the front door or where clients can see you.", "Only during your break. Clock out first.", "Come back without smell: wash hands, use mints, air your clothes."]}, {"id": "p10", "title": "Code of Conduct", "steps": ["Calm and respectful always. No shouting, no arguments in front of others.", "No private talks, politics or team problems in front of clients.", "No gossip. Worried about something? Talk to management.", "Salon products are for work only. Never take them home.", "Don't recommend other salons or products we don't sell.", "The salon has cameras for safety. They can be checked when something happens.", "Eat only on your break, in the staff room.", "Help your colleagues. We are one team."]}, {"id": "p11", "title": "Employee Treatments", "steps": ["You get 25% off treatments and Eminence products. Only for you, not family or friends.", "The discount doesn't mix with other offers.", "You get a birthday voucher every year.", "Working day: 1 treatment only. Wednesday or Thursday, time set by management.", "Management chooses the therapist. Ask for the slot before.", "Clock out with \"Team Treatment Break\" and clock in again after.", "Clients always come first."]}, {"id": "p12", "title": "Sick Leave", "steps": ["Sick? Tell your manager on Connecteam and reception on WhatsApp, before your shift.", "Up to 7 days: fill the Absence & Sickness Form within 24 hours of coming back.", "8 days or more: send a fit note on Connecteam.", "No form or fit note = unauthorised and unpaid.", "Use sick leave honestly. Misuse = disciplinary."]}, {"id": "p13", "title": "Wages", "steps": ["Pay day is the 10th. On a weekend or holiday, the next weekday.", "Paid by bank transfer. Keep your bank details up to date.", "Payslips arrive on Connecteam.", "Tips are paid separately.", "Found a mistake? Tell HR on Connecteam straight away."]}, {"id": "p14", "title": "Breaks", "steps": ["Everyone has a 30 minute break. Full time can ask for an extra 15 minutes, 1 month before.", "Clock out when the break starts, clock in when it ends.", "The break is on the rota. Take it, don't skip it.", "If the agenda changes, the break moves. It is never cancelled.", "Clean your station before your break.", "Early break only if: station clean, less than 2 people in the break room, reception knows.", "Max 2 people in the break room. Eat only there or in the kitchen."]}, {"id": "p15", "title": "Clock In & Out", "steps": ["Clock in only when you are ready to work: changed and breakfast done.", "Clock out at the end of your shift.", "Never clock in or out for someone else.", "Check your hours every day.", "Mistake? Ask for a correction on Connecteam within 72 hours.", "Forgot to clock? Report it the same day.", "End of month: check your total. Use the correction form before payroll."]}, {"id": "p16", "title": "Tips", "steps": ["All tips are shared by the team.", "Cash tips go in the tip box at reception. Keeping tips for yourself = serious misconduct.", "Tips are split by the hours you worked, after tax.", "Paid monthly as Sainsbury's vouchers on Connecteam.", "Sign your receipt on Connecteam, or the next month doesn't arrive.", "Never ask clients for tips.", "No gifts or tips from suppliers."]}, {"id": "p17", "title": "Normatives & Accident Book", "steps": ["Normatives are short rules for the team. Read and confirm each one on the day you get it.", "They start the same day.", "Any accident, even a small one, goes in the Accident Report Book (black cover, at reception).", "Examples: a cut on the cuticle, a waxing burn, an allergy, a fall.", "Check the BSB Essential Procedures book at reception, care for the client, explain what happened.", "Write date, time, what happened, what you did and witnesses.", "No time now? Ask reception to block time in your agenda to finish it."]}];
+const POL_LIVE=1; /* how many policies are open; the rest show "Soon" */
+const POLPIC=['stations','room','reception','sink','hall','bath','nails'];
+const PC='05-policies';
+let PV={pg:0,pi:0,si:0,T:0,pts:[],stroke:null};
+const pLive=i=>isPrev()||i<POL_LIVE;
+const pSigned=i=>!!get(PC,POL[i].id+'_sign');
+const pUnlocked=i=>isPrev()||(pLive(i)&&(i==0||pSigned(i-1)));
+const pMin=p=>Math.max(2,Math.ceil(p.steps.length*0.6));
+const fmtD=iso=>{if(!iso)return '';const d=new Date(iso);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})};
+const fmtT=iso=>{if(!iso)return '';const d=new Date(iso);return fmtD(iso)+' · '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
+function polScreens(p){return [{t:'open'},...p.steps.map((x,k)=>({t:'ack',k})),{t:'sign'},{t:'pdone'}]}
+function pAck(p,k){return get(PC,p.id+'_s'+(k+1))}
+
+function polHome(){
+ const n=POL.filter((p,i)=>pSigned(i)).length;
+ frame('room','Policies',n+' / '+POL.length+' signed',n/POL.length*100);
+ const per=7,pages=Math.ceil(POL.length/per);PV.pg=Math.min(PV.pg,pages-1);
+ const rows=POL.slice(PV.pg*per,PV.pg*per+per).map((p,j)=>{const i=PV.pg*per+j,s=pSigned(i),u=pUnlocked(i);
+  const st=s?'Signed':!pLive(i)?'Soon':u?pMin(p)+' min':`<img src="${LOCK}" alt="">`;
+  return `<button data-pi="${i}" class="${s?'done':''}" ${u||s?'':'disabled'}><span class="r">${String(i+1).padStart(2,'0')}</span><span class="t">${esc(p.title)}</span><span class="s">${st}</span></button>`}).join('');
+ $('main').innerHTML=`<div class="num">Chapter V</div><h1>Our <em>policies</em></h1><p class="lede pl-lede">Read each step and confirm. Sign at the end of every policy.</p><div class="chap pol">${rows}</div>${pages>1?`<div class="pager"><button id="pp" ${PV.pg?'':'disabled'}>‹</button>${PV.pg+1} / ${pages}<button id="pn" ${PV.pg<pages-1?'':'disabled'}>›</button></div>`:''}`;
+ $('bk').style.visibility='visible';
+ const nx=POL.findIndex((p,i)=>pUnlocked(i)&&!pSigned(i));
+ $('nx').textContent=nx<0?'Chapters':'Start '+String(nx+1).padStart(2,'0');$('nx').disabled=false;
+ $('nx').onclick=()=>{if(nx<0){view='home';return render()}openPol(nx)};
+ document.querySelectorAll('[data-pi]').forEach(b=>b.onclick=()=>openPol(+b.dataset.pi));
+ if($('pp')){$('pp').onclick=()=>{PV.pg--;polHome()};$('pn').onclick=()=>{PV.pg++;polHome()}}
+}
+function openPol(i){PV.pi=i;const p=POL[i];PV.T=Date.now();PV.pts=[];
+ if(pSigned(i))PV.si=0;else{const k=p.steps.findIndex((x,j)=>!pAck(p,j));PV.si=k<0?p.steps.length+1:(k==0?0:k+1)}
+ view='ps';polScreen()}
+function polScreen(){
+ const p=POL[PV.pi],S=polScreens(p),s=S[PV.si],no=String(PV.pi+1).padStart(2,'0');
+ frame(POLPIC[PV.pi%POLPIC.length],p.title,'Policy '+no+' · '+String(PV.si+1).padStart(2,'0')+' / '+String(S.length).padStart(2,'0'),(PV.si+1)/S.length*100);
+ let h=`<div class="num">Policy ${no}</div>`,ready=true,label='Continue';
+ if(s.t=='open'){h+=`<h1>${esc(p.title)}</h1><p class="lede">${p.steps.length} short steps. Confirm each one, then sign.</p><div class="meta">About ${pMin(p)} minutes</div>`;label='Begin'}
+ else if(s.t=='ack'){const a=pAck(p,s.k);
+  h+=`<div class="step-n">${s.k+1}<small>of ${p.steps.length}</small></div><p class="step">${esc(p.steps[s.k])}</p>
+  <button class="ack ${a?'on':''}" id="ack" ${a?'disabled':''}><span class="box">${a?'✓':''}</span><span>I have read and understood</span></button>${a?`<div class="sv-at">Confirmed ${fmtT(a.at)}</div>`:''}`;
+  ready=!!a||!!PV.tick}
+ else if(s.t=='sign'){const sg=get(PC,p.id+'_sign');
+  if(sg){h+=`<h1>Signed</h1><p class="lede">${esc(sg.name)} · ${fmtT(sg.at)}</p><div class="sigbox done">${sigSvg(sg)}</div>`}
+  else{const nmv=PV.name??(get('01-welcome','full_name')||person);PV.name=nmv;
+   h+=`<h1>Your <em>signature</em></h1><p class="decl">I confirm I have read and understood the <b>${esc(p.title)}</b> policy, and I will follow it.</p>
+   <div class="fl"><label>Full name</label><input id="sgn" value="${esc(nmv)}"></div>
+   <div class="sigwrap"><div class="siglab"><span>Sign here</span><button id="sgc">Clear</button></div><canvas id="sgcv" class="sigbox"></canvas></div>
+   <div class="meta">${fmtD(new Date().toISOString())}</div>`;
+   ready=PV.pts.length>0&&!!(PV.name||'').trim();label='Sign'}}
+ else if(s.t=='pdone'){const nx=PV.pi+1<POL.length&&pLive(PV.pi+1);
+  h=`<div class="num">Policy ${no} · Signed</div><h1>Thank you${first?', '+esc(first):''}.</h1><p class="lede">${esc(p.title)} is signed and saved.${nx?' Next: '+esc(POL[PV.pi+1].title)+'.':''}</p>`;label=nx?'Next policy':'Back to policies'}
+ $('main').innerHTML=h;$('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&!isPrev();$('nx').dataset.hint=s.t=='sign'?'Sign to continue':'Tick the box to continue';$('nx').onclick=polNext;
+ if(s.t=='ack'&&$('ack')&&!pAck(p,s.k))$('ack').onclick=()=>{PV.tick=!PV.tick;$('ack').classList.toggle('on',PV.tick);$('ack').querySelector('.box').textContent=PV.tick?'✓':'';$('nx').disabled=!PV.tick};
+ if(s.t=='sign'&&$('sgcv'))sigWire();
+}
+async function polNext(){
+ const p=POL[PV.pi],S=polScreens(p),s=S[PV.si];$('nx').disabled=true;
+ if(s.t=='ack'&&!pAck(p,s.k)){const f=p.id+'_s'+(s.k+1);setv(PC,f,{ok:1,at:new Date().toISOString(),text:p.steps[s.k]});if(!await save(PC,[f])){setv(PC,f,undefined);$('nx').disabled=false;return}}
+ if(s.t=='sign'&&!pSigned(PV.pi)){const f=p.id+'_sign',cv=$('sgcv');
+  let enc=PV.pts.map(st=>st.map(q=>q[0]+','+q[1]).join(';')).join('|');while(enc.length>3300){PV.pts=PV.pts.map(st=>st.filter((q,k)=>k%2==0||k==st.length-1));enc=PV.pts.map(st=>st.map(q=>q[0]+','+q[1]).join(';')).join('|')}
+  setv(PC,f,{name:PV.name.trim(),at:new Date().toISOString(),w:cv.clientWidth,h:cv.clientHeight,pts:enc,min:Math.max(1,Math.round((Date.now()-PV.T)/60000))});
+  if(!await save(PC,[f])){setv(PC,f,undefined);$('nx').disabled=false;return}}
+ if(s.t=='pdone'){if(PV.pi+1<POL.length&&pLive(PV.pi+1))return openPol(PV.pi+1);view='pol';return polHome()}
+ PV.tick=false;PV.si++;polScreen()}
+function polBack(){if(PV.si>0){PV.tick=false;PV.si--;polScreen()}else{view='pol';polHome()}}
+function sigWire(){const cv=$('sgcv'),r=window.devicePixelRatio||1,W=cv.clientWidth,Hh=cv.clientHeight;cv.width=W*r;cv.height=Hh*r;const x=cv.getContext('2d');x.scale(r,r);x.lineWidth=2;x.lineCap='round';x.lineJoin='round';x.strokeStyle='#2E2A25';
+ const draw=()=>{x.clearRect(0,0,W,Hh);PV.pts.forEach(st=>{x.beginPath();st.forEach((q,k)=>k?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));if(st.length==1)x.lineTo(st[0][0]+.5,st[0][1]);x.stroke()})};draw();
+ const pos=e=>{const b=cv.getBoundingClientRect();return [Math.round(e.clientX-b.left),Math.round(e.clientY-b.top)]};
+ cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);PV.stroke=[pos(e)];PV.pts.push(PV.stroke);draw()};
+ cv.onpointermove=e=>{if(!PV.stroke)return;const q=pos(e),l=PV.stroke[PV.stroke.length-1];if(Math.abs(q[0]-l[0])+Math.abs(q[1]-l[1])<3)return;PV.stroke.push(q);draw()};
+ cv.onpointerup=cv.onpointercancel=()=>{PV.stroke=null;$('nx').disabled=!(PV.pts.length&&(PV.name||'').trim())};
+ $('sgc').onclick=()=>{PV.pts=[];draw();$('nx').disabled=true};
+ $('sgn').oninput=e=>{PV.name=e.target.value;$('nx').disabled=!(PV.pts.length&&PV.name.trim())}}
+function sigSvg(sg){const d=(sg.pts||'').split('|').filter(Boolean).map(st=>st.split(';').map((q,k)=>(k?'L':'M')+q.replace(',',' ')).join(' ')).join(' ');
+ return `<svg viewBox="0 0 ${sg.w||400} ${sg.h||140}" preserveAspectRatio="xMidYMid meet"><path d="${d}" fill="none" stroke="#2E2A25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+
+/* ---------- TEAM ANSWERS (admin) ---------- */
+let ADMIN=false,RP={people:[],who:null,A:{},pg:0,open:null};
+async function checkAdmin(){try{const r=await rpc('onb_report',{p_person:person,p_code:CODE,p_target:null});if(r.ok){RP.people=(await r.json()).people;ADMIN=true}}catch(e){}}
+async function repLoad(who){RP.who=who;RP.A={};RP.pg=0;RP.open=null;try{const r=await rpc('onb_report',{p_person:person,p_code:CODE,p_target:who});const j=await r.json();RP.people=j.people;j.answers.forEach(x=>{let v=x.answer;try{if(v&&v[0]=='{')v=JSON.parse(v)}catch(e){}RP.A[x.module+'|'+x.field]=v})}catch(e){}report()}
+const rg=f=>RP.A[PC+'|'+f];
+function report(){
+ frame('reception','Team answers','',0);$('bk').style.visibility='visible';
+ if(!RP.who){$('main').innerHTML=`<div class="num">Team answers</div><h1>Who?</h1><div class="chap">${RP.people.map(p=>`<button data-w="${esc(p.person)}"><span class="r">·</span><span class="t">${esc(p.person)}</span><span class="s">${p.n} answers</span></button>`).join('')}</div>`;
+  $('nx').textContent='Chapters';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
+  document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>repLoad(b.dataset.w));return}
+ if(RP.open!=null){const p=POL[RP.open],sg=rg(p.id+'_sign');
+  $('main').innerHTML=`<div class="num">${esc(RP.who)} · Policy ${String(RP.open+1).padStart(2,'0')}</div><h1 class="rep-h">${esc(p.title)}</h1>
+  <div class="rep-steps">${p.steps.map((t,k)=>{const a=rg(p.id+'_s'+(k+1));return `<div class="${a?'ok':''}"><span>${a?'✓':'·'}</span><p>${esc(t)}</p><small>${a?fmtT(a.at):'Not yet'}</small></div>`}).join('')}</div>
+  ${sg?`<div class="rep-sig"><div class="sigbox done">${sigSvg(sg)}</div><small>${esc(sg.name)} · ${fmtT(sg.at)} · ${sg.min} min</small></div>`:'<p class="meta">Not signed yet</p>'}`;
+  $('nx').textContent='All policies';$('nx').disabled=false;$('nx').onclick=()=>{RP.open=null;report()};return}
+ const per=7,pages=Math.ceil(POL.length/per);const n=POL.filter(p=>rg(p.id+'_sign')).length;
+ $('main').innerHTML=`<div class="num">Team answers</div><h1>${esc(RP.who)}</h1><p class="meta">${n} / ${POL.length} policies signed</p>
+ <div class="chap pol">${POL.slice(RP.pg*per,RP.pg*per+per).map((p,j)=>{const i=RP.pg*per+j,sg=rg(p.id+'_sign'),k=p.steps.filter((t,x)=>rg(p.id+'_s'+(x+1))).length;
+  return `<button data-o="${i}" class="${sg?'done':''}"><span class="r">${String(i+1).padStart(2,'0')}</span><span class="t">${esc(p.title)}</span><span class="s">${sg?fmtD(sg.at):k?k+' / '+p.steps.length:'·'}</span></button>`}).join('')}</div>
+ <div class="pager"><button id="pp" ${RP.pg?'':'disabled'}>‹</button>${RP.pg+1} / ${pages}<button id="pn" ${RP.pg<pages-1?'':'disabled'}>›</button><button id="pdf" class="pdfb">Download PDF</button></div>`;
+ $('nx').textContent='Other person';$('nx').disabled=false;$('nx').onclick=()=>{RP.who=null;report()};
+ document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{RP.open=+b.dataset.o;report()});
+ $('pp').onclick=()=>{RP.pg--;report()};$('pn').onclick=()=>{RP.pg++;report()};$('pdf').onclick=printReport}
+function printReport(){
+ const pol=POL.map((p,i)=>{const sg=rg(p.id+'_sign');const k=p.steps.filter((t,x)=>rg(p.id+'_s'+(x+1))).length;if(!sg&&!k)return '';
+  return `<section><h2>${String(i+1).padStart(2,'0')} · ${esc(p.title)}</h2><table>${p.steps.map((t,x)=>{const a=rg(p.id+'_s'+(x+1));return `<tr><td class="c">${a?'✓':''}</td><td>${esc(t)}</td><td class="d">${a?'Read and understood · '+fmtT(a.at):'Not confirmed'}</td></tr>`}).join('')}</table>
+  ${sg?`<div class="ps"><div class="psig">${sigSvg(sg)}</div><div><b>${esc(sg.name)}</b><br>Signed ${fmtT(sg.at)}<br>I confirm I have read and understood this policy, and I will follow it.</div></div>`:'<p class="ns">Not signed</p>'}</section>`}).join('');
+ const n=POL.filter(p=>rg(p.id+'_sign')).length;
+ $('print').innerHTML=`<header><img src="${$('logo').src}"><div><h1>Staff Policies · Acknowledgement</h1><p>${esc(RP.who)} · ${n} of ${POL.length} policies signed · Printed ${fmtT(new Date().toISOString())}</p></div></header>${pol||'<p>No answers yet.</p>'}`;
+ document.title='BSB Policies · '+RP.who;window.print();setTimeout(()=>document.title='The BSB Way',1500)}
+
+
+/* ---------- CALENDAR (teaching) ---------- */
+const KEY4={fechado_ferias:['c-red','Closed · counts as holiday','The salon is closed and the day comes out of your 28.'],fechado_compensado:['c-green','Closed · not taken from your holidays','The salon is closed and you keep your days.'],janela_verao:['c-yel','Summer window','You can take 5 working days in summer.'],bloqueado:['c-grey','Blocked','Busy period. No holidays.'],off:['c-off','Sunday and Monday','The salon is always closed.']};
+let POLC=null,CALY=new Date().getFullYear(),CALSEL=null;
+async function loadPolc(){if(POLC)return;try{const r=await fetch(SBU+'bsb_ferias_politica?select=data,tipo&order=data',{headers:H});const rows=await r.json();POLC={};rows.forEach(x=>POLC[x.data]=x.tipo);const ys=[...new Set(rows.map(x=>+x.data.slice(0,4)))];const now=new Date().getFullYear();CALY=ys.includes(now)?now:(ys[0]||now)}catch(e){POLC={}}}
+function dayType(y,m,d){const dt=new Date(y,m-1,d),w=dt.getDay(),iso=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');return POLC[iso]||((w==0||w==1)?'off':null)}
+function calHtml(m){const y=CALY,n=new Date(y,m,0).getDate(),first=(new Date(y,m-1,1).getDay()+6)%7;let h='<div class="cal">'+['M','T','W','T','F','S','S'].map(x=>`<span>${x}</span>`).join('');for(let i=0;i<first;i++)h+='<i></i>';
+ for(let d=1;d<=n;d++){const t=dayType(y,m,d);h+=`<i class="d ${t?KEY4[t][0]:'n'} ${CALSEL==d?'sel':''}" data-d="${d}">${d}</i>`}return h+'</div>'}
+function calNote(m){if(!CALSEL)return '<div class="calnote"><b>Tap a day</b>Each colour has a meaning.</div>';const t=dayType(CALY,m,CALSEL);const k=t?KEY4[t]:null;return `<div class="calnote"><b>${CALSEL} ${new Date(CALY,m-1,1).toLocaleDateString('en-GB',{month:'long'})}</b>${k?k[1]+'. '+k[2]:'Open. You can ask for a holiday if you have days.'}</div>`}
+
+/* ---------- RENDER ---------- */
+function frame(pic,cap,cnt,pct){if(isPrev())cnt='PREVIEW · '+cnt;$('pic').style.backgroundImage=`url(${IMG[pic]})`;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
+function render(){if(view=='home')return home();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
+
+function home(){
+ frame('hall','Your onboarding','',CH.filter(chDone).length/CH.length*100);
+ $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${first?esc(first)+',<br>your <em>chapters</em>':'Your <em>chapters</em>'}</h1>
+ <div class="chap">${CH.map((c,k)=>{const d=chDone(c),u=unlocked(k)&&!c.soon;return `<button data-k="${k}" class="${d?'done':''}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${d?'Done':c.soon?'Soon':c.pol&&u?POL.filter((p,i)=>pSigned(i)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}</div>${ADMIN?'<button class="adm" id="adm">Team answers</button>':''}`;
+ if(ADMIN)$('adm').onclick=()=>{view='rep';RP.who=null;report()};
+ $('bk').style.visibility='hidden';$('nx').textContent='What if…';$('nx').disabled=false;
+ $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
+ document.querySelectorAll('.chap button').forEach(b=>b.onclick=()=>{ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
+}
+
+function screen(){$('nx').dataset.hint='Answer to continue';
+ const C=CH[ci],s=C.S[si],c=C.id,id=s.id;
+ frame(s.pic,s.cap,'Chapter '+C.n+' · '+String(si+1).padStart(2,'0')+' / '+String(C.S.length).padStart(2,'0'),(si+1)/C.S.length*100);
+ let h=`<div class="num">Chapter ${C.n}</div>`;let ready=true;let label='Continue';
+ const st=id?(get(c,id)||{}):{};
+ if(s.t=='open'){h+=`<h1>${nm(s.h)}</h1><p class="lede">${s.lede}</p>${s.meta?`<div class="meta">${s.meta}</div>`:''}`;label='Begin'}
+ else if(s.t=='done'){h=`<div class="num">Chapter ${C.n} · Complete</div><h1>${nm(s.h)}</h1><p class="lede">${s.lede}</p>${s.sign?'<div class="sign">Ligia<small>Founder</small></div>':''}`;label='Back to chapters'}
+ else if(s.t=='read'){const shown=s._n||1;h+=`<h1>${s.h}</h1><div class="lines">${s.lines.slice(0,shown).map(l=>`<p>${l}</p>`).join('')}</div>`;if(shown<s.lines.length)label='Next line';else if(s.link)h+=`<a class="golink" href="${s.link[1]}" target="_blank" rel="noopener">${s.link[0]}</a>`}
+ else if(s.t=='week'){h+=`<h1>${s.h}</h1><div class="wk"><div class="hd"><span></span><span>Team</span><span>Clients</span></div><div><b>Tue to Fri</b><span>9:45 to 19:15</span><span>from 10:00</span></div><div><b>Saturday</b><span>9:45 to 17:15</span><span>10:00 to 17:00</span></div><div class="off"><b>Sun · Mon</b><span>Closed</span><span>Closed</span></div></div>`}
+ else if(s.t=='key'){h+=`<h1>${s.h}</h1><div class="key">${['fechado_ferias','fechado_compensado','janela_verao','bloqueado','off'].map(k=>`<div><i class="${KEY4[k][0]}"></i><span>${KEY4[k][1]}<small>${KEY4[k][2]}</small></span></div>`).join('')}</div>`}
+ else if(s.t=='cal'){if(!POLC){h+=`<h1>${s.h}</h1><p class="lede">Loading…</p>`;loadPolc().then(()=>screen())}else h+=`<h1>${s.h} <em>${CALY}</em></h1><p class="lede pl-lede">${s.lede}</p>${calHtml(s.m)}${calNote(s.m)}`}
+ else if(s.t=='pal'){h+=`<h1>${s.h}</h1><p class="lede pl-lede">${s.lede}</p><div class="pal">${[['#262728','Black'],['#AC9D93','Taupe'],['#A17A60','Caramel'],['#F4EFEF','Cream'],['#FFFFFF','White']].map(x=>`<div><i style="background:${x[0]}"></i>${x[1]}</div>`).join('')}</div>`}
+ else if(s.t=='sign'){if(st.at){h+=`<h1>Signed</h1><p class="decl">${s.decl}</p><p class="lede">${esc(st.name)} · ${fmtT(st.at)}</p><div class="sigbox done">${sigSvg(st)}</div>`}else{const nmv=PV.name??(get('01-welcome','full_name')||person);PV.name=nmv;h+=`<h1>${s.h}</h1><p class="decl">${s.decl}</p><div class="fl"><label>Full name</label><input id="sgn" value="${esc(nmv)}"></div><div class="sigwrap"><div class="siglab"><span>Sign here</span><button id="sgc">Clear</button></div><canvas id="sgcv" class="sigbox"></canvas></div>`;ready=PV.pts.length>0&&!!(PV.name||'').trim();label='Sign'}}
+ else if(s.t=='vals'){h+=`<h1>${s.h}</h1><div class="vals">${s.vals.map(v=>`<div><b>${v[0]}</b><span>${v[1]}</span></div>`).join('')}</div>`}
+ else if(s.t=='form'){h+=`<h1>${s.h}</h1><div class="f">${s.f.map(x=>x.two?`<div class="two">${x.two.map(fld).join('')}</div>`:fld(x)).join('')}</div>`;ready=formOk(s)}
+ else if(s.t=='choose'){
+  const ord=shuffle(s.o,si*7+3);const ans=st.v!=null;
+  h+=`<h1>${s.h}</h1><p class="q">${s.q}</p>${ans?'':'<div class="tap">Tap one answer</div>'}<div class="opts">${ord.map(([o,i])=>{let cl='opt';if(ans){if(i==s.c)cl+=' right';else if(i==st.v)cl+=' wrong'}return `<button class="${cl}" data-i="${i}" ${ans?'disabled':''}>${s.say?`<span class="say">${o}</span>`:o}</button>`}).join('')}</div>`;
+  if(ans){h+=`<div class="conf"><b style="font-weight:400">How sure were you?</b> <button data-cf="sure" class="${st.conf=='sure'?'on':''}">I was sure</button><button data-cf="guess" class="${st.conf=='guess'?'on':''}">I guessed</button></div>`;
+   if(st.conf&&s.why)h+=`<div class="why"><b>${st.v==s.c?'Yes':'Not quite'}</b>${s.why}</div>`}
+  ready=ans&&!!st.conf}
+ else if(s.t=='match'){
+  const rights=s.pairs.map(p=>p[1]);const opts=shuffle(rights,si*5+1).map(x=>x[0]);const chk=!!st.checked;const sel=st.sel||{};
+  h+=`<h1>${s.h}</h1><p class="q" style="font-size:20px">${s.q}</p><div>${s.pairs.map((p,i)=>{const v=sel[i]||'';let cl='mrow';if(chk)cl+=v==p[1]?' right':' wrong';return `<div class="${cl}"><span>${p[0]}</span><select data-m="${i}" ${chk?'disabled':''}><option value="">Choose…</option>${opts.map(o=>`<option ${o==v?'selected':''}>${esc(o)}</option>`).join('')}</select>${chk&&v!=p[1]?`<small>${esc(p[1])}</small>`:''}</div>`}).join('')}</div>`;
+  if(!chk){ready=s.pairs.every((p,i)=>sel[i]);label='Check'}
+ }
+ else if(s.t=='order'){
+  const chk=!!st.checked;const cur=st.ord||shuffle(s.items,si*3+2).map(x=>x[1]);if(!st.ord){st.ord=cur;setv(c,id,st)}
+  h+=`<h1>${s.h}</h1><p class="q" style="font-size:20px">${s.q}</p><div class="ord">${cur.map((ix,k)=>`<div class="${chk?(ix==k?'right':'wrong'):''}"><span class="n">${k+1}</span><span class="t">${s.items[ix]}</span>${chk?'':`<button data-up="${k}" aria-label="Move up">▲</button><button data-dn="${k}" aria-label="Move down">▼</button>`}</div>`).join('')}</div>`;
+  if(chk&&s.why)h+=`<div class="why"><b>${cur.every((ix,k)=>ix==k)?'Yes':'The right order'}</b>${cur.every((ix,k)=>ix==k)?'':s.items.map((t,k)=>(k+1)+'. '+t.split(':')[0]).join(' · ')+'<br>'}${s.why}</div>`;
+  if(!chk)label='Check'}
+ else if(s.t=='write'){h+=`<h1>${s.h}</h1><div class="fl"><label>${s.q}</label><textarea data-w="1" placeholder="Write here…">${esc(st.v)}</textarea></div>`;ready=!!(st.v||'').trim()}
+ else if(s.t=='case'){h+=`<h1>${s.h}</h1><p class="q">${s.q}</p><div class="fl"><label>Your answer</label><textarea data-w="1" placeholder="Write here…">${esc(st.v)}</textarea></div>`;
+  if(st.seen)h+=`<div class="why"><b>Our answer</b>${s.a}</div>`;ready=!!(st.v||'').trim();if(!st.seen)label='See our answer'}
+ $('main').innerHTML=h;
+ $('nx').dataset.hint={choose:(st.v!=null?'Tap I was sure or I guessed':'Tap one answer'),write:'Write your answer',case:'Write your answer',form:'Fill in every box',match:'Choose every answer',sign:'Sign to continue'}[s.t]||'Answer to continue';
+ $('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&!isPrev();
+ wire(s,c,id,st);
+}
+function fld(x){const C=CH[ci].id;const v=get(C,x.id)||'';
+ if(x.o)return `<div class="fl"><label>${x.l}</label><div class="sz">${x.o.map(o=>`<button class="${v==o?'on':''}" data-f="${x.id}" data-v="${o}">${o}</button>`).join('')}</div></div>`;
+ if(x.ty=='area')return `<div class="fl"><label>${x.l}</label><textarea placeholder="Write here…" data-f="${x.id}">${esc(v)}</textarea></div>`;
+ return `<div class="fl"><label>${x.l}</label><input placeholder="Write here…" type="${x.ty||'text'}" data-f="${x.id}" value="${esc(v)}"></div>`}
+const ff=s=>s.f.flatMap(x=>x.two||[x]);
+const formOk=s=>ff(s).every(x=>(get(CH[ci].id,x.id)||'').trim());
+function wire(s,c,id,st){
+ document.querySelectorAll('.cal i.d').forEach(e=>e.onclick=()=>{CALSEL=+e.dataset.d;screen()});
+ if(s.t=='sign'&&$('sgcv'))sigWire();
+ document.querySelectorAll('[data-f]').forEach(e=>{if(e.tagName=='BUTTON')e.onclick=()=>{setv(c,e.dataset.f,e.dataset.v);screen()};else e.oninput=()=>{setv(c,e.dataset.f,e.value);$('nx').disabled=!formOk(s)}});
+ document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{st.v=+b.dataset.i;st.ok=st.v==s.c;setv(c,id,st);screen()});
+ document.querySelectorAll('[data-cf]').forEach(b=>b.onclick=()=>{st.conf=b.dataset.cf;setv(c,id,st);screen()});
+ document.querySelectorAll('[data-m]').forEach(e=>e.onchange=()=>{st.sel=st.sel||{};st.sel[e.dataset.m]=e.value;setv(c,id,st);$('nx').disabled=!s.pairs.every((p,i)=>st.sel[i])});
+ document.querySelectorAll('[data-up],[data-dn]').forEach(b=>b.onclick=()=>{const k=+(b.dataset.up??b.dataset.dn),j=b.dataset.up!=null?k-1:k+1;if(j<0||j>=st.ord.length)return;[st.ord[k],st.ord[j]]=[st.ord[j],st.ord[k]];setv(c,id,st);screen()});
+ document.querySelectorAll('[data-w]').forEach(e=>e.oninput=()=>{st.v=e.value;setv(c,id,st);$('nx').disabled=!e.value.trim()});
+}
+async function next(){
+ if(view=='home')return;
+ const C=CH[ci],s=C.S[si],c=C.id,id=s.id,st=id?(get(c,id)||{}):{};
+ if(s.t=='read'&&(s._n||1)<s.lines.length){s._n=(s._n||1)+1;return screen()}
+ if(s.t=='match'&&!st.checked){st.sel=st.sel||{};st.checked=1;st.ok=s.pairs.every((p,i)=>st.sel[i]==p[1]);setv(c,id,st);await save(c,[id]);return screen()}
+ if(s.t=='order'&&!st.checked){st.checked=1;st.ok=st.ord.every((ix,k)=>ix==k);setv(c,id,st);await save(c,[id]);return screen()}
+ if(s.t=='case'&&!st.seen){st.seen=1;setv(c,id,st);await save(c,[id]);return screen()}
+ if(s.t=='sign'&&!st.at){const cv=$('sgcv');let enc=PV.pts.map(q=>q.map(z=>z[0]+','+z[1]).join(';')).join('|');while(enc.length>3300){PV.pts=PV.pts.map(q=>q.filter((z,k)=>k%2==0||k==q.length-1));enc=PV.pts.map(q=>q.map(z=>z[0]+','+z[1]).join(';')).join('|')}setv(c,id,{name:(PV.name||'').trim(),at:new Date().toISOString(),w:cv?cv.clientWidth:400,h:cv?cv.clientHeight:140,pts:enc});PV.pts=[]}
+ $('nx').disabled=true;
+ let okSave=true;
+ if(s.t=='form')okSave=await save(c,ff(s).map(x=>x.id));
+ else if(id)okSave=await save(c,[id]);
+ if(s.t=='done'){const mins=Math.max(1,Math.round((Date.now()-T0)/60000));setv(c,'__done',new Date().toISOString());setv(c,'__minutes',String(mins));okSave=await save(c,['__done','__minutes']);if(!okSave){setv(c,'__done',undefined);$('nx').disabled=false;return}view='home';return render()}
+ if(!okSave){$('nx').disabled=false;return}
+ if(si<C.S.length-1){si++;CALSEL=null;screen()}
+}
+function back(){if(view=='pol'){view='home';return render()}if(view=='ps')return polBack();if(view=='rep'){if(RP.open!=null){RP.open=null;return report()}if(RP.who){RP.who=null;return report()}view='home';return render()}if(view=='wi'){if(WI.open!=null){WI.open=null;return whatif()}view='home';return render()}if(view=='ch'){CALSEL=null;if(si>0){si--;screen()}else{view='home';render()}}}
+
+/* ---------- WHAT IF ---------- */
+async function loadWI(){if(!WI.rows.length){try{WI.rows=await (await fetch(SBU+'bsb_onb_whatif?active=is.true&order=sort',{headers:H})).json()}catch(e){WI.rows=[]}}whatif()}
+function whatif(){
+ frame('reception','What if…','',0);$('bk').style.visibility='visible';
+ const rows=WI.rows.filter(r=>ROLE=='all'||r.roles=='all'||r.roles.split(',').includes(ROLE));
+ if(WI.open!=null){const r=rows.find(x=>x.id==WI.open);$('main').innerHTML=`<div class="num">What if · ${esc(r.area)}</div><p class="q">${esc(r.q)}</p><div class="why"><b>In this House</b>${esc(r.a)}</div>`;$('nx').textContent='All situations';$('nx').disabled=false;$('nx').onclick=()=>{WI.open=null;whatif()};return}
+ const areas=['All',...new Set(rows.map(r=>r.area))];
+ const f=rows.filter(r=>(WI.area=='All'||r.area==WI.area)&&(!WI.qq||(r.q+' '+r.a).toLowerCase().includes(WI.qq.toLowerCase())));
+ const per=6,pages=Math.max(1,Math.ceil(f.length/per));WI.pg=Math.min(WI.pg,pages-1);
+ $('main').innerHTML=`<div class="num">What if…</div><input class="wi-search" id="wq" placeholder="Search a situation" value="${esc(WI.qq)}"><div class="wi-chips">${areas.map(a=>`<button data-a="${esc(a)}" class="${a==WI.area?'on':''}">${esc(a)}</button>`).join('')}</div>
+ <div class="wi-list">${f.slice(WI.pg*per,WI.pg*per+per).map(r=>`<button data-o="${r.id}"><span>${esc(r.q)}</span><small>${esc(r.area)}</small></button>`).join('')||'<p class="lede">Nothing found.</p>'}</div>
+ <div class="pager"><button id="pp" ${WI.pg?'':'disabled'}>‹</button>${WI.pg+1} / ${pages}<button id="pn" ${WI.pg<pages-1?'':'disabled'}>›</button></div>`;
+ $('nx').textContent='Chapters';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
+ $('wq').oninput=e=>{WI.qq=e.target.value;WI.pg=0;const p=e.target.selectionStart;whatif();const n=$('wq');n.focus();n.setSelectionRange(p,p)};
+ document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{WI.area=b.dataset.a;WI.pg=0;whatif()});
+ document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{WI.open=+b.dataset.o;whatif()});
+ $('pp').onclick=()=>{WI.pg--;whatif()};$('pn').onclick=()=>{WI.pg++;whatif()};
+}
+
+$('bk').onclick=back;
+$('logo').onclick=()=>{if(!AUTH)return;view='home';render()};
+function bindNext(){$('nx').onclick=next}
+const _render=render;render=function(){bindNext();_render()};
+const _screen=screen;screen=function(){bindNext();_screen()};
+function stepDone(C,s){if(!s.id)return true;const v=get(C.id,s.id);
+ if(s.t=='form')return ff(s).every(x=>(get(C.id,x.id)||'').trim());
+ if(!v)return false;if(s.t=='choose')return v.v!=null&&!!v.conf;if(s.t=='match'||s.t=='order')return !!v.checked;if(s.t=='case')return !!v.seen;if(s.t=='write')return !!(v.v||'').trim();if(s.t=='sign')return !!v.at;return true}
+function resumeAt(C){if(chDone(C))return 0;const k=C.S.findIndex(s=>!stepDone(C,s));if(k<=C.S.findIndex(s=>s.id))return 0;const prev=C.S[k-1];return (prev.t=='read'||prev.t=='vals')?k-1:k}
+function blocked(kind){frame('reception','Brazilian Soul Beauty','',0);$('bk').style.visibility='hidden';$('nx').style.visibility='hidden';
+ const msg={nolink:['Please use your personal link','Your onboarding link has your name and a code. Ask Front of House or your manager to send it to you.'],badcode:['This link is not valid','Please ask your manager for your personal onboarding link.'],offline:['We could not connect','Check your internet and refresh the page.']}[kind];
+ $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${msg[0]}</h1><p class="lede">${msg[1]}</p>`}
+load().then(async st=>{if(st=='ok'){await checkAdmin();render()}else blocked(st)});
+</script>
+<div id="print"></div>
+</body>
+</html>
