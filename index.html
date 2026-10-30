@@ -86,8 +86,8 @@ h1 em{font-style:italic}
 .chap img{width:22px;height:22px;vertical-align:middle}
 @media(max-width:820px){#pic.paper{background-size:auto max(560px,147vw)!important;background-position:50% 46%!important}}
 .main{scrollbar-width:none}.main::-webkit-scrollbar{display:none}
-.main.ph{gap:10px}.main.ph h1{font-size:clamp(30px,3vw,44px);line-height:1.05}
-.chap.path button{padding:6px 0}.chap.path .t{font-size:19px}.chap button.sub{padding:3px 0 3px 44px;grid-template-columns:40px 1fr auto;border-bottom-color:rgba(220,212,201,.6)}.chap button.sub .t{font-size:16px}.chap button.sub .r{font-size:15px}.chap button.sub img{width:18px;height:18px}
+.main.ph{gap:14px}.stp{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--ink);margin-top:6px}.main.ph h1{font-size:clamp(30px,3vw,44px);line-height:1.05}
+.chap.path button{padding:9px 0}.chap.path .t{font-size:19px}.chap button.sub{padding:3px 0 3px 44px;grid-template-columns:40px 1fr auto;border-bottom-color:rgba(220,212,201,.6)}.chap button.sub .t{font-size:16px}.chap button.sub .r{font-size:15px}.chap button.sub img{width:18px;height:18px}
 .chap button[data-p="1"][disabled]{opacity:1;cursor:default}
 .wi-chips{display:flex;gap:8px;flex-wrap:wrap}
 .wi-chips button{background:none;border:1px solid var(--line);padding:6px 12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--ink2)}
@@ -456,7 +456,7 @@ const COVER={'01-welcome':'stations','02-this-house':'bath','03-words':'nails'};
 function picRule(pic){if(view=='home')return 'paper';if(view!='ch')return null;const C=CH[ci],sc=C.S[si];if(C.id=='08-image'){return C.S.findIndex(x=>x.pic==pic)==si?pic:null}if(sc.t=='open'&&COVER[C.id])return COVER[C.id];return null}
 function renderSteps(){const el=$('steps');if(!el)return;const inCh=view=='ch'||view=='pol'||view=='ps';
  if(inCh||view=='tr'){const L=CH.filter(c=>!c.soon);el.innerHTML=L.map(c=>{const k=CH.indexOf(c),d=chDone(c),cur=inCh&&k==ci;return `<span class="${d&&!cur?'d':''} ${cur?'c':''}" title="${c.title}">${d&&!cur?'✓':c.n}</span>`}).join('<i></i>')+(inCh?`<b>${CH[ci].title}</b>`:'<b>The BSB Way</b>');return}
- if(view=='home'){el.innerHTML=PATH.map((p,i)=>`<span class="${pDone(i)?'d':''}">${pDone(i)?'✓':i+1}</span>`).join('<i></i>')+'<b>Your path</b>';return}
+ if(view=='home'){const cur=curStep(),sel=PSEL==null?cur:PSEL;el.innerHTML=PATH.map((p,i)=>`<span data-s="${i}" class="${pDone(i)&&i!=sel?'d':''} ${i==sel?'c':''}" style="${i<=cur||pDone(i)?'cursor:pointer':''}">${pDone(i)&&i!=sel?'✓':i+1}</span>`).join('<i></i>')+`<b>${PATH[sel].t}</b>`;return}
  el.innerHTML=''}
 function frame(pic,cap,cnt,pct){$('bk').textContent=view=='home'&&ADMIN?'Team answers':'Back';$('main').classList.toggle('ph',view=='home');const use=picRule(pic);const C=CH[ci];const inCh=view=='ch'||view=='pol'||view=='ps';
  $('pic').classList.toggle('paper',use=='paper');if(use){titlePanel(false);$('pic').style.backgroundPosition=POS[use]||'center';$('pic').style.backgroundImage=`url(${IMG[use]})`}
@@ -464,16 +464,20 @@ function frame(pic,cap,cnt,pct){$('bk').textContent=view=='home'&&ADMIN?'Team an
  renderSteps();if(isPrev())cnt='PREVIEW · '+cnt;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
 function render(){if(view=='home')return home();if(view=='tr')return train();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
 
+let PSEL=null;
+function curStep(){let i=PATH.findIndex((p,k)=>!pDone(k));return i<0?PATH.length-1:i}
 function home(){
- const nd=PATH.filter((p,i)=>pDone(i)).length;frame('team','','',nd/PATH.length*100);
- const row=(i)=>{const p=PATH[i],d=pDone(i),o=pOpen(i),w=!o&&!p.soon&&(i==0||pDone(i-1));return `<button data-p="${i}" class="${d?'done':''}" ${o&&!(i==0&&d&&!isPrev())&&i!=1?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${d?'<b class="ck">✓</b>':p.soon?'Soon':i==1&&o?CH.filter(c=>!c.soon&&chDone(c)).length+' / '+CH.filter(c=>!c.soon).length:o?p.m:w?'Waiting for approval':`<img src="${LOCK}" alt="">`}</span></button>`};
- const subs=pOpen(1)?CH.map((c,k)=>{if(c.soon)return '';const d=chDone(c),u=unlocked(k);return `<button class="sub ${d?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${d?'<b class="ck">✓</b>':c.pol&&u?POL.filter((p,i)=>pSigned(i)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join(''):'';
- $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
- <div class="chap path">${row(0)}${row(1)}${subs}${PATH.map((p,i)=>i>1?row(i):'').join('')}</div>`;
+ const cur=curStep(),i=PSEL==null?cur:PSEL,p=PATH[i];frame('team','','',PATH.filter((x,k)=>pDone(k)).length/PATH.length*100);
+ const d=pDone(i),o=pOpen(i);let body='';
+ if(i==1&&o){body=CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
+ else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
+ $('main').innerHTML=`<div class="num">Step ${i+1} of ${PATH.length}</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
+ ${i==1&&o?`<div class="stp">${p.t}</div>`:""}<div class="chap path">${body}</div>`;
  $('bk').style.visibility=ADMIN?'visible':'hidden';$('nx').textContent='What if…';$('nx').disabled=false;
  $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
- document.querySelectorAll('.path button[data-p]').forEach(b=>b.onclick=()=>{const i=+b.dataset.p;if(i==0){location.href='details.html'+location.search}});
- document.querySelectorAll('.path button.sub').forEach(b=>b.onclick=()=>{ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
+ document.querySelectorAll('.path button[data-p]').forEach(b=>b.onclick=()=>{if(+b.dataset.p==0)location.href='details.html'+location.search});
+ document.querySelectorAll('.path button[data-k]').forEach(b=>b.onclick=()=>{PSEL=null;ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
+ document.querySelectorAll('#steps span[data-s]').forEach(x=>x.onclick=()=>{const k=+x.dataset.s;if(k<=cur||pDone(k)){PSEL=k==cur?null:k;home()}});
 }
 function train(){view='home';return home()}
 
