@@ -404,7 +404,7 @@ const rg=f=>RP.A[PC+'|'+f];
 function report(){
  frame('reception','Team answers','',0);$('bk').style.visibility='visible';
  if(!RP.who){$('main').innerHTML=`<div class="num">Team answers</div><h1>Who?</h1><div class="chap">${RP.people.map(p=>`<button data-w="${esc(p.person)}"><span class="r">·</span><span class="t">${esc(p.person)}</span><span class="s">${p.n} answers</span></button>`).join('')}</div>`;
-  $('nx').textContent='Chapters';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
+  $('nx').textContent='My path';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
   document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>repLoad(b.dataset.w));return}
  if(RP.open!=null){const p=POL[RP.open],sg=rg(p.id+'_sign');
   $('main').innerHTML=`<div class="num">${esc(RP.who)} · Policy ${String(RP.open+1).padStart(2,'0')}</div><h1 class="rep-h">${esc(p.title)}</h1>
@@ -461,7 +461,7 @@ function renderSteps(){const el=$('steps');if(!el)return;const inCh=view=='ch'||
  el.innerHTML=''}
 function frame(pic,cap,cnt,pct){$('bk').textContent=view=='home'&&ADMIN?'Team answers':'Back';$('main').classList.toggle('ph',view=='home');const use=picRule(pic);const C=CH[ci];const inCh=view=='ch'||view=='pol'||view=='ps';
  $('pic').classList.toggle('paper',use=='paper');if(use){titlePanel(false);$('pic').style.backgroundPosition=POS[use]||'center';$('pic').style.backgroundImage=`url(${IMG[use]})`}
- else{const lab=inCh?'Chapter '+C.n+' · '+C.title:(view=='home'?'The BSB Way':view=='tr'?'Step 2':cap);const t=inCh?cap:(view=='home'?'Your <em>path</em>':view=='tr'?'The BSB <em>Way</em>':cap);titlePanel(true,lab,t,(view=='ch'&&C.S[si].t=='open')?String(ci+1).padStart(2,'0'):'')}
+ else{const lab=inCh?'Chapter '+C.n+' · '+C.title:view=='wi'?'The BSB Way':(view=='home'?'The BSB Way':view=='tr'?'Step 2':cap);const t=inCh?cap:(view=='home'?'Your <em>path</em>':view=='tr'?'The BSB <em>Way</em>':cap);titlePanel(true,lab,t,(view=='ch'&&C.S[si].t=='open')?String(ci+1).padStart(2,'0'):'')}
  renderSteps();if(isPrev())cnt='PREVIEW · '+cnt;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
 function render(){if(view=='home')return home();if(view=='tr')return train();if(view=='pol')return polHome();if(view=='ps')return polScreen();if(view=='rep')return report();if(view=='wi')return whatif();return screen()}
 
@@ -474,7 +474,7 @@ function home(){
  else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
  $('main').innerHTML=`<div class="num">Step ${i+1} of ${PATH.length}</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
  ${i==1&&o?`<div class="stp">${p.t}</div>`:""}<div class="chap path">${body}</div>`;
- $('bk').style.visibility=ADMIN?'visible':'hidden';$('nx').textContent='What if…';$('nx').disabled=false;
+ $('bk').style.visibility=ADMIN?'visible':'hidden';$('nx').textContent='Questions';$('nx').disabled=false;
  $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
  document.querySelectorAll('.path button[data-p]').forEach(b=>b.onclick=()=>{if(+b.dataset.p==0)location.href='details.html'+location.search});
  document.querySelectorAll('.path button[data-k]').forEach(b=>b.onclick=()=>{PSEL=null;ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
@@ -559,16 +559,16 @@ function back(){if(view=='tr'||view=='pol'){view='home';return render()}if(view=
 /* ---------- WHAT IF ---------- */
 async function loadWI(){if(!WI.rows.length){try{WI.rows=await (await fetch(SBU+'bsb_onb_whatif?active=is.true&order=sort',{headers:H})).json()}catch(e){WI.rows=[]}}whatif()}
 function whatif(){
- frame('reception','What if…','',0);$('bk').style.visibility='visible';
+ frame('reception','Questions','',0);$('bk').style.visibility='visible';
  const rows=WI.rows.filter(r=>ROLE=='all'||r.roles=='all'||r.roles.split(',').includes(ROLE));
- if(WI.open!=null){const r=rows.find(x=>x.id==WI.open);$('main').innerHTML=`<div class="num">What if · ${esc(r.area)}</div><p class="q">${esc(r.q)}</p><div class="why"><b>In this House</b>${esc(r.a)}</div>`;$('nx').textContent='All situations';$('nx').disabled=false;$('nx').onclick=()=>{WI.open=null;whatif()};return}
+ if(WI.open!=null){const r=rows.find(x=>x.id==WI.open);$('main').innerHTML=`<div class="num">Questions · ${esc(r.area)}</div><p class="q">${esc(r.q)}</p><div class="why"><b>In this House</b>${esc(r.a)}</div>`;$('nx').textContent='All situations';$('nx').disabled=false;$('nx').onclick=()=>{WI.open=null;whatif()};return}
  const areas=['All',...new Set(rows.map(r=>r.area))];
  const f=rows.filter(r=>(WI.area=='All'||r.area==WI.area)&&(!WI.qq||(r.q+' '+r.a).toLowerCase().includes(WI.qq.toLowerCase())));
  const per=6,pages=Math.max(1,Math.ceil(f.length/per));WI.pg=Math.min(WI.pg,pages-1);
- $('main').innerHTML=`<div class="num">What if…</div><input class="wi-search" id="wq" placeholder="Search a situation" value="${esc(WI.qq)}"><div class="wi-chips">${areas.map(a=>`<button data-a="${esc(a)}" class="${a==WI.area?'on':''}">${esc(a)}</button>`).join('')}</div>
+ $('main').innerHTML=`<div class="num">Questions</div><h1>What if…</h1><input class="wi-search" id="wq" placeholder="Search a situation" value="${esc(WI.qq)}"><div class="wi-chips">${areas.map(a=>`<button data-a="${esc(a)}" class="${a==WI.area?'on':''}">${esc(a)}</button>`).join('')}</div>
  <div class="wi-list">${f.slice(WI.pg*per,WI.pg*per+per).map(r=>`<button data-o="${r.id}"><span>${esc(r.q)}</span><small>${esc(r.area)}</small></button>`).join('')||'<p class="lede">Nothing found.</p>'}</div>
  <div class="pager"><button id="pp" ${WI.pg?'':'disabled'}>‹</button>${WI.pg+1} / ${pages}<button id="pn" ${WI.pg<pages-1?'':'disabled'}>›</button></div>`;
- $('nx').textContent='Chapters';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
+ $('nx').textContent='My path';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
  $('wq').oninput=e=>{WI.qq=e.target.value;WI.pg=0;const p=e.target.selectionStart;whatif();const n=$('wq');n.focus();n.setSelectionRange(p,p)};
  document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{WI.area=b.dataset.a;WI.pg=0;whatif()});
  document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{WI.open=+b.dataset.o;whatif()});
