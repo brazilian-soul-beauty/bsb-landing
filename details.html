@@ -72,6 +72,12 @@ button:disabled{opacity:.5;cursor:default}
 #pdfBtn::after{display:none}
 @media(max-height:900px) and (min-width:821px){.side{padding-top:22px;padding-bottom:20px}.logo{height:44px}h1{font-size:clamp(30px,3.2vw,40px)}}
 @media(max-width:820px){.wrap{grid-template-columns:1fr;grid-template-rows:16vh 1fr}.pic .cap{left:20px;bottom:12px}.side{padding:14px 18px calc(12px + env(safe-area-inset-bottom));min-height:0}.logo{height:36px}h1{font-size:30px}.page{gap:11px}.photo{width:140px;height:140px}footer{padding-top:12px;margin-top:10px}}
+.need{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:14.5px;color:var(--ink2)}
+.need li{border-top:1px solid var(--line);padding-top:7px}
+.big{align-self:flex-start;background:var(--ink);color:var(--ivory);border:0;padding:14px 34px;font-size:13px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;margin-top:4px}
+footer .next{background:var(--ink);color:var(--ivory);padding:12px 22px}
+footer .next::after{display:none}
+@media(max-width:820px){.need{grid-template-columns:1fr;gap:5px}}
 </style>
 </head>
 <body>
@@ -85,7 +91,9 @@ button:disabled{opacity:.5;cursor:default}
       <div class="ico">🌿</div>
       <div class="num">My details</div>
       <h1>Welcome to<br>the <em>team</em></h1>
-      <p class="sub">A few details to get you started.<br>It takes about 5 minutes.</p>
+      <p class="sub">13 short pages. About 5 minutes.<br>Have these with you:</p>
+      <ul class="need"><li>🪪 Passport</li><li>🔢 National Insurance number</li><li>🏦 Bank details</li><li>🏠 Proof of address</li><li>🎓 Beauty certificates</li><li>📸 A photo of your face</li></ul>
+      <button type="button" class="big" id="go">Begin ›</button>
     </section>
 
     <section class="page" data-p="1">
@@ -261,8 +269,8 @@ function show(n){
   pages.forEach(p=>p.classList.toggle('on',+p.dataset.p===n));
   cur=n; $('err').textContent='';
   $('back').classList.toggle('hide',n===0||n>LAST);
-  $('nav').classList.toggle('hide',n>LAST);
-  $('next').textContent=n===0?'Begin':n===LAST?'Send':'Continue';
+  $('nav').classList.toggle('hide',n>LAST||n===0);
+  $('next').textContent=n===LAST?'Send ›':'Continue ›';
   $('stepTxt').textContent=n>0&&n<=LAST?'MY DETAILS · '+String(n).padStart(2,'0')+' / '+LAST:'';
   const pc=PICS[n]||PICS[0]; $('pic').style.backgroundImage='url("'+IMG[pc[0]]+'")'; $('cap').textContent=pc[1];
   $('bar').style.width=(Math.min(n,LAST)/LAST*100)+'%';
@@ -426,6 +434,7 @@ $('next').onclick=async()=>{
   catch(e){ $('err').textContent='Could not send. Please try again.'; $('next').disabled=false; $('next').textContent='Send'; console.error(e); }
 };
 $('back').onclick=()=>show(cur-1);
+$('go').onclick=()=>$('next').click();
 show(0);
 </script>
 </body>
