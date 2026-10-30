@@ -467,6 +467,11 @@ function render(){if(view=='home')return home();if(view=='tr')return train();if(
 
 let PSEL=null;
 function curStep(){for(let k=PATH.length-1;k>=0;k--)if(!PATH[k].soon&&pOpen(k)&&!pDone(k))return k;let i=PATH.findIndex((p,k)=>!pDone(k));return i<0?PATH.length-1:i}
+function openCh(k){PSEL=null;ci=k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()}
+function goTarget(){const cur=curStep();
+ if(!pDone(0))return{t:'Start',f:()=>{location.href='details.html'+location.search}};
+ if(!pDone(1)){if(!pOpen(1))return{t:'Waiting for approval',f:null};const k=CH.findIndex((c,j)=>!c.soon&&!chDone(c)&&unlocked(j));return k<0?{t:'Waiting for approval',f:null}:{t:'Continue',f:()=>openCh(k)}}
+ return{t:'Final questions',f:()=>{view='wi';WI.pg=0;WI.open=null;loadWI()}}}
 function home(){
  const cur=curStep(),i=PSEL==null?cur:PSEL,p=PATH[i];frame('team','','',PATH.filter((x,k)=>pDone(k)).length/PATH.length*100);
  const d=pDone(i),o=pOpen(i);let body='';
@@ -474,8 +479,8 @@ function home(){
  else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
  $('main').innerHTML=`<div class="num">Step ${i+1} of ${PATH.length}</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
  ${i==1&&o?`<div class="stp">${p.t}</div>`:""}<div class="chap path">${body}</div>`;
- $('bk').style.visibility=ADMIN?'visible':'hidden';$('nx').textContent='Questions';$('nx').disabled=false;
- $('nx').onclick=()=>{view='wi';WI.pg=0;WI.open=null;loadWI()};
+ $('bk').style.visibility=ADMIN?'visible':'hidden';
+ const go=goTarget();$('nx').textContent=go.t;$('nx').disabled=!go.f;$('nx').onclick=go.f||null;
  document.querySelectorAll('.path button[data-p]').forEach(b=>b.onclick=()=>{if(+b.dataset.p==0)location.href='details.html'+location.search});
  document.querySelectorAll('.path button[data-k]').forEach(b=>b.onclick=()=>{PSEL=null;ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
  document.querySelectorAll('#steps span[data-s]').forEach(x=>x.onclick=()=>{const k=+x.dataset.s;if(k==cur||pDone(k)||pOpen(k)){PSEL=k==cur?null:k;home()}});
