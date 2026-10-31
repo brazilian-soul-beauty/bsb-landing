@@ -41,7 +41,7 @@ label{font-size:12px;color:var(--ink2);display:block;margin-bottom:6px}
 const K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',U='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/';
 const H={apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'};
 const ME='Ligia';let PW='',ROWS=[];const $=id=>document.getElementById(id);
-const rpc=async(f,b)=>{const r=await fetch(U+f,{method:'POST',headers:H,body:JSON.stringify(b)});if(!r.ok)throw r.status;return r.json()};
+const rpc=async(f,b)=>{const r=await fetch(U+f,{method:'POST',headers:H,body:JSON.stringify(b)});if(!r.ok){let m='';try{m=(await r.json()).message||''}catch(_){}throw new Error(r.status+' '+m)}return r.json()};
 const WORDS=['Rosa','Lima','Mar','Sol','Lua','Flor','Mel','Cafe','Nuvem','Pera','Coco','Uva','Brisa','Areia','Seda','Perla','Clara','Vela','Jade','Ouro','Prata','Menta','Canela','Baunilha','Oliva','Linho','Musgo','Rio','Ilha','Folha'];
 function gen(){const a=new Uint32Array(3);crypto.getRandomValues(a);return WORDS[a[0]%WORDS.length]+'-'+WORDS[a[1]%WORDS.length]+'-'+(10+a[2]%90)}
 async function load(){ROWS=await rpc('hub_admin_list',{p_admin:ME,p_pw:PW});draw()}
@@ -58,12 +58,12 @@ function edit(n){const g=gen();$('list').classList.add('hide');$('edit').classLi
  $('rg').onclick=()=>{$('np').value=gen()};
  $('cx').onclick=draw;
  $('ef').onsubmit=async ev=>{ev.preventDefault();const v=$('np').value.trim();if(v.length<6){$('em').textContent='At least 6 characters.';return}$('sv').disabled=true;
-  try{const j=await rpc('hub_admin_set',{p_admin:ME,p_pw:PW,p_target:n,p_new:v});if(j!=='ok')throw 0;if(n===ME)PW=v;
+  try{const j=await rpc('hub_admin_set',{p_admin:ME,p_pw:PW,p_target:n,p_new:v});if(j!=='ok')throw new Error(String(j));if(n===ME)PW=v;
    $('edit').innerHTML=`<div class="nm">${n} · saved ✓</div><div class="sub" style="margin-top:6px">${n===ME?'Your new password:':'Send this to '+n+':'}</div>
    <div class="pw"><b id="pv">${v}</b><button id="cp">Copy</button></div><div class="sub" style="margin-top:10px">Save it in your phone's Passwords app. It is not shown again.</div>
    <div style="margin-top:14px"><button id="bk">Done</button></div>`;
    $('cp').onclick=async()=>{try{await navigator.clipboard.writeText(v);$('cp').textContent='Copied ✓'}catch(e){}};$('bk').onclick=load}
-  catch(e){$('em').textContent='Could not save.';$('sv').disabled=false}}}
+  catch(e){const m=String(e&&e.message||e);$('em').textContent=/not allowed/.test(m)?'Session expired. Close this page and open 🔑 again.':'Could not save ('+m+').';$('sv').disabled=false}}}
 $('lf').onsubmit=async ev=>{ev.preventDefault();PW=$('apw').value;$('lm').textContent='';$('in').disabled=true;
  try{await load();$('login').classList.add('hide')}catch(e){$('lm').textContent='Wrong password.';PW=''}$('in').disabled=false};
 (async()=>{const t=decodeURIComponent((location.hash.match(/t=([^&]+)/)||[])[1]||'');if(!t)return;history.replaceState(null,'',location.pathname);PW=t;try{await load();$('login').classList.add('hide')}catch(e){PW=''}})();
