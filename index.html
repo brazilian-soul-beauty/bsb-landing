@@ -418,8 +418,8 @@ function report(){
   setTimeout(()=>$('nn').focus(),50);return}
  if(!RP.who){if(!RP.list){rpc('onb_list_people',{p_person:person,p_code:CODE}).then(r=>r.json()).then(l=>{RP.list=Array.isArray(l)?l:[];if(view=='rep'&&!RP.who&&!RP.add&&!RP.share)report()}).catch(()=>{RP.list=[]})}
   const cnt={};RP.people.forEach(p=>cnt[p.person]=p.n);const names=[...new Set([...(RP.list||[]).map(p=>p.person),...RP.people.map(p=>p.person)])].slice(0,8);
-  $('main').innerHTML=`<div class="num">Team answers</div><h1>Who?</h1><div class="chap">${names.map(nm=>{const L=(RP.list||[]).find(x=>x.person==nm);return `<div class="who"><button data-w="${esc(nm)}"><span class="r">·</span><span class="t">${esc(nm)}</span><span class="s">${cnt[nm]||0} answers</span></button>${L?`<button class="lk" data-l="${esc(nm)}">Link</button>`:''}</div>`}).join('')}</div><button class="adm" id="add">+ New starter</button>`;
-  $('nx').textContent='My path';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
+  $('main').innerHTML=`<div class="num">Team answers</div><h1>${TEAMV?'New <em>starters</em>':'Who?'}</h1><div class="chap">${names.map(nm=>{const L=(RP.list||[]).find(x=>x.person==nm);return `<div class="who"><button data-w="${esc(nm)}"><span class="r">·</span><span class="t">${esc(nm)}</span><span class="s">${cnt[nm]||0} answers</span></button>${L?`<button class="lk" data-l="${esc(nm)}">Link</button>`:''}</div>`}).join('')}</div><button class="adm" id="add" style="${TEAMV?'display:none':''}">+ New starter</button>`;
+  if(TEAMV){$('nx').textContent='+ New starter';$('nx').disabled=false;$('nx').onclick=()=>{RP.add=true;report()};$('bk').style.visibility='hidden'}else{$('nx').textContent='My path';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()}}
   $('add').onclick=()=>{RP.add=true;report()};
   document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{RP.share=(RP.list||[]).find(x=>x.person==b.dataset.l);report()});
   document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>repLoad(b.dataset.w));return}
@@ -609,7 +609,8 @@ function resumeAt(C){if(chDone(C))return 0;const k=C.S.findIndex(s=>!stepDone(C,
 function blocked(kind){frame('reception','Brazilian Soul Beauty','',0);$('bk').style.visibility='hidden';$('nx').style.visibility='hidden';
  const msg={nolink:['Please use your personal link','Your onboarding link has your name and a code. Ask Front of House or your manager to send it to you.'],badcode:['This link is not valid','Please ask your manager for your personal onboarding link.'],offline:['We could not connect','Check your internet and refresh the page.']}[kind];
  $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${msg[0]}</h1><p class="lede">${msg[1]}</p>`}
-load().then(async st=>{if(st=='ok'){await checkAdmin();render()}else blocked(st)});
+const TEAMV=new URLSearchParams(location.search).get('v')=='team';
+load().then(async st=>{if(st=='ok'){await checkAdmin();if(ADMIN&&TEAMV){view='rep';RP.who=null}render()}else blocked(st)});
 </script>
 <div id="print"></div>
 </body>
