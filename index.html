@@ -635,8 +635,8 @@ function refreshName(){frame('team','','',0);$('steps').innerHTML='';$('bk').sty
 function blocked(kind){frame('reception','Brazilian Soul Beauty','',0);$('bk').style.visibility='hidden';$('nx').style.visibility='hidden';
  const msg={nolink:['Please use your personal link','Your onboarding link has your name and a code. Ask Front of House or your manager to send it to you.'],badcode:['This link is not valid','Please ask your manager for your personal onboarding link.'],offline:['We could not connect','Check your internet and refresh the page.']}[kind];
  $('main').innerHTML=`<div class="num">The BSB Way</div><h1>${msg[0]}</h1><p class="lede">${msg[1]}</p>`}
-const TEAMV=new URLSearchParams(location.search).get('v')=='team';
-if(REFRESH&&!CODE)refreshName();else load().then(async st=>{if(st=='ok'){await checkAdmin();if(ADMIN&&TEAMV){view='rep';RP.who=null}render()}else blocked(st)});
+const VQ=new URLSearchParams(location.search).get('v');const TEAMV=VQ=='team'||VQ=='refresh';
+if(REFRESH&&!CODE)refreshName();else load().then(async st=>{if(st=='ok'){await checkAdmin();if(ADMIN&&TEAMV){view='rep';RP.who=null;if(VQ=='refresh')RP.links=true}render()}else blocked(st)});
 </script>
 <div id="print"></div>
 </body>
