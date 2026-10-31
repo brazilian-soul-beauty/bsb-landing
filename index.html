@@ -94,10 +94,29 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .earn div b{display:block;font-size:24px;font-weight:800;letter-spacing:-.5px}
 .earn div span{font-size:11.5px;color:var(--muted)}
 .earn .tot b{color:var(--ok)}
+.allin>div:not(:first-child){padding-left:14px}.allin>div:not(:first-child) b{font-size:21px}.allin>div:not(:first-child) span{font-size:12px}
 .earn .coh{background:#F7F6FB;border-radius:12px;padding:8px 12px;font-size:12px;color:var(--ink);line-height:1.5}
 .top-rated{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(90deg,#F2C46D,#D99A3A);color:#fff;font-weight:700;font-size:11px;padding:3px 9px;border-radius:99px}
 .soon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#fff;border-radius:22px;border:1px dashed var(--line);grid-column:1/-1;color:var(--muted);text-align:center}
 .soon em{font-style:normal;font-size:44px}
+.emc{display:flex;flex-direction:column;gap:12px;min-height:0}
+.emc .grid{flex:1}
+.fil{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+.fil button{padding:7px 11px;white-space:nowrap;border-radius:99px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:13px}
+.fil button.on{background:#0F6B47;color:#fff;border-color:#0F6B47}
+.emn{display:flex;flex-direction:column;gap:6px;margin:auto 0}
+.emn button{display:flex;align-items:center;gap:10px;text-align:left;color:#fff;padding:10px 12px;border-radius:14px;font-weight:600;font-size:15px;background:transparent}
+.emn button.on{background:rgba(255,255,255,.2)}
+.emn button em{font-style:normal;font-size:20px}
+.pc{cursor:pointer}.pc .t{font-weight:700;font-size:15px;margin-top:8px;line-height:1.25}
+.pc .k{font-size:11px;font-weight:700;color:#0F6B47;background:#E3F6EE;padding:3px 8px;border-radius:99px;align-self:flex-start}
+.pc.known{border-color:#1F9D6B;box-shadow:inset 0 0 0 1px #1F9D6B}
+.thumb{width:100%;flex:1;min-height:0;border-radius:12px;background:#000 center/cover no-repeat;position:relative;margin-top:8px}
+.thumb:after{content:'▶';position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:30px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+.say{background:#E3F6EE;color:#0F6B47;border-radius:14px;padding:12px 14px;font-size:15px;font-weight:600}
+.vid{width:100%;aspect-ratio:16/9;border:0;border-radius:14px}
+.bigbtn{padding:14px;border-radius:14px;font-weight:700;font-size:15px;background:#0F6B47;color:#fff}
+.bigbtn.done{background:#E3F6EE;color:#0F6B47}
 /* sheet */
 .sheet{position:fixed;inset:0;background:rgba(31,29,43,.35);display:none;align-items:center;justify-content:center;z-index:9}
 .sheet.on{display:flex}
@@ -138,7 +157,43 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .team{display:flex;gap:6px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px 6px}
 .team button .av{width:34px;height:34px;font-size:13px;box-shadow:none;opacity:.55}
 .team button.on .av{opacity:1;box-shadow:0 0 0 2px var(--p)}
-@media (max-width:900px){main{grid-template-columns:1fr}.hero{display:none}.grid{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(4,1fr)}.nav b{min-width:110px}}
+@media (max-width:700px){
+#app{height:100dvh;padding:calc(env(safe-area-inset-top) + 10px) 0 calc(74px + env(safe-area-inset-bottom));gap:10px}
+.top{flex-wrap:wrap;gap:8px;padding:0 14px}
+.me{flex:1 1 100%}.me b{font-size:17px}.av{width:38px;height:38px}
+.sp{display:none}
+.team{order:5;width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+.team::-webkit-scrollbar{display:none}
+.seg{order:3}.seg button{padding:6px 10px;font-size:12.5px}
+.nav{order:4;flex:1}.nav b{min-width:0;flex:1;font-size:12.5px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:0}
+.tab{flex:1;flex-direction:column;gap:2px;border:0;background:none;padding:6px 2px;font-size:11px;border-radius:12px;line-height:1.1;text-align:center}
+.tab.on{background:var(--ps);color:var(--p)}
+main{display:flex!important;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;gap:0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+main::-webkit-scrollbar{display:none}
+main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 14px;overflow-y:auto}
+.hero{display:flex!important;margin:0 14px;flex:0 0 calc(100% - 28px);padding:18px}
+.hero .ring{transform:scale(.85)}
+.bands{flex:0 0 300%;display:grid;grid-template-rows:auto 1fr;grid-auto-flow:column;grid-auto-columns:calc(100% / 3);row-gap:8px;padding:0;overflow:visible}
+.bands>.bh,.bands>.row,.bands>.earn{margin:0 14px}
+.bands>.bh{scroll-snap-align:start}
+.bands>.row{grid-template-columns:repeat(2,1fr)!important;grid-auto-rows:1fr;align-content:start;overflow-y:auto}
+.bands>.row .tile{min-height:0}
+.earn{grid-template-columns:repeat(3,1fr)!important;align-self:start}
+.earn .coh{grid-column:1/-1}
+.grid{grid-template-columns:repeat(2,1fr)!important;grid-template-rows:none!important;grid-auto-rows:minmax(150px,auto);align-content:start}
+.grid>.tile{grid-column:auto!important}
+.grid>.span2,.grid>.tile[style*="span 4"],.grid>.tile[style*="span 2"]{grid-column:1/-1!important}
+.allin{grid-template-columns:repeat(3,1fr)!important}
+.allin>div:first-child{grid-column:1/-1;gap:14px!important;padding:12px 14px!important}.allin>div:first-child b{font-size:30px!important}
+.bands>*{min-width:0}
+.emc{padding:0 14px}.fil{overflow-x:auto;scrollbar-width:none}
+.emc .grid{padding:0}
+.wait{margin:0 14px;flex:0 0 calc(100% - 28px)}
+.panel{width:100vw;max-height:92dvh;border-radius:24px 24px 0 0;align-self:flex-end;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+.lk,.lk.wide{width:min(92vw,420px);padding:22px 18px}
+.faces{gap:12px}.face .av{width:64px;height:64px}
+}
 </style>
 </head>
 <body>
@@ -154,6 +209,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
     <button class="tab on" data-t="std">✅ BSB Standard</button>
     <button class="tab" data-t="xm">⭐ Extra mile</button>
     <button class="tab" data-t="path">🌱 Soul Path</button>
+    <button class="tab" data-t="em" id="tabEm" style="display:none">🌿 Eminence</button>
   </div>
   <main id="main"></main>
 </div>
@@ -237,6 +293,9 @@ function render(){
   var M=document.getElementById('main');
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null;
   if(!S.admin&&st0&&range()[1]<st0){M.innerHTML='<div class="wait"><em>✨</em><b style="font-size:22px;color:var(--ink)">Your Soul Path starts on '+st0.getDate()+' '+MN[st0.getMonth()]+'</b>Everything counts from that day.</div>';return}
+  var hasEm=((S.sp&&S.sp.goals)||[]).some(function(g){return g.kind==='eminence'});document.getElementById('tabEm').style.display=hasEm?'':'none';
+  if(S.tab==='em'&&!hasEm)S.tab='path';
+  if(S.tab==='em')return renderEm(M);
   if(S.tab==='xm')return renderXM(M);
   if(S.tab==='path')return renderPath(M);
   var C=calc(S.data),x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,rp=n?Math.round(100*nr/n):null,topR=rp!=null&&rp>=lad[0];
@@ -291,7 +350,7 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#5FD3A0 0%,#1F9D6B 50%,#0F6B47 100%)"><small>This is your path</small><h2>Soul Path</h2><p>'+LV[lv-1]+' · Level '+lv+'</p>'+
    '<div style="margin:auto 0;display:flex;flex-direction:column;gap:10px">'+LV.map(function(n,i){var on=i+1===lv,done=i+1<lv;return '<div style="display:flex;align-items:center;gap:10px;opacity:'+(on||done?1:.5)+'"><span style="width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:'+(on?'#fff':'rgba(255,255,255,.18)')+';color:'+(on?'#1F9D6B':'#fff')+';font-weight:800;font-size:13px">'+(done?'✓':i+1)+'</span><b style="font-size:'+(on?17:14)+'px">'+n+'</b>'+(on?'<span style="margin-left:auto;font-size:11px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:99px">You are here</span>':'')+'</div>'}).join('')+'</div>'+
    '<div class="verdict"><em>🗓️</em><span>'+(st&&today()<st?'Your path starts on '+st.getDate()+' '+MN[st.getMonth()]+'.':'○○○ 3 months = <b>£'+(s.bonus||250)+' bonus</b> · ○○○○○○ 6 months = next level')+'</span></div></div><div class="grid">';
-  var goals=s.goals||[];
+  var goals=(s.goals||[]).filter(function(g){return g.kind!=='eminence'});
   if(!goals.length)h+='<div class="tile span2"><div class="h"><em>🎯</em>My goals</div><div class="sub" style="margin-top:auto">Your goals from the meeting will appear here.</div></div>';
   goals.slice(0,2).forEach(function(g,i){
     if(g.kind==='facial_share'){var mx=s.mix||[],last=mx[mx.length-1]||{facials:0,massages:0},sh=(last.facials+last.massages)?Math.round(100*last.facials/(last.facials+last.massages)):0,mxv=Math.max.apply(null,mx.map(function(m){return m.facials+m.massages}).concat([1]));
@@ -303,13 +362,61 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
     else h+='<div class="tile span2"><div class="h"><em>🎯</em>'+esc(g.title)+'</div><div class="sub" style="margin-top:auto">'+esc(g.note||'')+'</div></div>';});
   if(goals.length===1)h+='<div class="tile span2"></div>';
   h+='<div class="tile" style="grid-column:span 4;animation-delay:150ms"><div class="h"><em>💷</em>My month, all in · '+label()+(S.admin?'<button class="chip ok" style="cursor:pointer" onclick="perkForm()">+ Add discount or gift</button>':'')+'</div>'+
-     '<div class="earn" style="border:0;padding:8px 0 0;grid-template-columns:repeat(6,1fr)">'+
-     '<div><b>£'+rate.toFixed(2)+'</b><span>Per hour</span></div><div><b>'+gbp(pay)+'</b><span>Pay · '+Math.round(hrs)+'h</span></div><div><b>'+gbp(tips)+'</b><span>Tips</span></div>'+
-     '<div><b>'+gbp(disc)+'</b><span>💅 Your discounts</span></div><div><b>'+gbp(gift)+'</b><span>🎁 Gifts from BSB</span></div>'+
-     '<div class="tot"><b>'+gbp(tot)+'</b><span>All in · £'+allh.toFixed(2)+'/h</span></div></div>'+
-     (perks.length?'<div class="sub" style="margin-top:8px;min-height:0">'+perks.map(function(p){return (p.kind==='gift'?'🎁 ':'💅 ')+esc(p.what)+' £'+(+p.value).toFixed(0)+(S.admin?' <a style="color:var(--no);cursor:pointer" onclick="perkDel(\''+p.id+'\')">✕</a>':'')}).join(' · ')+'</div>':'')+'</div></div>';
+     '<div class="earn allin" style="border:0;padding:8px 0 0;grid-template-columns:2.6fr repeat(5,1fr);align-items:stretch">'+'<div style="background:var(--ok);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:22px">'+'<div><b style="color:#fff;font-size:38px;line-height:1">'+gbp(tot)+'</b><span style="color:#fff;opacity:.9">All in this month</span></div>'+'<i style="width:1px;align-self:stretch;background:rgba(255,255,255,.4)"></i>'+'<div><b style="color:#fff;font-size:38px;line-height:1">£'+allh.toFixed(2)+'<small style="font-size:15px;font-weight:600">/h</small></b><span style="color:#fff;opacity:.9">Your real hour</span></div></div>'+'<div><b>£'+rate.toFixed(2)+'</b><span>Per hour</span></div><div><b>'+gbp(pay)+'</b><span>Pay · '+Math.round(hrs)+'h</span></div><div><b>'+gbp(tips)+'</b><span>Tips</span></div>'+'<div><b>'+gbp(disc)+'</b><span>💅 Discounts</span></div><div><b>'+gbp(gift)+'</b><span>🎁 Gifts</span></div></div>'+
+     (perks.length?'<div class="sub" style="margin-top:8px;min-height:0">'+perks.map(function(p){return (p.kind==='gift'?'🎁 ':p.auto?'🧾 ':'💅 ')+esc(p.what)+' · £'+(+p.value).toFixed(0)+(p.kind==='gift'?'':' off')+(S.admin&&p.id?' <a style="color:var(--no);cursor:pointer" onclick="perkDel(\''+p.id+'\')">✕</a>':'')}).join(' · ')+'</div>':'')+'</div></div>';
   M.innerHTML=h;
   requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},60)})}
+
+/* ---------- Eminence ---------- */
+var EMS=[['story','🌿','We are Eminence'],['why','💚','Why only Eminence'],['product','🧴','Know every product'],['study','🎬','Study to grow'],['mine','🛍️','My Eminence']];
+var EMI={story:['🇭🇺','🌾','🍃','🏆','🌳','💧'],why:['🏠','🤝','🚫','💬','🌱','🗣️']};
+function renderEm(M){var key=S.who+'|'+ymd(range()[0]);
+  if(!S.br||S.brk!==key){S.brk=key;S.br=null;M.innerHTML='<div class="wait"><em>🌿</em>Loading…</div>';
+    rpc('soul_brand',{p_code:S.code,p_person:S.who,p_month:ymd(range()[0])}).then(function(r){S.br=r||{};if(S.tab==='em')renderEm(M)}).catch(function(){S.br={};renderEm(M)});return}
+  var b=S.br,cards=b.cards||[],kn=b.known||[],sc=S.ems||'story';
+  var prods=cards.filter(function(c){return c.section==='product'}),vids=cards.filter(function(c){return c.section==='study'});
+  var path=[],pi=0,vi=0;while(pi<prods.length||vi<vids.length){if(pi<prods.length)path.push(prods[pi++]);if(pi<prods.length)path.push(prods[pi++]);if(vi<vids.length)path.push(vids[vi++])}
+  var ka=b.known_at||{},td=ymd(today()),LK={},nextId=null;
+  path.forEach(function(c,i){var p=path[i-1],open=S.admin||i===0||(p&&kn.indexOf(p.id)>=0&&(ka[p.id]||'')<td&&!LK[p.id]);LK[c.id]=!open;if(open&&kn.indexOf(c.id)<0&&nextId==null)nextId=c.id});
+  S.emLK=LK;
+  function lockT(c){return '<div class="tile" style="opacity:.55;background:#F7F6FB"><span style="font-size:26px">🔒</span><div class="t" style="font-weight:700;margin-top:8px;color:var(--faint)">'+esc(c.title)+'</div><div class="sub" style="margin-top:auto;min-height:0">Opens soon</div></div>'}
+  var kp=prods.filter(function(c){return kn.indexOf(c.id)>=0}).length,kv=vids.filter(function(c){return kn.indexOf(c.id)>=0}).length,
+      tot=prods.length+vids.length,pct=tot?Math.round(100*(kp+kv)/tot):0;
+  var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#8FCB6B 0%,#3E8E4E 50%,#1E5B37 100%)"><small>We are brand representatives</small><h2>Eminence</h2><p>Eminence expert · '+pct+'%</p>'+
+    '<div class="bar" style="background:rgba(255,255,255,.2);margin-top:8px"><b data-w="'+pct+'" style="background:#fff"></b></div>'+
+    '<div class="emn">'+EMS.map(function(e){return '<button class="'+(e[0]===sc?'on':'')+'" onclick="S.ems=\''+e[0]+'\';S.emp=0;S.emJump=1;renderEm(document.getElementById(\'main\'))"><em>'+e[1]+'</em>'+e[2]+'</button>'}).join('')+'</div>'+
+    '<div class="verdict"><em>✨</em><span>'+(S.admin?'You see every topic.':'One new topic a day. Learn it, and tomorrow the next one opens.')+'</span></div></div>';
+  if(sc==='story'||sc==='why'){var L=cards.filter(function(c){return c.section===sc});
+    h+='<div class="grid" style="grid-template-columns:repeat(3,1fr)">'+L.map(function(c,i){var last=sc==='why'&&i===L.length-1;
+      return '<div class="tile" style="animation-delay:'+(i*60)+'ms'+(last?';background:#E3F6EE;border-color:#BFE6D3':'')+'"><em style="font-style:normal;font-size:32px">'+EMI[sc][i%6]+'</em><div style="font-weight:800;font-size:18px;margin-top:10px">'+esc(c.title)+'</div><div class="sub" style="margin-top:6px;font-size:14px;line-height:1.45'+(last?';color:#0F6B47;font-weight:600':'')+'">'+esc(c.body)+'</div></div>'}).join('')+'</div>';}
+  else if(sc==='product'){var cons=['All'];prods.forEach(function(c){if(cons.indexOf(c.concern)<0)cons.push(c.concern)});
+    var f=S.emf||'All',L=prods.filter(function(c){return f==='All'||c.concern===f}),pg=S.emp||0,np=Math.ceil(L.length/8);if(pg>=np)pg=0;var P=L.slice(pg*8,pg*8+8);
+    h+='<div class="emc"><div class="fil">'+cons.map(function(c){return '<button class="'+(c===f?'on':'')+'" onclick="S.emf=\''+c+'\';S.emp=0;renderEm(document.getElementById(\'main\'))">'+c+'</button>'}).join('')+
+      (np>1?'<button style="margin-left:auto" onclick="S.emp='+((pg+1)%np)+';renderEm(document.getElementById(\'main\'))">Next ›</button>':'')+'</div>'+
+      '<div class="grid">'+P.map(function(c,i){if(LK[c.id])return lockT(c);var k=kn.indexOf(c.id)>=0;return '<div class="tile pc'+(k?' known':'')+'" style="animation-delay:'+(i*40)+'ms" onclick="emCard('+c.id+')"><span class="k">'+esc(c.concern)+'</span>'+(c.id===nextId?'<span class="chip ok" style="position:absolute;top:14px;right:14px">✨ Today</span>':'')+'<div class="t">'+esc(c.title)+'</div><div class="sub" style="margin-top:auto;min-height:0;display:flex;align-items:center">'+[c.price?'£'+c.price:'',c.video?'🎬':''].filter(Boolean).join(' · ')+'<b style="margin-left:auto;color:#1F9D6B;font-size:16px">'+(k?'✓':'')+'</b></div></div>'}).join('')+'</div></div>';}
+  else if(sc==='study'){h+='<div class="grid" style="grid-template-columns:repeat(3,1fr)">'+vids.map(function(c,i){if(LK[c.id])return lockT(c);var k=kn.indexOf(c.id)>=0;
+      return '<div class="tile pc'+(k?' known':'')+'" style="animation-delay:'+(i*60)+'ms" onclick="emCard('+c.id+')"><div class="h">'+esc(c.title)+'<span class="chip '+(k||c.id===nextId?'ok':'na')+'">'+(k?'✓ Watched':c.id===nextId?'✨ Today':'New')+'</span></div><div class="thumb" style="background-image:url(https://img.youtube.com/vi/'+c.video+'/mqdefault.jpg)"></div></div>'}).join('')+'</div>';}
+  else {var nf=b.new_facial||0,nb=b.new_buyers||0,fc=b.facial_clients||0,by=b.buyers||0,rp=nf?Math.round(100*nb/nf):0,lst=b.list;
+    h+='<div class="grid">'+
+     '<div class="tile span2"><div class="h"><em>🆕</em>New facial clients who took Eminence home<span class="chip '+(rp>=33?'ok':rp>=20?'ok':'no')+'">'+(rp>=33?'🥇':rp>=20?'🥉':'Goal 20%')+'</span></div><div class="big">'+rp+'<small>%</small></div><div class="sub">'+(S.admin?nb+' of '+nf+' new facial clients · ':'')+'🥉 1 in 5 · 🥇 1 in 3</div><div class="bar"><b data-w="'+Math.min(100,rp*3)+'"></b></div></div>'+
+     '<div class="tile"><div class="h"><em>👩</em>All facial clients</div><div class="big">'+(fc?Math.round(100*by/fc):0)+'<small>%</small></div><div class="sub">took Eminence home'+(S.admin?' · '+by+' of '+fc:'')+'</div></div>'+
+     '<div class="tile"><div class="h"><em>💷</em>Eminence sold</div><div class="big">'+gbp(b.sales||0)+'</div><div class="sub">'+(b.items||0)+' products</div></div>'+
+     (S.admin&&lst?'<div class="tile span2" style="overflow:auto"><div class="h"><em>✅</em>Bought</div><div class="list" style="margin-top:8px">'+((lst.bought||[]).map(function(x){return '<div class="li"><b>'+esc(x.name)+'</b>'+esc(x.item)+'<span style="margin-left:auto">£'+Math.round(x.gbp)+'</span></div>'}).join('')||'<div class="sub">Nobody yet</div>')+'</div></div>'+
+       '<div class="tile span2" style="overflow:auto"><div class="h"><em>🆕</em>New facial, not yet</div><div class="list" style="margin-top:8px">'+((lst.not_yet||[]).map(function(x){var d=x.date?pd(x.date):null;return '<div class="li"><b>'+esc(x.name)+'</b><span style="margin-left:auto;color:var(--muted)">'+(d?d.getDate()+' '+MN[d.getMonth()]:'')+'</span></div>'}).join('')||'<div class="sub">Everyone bought 🎉</div>')+'</div></div>'
+     :'<div class="tile span2"><div class="h"><em>🧴</em>Products I know</div><div class="big">'+kp+'<small>/'+prods.length+'</small></div><div class="bar"><b data-w="'+(prods.length?100*kp/prods.length:0)+'"></b></div></div>'+
+       '<div class="tile span2"><div class="h"><em>🎬</em>Videos watched</div><div class="big">'+kv+'<small>/'+vids.length+'</small></div><div class="bar"><b data-w="'+(vids.length?100*kv/vids.length:0)+'"></b></div></div>')+'</div>';}
+  M.innerHTML=h;if(S.emJump&&window.innerWidth<=700){S.emJump=0;M.scrollLeft=M.clientWidth}
+  requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b').forEach(function(x){x.style.width=x.getAttribute('data-w')+'%'})},60)})}
+function emCard(id){var c=(S.br.cards||[]).filter(function(x){return x.id===id})[0],k=(S.br.known||[]).indexOf(id)>=0,st=c.section==='study';
+  document.getElementById('panel').innerHTML='<div class="ph"><em>'+(st?'🎬':'🧴')+'</em>'+esc(c.title)+'<button onclick="closeT()">✕</button></div>'+
+    (c.concern?'<span class="k" style="font-size:12px;font-weight:700;color:#0F6B47;background:#E3F6EE;padding:4px 10px;border-radius:99px;align-self:flex-start">'+esc(c.concern)+(c.price?' · £'+c.price:'')+'</span>':'')+
+    (c.video?'<iframe class="vid" src="https://www.youtube-nocookie.com/embed/'+c.video+'?rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>':'')+
+    (c.body?'<div style="font-size:15px;line-height:1.5">'+esc(c.body)+'</div>':'')+
+    (c.pitch?'<div class="say">💬 '+esc(c.pitch)+'</div>':'')+
+    '<button class="bigbtn'+(k?' done':'')+'" onclick="emKnow('+id+','+(!k)+')">'+(k?'✓ '+(st?'Watched':'I know this one'):(st?'I watched it':'I know this one'))+'</button>';
+  document.getElementById('sheet').classList.add('on')}
+function emKnow(id,on){var kn=S.br.known||[];if(on){if(kn.indexOf(id)<0)kn.push(id);S.br.known_at=S.br.known_at||{};S.br.known_at[id]=ymd(today())}else kn.splice(kn.indexOf(id),1);S.br.known=kn;
+  rpc('soul_brand_know',{p_code:S.code,p_person:S.who,p_card:id,p_on:on}).catch(function(){});closeT();renderEm(document.getElementById('main'))}
 function perkForm(){document.getElementById('panel').innerHTML='<div class="ph"><em>💷</em>Add for '+esc(S.who)+'<button onclick="closeT()">✕</button></div>'+
   '<div class="seg" id="pk" style="align-self:flex-start"><button class="on" data-k="discount">💅 Discount</button><button data-k="gift">🎁 Gift</button></div>'+
   '<input id="pw" placeholder="What (e.g. Facial 25% off)" style="font:inherit;padding:12px;border:1px solid var(--line);border-radius:12px">'+
@@ -336,7 +443,7 @@ function openT(k){var c=S.C.filter(function(x){return x.k===k})[0],h='<div class
     var rules={time:'⏰ Arrive by your start time, every day.',lunch:'🍽️ Lunch is '+(S.data?S.data.lunch_max:30)+' minutes. Every minute over comes out of client time.',abs:'📅 Leave only counts when it is registered in Connecteam.',look:'💄 Tap the lipstick when you arrive. Joana checks it.',tasks:'☑️ Morning, Day and Close tasks, every day you work.'};
     h+='<div class="rule">'+rules[k]+'</div>'}
   document.getElementById('panel').innerHTML=h;document.getElementById('sheet').classList.add('on')}
-function closeT(){document.getElementById('sheet').classList.remove('on')}
+function closeT(){document.getElementById('sheet').classList.remove('on');var v=document.querySelector('#panel iframe');if(v)v.remove()}
 document.getElementById('sheet').onclick=function(e){if(e.target.id==='sheet')closeT()};
 
 /* ---------- controls ---------- */
@@ -346,7 +453,7 @@ function step(n){var a=new Date(S.anchor);if(S.mode==='day')a.setDate(a.getDate(
   if(a>today())a=today();S.anchor=a;load()}
 document.getElementById('prev').onclick=function(){step(-1)};document.getElementById('next').onclick=function(){step(1)};
 document.getElementById('tabs').onclick=function(e){var b=e.target.closest('.tab');if(!b)return;S.tab=b.getAttribute('data-t');
-  [].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});render()};
+  [].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});document.getElementById('main').scrollLeft=0;render()};
 loadPeople();
 </script>
 </body>
