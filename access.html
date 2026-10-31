@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team access · BSB</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F4FA;--card:#fff;--ink:#1F1D2B;--ink2:#6B6880;--line:#E6E3F0;--pur:#6C4BD8;--pur2:#EFEAFD;--ok:#2E8B57;--bad:#C2413A}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;font-size:15px;display:flex;justify-content:center;padding:28px 16px;overflow:hidden}
+.w{width:100%;max-width:620px;display:flex;flex-direction:column;gap:16px}
+h1{font-size:24px;font-weight:600}
+.sub{color:var(--ink2);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.nm{font-weight:600}
+.st{font-size:12px;margin-top:2px}
+.st.on{color:var(--ok)}.st.off{color:var(--bad)}.st.no{color:var(--ink2)}
+button{font:inherit;font-size:13px;font-weight:500;border-radius:9px;padding:9px 13px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+button.p{background:var(--pur);border-color:var(--pur);color:#fff}
+button.r{color:var(--bad)}
+input{width:100%;font:inherit;font-size:16px;padding:11px 13px;border:1px solid var(--line);border-radius:9px;outline:none;background:#fff}
+input:focus{border-color:var(--pur)}
+.msg{font-size:13px;color:var(--bad);min-height:18px}
+.pw{display:flex;gap:8px;align-items:center;background:var(--pur2);border-radius:10px;padding:12px 14px;margin-top:10px}
+.pw b{font-size:20px;letter-spacing:.06em;flex:1;font-family:ui-monospace,Menlo,monospace}
+.hide{display:none}
+label{font-size:12px;color:var(--ink2);display:block;margin-bottom:6px}
+</style></head><body>
+<div class="w">
+  <div><h1>Team access</h1><div class="sub">One password per person, for all BSB dashes</div></div>
+  <div class="card" id="login">
+    <label>Your password</label>
+    <div style="display:flex;gap:8px"><input type="password" id="apw" autocomplete="current-password"><button class="p" id="in">Enter</button></div>
+    <div class="msg" id="lm"></div>
+  </div>
+  <div class="card hide" id="list"></div>
+  <div class="card hide" id="edit"></div>
+</div>
+<script>
+const K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',U='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/';
+const H={apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'};
+const ME='Ligia';let PW='',ROWS=[];const $=id=>document.getElementById(id);
+const rpc=async(f,b)=>{const r=await fetch(U+f,{method:'POST',headers:H,body:JSON.stringify(b)});if(!r.ok)throw r.status;return r.json()};
+function gen(){const c='abcdefghjkmnpqrstuvwxyz23456789';let s='';const a=new Uint32Array(8);crypto.getRandomValues(a);a.forEach(x=>s+=c[x%c.length]);return s.slice(0,4)+'-'+s.slice(4)}
+async function load(){ROWS=await rpc('hub_admin_list',{p_admin:ME,p_pw:PW});draw()}
+function draw(){$('edit').classList.add('hide');$('list').classList.remove('hide');
+ $('list').innerHTML=ROWS.map(r=>{const st=!r.has_pw?['no','No password yet']:r.active?['on','Active']:['off','Blocked'];
+  return `<div class="row"><div><div class="nm">${r.person}</div><div class="st ${st[0]}">${st[1]}</div></div>
+  <button data-n="${r.person}">${r.is_admin?'Change mine':'New password'}</button>
+  ${r.is_admin?'<span></span>':`<button class="${r.active?'r':''}" data-b="${r.person}" data-on="${r.active?0:1}">${r.active?'Block':'Unblock'}</button>`}</div>`}).join('');
+ document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>edit(b.dataset.n));
+ document.querySelectorAll('[data-b]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await rpc('hub_admin_active',{p_admin:ME,p_pw:PW,p_target:b.dataset.b,p_on:b.dataset.on=='1'});await load()}catch(e){b.disabled=false}})}
+function edit(n){const g=gen();$('list').classList.add('hide');$('edit').classList.remove('hide');
+ $('edit').innerHTML=`<div class="nm" style="margin-bottom:12px">${n} · new password</div><label>Password</label><input id="np" value="${g}" autocomplete="off">
+ <div class="msg" id="em"></div><div style="display:flex;gap:8px;margin-top:6px"><button class="p" id="sv">Save</button><button id="cx">Cancel</button></div>`;
+ $('cx').onclick=draw;
+ $('sv').onclick=async()=>{const v=$('np').value.trim();if(v.length<6){$('em').textContent='At least 6 characters.';return}$('sv').disabled=true;
+  try{const j=await rpc('hub_admin_set',{p_admin:ME,p_pw:PW,p_target:n,p_new:v});if(j!=='ok')throw 0;if(n===ME)PW=v;
+   $('edit').innerHTML=`<div class="nm">${n} · saved ✓</div><div class="sub" style="margin-top:6px">${n===ME?'Your new password:':'Send this to '+n+':'}</div>
+   <div class="pw"><b id="pv">${v}</b><button id="cp">Copy</button></div><div class="sub" style="margin-top:10px">Save it in your phone's Passwords app. It is not shown again.</div>
+   <div style="margin-top:14px"><button id="bk">Done</button></div>`;
+   $('cp').onclick=async()=>{try{await navigator.clipboard.writeText(v);$('cp').textContent='Copied ✓'}catch(e){}};$('bk').onclick=load}
+  catch(e){$('em').textContent='Could not save.';$('sv').disabled=false}}}
+$('in').onclick=async()=>{PW=$('apw').value;$('lm').textContent='';$('in').disabled=true;
+ try{await load();$('login').classList.add('hide')}catch(e){$('lm').textContent='Wrong password.';PW=''}$('in').disabled=false};
+$('apw').onkeydown=e=>{if(e.key==='Enter')$('in').click()};
+</script>
+</body></html>
