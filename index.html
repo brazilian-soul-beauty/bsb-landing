@@ -83,6 +83,19 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;z-index:30;animation:pop .25s}
 .wait{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#fff;border-radius:22px;text-align:center;color:var(--muted)}
 .wait em{font-style:normal;font-size:48px}
+.bands{display:grid;grid-template-rows:auto 1fr auto 1fr auto;gap:8px;min-height:0}
+.bh{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-top:2px}
+.row{display:grid;gap:10px;min-height:0}
+.row .tile{padding:12px 13px 11px;border-radius:16px}
+.row .tile .big{font-size:30px}
+.row .tile .sub{min-height:0;font-size:11.5px}
+.row .tile .h{font-size:13px}
+.earn{display:grid;grid-template-columns:repeat(3,1fr) 1.6fr;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;align-items:center}
+.earn div b{display:block;font-size:24px;font-weight:800;letter-spacing:-.5px}
+.earn div span{font-size:11.5px;color:var(--muted)}
+.earn .tot b{color:var(--ok)}
+.earn .coh{background:#F7F6FB;border-radius:12px;padding:8px 12px;font-size:12px;color:var(--ink);line-height:1.5}
+.top-rated{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(90deg,#F2C46D,#D99A3A);color:#fff;font-weight:700;font-size:11px;padding:3px 9px;border-radius:99px}
 .soon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#fff;border-radius:22px;border:1px dashed var(--line);grid-column:1/-1;color:var(--muted);text-align:center}
 .soon em{font-style:normal;font-size:44px}
 /* sheet */
@@ -226,19 +239,25 @@ function render(){
   if(!S.admin&&st0&&range()[1]<st0){M.innerHTML='<div class="wait"><em>✨</em><b style="font-size:22px;color:var(--ink)">Your Soul Path starts on '+st0.getDate()+' '+MN[st0.getMonth()]+'</b>Everything counts from that day.</div>';return}
   if(S.tab==='xm')return renderXM(M);
   if(S.tab!=='std'){M.innerHTML='<div class="soon"><em>✨</em><b style="font-size:20px;color:var(--ink)">Soul Path</b>Coming next</div>';return}
-  var C=calc(S.data),scored=C.filter(function(c){return c.ok!==null}),met=scored.filter(function(c){return c.ok}).length,tot=scored.length;
+  var C=calc(S.data),x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,rp=n?Math.round(100*nr/n):null,topR=rp!=null&&rp>=lad[0];
+  C.push({k:'newrev',ic:'✍️',t:'New client reviews',ok:rp==null?null:topR,big:rp==null?'–':rp,of:rp==null?'':'%',sub:rp==null?'No new clients yet':(S.admin?nr+' of '+n+' new clients':nr+' reviews'),pct:rp==null?0:Math.min(1,rp/lad[0])});
+  var scored=C.filter(function(c){return c.ok!==null}),met=scored.filter(function(c){return c.ok}).length,tot=scored.length;
   var all=tot&&met===tot,R=82,CF=2*Math.PI*R;
-  var h='<div class="hero"><small>This is your job</small><h2>BSB Standard</h2><p>'+label()+'</p>'+
+  var h='<div class="hero"><small>This is your job</small><h2>BSB Standard</h2><p>'+label()+'</p>'+(topR?'<p style="margin-top:10px"><span class="top-rated">🏆 Top Rated</span></p>':'')+
    '<div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="'+R+'" stroke="rgba(255,255,255,.18)" stroke-width="14" fill="none"/>'+
    '<circle id="arc" cx="95" cy="95" r="'+R+'" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/></svg>'+
    '<div class="c"><div><b id="cnt">0</b><span>of '+tot+' standards</span></div></div></div>'+
-   '<div class="verdict"><em>'+(all?'💜':'🎯')+'</em><span>'+(all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div></div><div class="grid">';
-  C.forEach(function(c,i){var st=c.ok===null?'na':(c.ok?'ok':'no');
-    h+='<button class="tile '+st+'" style="animation-delay:'+(i*60)+'ms" onclick="openT(\''+c.k+'\')"><div class="h"><em>'+c.ic+'</em>'+c.t+'<span class="chip '+st+'">'+(c.ok===null?'–':c.ok?'✓ Met':'Fix')+'</span></div>';
-    if(c.tri)h+='<div class="tri">'+['Morning','Day','Close'].map(function(l,j){return '<div><b>'+c.tri[j]+'<small style="font-size:12px;color:var(--faint)">/'+c.n+'</small></b><span>'+l+'</span></div>'}).join('')+'</div>';
-    else h+='<div class="big" data-v="'+c.big+'">'+c.big+'<small>'+c.of+'</small></div>';
-    h+='<div class="sub">'+esc(c.sub)+'</div><div class="bar"><b data-w="'+Math.round(c.pct*100)+'"></b></div></button>'});
-  h+='<div class="tile" style="animation-delay:420ms;background:var(--ps);border-color:transparent"><div class="h"><em>💜</em>The rule</div><div class="sub" style="margin-top:auto;font-size:13.5px;color:var(--ink);min-height:0"><b>The Standard is your job.</b><br>The Extra mile is your growth.</div></div></div>';
+   '<div class="verdict"><em>'+(all?'💜':'🎯')+'</em><span>'+(all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div></div><div class="bands">';
+  function tile(c,i){var st=c.ok===null?'na':(c.ok?'ok':'no'),s='<button class="tile '+st+'" style="animation-delay:'+(i*50)+'ms" onclick="openT(\''+c.k+'\')"><div class="h"><em>'+c.ic+'</em>'+c.t+'<span class="chip '+st+'">'+(c.ok===null?'–':c.ok?'✓':'Fix')+'</span></div>';
+    if(c.tri)s+='<div class="tri">'+['AM','Day','Close'].map(function(l,j){return '<div><b style="font-size:16px">'+c.tri[j]+'<small style="font-size:11px;color:var(--faint)">/'+c.n+'</small></b><span>'+l+'</span></div>'}).join('')+'</div>';
+    else s+='<div class="big">'+c.big+'<small>'+c.of+'</small></div>';
+    return s+'<div class="sub">'+esc(c.sub)+'</div><div class="bar"><b data-w="'+Math.round(c.pct*100)+'"></b></div></button>'}
+  var by={};C.forEach(function(c){by[c.k]=c});
+  h+='<div class="bh">👩‍💼 As a team member</div><div class="row" style="grid-template-columns:repeat(5,1fr)">'+['time','lunch','abs','look','tasks'].map(function(k,i){return tile(by[k],i)}).join('')+'</div>';
+  h+='<div class="bh">💜 With your clients</div><div class="row" style="grid-template-columns:repeat(3,1fr)">'+['comp','stars','newrev'].map(function(k,i){return tile(by[k],i+5)}).join('')+'</div>';
+  var ym=ymd(range()[0]).slice(0,7),tc=(x.tips||[]).filter(function(q){return q.ym===ym})[0],hrs=tc?+tc.hours:0,pay=hrs*(+x.base_rate||0),tips=tc?+tc.tips:0;
+  h+='<div class="bh">💷 What you earn · '+label()+'</div><div class="earn"><div><b>£'+Math.round(pay).toLocaleString()+'</b><span>Pay · '+Math.round(hrs)+'h</span></div><div><b>£'+Math.round(tips)+'</b><span>Tips · £'+(hrs?(tips/hrs).toFixed(2):'0')+'/h</span></div><div class="tot"><b>£'+Math.round(pay+tips).toLocaleString()+'</b><span>Total'+(tc&&!tc.final?' · so far':'')+'</span></div>'+
+     '<div class="coh">'+(S.admin?'🆕 '+n+' new clients · ':'')+'✍️ '+nr+' reviews · 💷 £'+Math.round(tips)+' tips<br><span style="color:var(--muted)">Happy clients leave reviews and tips. Your service shows here.</span></div></div></div>';
   M.innerHTML=h;S.C=C;
   requestAnimationFrame(function(){setTimeout(function(){
     var a=document.getElementById('arc');if(a)a.style.strokeDashoffset=CF*(1-(tot?met/tot:0));
