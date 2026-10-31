@@ -66,6 +66,23 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .tri div{flex:1;background:#F7F6FB;border-radius:10px;padding:7px 4px;text-align:center}
 .tri b{display:block;font-size:20px;font-weight:800}
 .tri span{font-size:11px;color:var(--muted)}
+.hero.gold{background:radial-gradient(120% 90% at 0% 0%,#F2C46D 0%,#D99A3A 45%,#A8661E 100%)}
+.span2{grid-column:span 2}
+.lad{position:relative;height:10px;border-radius:6px;background:#EEEDF4;margin:14px 0 6px}
+.lad b{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--p2),var(--p));width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.lad i{position:absolute;top:-5px;width:2px;height:20px;background:#fff;box-shadow:0 0 0 1px var(--line)}
+.ladl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.ladl span{flex:1;text-align:center}
+.arrow{font-size:13px;font-weight:700;margin-left:6px}.arrow.up{color:var(--ok)}.arrow.dn{color:var(--no)}
+.rv{display:flex;flex-direction:column;gap:7px;margin-top:10px;overflow:hidden}
+.rv div{background:#F7F6FB;border-radius:10px;padding:7px 10px;font-size:12.5px;display:flex;gap:8px}
+.rv div b{color:#E2A400;letter-spacing:1px}
+.logb{display:flex;flex-direction:column;gap:9px;margin-top:auto}
+.logb button{background:var(--ps);color:var(--p);border-radius:14px;padding:12px;font-weight:700;font-size:14.5px;display:flex;align-items:center;justify-content:center;gap:8px}
+.logb button:active{transform:scale(.97);background:#E0D7FF}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;z-index:30;animation:pop .25s}
+.wait{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#fff;border-radius:22px;text-align:center;color:var(--muted)}
+.wait em{font-style:normal;font-size:48px}
 .soon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#fff;border-radius:22px;border:1px dashed var(--line);grid-column:1/-1;color:var(--muted);text-align:center}
 .soon em{font-style:normal;font-size:44px}
 /* sheet */
@@ -122,7 +139,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
   </div>
   <div class="tabs" id="tabs">
     <button class="tab on" data-t="std">✅ BSB Standard</button>
-    <button class="tab" data-t="xm">⭐ Extra mile <i>next</i></button>
+    <button class="tab" data-t="xm">⭐ Extra mile</button>
     <button class="tab" data-t="path">✨ Soul Path <i>next</i></button>
   </div>
   <main id="main"></main>
@@ -179,7 +196,8 @@ function start(){document.getElementById('login').style.display='none';document.
 function load(){document.getElementById('per').textContent=label();
   document.getElementById('next').disabled=range()[1]>=today();
   var r=range();document.getElementById('main').classList.add('load');
-  rpc('soul_standard',{p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])}).then(function(d){S.data=d;render()}).catch(function(){S.data=null;render()})}
+  var b={p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])};
+  Promise.all([rpc('soul_standard',b).catch(function(){return null}),rpc('soul_extra',b).catch(function(){return null})]).then(function(x){S.data=x[0];S.xm=x[1];render()})}
 
 /* ---------- the 7 standards ---------- */
 function calc(d){
@@ -204,7 +222,10 @@ function calc(d){
 function render(){
   document.getElementById('main').classList.remove('load');
   var M=document.getElementById('main');
-  if(S.tab!=='std'){M.innerHTML='<div class="soon"><em>'+(S.tab==='xm'?'⭐':'✨')+'</em><b style="font-size:20px;color:var(--ink)">'+(S.tab==='xm'?'Extra mile':'Soul Path')+'</b>Coming next</div>';return}
+  var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null;
+  if(!S.admin&&st0&&range()[1]<st0){M.innerHTML='<div class="wait"><em>✨</em><b style="font-size:22px;color:var(--ink)">Your Soul Path starts on '+st0.getDate()+' '+MN[st0.getMonth()]+'</b>Everything counts from that day.</div>';return}
+  if(S.tab==='xm')return renderXM(M);
+  if(S.tab!=='std'){M.innerHTML='<div class="soon"><em>✨</em><b style="font-size:20px;color:var(--ink)">Soul Path</b>Coming next</div>';return}
   var C=calc(S.data),scored=C.filter(function(c){return c.ok!==null}),met=scored.filter(function(c){return c.ok}).length,tot=scored.length;
   var all=tot&&met===tot,R=82,CF=2*Math.PI*R;
   var h='<div class="hero"><small>This is your job</small><h2>BSB Standard</h2><p>'+label()+'</p>'+
@@ -224,6 +245,34 @@ function render(){
     document.querySelectorAll('.bar b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'});
     var el=document.getElementById('cnt'),i=0,st=setInterval(function(){if(i>=met){clearInterval(st);el.textContent=met;return}el.textContent=++i},120);
   },60)})}
+
+/* ---------- Extra mile ---------- */
+function renderXM(M){var x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,pct=n?Math.round(100*nr/n):null;
+  var pp=x.new_prev?Math.round(100*(x.new_rev_prev||0)/x.new_prev):null,arr=(pct!=null&&pp!=null&&pct!==pp)?'<span class="arrow '+(pct>pp?'up':'dn')+'">'+(pct>pp?'▲':'▼')+' '+Math.abs(pct-pp)+'</span>':'';
+  var tier=pct==null?0:(pct>=lad[2]?3:pct>=lad[1]?2:pct>=lad[0]?1:0),medal=['','🥉','🥈','🥇'][tier];
+  var exp=Math.floor((x.free_min||0)/60),vids=(x.v_nails||0)+(x.v_content||0),cs=exp?Math.min(100,Math.round(100*vids/exp)):(vids?100:null);
+  var ym=ymd(range()[0]).slice(0,7),tips=(x.tips||[]),tc=tips.filter(function(t){return t.ym===ym})[0],tpv=tips.filter(function(t){return t.ym<ym}).pop();
+  var tArr=(tc&&tpv)?'<span class="arrow '+(+tc.tips>=+tpv.tips?'up':'dn')+'">'+(+tc.tips>=+tpv.tips?'▲':'▼')+' £'+Math.abs(Math.round(tc.tips-tpv.tips))+'</span>':'';
+  var okR=pct!=null&&pct>=lad[0],okC=cs!=null&&cs>=100,okT=tc&&tpv?+tc.tips>=+tpv.tips:null;
+  var sc=[okR,okC,okT].filter(function(v){return v!==null}),met=sc.filter(Boolean).length;
+  var h='<div class="hero gold"><small>This is your growth</small><h2>Extra mile</h2><p>'+label()+'</p>'+
+   '<div class="ring"><div class="c" style="position:static;height:100%"><div><b style="font-size:64px">'+(medal||'⭐')+'</b><span style="font-size:15px;margin-top:10px">'+met+' of '+sc.length+' going beyond</span></div></div></div>'+
+   '<div class="verdict"><em>💷</em><span>3 months of Standard + Extra mile = <b>£250 bonus</b>. 6 months = next level.</span></div></div><div class="grid">';
+  h+='<div class="tile span2 '+(pct==null?'na':okR?'ok':'no')+'" style="animation-delay:0ms"><div class="h"><em>✍️</em>New clients who left a review<span class="chip '+(pct==null?'na':okR?'ok':'no')+'">'+(medal?medal+' '+['','Bronze','Silver','Gold'][tier]:'Next: '+lad[0]+'%')+'</span></div>'+
+     '<div style="display:flex;gap:26px;align-items:flex-end;margin-top:auto"><div><div class="big" style="margin:0">'+nr+'</div><div class="sub" style="min-height:0">reviews</div></div><div><div class="big" style="margin:0">'+(pct==null?'–':pct)+'<small>'+(pct==null?'':'%')+'</small>'+arr+'</div><div class="sub" style="min-height:0">of new clients</div></div></div><div class="sub">'+(pct==null?'No new clients yet':(S.admin?nr+' of '+n+' new clients':(nr?'About '+Math.max(1,Math.round(pct/10))+' of every 10 new clients':'No review from a new client yet')))+'</div>'+
+     '<div class="lad"><b data-w="'+Math.min(100,pct||0)+'"></b>'+lad.map(function(l){return '<i style="left:'+l+'%"></i>'}).join('')+'</div><div class="ladl"><span>🥉 '+lad[0]+'%</span><span>🥈 '+lad[1]+'%</span><span>🥇 '+lad[2]+'%</span></div></div>';
+  h+='<div class="tile '+(okT===null?'na':okT?'ok':'no')+'" style="animation-delay:60ms"><div class="h"><em>💷</em>Tips<span class="chip '+(okT===null?'na':okT?'ok':'no')+'">'+(okT===null?'–':okT?'▲ Up':'▼ Down')+'</span></div>'+
+     '<div class="big">'+(tc?'£'+Math.round(tc.tips):'–')+tArr+'</div><div class="sub">'+(tc&&+tc.hours?'£'+(tc.tips/tc.hours).toFixed(2)+' per hour':'')+(tc&&!tc.final?' · so far':'')+'</div></div>';
+  h+='<div class="tile '+(cs==null?'na':okC?'ok':'no')+'" style="animation-delay:120ms"><div class="h"><em>🎬</em>Content<span class="chip '+(cs==null?'na':okC?'ok':'no')+'">'+(cs==null?'–':cs+'%')+'</span></div>'+
+     '<div class="big">'+vids+'<small>/'+exp+'</small></div><div class="sub">'+Math.floor((x.free_min||0)/60)+'h free · 1 video per free hour<br>💅 '+(x.v_nails||0)+' nails · 🎬 '+(x.v_content||0)+' content</div><div class="bar"><b data-w="'+(cs||0)+'"></b></div></div>';
+  var rv=(x.reviews||[]).slice(-4).reverse();
+  h+='<div class="tile span2" style="animation-delay:180ms"><div class="h"><em>💌</em>New clients who wrote about you</div><div class="rv">'+(rv.length?rv.map(function(r){return '<div><b>'+'★'.repeat(+r.rating||5)+'</b>'+esc(String(r.client||'').split(' ')[0])+' · '+fd(r.date)+'</div>'}).join(''):'<div>Ask every new client to write a review with your name.</div>')+'</div></div>';
+  h+='<div class="tile" style="animation-delay:240ms"><div class="h"><em>➕</em>Log a video</div><div class="logb"><button onclick="logV(\'nails\')">💅 Nails filmed</button><button onclick="logV(\'content\')">🎬 Video made</button></div></div>';
+  h+='<div class="tile" style="animation-delay:300ms;background:#FFF4DC;border-color:transparent"><div class="h"><em>💛</em>The rule</div><div class="sub" style="margin-top:auto;font-size:13.5px;color:var(--ink);min-height:0">The Standard is your job.<br><b>The Extra mile is your growth.</b></div></div></div>';
+  M.innerHTML=h;
+  requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b,.lad b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},60)})}
+function toast(m){var d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(function(){d.remove()},1800)}
+function logV(k){rpc('soul_log_video',{p_code:S.code,p_person:S.who,p_kind:k}).then(function(r){if(!r)throw 0;toast(k==='nails'?'💅 Saved. Beautiful work!':'🎬 Saved. Thank you!');load()}).catch(function(){toast('Not saved. Try again.')})}
 
 /* ---------- detail sheet ---------- */
 function openT(k){var c=S.C.filter(function(x){return x.k===k})[0],h='<div class="ph"><em>'+c.ic+'</em>'+c.t+'<button onclick="closeT()">✕</button></div>';
