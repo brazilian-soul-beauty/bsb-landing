@@ -153,7 +153,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
   <div class="tabs" id="tabs">
     <button class="tab on" data-t="std">✅ BSB Standard</button>
     <button class="tab" data-t="xm">⭐ Extra mile</button>
-    <button class="tab" data-t="path">✨ Soul Path <i>next</i></button>
+    <button class="tab" data-t="path">🌱 Soul Path</button>
   </div>
   <main id="main"></main>
 </div>
@@ -210,7 +210,7 @@ function load(){document.getElementById('per').textContent=label();
   document.getElementById('next').disabled=range()[1]>=today();
   var r=range();document.getElementById('main').classList.add('load');
   var b={p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])};
-  Promise.all([rpc('soul_standard',b).catch(function(){return null}),rpc('soul_extra',b).catch(function(){return null})]).then(function(x){S.data=x[0];S.xm=x[1];render()})}
+  Promise.all([rpc('soul_standard',b).catch(function(){return null}),rpc('soul_extra',b).catch(function(){return null}),rpc('soul_path',{p_code:S.code,p_person:S.who,p_month:ymd(r[0])}).catch(function(){return null})]).then(function(x){S.data=x[0];S.xm=x[1];S.sp=x[2];render()})}
 
 /* ---------- the 7 standards ---------- */
 function calc(d){
@@ -238,7 +238,7 @@ function render(){
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null;
   if(!S.admin&&st0&&range()[1]<st0){M.innerHTML='<div class="wait"><em>✨</em><b style="font-size:22px;color:var(--ink)">Your Soul Path starts on '+st0.getDate()+' '+MN[st0.getMonth()]+'</b>Everything counts from that day.</div>';return}
   if(S.tab==='xm')return renderXM(M);
-  if(S.tab!=='std'){M.innerHTML='<div class="soon"><em>✨</em><b style="font-size:20px;color:var(--ink)">Soul Path</b>Coming next</div>';return}
+  if(S.tab==='path')return renderPath(M);
   var C=calc(S.data),x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,rp=n?Math.round(100*nr/n):null,topR=rp!=null&&rp>=lad[0];
   C.push({k:'newrev',ic:'✍️',t:'New client reviews',ok:rp==null?null:topR,big:rp==null?'–':rp,of:rp==null?'':'%',sub:rp==null?'No new clients yet':(S.admin?nr+' of '+n+' new clients':nr+' reviews'),pct:rp==null?0:Math.min(1,rp/lad[0])});
   var scored=C.filter(function(c){return c.ok!==null}),met=scored.filter(function(c){return c.ok}).length,tot=scored.length;
@@ -266,30 +266,60 @@ function render(){
   },60)})}
 
 /* ---------- Extra mile ---------- */
-function renderXM(M){var x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,pct=n?Math.round(100*nr/n):null;
-  var pp=x.new_prev?Math.round(100*(x.new_rev_prev||0)/x.new_prev):null,arr=(pct!=null&&pp!=null&&pct!==pp)?'<span class="arrow '+(pct>pp?'up':'dn')+'">'+(pct>pp?'▲':'▼')+' '+Math.abs(pct-pp)+'</span>':'';
-  var tier=pct==null?0:(pct>=lad[2]?3:pct>=lad[1]?2:pct>=lad[0]?1:0),medal=['','🥉','🥈','🥇'][tier];
-  var exp=Math.floor((x.free_min||0)/60),vids=(x.v_nails||0)+(x.v_content||0),cs=exp?Math.min(100,Math.round(100*vids/exp)):(vids?100:null);
-  var ym=ymd(range()[0]).slice(0,7),tips=(x.tips||[]),tc=tips.filter(function(t){return t.ym===ym})[0],tpv=tips.filter(function(t){return t.ym<ym}).pop();
-  var tArr=(tc&&tpv)?'<span class="arrow '+(+tc.tips>=+tpv.tips?'up':'dn')+'">'+(+tc.tips>=+tpv.tips?'▲':'▼')+' £'+Math.abs(Math.round(tc.tips-tpv.tips))+'</span>':'';
-  var okR=pct!=null&&pct>=lad[0],okC=cs!=null&&cs>=100,okT=tc&&tpv?+tc.tips>=+tpv.tips:null;
-  var sc=[okR,okC,okT].filter(function(v){return v!==null}),met=sc.filter(Boolean).length;
+function renderXM(M){var x=S.xm||{},P=x.pers||{clients:0,pe:0},pp=P.clients?Math.round(100*P.pe/P.clients):null,okP=pp==null?null:pp>=80;
+  var exp=Math.floor((x.free_min||0)/60),vids=(x.v_nails||0)+(x.v_content||0),cs=exp?Math.min(100,Math.round(100*vids/exp)):(vids?100:null),okC=cs==null?null:cs>=100;
+  var sc=[okP,okC].filter(function(v){return v!==null}),met=sc.filter(Boolean).length;
   var h='<div class="hero gold"><small>This is your growth</small><h2>Extra mile</h2><p>'+label()+'</p>'+
-   '<div class="ring"><div class="c" style="position:static;height:100%"><div><b style="font-size:64px">'+(medal||'⭐')+'</b><span style="font-size:15px;margin-top:10px">'+met+' of '+sc.length+' going beyond</span></div></div></div>'+
-   '<div class="verdict"><em>💷</em><span>3 months of Standard + Extra mile = <b>£250 bonus</b>. 6 months = next level.</span></div></div><div class="grid">';
-  h+='<div class="tile span2 '+(pct==null?'na':okR?'ok':'no')+'" style="animation-delay:0ms"><div class="h"><em>✍️</em>New clients who left a review<span class="chip '+(pct==null?'na':okR?'ok':'no')+'">'+(medal?medal+' '+['','Bronze','Silver','Gold'][tier]:'Next: '+lad[0]+'%')+'</span></div>'+
-     '<div style="display:flex;gap:26px;align-items:flex-end;margin-top:auto"><div><div class="big" style="margin:0">'+nr+'</div><div class="sub" style="min-height:0">reviews</div></div><div><div class="big" style="margin:0">'+(pct==null?'–':pct)+'<small>'+(pct==null?'':'%')+'</small>'+arr+'</div><div class="sub" style="min-height:0">of new clients</div></div></div><div class="sub">'+(pct==null?'No new clients yet':(S.admin?nr+' of '+n+' new clients':(nr?'About '+Math.max(1,Math.round(pct/10))+' of every 10 new clients':'No review from a new client yet')))+'</div>'+
-     '<div class="lad"><b data-w="'+Math.min(100,pct||0)+'"></b>'+lad.map(function(l){return '<i style="left:'+l+'%"></i>'}).join('')+'</div><div class="ladl"><span>🥉 '+lad[0]+'%</span><span>🥈 '+lad[1]+'%</span><span>🥇 '+lad[2]+'%</span></div></div>';
-  h+='<div class="tile '+(okT===null?'na':okT?'ok':'no')+'" style="animation-delay:60ms"><div class="h"><em>💷</em>Tips<span class="chip '+(okT===null?'na':okT?'ok':'no')+'">'+(okT===null?'–':okT?'▲ Up':'▼ Down')+'</span></div>'+
-     '<div class="big">'+(tc?'£'+Math.round(tc.tips):'–')+tArr+'</div><div class="sub">'+(tc&&+tc.hours?'£'+(tc.tips/tc.hours).toFixed(2)+' per hour':'')+(tc&&!tc.final?' · so far':'')+'</div></div>';
-  h+='<div class="tile '+(cs==null?'na':okC?'ok':'no')+'" style="animation-delay:120ms"><div class="h"><em>🎬</em>Content<span class="chip '+(cs==null?'na':okC?'ok':'no')+'">'+(cs==null?'–':cs+'%')+'</span></div>'+
-     '<div class="big">'+vids+'<small>/'+exp+'</small></div><div class="sub">'+Math.floor((x.free_min||0)/60)+'h free · 1 video per free hour<br>💅 '+(x.v_nails||0)+' nails · 🎬 '+(x.v_content||0)+' content</div><div class="bar"><b data-w="'+(cs||0)+'"></b></div></div>';
-  var rv=(x.reviews||[]).slice(-4).reverse();
-  h+='<div class="tile span2" style="animation-delay:180ms"><div class="h"><em>💌</em>New clients who wrote about you</div><div class="rv">'+(rv.length?rv.map(function(r){return '<div><b>'+'★'.repeat(+r.rating||5)+'</b>'+esc(String(r.client||'').split(' ')[0])+' · '+fd(r.date)+'</div>'}).join(''):'<div>Ask every new client to write a review with your name.</div>')+'</div></div>';
-  h+='<div class="tile" style="animation-delay:240ms"><div class="h"><em>📤</em>From your tasks</div><div class="tri" style="margin-top:auto"><div><b>'+(x.v_nails||0)+'</b><span>💅 Nails</span></div><div><b>'+(x.v_content||0)+'</b><span>🎬 Videos</span></div></div><div class="sub" style="min-height:0">Upload in your task and it counts here.</div></div>';
-  h+='<div class="tile" style="animation-delay:300ms;background:#FFF4DC;border-color:transparent"><div class="h"><em>💛</em>The rule</div><div class="sub" style="margin-top:auto;font-size:13.5px;color:var(--ink);min-height:0">The Standard is your job.<br><b>The Extra mile is your growth.</b></div></div></div>';
+   '<div class="ring"><div class="c" style="position:static;height:100%"><div><b style="font-size:64px">'+(met===sc.length&&sc.length?'🌟':'⭐')+'</b><span style="font-size:15px;margin-top:10px">'+met+' of '+sc.length+' going beyond</span></div></div></div>'+
+   '<div class="verdict"><em>🌱</em><span>Month after month of Extra mile moves you up your Soul Path.</span></div></div><div class="grid">';
+  h+='<div class="tile span2 '+(okP==null?'na':okP?'ok':'no')+'" style="animation-delay:0ms"><div class="h"><em>✨</em>Personalised clients<span class="chip '+(okP==null?'na':okP?'ok':'no')+'">'+(okP==null?'–':okP?'✓':'Goal 80%')+'</span></div>'+
+     '<div class="big">'+(pp==null?'–':pp)+'<small>'+(pp==null?'':'%')+'</small></div><div class="sub">'+(S.admin?P.pe+' of '+P.clients+' clients':'')+' Tap ✨ on the client card in your diary</div><div class="bar"><b data-w="'+(pp||0)+'"></b></div></div>';
+  h+='<div class="tile span2 '+(okC==null?'na':okC?'ok':'no')+'" style="animation-delay:60ms"><div class="h"><em>🎬</em>Content<span class="chip '+(okC==null?'na':okC?'ok':'no')+'">'+(cs==null?'–':cs+'%')+'</span></div>'+
+     '<div class="big">'+vids+'<small>/'+exp+'</small></div><div class="sub">'+Math.floor((x.free_min||0)/60)+'h free · 1 video per free hour</div><div class="bar"><b data-w="'+(cs||0)+'"></b></div></div>';
+  h+='<div class="tile span2" style="animation-delay:120ms"><div class="h"><em>📤</em>From your tasks</div><div class="tri" style="margin-top:auto"><div><b>'+(x.v_nails||0)+'</b><span>💅 Nails</span></div><div><b>'+(x.v_content||0)+'</b><span>🎬 Videos</span></div></div><div class="sub" style="min-height:0">Upload in your task and it counts here.</div></div>';
+  h+='<div class="tile span2" style="animation-delay:180ms;background:#FFF4DC;border-color:transparent"><div class="h"><em>💛</em>The rule</div><div class="sub" style="margin-top:auto;font-size:14px;color:var(--ink);min-height:0">The Standard is your job.<br><b>The Extra mile is your growth.</b></div></div></div>';
   M.innerHTML=h;
   requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b,.lad b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},60)})}
+
+/* ---------- Soul Path ---------- */
+var LV=['Soul','Soul+','Senior Soul','Soul Educator','Soul Lead'];
+function gbp(v){return '£'+(Math.round(v)).toLocaleString()}
+function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(String(s.start).replace(/"/g,'')):null;
+  var tc=s.tips,hrs=tc?+tc.hours:0,rate=+s.base_rate||0,pay=hrs*rate,tips=tc?+tc.tips:0,perks=s.perks||[];
+  var disc=perks.filter(function(p){return p.kind==='discount'}).reduce(function(a,p){return a+(+p.value)},0),gift=perks.filter(function(p){return p.kind==='gift'}).reduce(function(a,p){return a+(+p.value)},0);
+  var tot=pay+tips+disc+gift,allh=hrs?tot/hrs:0;
+  var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#5FD3A0 0%,#1F9D6B 50%,#0F6B47 100%)"><small>This is your path</small><h2>Soul Path</h2><p>'+LV[lv-1]+' · Level '+lv+'</p>'+
+   '<div style="margin:auto 0;display:flex;flex-direction:column;gap:10px">'+LV.map(function(n,i){var on=i+1===lv,done=i+1<lv;return '<div style="display:flex;align-items:center;gap:10px;opacity:'+(on||done?1:.5)+'"><span style="width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:'+(on?'#fff':'rgba(255,255,255,.18)')+';color:'+(on?'#1F9D6B':'#fff')+';font-weight:800;font-size:13px">'+(done?'✓':i+1)+'</span><b style="font-size:'+(on?17:14)+'px">'+n+'</b>'+(on?'<span style="margin-left:auto;font-size:11px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:99px">You are here</span>':'')+'</div>'}).join('')+'</div>'+
+   '<div class="verdict"><em>🗓️</em><span>'+(st&&today()<st?'Your path starts on '+st.getDate()+' '+MN[st.getMonth()]+'.':'○○○ 3 months = <b>£'+(s.bonus||250)+' bonus</b> · ○○○○○○ 6 months = next level')+'</span></div></div><div class="grid">';
+  var goals=s.goals||[];
+  if(!goals.length)h+='<div class="tile span2"><div class="h"><em>🎯</em>My goals</div><div class="sub" style="margin-top:auto">Your goals from the meeting will appear here.</div></div>';
+  goals.slice(0,2).forEach(function(g,i){
+    if(g.kind==='facial_share'){var mx=s.mix||[],last=mx[mx.length-1]||{facials:0,massages:0},sh=(last.facials+last.massages)?Math.round(100*last.facials/(last.facials+last.massages)):0,mxv=Math.max.apply(null,mx.map(function(m){return m.facials+m.massages}).concat([1]));
+      h+='<div class="tile span2 ok" style="animation-delay:'+(i*60)+'ms"><div class="h"><em>🎯</em>'+esc(g.title)+'<span class="chip ok">'+sh+'% skin</span></div>'+
+       '<div style="display:flex;align-items:flex-end;gap:10px;height:110px;margin-top:auto">'+mx.map(function(m){var f=m.facials/mxv*100,ms=m.massages/mxv*100;return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;display:flex;flex-direction:column-reverse;height:90px"><i style="display:block;height:'+f+'%;background:var(--ok);border-radius:0 0 6px 6px"></i><i style="display:block;height:'+ms+'%;background:#D9D6E6;border-radius:6px 6px 0 0"></i></div><span style="font-size:10.5px;color:var(--muted)">'+MN[+m.m.slice(5)-1]+'</span></div>'}).join('')+'</div>'+
+       '<div class="sub" style="min-height:0;margin-top:6px"><b style="color:var(--ok)">■</b> Facials '+last.facials+' · <b style="color:#B9B5CC">■</b> Massages '+last.massages+' · '+esc(g.note||'')+'</div></div>';}
+    else if(g.kind==='content'){var exp=Math.floor((x.free_min||0)/60),v=(x.v_nails||0)+(x.v_content||0);
+      h+='<div class="tile span2" style="animation-delay:'+(i*60)+'ms"><div class="h"><em>🎯</em>'+esc(g.title)+'<span class="chip '+(exp&&v>=exp?'ok':'no')+'">'+v+'/'+exp+'</span></div><div class="big">'+v+'<small> videos</small></div><div class="sub">'+esc(g.note||'')+'</div><div class="bar"><b data-w="'+(exp?Math.min(100,100*v/exp):0)+'"></b></div></div>';}
+    else h+='<div class="tile span2"><div class="h"><em>🎯</em>'+esc(g.title)+'</div><div class="sub" style="margin-top:auto">'+esc(g.note||'')+'</div></div>';});
+  if(goals.length===1)h+='<div class="tile span2"></div>';
+  h+='<div class="tile" style="grid-column:span 4;animation-delay:150ms"><div class="h"><em>💷</em>My month, all in · '+label()+(S.admin?'<button class="chip ok" style="cursor:pointer" onclick="perkForm()">+ Add discount or gift</button>':'')+'</div>'+
+     '<div class="earn" style="border:0;padding:8px 0 0;grid-template-columns:repeat(6,1fr)">'+
+     '<div><b>£'+rate.toFixed(2)+'</b><span>Per hour</span></div><div><b>'+gbp(pay)+'</b><span>Pay · '+Math.round(hrs)+'h</span></div><div><b>'+gbp(tips)+'</b><span>Tips</span></div>'+
+     '<div><b>'+gbp(disc)+'</b><span>💅 Your discounts</span></div><div><b>'+gbp(gift)+'</b><span>🎁 Gifts from BSB</span></div>'+
+     '<div class="tot"><b>'+gbp(tot)+'</b><span>All in · £'+allh.toFixed(2)+'/h</span></div></div>'+
+     (perks.length?'<div class="sub" style="margin-top:8px;min-height:0">'+perks.map(function(p){return (p.kind==='gift'?'🎁 ':'💅 ')+esc(p.what)+' £'+(+p.value).toFixed(0)+(S.admin?' <a style="color:var(--no);cursor:pointer" onclick="perkDel(\''+p.id+'\')">✕</a>':'')}).join(' · ')+'</div>':'')+'</div></div>';
+  M.innerHTML=h;
+  requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},60)})}
+function perkForm(){document.getElementById('panel').innerHTML='<div class="ph"><em>💷</em>Add for '+esc(S.who)+'<button onclick="closeT()">✕</button></div>'+
+  '<div class="seg" id="pk" style="align-self:flex-start"><button class="on" data-k="discount">💅 Discount</button><button data-k="gift">🎁 Gift</button></div>'+
+  '<input id="pw" placeholder="What (e.g. Facial 25% off)" style="font:inherit;padding:12px;border:1px solid var(--line);border-radius:12px">'+
+  '<input id="pv" type="number" placeholder="Value £" style="font:inherit;padding:12px;border:1px solid var(--line);border-radius:12px">'+
+  '<button onclick="perkSave()" style="background:var(--p);color:#fff;border-radius:12px;padding:12px;font-weight:700">Save</button>';
+  document.getElementById('pk').onclick=function(e){var k=e.target.getAttribute('data-k');if(!k)return;[].forEach.call(this.children,function(b){b.classList.toggle('on',b===e.target)})};
+  document.getElementById('sheet').classList.add('on')}
+function perkSave(){var k=document.querySelector('#pk .on').getAttribute('data-k'),w=document.getElementById('pw').value.trim(),v=+document.getElementById('pv').value;
+  if(!w||!v)return toast('Fill both');rpc('soul_perk_add',{p_code:S.code,p_person:S.who,p_kind:k,p_what:w,p_value:v,p_date:ymd(range()[0]>today()?today():(range()[1]<today()?range()[1]:today()))}).then(function(r){if(!r)throw 0;closeT();toast('Saved');load()}).catch(function(){toast('Not saved')})}
+function perkDel(id){rpc('soul_perk_del',{p_code:S.code,p_id:id}).then(function(){load()})}
 function toast(m){var d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(function(){d.remove()},1800)}
 function logV(k){rpc('soul_log_video',{p_code:S.code,p_person:S.who,p_kind:k}).then(function(r){if(!r)throw 0;toast(k==='nails'?'💅 Saved. Beautiful work!':'🎬 Saved. Thank you!');load()}).catch(function(){toast('Not saved. Try again.')})}
 
