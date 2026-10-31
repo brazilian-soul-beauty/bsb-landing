@@ -1,0 +1,1413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Soul Path</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Soul Path">
+<meta name="theme-color" content="#5B47E0">
+<link rel="manifest" href="manifest.json">
+<link id="touchIcon" rel="apple-touch-icon" href="icons/ligia.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5FB;--card:#fff;--ink:#1F2235;--mut:#8A8BA6;--line:#ECECF4;--pur:#5B47E0;--pur2:#EEEBFF;--grn:#22B66E;--grn2:#E6F7EE;--red:#E5484D;--red2:#FDECEC;--gold:#E3B23C;--gold2:#FFF5DC;--pink:#E23E8C;--pink2:#FDE8F2;--sil:#9BA3B4;--brz:#C98A55}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select{font-family:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;color:var(--ink)}
+#app{height:100dvh;display:flex;flex-direction:column}
+.top{height:58px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:#fff;border-bottom:1px solid var(--line)}
+.top .logo{font-weight:800;font-size:17px;color:var(--pur);white-space:nowrap}
+.top .who{font-weight:700;font-size:15px;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--pur2);color:var(--pur);white-space:nowrap}
+.chip.g{background:var(--grn2);color:var(--grn)}.chip.r{background:var(--red2);color:var(--red)}.chip.y{background:var(--gold2);color:#9A6B00}.chip.k{background:#F1F1F6;color:var(--mut)}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{padding:8px 14px;border-radius:10px;font-weight:600;font-size:14px;color:var(--mut)}
+.tab.on{background:var(--pur);color:#fff}
+.out{font-size:13px;color:var(--mut);font-weight:600;padding:8px}
+.pg{flex:1;min-height:0;padding:16px 18px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.card{background:var(--card);border-radius:18px;box-shadow:0 1px 3px rgba(16,24,40,.06);padding:16px}
+.h{font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.big{font-size:34px;font-weight:800;line-height:1}
+.mut{color:var(--mut)}
+.row{display:flex;gap:14px;min-height:0}
+.grow{flex:1;min-width:0}
+.bar{height:10px;border-radius:99px;background:#F0EFF7;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--pur);transition:width .6s}
+.banner{background:linear-gradient(90deg,var(--pur),#8C6CF0);color:#fff;border-radius:14px;padding:10px 16px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px}
+.prac{background:var(--gold2);color:#7A5600;border-radius:12px;padding:8px 14px;font-size:13px;font-weight:600}
+/* login */
+.login{flex:1;display:flex;align-items:center;justify-content:center}
+.lg{width:320px;text-align:center}
+.lg h1{font-size:28px;font-weight:800;color:var(--pur);margin-bottom:4px}
+.dots{display:flex;gap:12px;justify-content:center;margin:22px 0}
+.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--pur)}
+.dots i.f{background:var(--pur)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.keys button{height:62px;border-radius:16px;background:#fff;font-size:24px;font-weight:700;box-shadow:0 1px 3px rgba(16,24,40,.08)}
+.err{color:var(--red);font-weight:600;height:20px;margin-top:10px;font-size:14px}
+/* today */
+.hero{display:flex;align-items:center;gap:16px}
+.fire{font-size:44px;line-height:1}
+.mis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;flex:1;min-height:0}
+.mc{display:flex;flex-direction:column;justify-content:center;gap:12px;min-height:0}
+.mc .grow{flex:none;width:85%}
+.mc{align-items:center;text-align:center}
+.mc .bar{width:100%}
+.mc .miss{justify-content:center}
+.miss.ok span{background:var(--grn2);color:var(--grn)}
+.mc .why{font-size:13px;color:var(--mut);font-weight:600;margin-top:8px}
+.mc .ic{font-size:44px}
+.mc .t{font-weight:800;font-size:17px}
+.mc .n{font-size:40px;font-weight:800;margin:4px 0 8px}
+.mc.done{background:var(--grn2)}
+.mc.done .bar i{background:var(--grn)}
+.miss{display:flex;flex-wrap:wrap;gap:5px}
+.miss span{background:var(--pink2);color:var(--pink);font-size:12px;font-weight:700;border-radius:99px;padding:3px 9px}
+.look{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.look .lk.ro{flex:none;height:34px;padding:0 12px;font-size:13px;border-width:1.5px;border-radius:99px}.lookgift{padding:12px 16px!important;font-size:15px!important;margin-top:10px!important}.lookgift .ky{width:44px!important;height:44px!important;font-size:24px!important;border-radius:12px!important}.lookgift .kys{gap:8px!important}
+.lk{flex:1;height:64px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}
+.lk.on{border-color:var(--pink);background:var(--pink2);color:var(--pink)}.lk.ro{cursor:default;opacity:.75}.lk.ro.on{opacity:1}
+.lkst{min-width:170px;text-align:center;font-weight:700;font-size:14px}
+/* path */
+.road{display:flex;align-items:center;justify-content:space-between;position:relative;padding:10px 20px}
+.road:before{content:"";position:absolute;left:60px;right:60px;top:56px;height:6px;border-radius:9px;background:#E4E1F5}
+.st{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;width:150px;text-align:center}
+.st .o{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;background:#fff;border:4px solid #E4E1F5}
+.st.done .o{border-color:var(--grn);background:var(--grn2)}
+.st.cur .o{border-color:var(--pur);background:var(--pur2);box-shadow:0 0 0 8px rgba(91,71,224,.12)}
+.st .nm{font-weight:800;font-size:14px}
+.st .pl{font-size:12px;font-weight:700;color:var(--grn)}
+.st .pl.mut{color:var(--mut)}
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.gate .gv{font-size:22px;font-weight:800;margin:6px 0}
+.gate.ok{background:var(--grn2)}
+.gate.ok .bar i{background:var(--grn)}
+/* wins */
+.wins{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:12px;flex:1;min-height:0}
+.wins.w11{grid-template-columns:repeat(6,1fr)}
+.w{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:12px}
+.w > div:last-child{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%}
+.w .wi{font-size:52px;filter:grayscale(1);opacity:.4}
+.w.t1 .wi,.w.t2 .wi,.w.t3 .wi{filter:none;opacity:1}
+.w .wn{font-weight:800;font-size:16px}
+.w .wt{display:flex;gap:6px;font-size:24px}
+.w .wt b{opacity:.2}.w .wt b.on{opacity:1}
+.w .wp{font-size:12px;color:var(--mut);font-weight:600}
+.w.t3{background:var(--gold2)}
+/* prizes */
+.boxes{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.bx{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;text-align:center}
+.bx .bi{font-size:40px}
+.bx .bn{font-size:13px;font-weight:700}
+.bx.ready{background:var(--pur2);animation:wig 2.2s infinite}
+@keyframes wig{0%,88%,100%{transform:rotate(0)}92%{transform:rotate(-4deg)}96%{transform:rotate(4deg)}}
+.reveal{position:fixed;inset:0;background:rgba(31,34,53,.55);display:flex;align-items:center;justify-content:center;z-index:50}
+.reveal .card{width:min(380px,90vw);text-align:center;padding:30px}
+.reveal .bi{font-size:70px;animation:pop .6s}
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+/* admin */
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start}
+.tc .kv{font-size:15px;padding:3px 0}
+.tc{display:flex;flex-direction:column;gap:9px;cursor:pointer}
+.tc .nm{font-size:19px;font-weight:800}
+.kv{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+.kv b{font-weight:800}
+.btn{padding:9px 14px;border-radius:11px;font-weight:700;font-size:14px;background:var(--pur);color:#fff}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.btn.g{background:var(--grn)}.btn.r{background:#fff;border:1.5px solid var(--red);color:var(--red)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl td,.tbl th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+.tbl th{font-size:12px;color:var(--mut);font-weight:700;text-transform:uppercase}
+.tbl input,.tbl select{padding:5px 7px;font-size:13px}
+.pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:8px;font-size:13px;color:var(--mut);font-weight:600}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;z-index:60}
+.load{flex:1;display:flex;align-items:center;justify-content:center;color:var(--mut);font-weight:600}
+
+
+/* v4 arte */
+.std{display:inline-block;margin-top:6px;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700;background:rgba(255,255,255,.2);color:#fff}
+.std.warn{background:rgba(255,255,255,.92);color:#7A6F61}
+.mimg{width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(120,80,40,.3))}
+.mc:not(.done) .mimg{filter:grayscale(.15) drop-shadow(0 6px 10px rgba(120,80,40,.25))}
+@media (max-width:760px){.mimg{width:40px;height:40px}}
+.mapc{padding:0;overflow:hidden;aspect-ratio:2.416;flex:none;max-height:min(44vh,420px);position:relative;background:#FBF7F3}
+.mapin{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);height:100%;aspect-ratio:2.416;max-width:100%;background:url(medals/map_full.webp) center/100% 100% no-repeat;z-index:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}.mapc::before{content:'';position:absolute;inset:-30px;background:url(medals/map_full.webp) center/cover no-repeat;filter:blur(22px) saturate(1.1);opacity:.85}.mapc::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(251,247,243,.55),rgba(251,247,243,0) 25%,rgba(251,247,243,0) 75%,rgba(251,247,243,.55))}
+@supports not (aspect-ratio:1){.mapc{height:300px}}
+.pin{position:absolute;transform:translate(-50%,-78%);display:flex;flex-direction:column;align-items:center;gap:4px}
+.pin .lk{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 14px rgba(120,80,40,.35)}
+.pin.done .lk{background:#E6F7EE;color:var(--grn);font-weight:900}
+.pin .lbl{background:rgba(255,255,255,.92);border-radius:99px;padding:3px 10px;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.pin.cur .av{animation:hop 1.6s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(120,80,40,.45))}
+.pin.cur .lbl{background:var(--pur);color:#fff}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.mis .mimg{width:58px!important;height:58px!important}.mc .n{margin:2px 0 4px!important}
+.lookgift{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding:6px 14px;border-radius:12px;background:var(--pink2);color:var(--pink);font-size:13px;font-weight:700}.lookgift.ok{background:var(--grn2);color:var(--grn)}
+.kys{display:flex;gap:5px}.ky{width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:15px;background:rgba(255,255,255,.7);border:1.5px dashed currentColor;opacity:.8}.ky.key{border:none;background:#FFF3D6;opacity:1;animation:wig 2.4s infinite}.ky.miss{border-style:solid;opacity:.35}
+.tiers{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}.tiers span{font-size:12px;font-weight:800;padding:5px 10px;border-radius:99px;background:#F3F1FA;color:var(--mut)}.tiers span.done{background:var(--grn2);color:var(--grn)}.tiers span.on{background:var(--pur);color:#fff}
+.revbox{z-index:1;background:rgba(255,255,255,.14);border-radius:16px;padding:12px 16px;min-width:230px;display:flex;flex-direction:column;gap:4px}
+.revbox .rl{font-size:12px;font-weight:700;opacity:.9}.revbox .rn{font-size:30px;font-weight:800;line-height:1}.revbox .rn b{font-size:40px}
+.chap{position:absolute;left:14px;top:12px;background:rgba(255,255,255,.92);border-radius:99px;padding:5px 12px;font-size:12px;font-weight:800;color:var(--pur);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.pin.gate .lk{background:rgba(255,246,220,.95);box-shadow:0 0 0 6px rgba(255,214,140,.35),0 4px 14px rgba(120,80,40,.35)}
+.hero2{background:linear-gradient(100deg,rgba(74,55,201,.92) 0%,rgba(91,71,224,.82) 45%,rgba(140,108,240,.55) 100%),url(medals/sunrise.webp) center/cover!important}
+.bx .bi img{width:86px;height:86px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(120,80,40,.3))}
+.bx.wait .bi img{filter:grayscale(.6) opacity(.55)}
+.bx.ready .bi img{animation:wig 1.8s infinite}
+.reveal .bi img{width:170px;height:170px;object-fit:contain}
+@media (max-width:760px){.pin .lk{width:30px;height:30px;font-size:14px}.pin .lbl{font-size:10px;padding:2px 6px}.pin.cur .av{width:44px!important;height:44px!important}}
+
+/* v3 movimento */
+@property --deg{syntax:'<angle>';inherits:false;initial-value:0deg}
+.ring{background:conic-gradient(#FFD27A var(--deg), rgba(255,255,255,.18) 0)!important;transition:--deg 1.2s cubic-bezier(.2,.8,.2,1)}
+.rise{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.hero2 .av{animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.mc.win{animation:winpop .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes winpop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+.mc{transition:background .5s,transform .2s}
+.mc:active,.lk:active,.tab:active{transform:scale(.97)}
+.xpf{position:fixed;z-index:80;font-weight:900;font-size:26px;color:#FFB800;text-shadow:0 2px 0 #fff,0 4px 12px rgba(91,71,224,.4);pointer-events:none;animation:xpup 1.4s ease-out forwards}
+@keyframes xpup{0%{opacity:0;transform:translateY(10px) scale(.6)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-90px) scale(1)}}
+.xpbar{height:8px;border-radius:9px;background:rgba(255,255,255,.22);overflow:hidden;margin-top:8px;max-width:340px}
+.xpbar i{display:block;height:100%;background:linear-gradient(90deg,#FFD27A,#FFF1C2);border-radius:9px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.xptag{font-size:12px;font-weight:800;opacity:.9;margin-top:4px}
+.bar i{transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.lvlup{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(91,71,224,.55),rgba(31,34,53,.75));animation:fadein .3s}
+.lvlup .box{text-align:center;color:#fff}
+.lvlup .big1{font-size:90px;animation:pop .8s cubic-bezier(.2,1.6,.4,1)}
+.lvlup h2{font-family:'Cormorant Garamond',serif;font-size:44px;margin:6px 0}
+@keyframes fadein{from{opacity:0}}
+
+/* v2 cara de jogo */
+.av{border-radius:50%;object-fit:contain;flex:none;display:inline-flex;align-items:center;justify-content:center}
+.av.ini{background:linear-gradient(135deg,#E9D9B8,#C9A26A);color:#fff;font-weight:800;border-radius:50%}
+.serif{font-family:'Cormorant Garamond',serif;font-weight:600}
+.hero2{display:flex;align-items:center;gap:22px;padding:14px 22px;border-radius:22px;color:#fff;
+  background:radial-gradient(120% 140% at 0% 0%,#8C6CF0 0%,#5B47E0 45%,#3B2BA8 100%);box-shadow:0 10px 30px rgba(91,71,224,.28);position:relative;overflow:hidden}
+.hero2:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,140,.35),transparent 70%)}
+.hero2 .hi{font-size:34px;line-height:1.05}
+.hero2 .sub{opacity:.85;font-weight:600;font-size:14px;margin-top:4px}
+.ring{width:118px;height:118px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.ring .in{width:92px;height:92px;border-radius:50%;background:#4A37C9;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .in b{font-size:30px;font-weight:800;line-height:1}.ring .in span{font-size:11px;font-weight:700;opacity:.85}
+.flame{display:flex;flex-direction:column;align-items:center;z-index:1;min-width:96px}
+.flame .f{font-size:46px;line-height:1;animation:flick 1.8s infinite ease-in-out}
+@keyframes flick{0%,100%{transform:scale(1)}50%{transform:scale(1.08) rotate(-3deg)}}
+.flame b{font-size:28px;font-weight:800}.flame span{font-size:12px;font-weight:700;opacity:.85}
+.conf{position:fixed;top:-30px;font-size:22px;z-index:70;pointer-events:none;animation:fall 2.6s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.w.t1,.w.t2,.w.t3{position:relative;overflow:hidden;border:2px solid #F1DFB2}
+.w.t1:before,.w.t2:before,.w.t3:before{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);animation:shine 3.5s infinite}
+@keyframes shine{0%{left:-60%}60%,100%{left:130%}}
+.w.t0 .wi{filter:brightness(0);opacity:.12}
+.w.t0{border:2px dashed #E4E1F5;background:#FBFAFF}
+.w > *{position:relative;z-index:1}
+.w.t1:before,.w.t2:before,.w.t3:before{z-index:0;opacity:.6}
+.cal .dn{font-size:16px}
+.w.art .wi img{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(201,138,85,.35))}
+.w.art.t0 .wi{filter:none;opacity:1}
+.w.art.t0 .wi img{filter:grayscale(1) brightness(1.15);opacity:.38}
+.w.art:not(.t0) .wi img{animation:medal 3.5s ease-in-out infinite}
+@keyframes medal{0%,100%{transform:rotate(-3deg) scale(1)}50%{transform:rotate(3deg) scale(1.04)}}
+.togo{font-size:12px;font-weight:800;color:var(--pur);background:var(--pur2);border-radius:99px;padding:3px 10px}
+.st .o img{width:84px;height:84px}
+.st.cur .o{width:96px;height:96px;background:#fff;border-color:var(--gold);box-shadow:0 0 0 8px rgba(227,178,60,.18)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:1fr;gap:6px;flex:1;min-height:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.strip .card{padding:12px}
+.welcome{flex:1;display:flex;flex-direction:column;gap:14px}
+@media (max-width:760px){
+  .hero2{gap:10px;padding:12px}
+  .hero2 .av{width:58px!important;height:58px!important}
+  .gpend{display:none}
+  .goalc .big{font-size:22px!important}
+  .goalc .h{font-size:11px}
+  .goalc span{font-size:12px}
+  .hero2 .sub{font-size:12px}.hero2 .hi{font-size:24px}
+  .ring{width:84px;height:84px}.ring .in{width:64px;height:64px}.ring .in b{font-size:20px}
+  .flame .f{font-size:30px}.flame b{font-size:20px}.flame{min-width:60px}
+  .strip{grid-template-columns:repeat(3,1fr)}.strip .card .big{font-size:18px!important}
+  .st .o img{width:52px;height:52px}.st.cur .o{width:60px;height:60px}
+}
+@media (max-width:760px){
+  .top{height:auto;flex-wrap:wrap;padding:8px 12px;gap:6px}
+  .tabs{margin-left:0;width:100%;order:9}
+  .top .chip{display:none}
+  .top .out{margin-left:auto}
+  .tab{flex:1;text-align:center;padding:7px 4px;font-size:13px}
+  .pg{padding:10px 12px;gap:10px}
+  .card{padding:12px;border-radius:14px}
+  .mis{grid-template-columns:1fr;gap:8px}
+  .mc{flex-direction:row;align-items:center;gap:10px;text-align:left}
+  .mc .grow{flex:1}
+  .mc .ic{font-size:24px}.mc .n{font-size:20px}.mc .t{font-size:14px}
+  .mc .miss{display:none}
+  .mc .why{display:none}
+  .mc .n{margin:2px 0 4px}
+  .tab{font-size:12px}
+  .lk{height:50px;font-size:13px}
+  .look{flex-wrap:wrap}.lkst{min-width:0;width:100%}
+  .fire{font-size:34px}.big{font-size:26px}
+  .wins{grid-template-columns:repeat(2,1fr);grid-template-rows:none;gap:8px}
+  .w{flex-direction:row;padding:8px;justify-content:flex-start;text-align:left}
+  .w .wi{font-size:24px}.w .wp{display:none}
+  .boxes{grid-template-columns:repeat(3,1fr)}
+  .gates{grid-template-columns:repeat(2,1fr);gap:8px}
+  .road:before{left:40px;right:40px;top:36px}
+  .st{width:90px}.st .o{width:52px;height:52px;font-size:22px}.st .nm{font-size:12px}
+  .team{grid-template-columns:1fr 1fr}
+}
+.blks{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0}
+.blk{border:0;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:22px 26px;font:inherit;background:#fff;border:2px solid var(--line)}
+.blk.p{background:var(--pur2);border-color:#D9D2FA}.blk.p .bw{color:var(--pur)}
+.blk.g{background:var(--grn2);border-color:#BFE5CC}.blk.y{background:#FFF7E0;border-color:#F1DFB2}
+.blk .bh{font-size:15px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.blk .bv{font-size:54px;font-weight:800;line-height:1.05;color:var(--ink,#1E1B3A)}
+.blk .bw{font-size:18px;font-weight:800}.blk.g .bw{color:var(--grn)}.blk.y .bw{color:#B07F17}
+.blk .bs{font-size:14px;font-weight:600;color:var(--mut)}.blk .bt{margin-top:6px;font-size:13px;font-weight:800;color:var(--pur)}
+@media(max-width:700px){.blks{grid-template-columns:1fr}.blk .bv{font-size:40px}}
+.blks.five{grid-template-columns:repeat(6,1fr)}.blks.five .blk{grid-column:span 2}.blks.five .blk:nth-child(-n+2){grid-column:span 3}
+.blks.five .blk .bv{font-size:44px}
+.blk .up{color:var(--grn);font-weight:800}.blk .dn{color:#B07F17;font-weight:800}
+.nudge{background:linear-gradient(90deg,var(--pur2),#FFF0F6);border-radius:16px;padding:16px 22px;font-size:20px;font-weight:800;color:var(--pur)}
+@media(max-width:700px){.blks.five{grid-template-columns:1fr}.blks.five .blk,.blks.five .blk:nth-child(-n+2){grid-column:auto}}
+.wk{display:flex;gap:10px;flex:1}.wd{flex:1;background:#F6F5FB;border-radius:14px;padding:10px 6px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.wd b{font-size:13px;color:var(--mut)}.wd .ws{font-size:26px;line-height:1.1}.wd .wp{font-size:12px;font-weight:700;color:var(--mut)}
+.wd.now{outline:3px solid var(--pur);background:var(--pur2)}.wd.star{background:var(--grn2)}
+.scard{min-width:150px;border:2px dashed #E9C8DA;border-radius:16px;padding:10px 14px;text-align:center;display:flex;flex-direction:column;background:#FFF5FA}
+.scard b{font-size:17px}.scard span{font-size:12px;font-weight:700;color:var(--mut)}.scard.on{border-style:solid;border-color:var(--grn);background:var(--grn2)}
+</style>
+<style>/*ANIM-GAME 22/10: bau abre como jogo, chave nova pulsa, numeros sobem*/
+@keyframes shake{0%,100%{transform:rotate(0) scale(1)}15%{transform:rotate(-8deg) scale(1.05)}30%{transform:rotate(8deg) scale(1.08)}45%{transform:rotate(-10deg) scale(1.1)}60%{transform:rotate(10deg) scale(1.12)}75%{transform:rotate(-6deg) scale(1.1)}}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}40%{opacity:1}100%{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
+@keyframes prizein{0%{transform:translateY(30px) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+@keyframes keyglow{0%,100%{box-shadow:0 0 0 0 rgba(255,196,64,.0)}50%{box-shadow:0 0 0 8px rgba(255,196,64,.45)}}
+.reveal .stage2{position:relative;height:200px;display:flex;align-items:center;justify-content:center}
+.reveal .stage2 img{width:180px;height:180px;object-fit:contain;position:relative;z-index:2}
+.reveal .stage2 img.sh{animation:shake 1.1s ease-in-out}
+.reveal .stage2 .glow{position:absolute;left:50%;top:50%;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,150,.95),rgba(255,180,220,.5) 45%,transparent 70%);animation:burst 1.2s ease-out forwards;z-index:1}
+.reveal .prize{animation:prizein .6s ease-out both}
+.reveal .tap{font-weight:800;color:var(--pur);margin-top:6px}
+.ky.key.new{animation:keyglow 1.4s ease-in-out 3}
+.bx.ready .bi img{animation:wig 2.2s ease-in-out infinite}
+</style>
+</head>
+<body>
+<div id="app"><div class="load">Loading…</div></div>
+<script>
+/* SOUL PATH v1 (21/10/2026) Ligia: dash de reconhecimento e plano de carreira das terapeutas.
+   Standard = contrato. Above = missoes do dia (personalizar TODAS, check-out de TODAS, princesa de TODAS),
+   look do dia (ela marca, a Joana confirma), conteudo, reviews, clientes novas que voltam.
+   Erro nunca apaga conquista: complaint abre Pit stop (pausa o nivel), refresh + X dias limpos volta a andar.
+   Tudo no Hub (bsb_sp_*), nada no aparelho. */
+var SB = 'https://qwumncqcyurojhuyazuj.supabase.co', KEY = 'sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+var HD = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' };
+function get(p){ return fetch(SB + '/rest/v1/' + p, { headers: HD }).then(function(r){ if (!r.ok) throw new Error(p); return r.json(); }); }
+function rpc(n, b){ return fetch(SB + '/rest/v1/rpc/' + n, { method: 'POST', headers: HD, body: JSON.stringify(b || {}) }).then(function(r){ if (!r.ok) throw new Error(n); return r.json(); }); }
+function upsert(t, row, conf, ignore){ return fetch(SB + '/rest/v1/' + t + (conf ? '?on_conflict=' + conf : ''), { method: 'POST',
+  headers: Object.assign({}, HD, { Prefer: (ignore ? 'resolution=ignore-duplicates' : 'resolution=merge-duplicates') + ',return=representation' }), body: JSON.stringify(row) })
+  .then(function(r){ if (!r.ok) throw new Error(t); return r.json(); }); }
+function patch(t, q, row){ return fetch(SB + '/rest/v1/' + t + '?' + q, { method: 'PATCH', headers: Object.assign({}, HD, { Prefer: 'return=minimal' }), body: JSON.stringify(row) })
+  .then(function(r){ if (!r.ok) throw new Error(t); }); }
+function remove(t, q){ return fetch(SB + '/rest/v1/' + t + '?' + q, { method: 'DELETE', headers: HD }).then(function(r){ if (!r.ok) throw new Error(t); }); }
+function e(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
+function ldn(d){ return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year:'numeric', month:'2-digit', day:'2-digit' }).format(d || new Date()); }
+var TODAY = ldn();
+function addDays(s, n){ var d = new Date(s + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function monthsBetween(a, b){ if (!a) return 0; var x = new Date(a + 'T12:00:00Z'), y = new Date(b + 'T12:00:00Z'); var m = (y.getUTCFullYear() - x.getUTCFullYear()) * 12 + y.getUTCMonth() - x.getUTCMonth(); if (y.getUTCDate() < x.getUTCDate()) m--; return Math.max(0, m); }
+function mName(ym){ return new Date(ym + '-15T12:00:00Z').toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' }); }
+function dShort(s){ return new Date(s + 'T12:00:00Z').toLocaleString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }); }
+function toast(t){ var o = document.querySelector('.toast'); if (o) o.remove(); var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 2400); }
+function pct(a, b){ return b ? Math.round(a * 100 / b) : 0; }
+function bar(v, max, col){ return '<div class="bar"><i style="width:' + Math.min(100, pct(v, max)) + '%' + (col ? ';background:' + col : '') + '"></i></div>'; }
+
+var S = { who: null, role: null, tab: 'today', view: null, set: {}, people: [], pits: [], refresh: [], rewards: [], levelups: [], prizes: [], M: {}, page: {} };
+
+var ACH = [
+  { k:'touch',    ic:'💜', name:'Soul Touch',     unit:'days in a row, every client personalised', t:[5,20,60], v:function(m){ return m.run.m1; } },
+  { k:'checkout', ic:'📋', name:'Full Check-out', unit:'days in a row, every check-out',            t:[5,20,60], v:function(m){ return m.run.m2; } },
+  { k:'princess', ic:'👑', name:'Princess Maker', unit:'days in a row, every client asked',         t:[5,20,60], v:function(m){ return m.run.m3; } },
+  { k:'ready',    ic:'💄', name:'Always Ready',   unit:'full months, look every day',               t:[1,3,6],   v:function(m){ return m.lookMonths; } },
+  { k:'ontime',   ic:'⏰', name:'On Time',        unit:'months with no late day',                   t:[1,3,6],   v:function(m){ return m.onTimeMonths; } },
+  { k:'reviews',  ic:'⭐', name:'New Client Love', unit:'5★ reviews from new clients',             t:[5,20,50], v:function(m){ return m.newRev; } },
+  { k:'magic',    ic:'✨', name:'Magic Hands',    unit:'new clients who came back',                 t:[10,30,60], v:function(m){ return m.magic; } },
+  { k:'content',  ic:'📸', name:'Content Star',   unit:'videos filmed',                             t:[10,30,60], v:function(m){ return m.content; } },
+  { k:'comeback', ic:'🔧', name:'Comeback',       unit:'pit stops finished',                        t:[1,2,3],   v:function(m){ return m.pitDone; } },
+  { k:'refresh',  ic:'🎓', name:'Refresh Done',   unit:'trainings: make, hair, uniform',            t:[1,2,3],   v:function(m){ return m.refreshN; } }
+];
+/* Joana: as missoes dela sao da recepcao */
+var ACH_DESK = [
+  { k:'welcome',  ic:'👋', name:'Warm Welcome',   unit:'days in a row, every client welcomed',    t:[5,20,60], v:function(m){ return m.run.m1; } },
+  { k:'drink',    ic:'🥂', name:'Perfect Host',   unit:'days in a row, every client offered a drink', t:[5,20,60], v:function(m){ return m.run.m2; } },
+  { k:'nextvisit',ic:'📅', name:'See You Soon',   unit:'days in a row, every client offered her next visit', t:[5,20,60], v:function(m){ return m.run.m3; } },
+  { k:'ready',    ic:'💄', name:'Always Ready',   unit:'full months, look every day',               t:[1,3,6],   v:function(m){ return m.lookMonths; } },
+  { k:'ontime',   ic:'⏰', name:'On Time',        unit:'months with no late day',                   t:[1,3,6],   v:function(m){ return m.onTimeMonths; } },
+  { k:'booked',   ic:'🗓', name:'Diary Builder',  unit:'clients left with the next visit booked',   t:[50,200,500], v:function(m){ return m.booked; } }
+];
+var MIS_DESK = [
+  { k:'m1', img:'welcome', ic:'👋', t:'Welcome every client', f:'pe', miss:'miss_pe', why:'She feels expected' },
+  { k:'m2', img:'drink', ic:'🥂', t:'Offer every client a drink', f:'co', miss:'miss_co', why:'She feels at home' },
+  { k:'m3', img:'nextvisit', ic:'📅', t:'Offer every client her next visit', f:'pr', miss:'miss_pr', why:'She already knows when she is back' }
+];
+function misOf(m){ return m && m.desk ? MIS_DESK : MIS; }
+var TIER = ['', '🥉', '🥈', '🥇'];
+/* arte das medalhas (Ligia gera na IA de imagem); sem arquivo, fica o emoji */
+var MEDAL = {}; ['touch','checkout','princess','ready','ontime','reviews','magic','content','comeback','refresh','glow','drink','nextvisit','booked','welcome'].forEach(function(k){ MEDAL[k] = 'medals/' + k + '.webp'; });
+var DREAM = { master: { ic: '💎', name: 'Master', sub: 'the top specialist' }, educator: { ic: '🎓', name: 'Educator', sub: 'teaches at the Academy' }, manager: { ic: '🗝', name: 'Manager', sub: 'leads the salon' } };
+function dreamOf(p){ return DREAM[p && p.dream] || { ic: '🌟', name: 'My dream', sub: 'you choose it with Ligia' }; }
+/* pay_from: quem ainda nao entra no dinheiro (Joana pelo contrato, Sana depois de 2028) ve o caminho sem £ */
+function gbp(p, v){ if (!v || (S.role !== 'admin' && !S.set.show_pay) || (p && p.pay_from && p.pay_from > TODAY)) return ''; return '+£' + Number(v).toFixed(2) + '/h'; }
+var AV = { Michelle: 'avatars/michelle.webp', Dania: 'avatars/dania.webp', Anukis: 'avatars/anukis.webp', Aluana: 'avatars/aluana.webp', Ligia: 'avatars/ligia.webp', Joana: 'avatars/joana.webp?v=2', Sana: 'avatars/sana.webp' };
+function av(name, size){ var f = AV[name]; return f ? '<img class="av" src="' + f + '" style="width:' + size + 'px;height:' + size + 'px" alt="">' : '<span class="av ini" style="width:' + size + 'px;height:' + size + 'px;font-size:' + Math.round(size / 2.4) + 'px">' + e(String(name || '?')[0]) + '</span>'; }
+var MOT = { progress: '🚀 Progress', stability: '🏛 Stability', reference: '🎓 Reference' };
+
+/* ---------- carga ---------- */
+function loadBase(){
+  return Promise.all([
+    get('bsb_sp_settings?select=key,value'), get('bsb_sp_people_pub?select=*&order=sort'),
+    get('bsb_sp_pitstops?select=*&order=opened_at.desc'), get('bsb_sp_refresh?select=*'),
+    get('bsb_sp_rewards?select=*&order=earned_at.desc'), get('bsb_sp_levelups?select=*&order=approved_at.desc'),
+    get('bsb_sp_prizes?select=*&order=created_at.desc'),
+    rpc('bsb_sp_tips', { p_from: addDays(TODAY, -200).slice(0, 7) + '-01' }).catch(function(){ return []; }),
+    get('bsb_sp_goals?select=*&active=eq.true').catch(function(){ return []; }),
+    get('bsb_sp_steps?select=*&order=sort,id').catch(function(){ return []; })
+  ]).then(function(r){
+    S.steps = r[9] || [];
+    S.goals = {}; (r[8] || []).forEach(function(x){ S.goals[x.person] = x; });
+    S.tips = {}; (r[7] || []).forEach(function(x){ S.tips[x.ym] = x; });
+    S.set = {}; r[0].forEach(function(x){ S.set[x.key] = x.value; });
+    S.people = r[1]; S.pits = r[2]; S.refresh = r[3]; S.rewards = r[4]; S.levelups = r[5]; S.prizes = r[6];
+    S.liveFrom = S.set.live_from || '2026-11-01';
+    S.live = TODAY >= S.liveFrom;
+    /* Ligia 22/10: "colocar a leitura toda para eu ver": a tela mostra o mes inteiro do inicio do jogo (historico); a revisao conta so do inicio */
+    S.from = S.live ? S.liveFrom.slice(0, 7) + '-01' : addDays(TODAY, -34);
+  });
+}
+function therapists(){ return S.people.filter(function(p){ return p.role === 'therapist' && p.active; }); }
+function personOf(n){ return S.people.filter(function(p){ return p.person === n; })[0]; }
+
+function loadModel(name){
+  /* a menina nao ve o treino: antes do inicio ela comeca do zero, limpo */
+  var hide = !S.live && S.role !== 'admin', fr = hide ? S.liveFrom : S.from;
+  var pp = personOf(name);
+  /* Ligia 22/10: a gorjeta DELA no mes (parte do pote por horas; meses fechados = o que foi pago) */
+  S.myTips = S.myTips || {};
+  var tipsP = rpc('bsb_sp_my_tips', { p_person: name, p_from: addDays(TODAY, -200).slice(0, 7) + '-01' }).then(function(r){ S.myTips[name] = {}; (r || []).forEach(function(x){ S.myTips[name][x.ym] = x; }); }).catch(function(){});
+  if (pp && pp.role === 'desk'){
+    var bTo = addDays((S.liveFrom < TODAY ? S.liveFrom : TODAY), -1), bFrom = addDays(bTo, -183);
+    return Promise.all([rpc('bsb_sp_desk_days', { p_person: name, p_from: fr, p_to: TODAY }), rpc('bsb_sp_desk_days', { p_person: name, p_from: bFrom, p_to: bTo }).catch(function(){ return []; })]).then(function(r){
+      var m = build(pp, r[0], 0, [], null); m.hide = hide; deskRes(m, r[1]); m.base = r[1] || []; S.M[name] = m; return Promise.all([tipsP,
+      rpc('bsb_sp_desk_drinks', { p_from: addDays(TODAY, -40), p_to: TODAY }).then(function(b){ m.dr = {}; (b || []).forEach(function(x){ m.dr[String(x.d)] = x; }); }).catch(function(){ m.dr = {}; }),
+      rpc('bsb_sp_desk_bookings', { p_from: addDays(TODAY, -100).slice(0, 7) + '-01' }).then(function(b){ m.bk = {}; (b || []).forEach(function(x){ m.bk[String(x.d)] = x.n; }); }).catch(function(){ m.bk = null; }), rpc('bsb_sp_desk_bonus', { p_from: TODAY.slice(0, 7) + '-01' }).then(function(b){ m.db = (b || []).filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || null; }).catch(function(){}),
+      /* Ligia 22/10: o estudo dela (Joana · My Path, bsb_lab career_joana) aparece aqui, e a Ligia ve onde ela esta */
+      get('bsb_lab?select=content,updated_at&id=eq.career_' + name.toLowerCase()).then(function(r){ try { m.study = JSON.parse((r[0] || {}).content || '{}'); m.study.at = (r[0] || {}).updated_at; } catch (x) { m.study = null; } }).catch(function(){})]).then(function(){ return m; }); });
+  }
+  return Promise.all([
+    rpc('bsb_sp_days', { p_person: name, p_from: fr, p_to: TODAY }),
+    rpc('bsb_sp_magic', { p_person: name, p_from: fr }),
+    hide ? Promise.resolve([]) : rpc('bsb_sp_newrev', { p_person: name, p_from: addDays(TODAY, -365) }),
+    (S.goals[name] && S.goals[name].preset === 'facial') ? rpc('bsb_sp_homecare', { p_person: name, p_from: addDays(TODAY, -365).slice(0, 7) + '-01' }).catch(function(){ return []; }) : Promise.resolve(null),
+    rpc('bsb_sp_feed', { p_person: name, p_from: addDays(TODAY, -240) }).catch(function(){ return []; }),
+    (S.goals[name] && S.goals[name].preset === 'facial') ? rpc('bsb_sp_homecare_days', { p_person: name, p_from: addDays(TODAY, -45) }).catch(function(){ return []; }) : Promise.resolve(null),
+    S.goals[name] ? rpc('bsb_sp_goal_return', { p_person: name, p_preset: S.goals[name].preset, p_days: S.goals[name].days, p_from: addDays(TODAY, -150).slice(0, 7) + '-01' }).catch(function(){ return []; }) : Promise.resolve([])
+  ]).then(function(r){ var hc = r[3], feed = r[4], hcd = r[5]; r.splice(3, 3);
+    var m = build(personOf(name), r[0], (r[1][0] || {}).n || 0, r[2], hc, feed); m.hide = hide; m.hcd = hcd || [];
+    var g = S.goals[name]; if (g){ var ms = r[3] || [], cur = ms.filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || { clients: 0, back: 0, pending: [] };
+      var past = ms.filter(function(x){ return x.ym < TODAY.slice(0, 7); }).slice(-3), pc = past.reduce(function(a, x){ return a + x.clients; }, 0), pb = past.reduce(function(a, x){ return a + x.back; }, 0);
+      m.goal = { g: g, cur: cur, rate: pct(cur.back, cur.clients), before: pc ? pct(pb, pc) : null, months: ms }; }
+    S.M[name] = m; return tipsP.then(function(){ return m; }); });
+}
+
+/* ---------- o motor ---------- */
+function build(p, days, magic, nr, hc, feed){
+  var m = { p: p, days: days, magic: magic, desk: p.role === 'desk' };
+  /* RESULTADOS (o efeito do atendimento encantador): cliente nova que deixou 5* e cliente nova que voltou.
+     A meta e de cada uma: a media dela nos 6 meses antes do jogo, mais 10%. */
+  m.res = !m.desk;
+  if (m.res){
+    m.feed = feed || []; m.fy = {};
+    m.feed.forEach(function(x){ var k = String(x.d).slice(0, 7), y = m.fy[k] || (m.fy[k] = { rev: [], back: [] }); y[x.kind === 'review' ? 'rev' : 'back'].push(x.client || 'Client'); });
+    var base = (S.liveFrom < TODAY ? S.liveFrom : TODAY).slice(0, 7), win = [];
+    for (var b = 1; b <= 6; b++){ var dt = new Date(base + '-15T12:00:00Z'); dt.setUTCMonth(dt.getUTCMonth() - b); win.push(dt.toISOString().slice(0, 7)); }
+    function avg(k){ return win.reduce(function(a, ym){ return a + ((m.fy[ym] || {})[k] || []).length; }, 0) / win.length; }
+    m.aRev = Math.round(avg('rev') * 10) / 10; m.aBack = Math.round(avg('back') * 10) / 10;
+    m.tRev = Math.max(1, Math.ceil(m.aRev)); m.tBack = Math.max(1, Math.ceil(m.aBack));
+    /* revisao de salario: dezembro, a mesma para todas; a primeira com 12 meses de jogo */
+    var ry = +TODAY.slice(0, 4) + (TODAY.slice(5, 7) === '12' ? 1 : 0); ry = Math.max(ry, +S.liveFrom.slice(0, 4) + 1);
+    m.review = { year: ry, from: (ry - 1) + '-12', to: ry + '-11' }; var lf = S.liveFrom.slice(0, 7); if (m.review.from < lf || ry === +lf.slice(0, 4) + 1) m.review.from = lf < m.review.from && ry === +lf.slice(0, 4) + 1 ? lf : (m.review.from < lf ? lf : m.review.from); if (m.review.from < firstFull()) m.review.from = firstFull();
+  }
+  /* homecare Eminence (so quem tem goal de facial): clientes de facial que levaram produto, pela fatura */
+  if (hc){ m.hc = {}; hc.forEach(function(x){ m.hc[x.ym] = x; }); m.hcTotal = hc.filter(function(x){ return x.ym >= S.from.slice(0, 7); }).reduce(function(a, x){ return a + x.homecare_clients; }, 0); }
+  /* reviews de clientes NOVAS (contam desde o inicio) */
+  m.nr = {}; (nr || []).forEach(function(x){ m.nr[x.ym] = x; });
+  m.newRev = (nr || []).filter(function(x){ return x.ym >= S.from.slice(0, 7); }).reduce(function(a, x){ return a + x.new_reviews; }, 0);
+  var starPct = +S.set.star_pct || 80, freezes = +S.set.freezes || 1, pitDays = +S.set.pitstop_days || 14;
+  days.forEach(function(d){
+    d.w = !!(d.worked || d.clients > 0);
+    d.m1 = d.clients > 0 && d.pe >= d.clients;
+    d.m2 = d.clients > 0 && d.co >= d.clients;
+    d.m3 = d.clients > 0 && d.pr >= d.clients;
+    d.full = d.m1 && d.m2 && d.m3;
+    d.look = !!(d.look_marked && (m.desk || d.look_ok === true));   /* Ligia 22/10: a Joana e independente, o check-in dela ja conta */
+    d.late = d.late_min != null && d.late_min > 0;
+  });
+  m.today = days.filter(function(d){ return d.d === TODAY; })[0] || { clients:0, co:0, pe:0, pr:0, miss_co:[], miss_pe:[], miss_pr:[] };
+  /* fogo: dias trabalhados seguidos com as 3 missoes; 1 escudo por mes */
+  var streak = 0, used = {}, past = days.filter(function(d){ return d.w && d.d < TODAY; }).reverse();
+  if (m.today.full) streak++;
+  for (var i = 0; i < past.length; i++){
+    var d = past[i]; if (d.full){ streak++; continue; }
+    var mo = d.d.slice(0, 7); if ((used[mo] || 0) < freezes){ used[mo] = (used[mo] || 0) + 1; continue; }
+    break;
+  }
+  m.streak = streak; m.freezeLeft = Math.max(0, freezes - (used[TODAY.slice(0, 7)] || 0));
+  /* sequencias (a melhor nunca cai) */
+  m.run = {};
+  ['m1','m2','m3'].forEach(function(k){
+    var b = 0, c = 0;
+    days.forEach(function(d){ if (!d.w) return; if (d.d === TODAY && !d[k]) return; if (d[k]){ c++; if (c > b) b = c; } else c = 0; });
+    m.run[k] = b;
+  });
+  /* meses */
+  var mon = {};
+  days.forEach(function(d){
+    var k = d.d.slice(0, 7), x = mon[k] || (mon[k] = { ym:k, worked:0, full:0, look:0, late:0, known:0, content:0, reviews:0 });
+    x.content += d.content; x.reviews += d.reviews5;
+    if (!d.w) return; x.worked++; if (d.full) x.full++; if (d.look) x.look++;
+    if (d.late_min != null){ x.known++; if (d.late) x.late++; }
+  });
+  m.months = Object.keys(mon).sort().map(function(k){
+    var x = mon[k]; x.closed = k < TODAY.slice(0, 7);
+    x.missionPct = pct(x.full, x.worked); x.lookPct = pct(x.look, x.worked); x.onTimePct = x.known ? pct(x.known - x.late, x.known) : 100;
+    if (m.res){ var fy = m.fy[k] || { rev: [], back: [] }; x.rev = fy.rev.length; x.back = fy.back.length; x.revOk = x.rev >= m.tRev; x.backOk = x.back >= m.tBack; }
+    x.std = x.lookPct >= starPct && x.onTimePct >= 90;
+    /* mes acima da media: o resultado do mes (reviews + voltas) passou a media dela */
+    if (m.res) x.above = (x.rev + x.back) >= Math.max(1, Math.ceil(m.aRev + m.aBack));
+    x.star = m.res ? (x.closed && x.worked >= 4 && x.revOk && x.backOk && x.std) : (x.closed && x.worked >= 4 && x.missionPct >= starPct && x.lookPct >= starPct && x.onTimePct >= 90);
+    return x;
+  });
+  m.thisMonth = m.months.filter(function(x){ return x.ym === TODAY.slice(0, 7); })[0] || { ym: TODAY.slice(0, 7), worked:0, full:0, look:0, late:0, known:0, content:0, reviews:0, missionPct:0, lookPct:0, onTimePct:100, rev: 0, back: 0 };
+  if (m.res){ m.aboveN = m.months.filter(function(x){ return x.closed && x.above && x.ym >= m.review.from && x.ym <= m.review.to; }).length;
+    m.stdMonths = m.months.filter(function(x){ return x.closed && x.worked && x.std && x.ym >= m.review.from && x.ym <= m.review.to; }).length; }
+  m.lookMonths = m.months.filter(function(x){ return x.closed && x.worked > 0 && x.look >= x.worked; }).length;
+  m.onTimeMonths = m.months.filter(function(x){ return x.closed && x.known > 0 && x.late === 0; }).length;
+  m.reviews = days.reduce(function(a, d){ return a + d.reviews5; }, 0);
+  m.content = days.reduce(function(a, d){ return a + d.content; }, 0);
+  /* pit stops */
+  m.pits = S.pits.filter(function(x){ return x.person === p.person; }).map(function(x){
+    var st = !x.refresh_done_at ? 'open' : (addDays(x.refresh_done_at, pitDays) <= TODAY ? 'done' : 'cool');
+    return Object.assign({ st: st, left: x.refresh_done_at ? Math.max(0, Math.round((new Date(addDays(x.refresh_done_at, pitDays)) - new Date(TODAY)) / 864e5)) : null }, x);
+  });
+  m.pitOpen = m.pits.filter(function(x){ return x.st !== 'done'; });
+  m.pitDone = m.pits.filter(function(x){ return x.st === 'done'; }).length;
+  m.refreshN = S.refresh.filter(function(x){ return x.person === p.person; }).length;
+  /* conquistas */
+  m.booked = days.reduce(function(a, d){ return a + (d.booked || 0); }, 0);
+  var ACHP = m.desk ? ACH_DESK : m.hc ? ACH.concat([{ k:'glow', ic:'🧴', name:'Glow at Home', unit:'clients took Éminence home', t:[5,20,50], v:function(mm){ return mm.hcTotal || 0; } }]) : ACH;
+  var anyKnown = m.months.some(function(x){ return x.known > 0; });
+  m.ach = ACHP.filter(function(a){ return a.k !== 'ontime' || anyKnown; }).map(function(a){ var v = a.v(m), t = 0; a.t.forEach(function(th){ if (v >= th) t++; }); return { a: a, v: v, tier: t, next: a.t[t] }; });
+  m.silver = m.ach.filter(function(x){ return x.tier >= 2; }).length;
+  m.gold = m.ach.filter(function(x){ return x.tier >= 3; }).length;
+  /* nivel */
+  var L = S.set.levels || [], cur = L[p.level - 1] || L[0] || { name: 'Soul Therapist', plus: 0 }, nx = L[p.level];
+  m.level = cur; m.next = nx;
+  var since = p.level_since || S.liveFrom;
+  m.starsSince = m.months.filter(function(x){ return x.star && x.ym >= since.slice(0, 7); }).length;
+  if (nx){
+    var g = [];
+    if (nx.months_house) g.push({ ic:'🗓', t:'Time with us', v: monthsBetween(p.start_date, TODAY), need: nx.months_house, u:'months' });
+    if (nx.months_level) g.push({ ic:'🗓', t:'Time at this level', v: monthsBetween(p.level_since, TODAY), need: nx.months_level, u:'months' });
+    g.push({ ic:'⭐', t:'Star months', v: m.starsSince, need: nx.stars || 3, u:'months' });
+    if (nx.silver) g.push({ ic:'🥈', t:'Silver wins', v: m.silver, need: nx.silver, u:'wins' });
+    if (nx.gold) g.push({ ic:'🥇', t:'Gold wins', v: m.gold, need: nx.gold, u:'wins' });
+    m.steps = S.steps.filter(function(x){ return x.person === p.person && x.level === p.level + 1; });
+    if (m.steps.length) g.push({ ic:'🔑', t:'Steps from Ligia', v: m.steps.filter(function(x){ return x.done_at; }).length, need: m.steps.length, u:'steps' });
+    g.forEach(function(x){ x.ok = x.v >= x.need; });
+    m.gates = g; m.paused = m.pitOpen.length > 0;
+    /* Standard (chegar no horario) e o cadeado do dinheiro e do nivel */
+    m.stdOk = m.thisMonth.onTimePct >= 90;
+    m.ready = !m.paused && m.stdOk && g.every(function(x){ return x.ok; });
+    m.pathPct = Math.round(g.reduce(function(a, x){ return a + Math.min(1, x.v / x.need); }, 0) * 100 / g.length);
+  } else { m.gates = []; m.ready = false; m.pathPct = 100; }
+  /* premios ganhos (so conta depois do inicio) */
+  m.earned = [];
+  if (S.live && (m.res || m.desk)){
+    m.months.forEach(function(x){ if (x.ym >= S.liveFrom.slice(0, 7) && lookKeys(m, x.ym).n >= keysNeed(x.ym)) m.earned.push({ key: 'look-' + x.ym + '-' + p.person, reason: '🔑 ' + keysNeed(x.ym) + ' keys · ' + mName(x.ym), size: 'M', prize: lookGift(x.ym) }); });
+    m.pits.forEach(function(x){ if (x.st === 'done') m.earned.push({ key: 'pit-' + x.id, reason: '🔧 Pit stop finished', size: 'S' }); });
+    S.levelups.forEach(function(x){ if (x.person === p.person) m.earned.push({ key: 'level-' + x.level + '-' + p.person, reason: '🔓 ' + ((L[x.level - 1] || {}).name || 'New level'), size: 'L' }); });
+  } else if (S.live){
+    var goal = +S.set.content_goal || 8;
+    m.months.forEach(function(x){
+      if (x.content >= goal) m.earned.push({ key: 'content-' + x.ym + '-' + p.person, reason: '📸 ' + goal + ' videos in ' + mName(x.ym), size: 'L' });
+      if (x.closed && x.worked > 0 && x.look >= x.worked) m.earned.push({ key: 'look-' + x.ym + '-' + p.person, reason: '💄 Ready every day of ' + mName(x.ym), size: 'M' });
+    });
+    m.ach.forEach(function(x){ if (x.tier >= 3) m.earned.push({ key: 'gold-' + x.a.k + '-' + p.person, reason: '🥇 ' + x.a.name, size: 'M' }); });
+    m.pits.forEach(function(x){ if (x.st === 'done') m.earned.push({ key: 'pit-' + x.id, reason: '🔧 Pit stop finished', size: 'S' }); });
+    S.levelups.forEach(function(x){ if (x.person === p.person) m.earned.push({ key: 'level-' + x.level + '-' + p.person, reason: '🔓 ' + ((L[x.level - 1] || {}).name || 'New level'), size: 'L' }); });
+  }
+  m.boxes = S.rewards.filter(function(x){ return x.person === p.person; });
+  m.tickets = S.live ? m.thisMonth.full + m.thisMonth.content + m.thisMonth.reviews : 0;
+  return m;
+}
+function syncRewards(m){
+  var have = {}; S.rewards.forEach(function(x){ have[x.reason_key] = 1; });
+  var add = m.earned.filter(function(x){ return !have[x.key]; }).map(function(x){ var r = { person: m.p.person, reason: x.reason, reason_key: x.key, size: x.size }; if (x.prize){ r.prize_name = x.prize; r.status = 'ready'; } return r; });
+  if (!add.length) return Promise.resolve();
+  return upsert('bsb_sp_rewards', add, 'reason_key', true).then(function(r){ S.rewards = r.concat(S.rewards); }).catch(function(){});
+}
+
+/* ---------- tela ---------- */
+var A = document.getElementById('app');
+function topbar(tabs){
+  var p = S.view ? personOf(S.view) : null, m = S.view ? S.M[S.view] : null;
+  return '<div class="top"><span class="logo">✨ Soul Path</span>' +
+    (S.role === 'admin' && S.view ? '<button class="btn ghost sm" onclick="go(\'team\',null)">‹ Team</button>' : '') +
+    (p ? av(p.person, 36) + '<span class="who">' + e(p.person) + '</span>' + (m && !m.desk ? '<span class="chip">' + e(m.level.name) + '</span>' : m ? '<span class="chip">Front of House</span>' : '') : '<span class="who">' + e(S.who) + '</span>') +
+    '<div class="tabs">' + tabs.map(function(t){ return '<button class="tab' + (S.tab === t[0] ? ' on' : '') + '" onclick="go(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') + '</div>' +
+    '<button class="out" onclick="logout()">Exit</button></div>';
+}
+var GIRL_TABS = [['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins']];
+var DESK_TABS = [['day','My day'],['today','My performance'],['month','My month'],['path','My path'],['bonus','My bonus'],['wins','My wins']];   /* Ligia 22/10: a Joana confere o look das meninas no dash da recepcao (LOOK367) */
+var ADMIN_TABS = [['team','Team'],['steps','Steps'],['look','Look'],['shelf','Prizes'],['pits','Pit stops'],['set','Settings']];
+function go(t, v){ if (v !== undefined) S.view = v; S.tab = t; S.det = null; render(); }
+function render(){
+  if (!S.who) return renderLogin();
+  if (S.view){
+    var m = S.M[S.view];
+    if (!m){ A.innerHTML = topbar(GIRL_TABS) + '<div class="load">Loading…</div>'; loadModel(S.view).then(function(mm){ if (S.live && S.role === 'admin') syncRewards(mm); render(); }).catch(function(){ A.innerHTML = '<div class="load">Could not load. Check the internet and try again.</div>'; }); return; }
+    var tabs = m.desk ? DESK_TABS : GIRL_TABS;
+    var body = { day: pgDay, today: pgToday, month: pgMonth, path: pgPath, wins: pgWins, prizes: pgPrizes, bonus: pgBonus, look: function(){ return pgLook(); } }[S.tab] || pgToday;
+    A.innerHTML = topbar(tabs) + '<div class="pg">' + body(m) + '</div>';
+    return;
+  }
+  if (S.role === 'ops'){ A.innerHTML = topbar([['look','Look']]) + '<div class="pg">' + pgLook() + '</div>'; return; }
+  var b = { team: pgTeam, steps: pgSteps, look: pgLook, shelf: pgShelf, pits: pgPits, set: pgSet }[S.tab] || pgTeam;
+  A.innerHTML = topbar(ADMIN_TABS) + '<div class="pg">' + b() + '</div>';
+}
+
+/* login */
+var PIN = '';
+function renderLogin(msg){
+  A.innerHTML = '<div class="login"><div class="lg"><h1>✨ Soul Path</h1><div class="mut">Your code</div>' +
+    '<div class="dots">' + [0,1,2,3].concat(PIN.length > 4 ? [4,5].slice(0, PIN.length - 4) : []).map(function(i){ return '<i class="' + (i < PIN.length ? 'f' : '') + '"></i>'; }).join('') + '</div>' +
+    '<div class="keys">' + [1,2,3,4,5,6,7,8,9,'✓',0,'⌫'].map(function(k){ return k === '✓' ? (PIN.length >= 4 ? '<button onclick="key(\'✓\')">✓</button>' : '<span></span>') : '<button onclick="key(\'' + k + '\')">' + k + '</button>'; }).join('') + '</div>' +
+    '<div class="err">' + (msg || '') + '</div></div></div>';
+}
+function key(k){
+  if (k === '⌫'){ PIN = PIN.slice(0, -1); return renderLogin(); }
+  /* o codigo e o mesmo do Connecteam: 4 a 6 numeros. Com 4 tenta sozinho; mais longo, ✓ ou o 6o numero */
+  if (k !== '✓'){ if (PIN.length >= 6) return; PIN += k; renderLogin(); }
+  var force = k === '✓' || PIN.length === 6;
+  if (PIN.length === 4 || force){
+    var tried = PIN;
+    rpc('bsb_sp_login', { p_code: PIN }).then(function(r){
+      if (!r.length){ if (!force || tried !== PIN) return; PIN = ''; return renderLogin('Wrong code'); }
+      S.who = r[0].person; S.role = r[0].role; S.code = PIN; PIN = '';
+      /* no celular dela, o icone da tela de inicio vira a carinha dela */
+      try { var ti = document.getElementById('touchIcon'), nm = String(S.who).toLowerCase(); if (ti && AV[S.who]) ti.href = 'icons/' + nm + '.png'; } catch (e) {}
+      A.innerHTML = '<div class="load">Loading…</div>';
+      return loadBase().then(function(){
+        if (S.role === 'therapist'){ S.view = S.who; S.tab = 'today'; }
+        else if (S.role === 'desk'){ S.view = S.who; S.tab = 'day'; return Promise.all([loadLook(), loadMyLook()]).then(render); }
+        else if (S.role === 'ops'){ S.view = null; S.tab = 'look'; return loadLook().then(render); }
+        else { S.view = null; S.tab = 'team'; return adminLoad(); }
+        render();
+      });
+    }).catch(function(){ PIN = ''; renderLogin('No connection'); });
+  }
+}
+function logout(){ S.who = null; S.view = null; S.M = {}; renderLogin(); }
+
+
+/* ===== MY DAY (Joana) · Ligia 22/10: o que ela faz hoje, cliente por cliente; o dia bom vira ⭐ e anda na semana ===== */
+var STAR_DAY = 80, CARD_DAYS = 4;
+function dayScore(m, d){
+  if (!d || !d.w || !d.clients) return null;
+  var dr = (m.dr || {})[d.d] || { nails: 0, paid: 0 }, nails = dr.nails || 0, drinks = Math.min(nails, (d.co || 0) + (dr.paid || 0));
+  var parts = [Math.min(1, d.pe / d.clients), Math.min(1, d.pr / d.clients)]; if (nails) parts.push(drinks / nails);
+  return { pct: Math.round(parts.reduce(function(a, x){ return a + x; }, 0) / parts.length * 100), nails: nails, free: d.co || 0, paid: dr.paid || 0, drinks: drinks };
+}
+function pgDay(m){
+  if (!m.desk) return pgToday(m);
+  var dm = {}; m.days.forEach(function(d){ dm[d.d] = d; });
+  var t = dm[TODAY] || { clients: 0, pe: 0, co: 0, pr: 0, booked: 0, w: false, d: TODAY }, sc = dayScore(m, t) || { pct: 0, nails: 0, free: 0, paid: 0, drinks: 0 };
+  /* sequencia de dias ⭐ (dias de trabalho seguidos, sem contar hoje se ainda nao fechou) */
+  var streak = 0; for (var i = 1; i < 40; i++){ var dd = dm[addDays(TODAY, -i)]; if (!dd || !dd.w) continue; var s2 = dayScore(m, dd); if (s2 && s2.pct >= STAR_DAY) streak++; else break; }
+  if (sc.pct >= STAR_DAY) streak++;
+  var cl = t.clients, missW = cl - t.pe, missD = sc.nails - sc.drinks, missN = cl - t.pr;
+  var nudge = !cl ? 'Clients will show here as they arrive' : missN >= missW && missN >= missD && missN > 0 ? '📅 Offer the next visit to ' + missN + ' more client' + (missN > 1 ? 's' : '')
+    : missW >= missD && missW > 0 ? '✨ Warm welcome for ' + missW + ' more client' + (missW > 1 ? 's' : '') : missD > 0 ? '🥂 Offer a drink to ' + missD + ' more at the chair' : 'Every client cared for today ⭐';
+  function tile(ic, t2, v, of, sub, ok){ var p2 = of ? Math.round(v * 100 / of) : 0;
+    return '<div class="card blk ' + (of && v >= of ? 'g' : p2 >= 50 ? 'y' : '') + ' rise"><div class="bh">' + ic + ' ' + t2 + '</div><div class="bv">' + v + '<span style="font-size:26px;color:var(--mut)"> / ' + of + '</span></div><div class="bs">' + sub + '</div>' + bar(v, of || 1, of && v >= of ? 'var(--grn)' : '') + '</div>'; }
+  /* a semana: ter a sab */
+  var dt = new Date(TODAY + 'T12:00:00Z'), mon = addDays(TODAY, -((dt.getUTCDay() + 6) % 7)), wk = '', stars = 0;
+  ['Tue','Wed','Thu','Fri','Sat'].forEach(function(nm, k){ var ds = addDays(mon, k + 1), d = dm[ds], s3 = dayScore(m, d), fut = ds > TODAY, isT = ds === TODAY;
+    var st = fut ? '' : s3 && s3.pct >= STAR_DAY ? '⭐' : isT ? '⏳' : s3 ? '·' : '';
+    if (s3 && s3.pct >= STAR_DAY) stars++;
+    wk += '<div class="wd' + (isT ? ' now' : '') + (st === '⭐' ? ' star' : '') + '"><b>' + nm + '</b><span class="ws">' + (st || '&nbsp;') + '</span><span class="wp">' + (fut || !s3 ? '' : s3.pct + '%') + '</span></div>'; });
+  var card = stars >= CARD_DAYS;
+  return '<div class="row" style="align-items:center"><div class="big" style="font-size:24px">🌅 My day · ' + new Date(TODAY + 'T12:00:00Z').toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', timeZone: 'UTC' }) + '</div>' +
+      '<span class="chip" style="margin-left:auto;font-size:15px">' + (streak ? '🔥 ' + streak + ' ⭐ day' + (streak === 1 ? '' : 's') + ' in a row' : '🔥 Start your streak today') + '</span></div>' +
+    '<div class="blks" style="grid-template-columns:repeat(3,1fr);flex:0 0 auto">' +
+      tile('✨', 'Warm welcome', t.pe, cl, 'every client', 0) +
+      tile('🥂', 'Drink at the chair', sc.drinks, sc.nails, 'free ' + sc.free + ' · paid ' + sc.paid, 0) +
+      tile('📅', 'Next visit booked', t.booked || 0, cl, 'offered to ' + t.pr + ' of ' + cl, 0) + '</div>' +
+    '<div class="nudge rise">👉 ' + nudge + '</div>' +
+    '<div class="card rise" style="display:flex;align-items:center;gap:22px"><div><div class="h" style="margin:0">🗓️ My week</div><div class="mut" style="font-weight:700;font-size:13px">' + STAR_DAY + '% care = ⭐ day</div></div>' +
+      '<div class="wk">' + wk + '</div>' +
+      '<div class="scard' + (card ? ' on' : '') + '"><div style="font-size:30px">🃏</div><b>' + (card ? 'Soul Card won!' : stars + ' / ' + CARD_DAYS + ' ⭐') + '</b><span>' + (card ? 'see My wins' : 'Soul Card this week') + '</span></div></div>';
+}
+/* ===== TODAY ===== */
+function greet(){ var h = +new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: 'numeric', hour12: false }).format(new Date()); return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; }
+var MIS = [
+  { k:'m1', img:'touch', ic:'💜', t:'Personalise every client', f:'pe', miss:'miss_pe', why:'Next visit feels made for her' },
+  { k:'m2', img:'checkout', ic:'📋', t:'Check-out every client', f:'co', miss:'miss_co', why:'Every client leaves cared for' },
+  { k:'m3', img:'princess', ic:'👑', t:'Ask every client: princess?', f:'pr', miss:'miss_pr', why:'Make her feel like royalty' }
+];
+/* MY PERFORMANCE: a funcao (Standard) e o resultado, lado a lado. Sem premio aqui: e espelho. */
+/* JOANA: o mesmo desenho. Funcao = welcome, drink, oferecer a proxima visita (sobre todas as clientes), look, horario.
+   Resultado = % de clientes que saem com a proxima visita marcada (contra a media dela) e 5* da casa. */
+/* o primeiro mes que conta inteiro: se comecou no meio do mes, conta a partir do mes seguinte (chaves e Standard ja contam desde o dia) */
+function firstFull(){ var lf = S.liveFrom; if (lf.slice(8, 10) === '01') return lf.slice(0, 7); var d = new Date(lf.slice(0, 7) + '-15T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1); return d.toISOString().slice(0, 7); }
+function deskRes(m, base){
+  var bc = 0, bb = 0, bmon = {}; (base || []).forEach(function(d){ if (!d.worked) return; bc += d.clients; bb += d.booked || 0; var k = d.d.slice(0, 7); bmon[k] = (bmon[k] || 0) + d.reviews5; });
+  var bm = Object.keys(bmon);
+  m.aRate = bc ? Math.round(bb * 100 / bc) : 0; m.aRev5 = bm.length ? Math.round(bm.reduce(function(a, k){ return a + bmon[k]; }, 0) / bm.length * 10) / 10 : 0;
+  var ry = +TODAY.slice(0, 4) + (TODAY.slice(5, 7) === '12' ? 1 : 0), lf = S.liveFrom.slice(0, 7); ry = Math.max(ry, +lf.slice(0, 4) + 1);
+  m.review = { year: ry, from: ry === +lf.slice(0, 4) + 1 ? lf : (ry - 1) + '-12', to: ry + '-11' }; if (m.review.from < firstFull()) m.review.from = firstFull();
+  m.months.forEach(function(x){ var c = 0, b = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === x.ym && d.w){ c += d.clients; b += d.booked || 0; } });
+    x.cl = c; x.bk = b; x.rate = c ? Math.round(b * 100 / c) : 0; x.above = c > 0 && x.rate >= m.aRate; });
+  m.aboveN = m.months.filter(function(x){ return x.closed && x.above && x.ym >= m.review.from && x.ym <= m.review.to; }).length;
+  m.stdMonths = m.months.filter(function(x){ return x.closed && x.worked && x.std && x.ym >= m.review.from && x.ym <= m.review.to; }).length;
+  m.deskRes = true;
+}
+function pgTodayDesk(m){
+  var p = m.p, tm = m.thisMonth, t = m.today, look = S.lookMine || {};
+  var lst = !look.make || !look.hair || !look.uniform ? lkWait()
+    : '<span class="chip g">✓ Checked in</span>';
+  var rows = [
+    { ic:'👋', t:'Welcome', ok: t.clients && t.pe >= t.clients, v: t.pe + ' / ' + t.clients },
+    { ic:'🥂', t:'Drink', ok: t.clients && t.co >= t.clients, v: t.co + ' / ' + t.clients },
+    { ic:'📅', t:'Next visit offered', ok: t.clients && t.pr >= t.clients, v: t.pr + ' / ' + t.clients }
+  ], allOk = rows.every(function(x){ return x.ok; });
+  var miss = []; MIS_DESK.forEach(function(x){ (t[x.miss] || []).forEach(function(nm){ if (miss.indexOf(nm) < 0) miss.push(nm); }); });
+  var stdCard = '<div class="card mc rise' + (allOk ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/welcome.webp" alt=""></div><div class="grow"><div class="t">Client care · today</div>' +
+    rows.map(function(x){ return '<div class="kv" style="margin-top:8px;font-size:15px"><span>' + (x.ok ? '✅' : '◻️') + ' ' + x.ic + ' ' + x.t + '</span><b>' + x.v + '</b></div>'; }).join('') +
+    (miss.length && !allOk ? '<div class="miss" style="margin-top:8px">' + miss.slice(0, 4).map(function(nm){ return '<span>' + e(nm) + '</span>'; }).join('') + (miss.length > 4 ? '<span>+' + (miss.length - 4) + '</span>' : '') + '</div>' : '') + '</div></div>';
+  var up1 = tm.cl && tm.rate >= m.aRate, up2 = tm.reviews >= Math.ceil(m.aRev5);
+  var r1 = '<div class="card mc rise' + (up1 ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/booked.webp" alt=""></div><div class="grow"><div class="t">Next visit booked</div>' +
+    '<div class="n">' + (tm.rate || 0) + '%</div><div class="why" style="margin-top:0">' + (tm.bk || 0) + ' of ' + (tm.cl || 0) + ' clients · you usually get ' + m.aRate + '%' + (up1 ? ' · ▲ more than usual' : '') + '</div>' + bar(tm.rate || 0, Math.max(1, m.aRate)) + '</div></div>';
+  var r2 = '<div class="card mc rise' + (up2 ? ' done' : '') + '"><div class="ic"><img class="mimg" src="medals/reviews.webp" alt=""></div><div class="grow"><div class="t">5★ reviews · the whole team</div>' +
+    '<div class="n">' + (tm.reviews || 0) + '</div><div class="why" style="margin-top:0">you usually get ' + m.aRev5 + (up2 ? ' · ▲ more than usual' : '') + '</div>' + bar(tm.reviews || 0, Math.max(1, Math.ceil(m.aRev5))) + '</div></div>';
+  var need = 8, rv = m.review;
+  /* Ligia 22/10: o proximo aumento da Joana vem do treino (Senior quando os 12 passos estiverem feitos, contrato), nao dos meses */
+  var jm = (m.study || {}).modules || {}, jc = 0; for (var ji = 1; ji <= 12; ji++){ if ((jm[ji] || {}).s === 'certified') jc++; }
+  return (S.live ? '' : '<div class="prac">🧪 Practice · only you see this · counting starts ' + dShort(S.liveFrom) + '</div>') +
+    '<div class="hero2 rise">' + av(p.person, 96) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div><div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
+      '<div class="revbox"><div class="rl">💷 Next raise · Senior</div><div class="rn"><b>' + jc + '</b> / 12</div><div class="rl">training steps done</div>' +
+      '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
+    homeOrDetail(m, {
+      res: '<div class="mis" style="grid-template-columns:1fr 1fr">' + r2 + r1 + '</div>',
+      care: '<div class="mis" style="grid-template-columns:1fr">' + stdCard + '</div>',
+      basics: '<div class="card rise"><div class="h">💄 My look today</div><div class="look">' + lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
+        '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + basicsRows(m),
+      resV: tm.reviews || 0, resUp: up2, resWord: up2 ? 'More than usual' : 'Keep going', resSub: 'you usually get ' + Math.round(m.aRev5) + ' · 📅 ' + (tm.rate || 0) + '% booked next visit', resSub2: '📅 ' + (tm.rate || 0) + '% booked next visit', resT: '5★ reviews'
+    });
+}
+
+/* Ligia 22/10 "tela 1": My performance = 4 blocos (o que importa: reviews e tips). Tocar abre o detalhe. */
+function basicsRows(m){
+  var tm = m.thisMonth, ym = TODAY.slice(0, 7), k = lookKeys(m, ym);
+  return '<div class="card rise"><div class="kv" style="font-size:16px"><span>⏰ On time</span><b>' + (!tm.known ? '·' : tm.late ? tm.late + ' late day' + (tm.late > 1 ? 's' : '') : '✓') + '</b></div>' +
+    '<div class="kv" style="margin-top:10px;font-size:16px"><span>💄 Look · days ready</span><b>' + tm.look + ' / ' + tm.worked + '</b></div></div>';
+}
+function careMonth(m){
+  var ym = TODAY.slice(0, 7), c = 0, a = 0;
+  m.days.forEach(function(d){ if (d.d.slice(0, 7) !== ym) return; if (m.desk){ c += 3 * d.clients; a += d.pe + d.co + d.pr; } else { c += d.clients; a += d.co; } });
+  return c ? Math.round(a * 100 / c) : null;
+}
+/* Ligia 22/10: comparar com o mes passado ATE O MESMO DIA (justo) + um empurrao quando ela toca */
+function prevYm(ym){ var d = new Date(ym + '-15T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() - 1); return d.toISOString().slice(0, 7); }
+function dom(){ return +TODAY.slice(8, 10); }
+function inWin(ds, ym){ return String(ds).slice(0, 7) === ym && +String(ds).slice(8, 10) <= dom(); }
+function cmpTxt(cur, prv, ym, unit){ if (prv == null) return ''; var d = cur - prv, mn = mName(prevYm(ym)), u = unit || '';
+  if (d > 0) return '<span class="up">▲ ' + (u === '£' ? '£' + d : d) + ' vs ' + mn + '</span>';
+  if (d < 0) return '<span class="dn">▼ ' + (u === '£' ? '£' + (-d) : -d) + ' vs ' + mn + '</span>';
+  return '<span class="mut">= ' + mn + '</span>'; }
+function homeOrDetail(m, P){
+  var ym = TODAY.slice(0, 7), py = prevYm(ym), pmn = mName(py);
+  var D = { res: '⭐ Results', care: '💛 Client care', basics: '🧱 My basics', book: '📞 Bookings I made' };
+  /* bookings feitos na mao (Salonized, nao online) */
+  var bkC = null, bkP = null, bkPT = null;
+  if (m.desk && m.bk){ bkC = 0; bkP = 0; bkPT = 0; Object.keys(m.bk).forEach(function(d){ if (inWin(d, ym)) bkC += m.bk[d]; if (inWin(d, py)) bkP += m.bk[d]; if (d.slice(0, 7) === py) bkPT += m.bk[d]; }); }
+  var tm = m.thisMonth, k = lookKeys(m, ym), NK = keysNeed(ym), cp = careMonth(m);
+  /* mes passado ate o mesmo dia */
+  var revP = null, careP = null;
+  if (m.desk){ var b5 = 0, cc = 0, ca = 0, seen = 0; (m.base || []).forEach(function(d){ if (!inWin(d.d, py)) return; seen++; b5 += d.reviews5 || 0; if (d.worked){ cc += 3 * d.clients; ca += (d.pe || 0) + (d.co || 0) + (d.pr || 0); } }); if (seen){ revP = b5; careP = cc ? Math.round(ca * 100 / cc) : null; } }
+  else if (m.feed && m.feed.length){ revP = m.feed.filter(function(x){ return x.kind === 'review' && inWin(x.d, py); }).length; }
+  var MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym], mq = MT[py];
+  var tipV = mt && mt.tips != null ? Math.round(mt.tips) : null;
+  var pDays = new Date(Date.UTC(+py.slice(0, 4), +py.slice(5, 7), 0)).getUTCDate(), tipP = mq && mq.tips != null ? Math.round(mq.tips * Math.min(1, dom() / pDays)) : null;
+  /* o empurrao: uma frase so, calculada na hora */
+  var t = m.today || {}, N = {};
+  if (revP != null) N.res = P.resV < revP ? (revP - P.resV + 1) + ' more 5★ and you beat ' + pmn + ' ⭐' : P.resV > revP ? 'You are ' + (P.resV - revP) + ' ahead of ' + pmn + '. Keep it up 🎉' : 'One more 5★ and you beat ' + pmn + ' ⭐';
+  if (bkC != null){ var left = bkPT - bkC + 1; N.book = left > 0 ? left + ' more and you pass all of ' + pmn + ' (' + bkPT + ') 🏆' : 'New record: more than all of ' + pmn + ' 🏆'; }
+  if (t.clients){ var gap = m.desk ? [['pr', 'Offer next visit to', '📅'], ['co', 'Offer a drink to', '🥂'], ['pe', 'Welcome', '👋']] : [['co', 'Check-out', '📋'], ['pe', 'Personalise', '💜']];
+    gap.some(function(g){ var n = t.clients - (t[g[0]] || 0); if (n > 0){ N.care = g[2] + ' ' + g[1] + ' ' + n + ' more client' + (n > 1 ? 's' : '') + ' today'; return true; } });
+    if (!N.care) N.care = 'Every client cared for today 💛'; }
+  N.basics = k.n >= NK ? 'Chest unlocked ✨' : '💄 Look ready every day this week = 🔑 ' + (k.n + 1) + ' of ' + NK;
+  if (S.det && (P[S.det] || S.det === 'book')){
+    var body = S.det === 'book' ? '<div class="card rise"><div class="kv" style="font-size:18px"><span>📞 ' + mName(ym) + ' · up to day ' + dom() + '</span><b>' + bkC + '</b></div>' +
+        '<div class="kv" style="margin-top:12px;font-size:18px"><span>' + pmn + ' · up to day ' + dom() + '</span><b>' + bkP + '</b></div>' +
+        '<div class="kv" style="margin-top:12px;font-size:18px"><span>All of ' + pmn + '</span><b>' + bkPT + '</b></div>' +
+        '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">Visits booked by the desk in Salonized (not online)</div></div>' : P[S.det];
+    return '<div class="row" style="align-items:center"><button class="btn ghost sm" onclick="S.det=null;render()">‹ Back</button><div class="big" style="font-size:22px">' + D[S.det] + '</div><span class="mut" style="margin-left:auto;font-weight:700">' + mName(ym) + '</span></div>' +
+      (N[S.det] ? '<div class="nudge rise">👉 ' + N[S.det] + '</div>' : '') + body;
+  }
+  var bOk = tm.worked && tm.look >= tm.worked && !tm.late;
+  function col(ok, warn){ return ok ? 'g' : warn ? 'y' : ''; }
+  function blk(id, ic, t2, v, word, c, sub){
+    return '<button class="card blk ' + c + ' rise"' + (id ? ' onclick="S.det=\'' + id + '\';render()"' : ' onclick="go(\'month\')"') + '><div class="bh">' + ic + ' ' + t2 + '</div><div class="bv">' + v + '</div><div class="bw">' + word + '</div><div class="bs">' + sub + '</div><div class="bt">' + (id ? 'Tap to see ›' : 'My month ›') + '</div></button>';
+  }
+  var bkPct = bkP ? Math.round((bkC - bkP) * 100 / bkP) : null;
+  return '<div class="blks' + (bkC != null ? ' five' : '') + '">' +
+    blk('res', '⭐', P.resT, '<span class="cnt" data-to="' + P.resV + '">0</span>', P.resWord || (P.resUp ? 'More than usual' : 'Keep going'), col(P.resUp, P.resV > 0), (cmpTxt(P.resV, revP, ym) || P.resSub) + (revP != null ? '<br>' + P.resSub2 : '')) +
+    blk('', '💷', 'My tips', tipV != null ? '£<span class="cnt" data-to="' + tipV + '">0</span>' : '·', mt && mt.final ? 'Paid' : 'This month so far', 'p', tipV != null ? cmpTxt(tipV, tipP, ym, '£') : '') +
+    (bkC != null ? blk('book', '📞', 'Bookings I made', '<span class="cnt" data-to="' + bkC + '">0</span>', bkPct == null ? 'This month' : bkPct > 0 ? '▲ ' + bkPct + '% vs ' + pmn : bkPct < 0 ? '▼ ' + (-bkPct) + '% vs ' + pmn : 'Same as ' + pmn, col(bkC >= bkP, bkC > 0), pmn + ' at this point: ' + bkP) : '') +
+    blk('care', '💛', 'Client care', cp == null ? '·' : '<span class="cnt" data-to="' + cp + '">0</span>%', cp == null ? 'No clients yet' : cp >= 90 ? 'Great' : cp >= 60 ? 'Almost' : 'Needs care', col(cp >= 90, cp >= 60), careP && cp != null ? pmn + ' at this point: ' + careP + '%' : (m.desk ? 'welcome · drink · next visit' : 'check-out every client')) +
+    blk('basics', '🧱', 'My basics', tm.look + ' / ' + tm.worked, 'days ready', col(bOk, tm.look > 0), '🔑 ' + k.n + ' / ' + NK + ' keys' + (lookGift(ym) ? ' · 🎁 ' + e(lookGift(ym)) : '')) +
+  '</div>';
+}
+/* o presente do look do mes (a Ligia escolhe em Settings: base, rimel, blush...) */
+function lookGift(ym){ return ((S.set.look_gift || {})[ym]) || ''; }
+/* chaves: cada semana com o look impecavel em todos os dias trabalhados = 1 chave. 4 chaves abrem o bau do mes.
+   Semana que nao fecha nao da chave, mas chave ganha nunca se perde. */
+var KEYS = 4;
+/* Ligia 22/10: "se o mes tem 5 semanas, poe 5 chaves": uma chave por semana do mes (semana que tem dia de salao, ter a sab, dentro do mes) */
+function keysNeed(ym){ var d = new Date(ym + '-01T12:00:00Z'), seen = {}, n = 0; while (d.toISOString().slice(0, 7) === ym){ var wd = d.getUTCDay(); if (wd >= 2 && wd <= 6){ var mon = new Date(d); mon.setUTCDate(d.getUTCDate() - ((wd + 6) % 7)); var k = mon.toISOString().slice(0, 10); if (!seen[k]){ seen[k] = 1; n++; } } d.setUTCDate(d.getUTCDate() + 1); } return n || KEYS; }
+function lookKeys(m, ym){
+  var wk = {}; m.days.forEach(function(d){ if (d.d.slice(0, 7) !== ym || !d.w) return; var dt = new Date(d.d + 'T12:00:00Z'), mon = new Date(dt); mon.setUTCDate(dt.getUTCDate() - ((dt.getUTCDay() + 6) % 7));
+    var k = mon.toISOString().slice(0, 10), w = wk[k] || (wk[k] = { n: 0, ok: 0, last: d.d }); w.n++; if (d.look) w.ok++; if (d.d > w.last) w.last = d.d; });
+  var ks = Object.keys(wk).sort().map(function(k){ var w = wk[k], closed = addDays(k, 6) < TODAY; return w.ok >= w.n ? 'key' : closed ? 'miss' : 'open'; });
+  return { list: ks, n: ks.filter(function(x){ return x === 'key'; }).length };
+}
+function lookStrip(m){
+  var ym = TODAY.slice(0, 7), g = lookGift(ym), k = lookKeys(m, ym), NK = keysNeed(ym), done = k.n >= NK;
+  var lastK = k.list.lastIndexOf('key'), fresh = lastK >= 0 && lastK >= k.list.length - 2;
+  var slots = []; for (var i = 0; i < Math.max(NK, k.list.length); i++){ var st = k.list[i] || 'open'; slots.push('<i class="ky ' + st + (i === lastK && fresh ? ' new' : '') + '">' + (st === 'key' ? '🔑' : st === 'miss' ? '·' : '') + '</i>'); }
+  return '<div class="lookgift' + (done ? ' ok' : '') + '"><span>🎁 ' + (g ? e(g) : 'This month\'s make-up gift') + '</span><span class="kys">' + slots.join('') + '</span><b>' + (done ? 'Chest unlocked ✨' : k.n + ' / ' + NK + ' keys') + '</b></div>';
+}
+function stdCheck(m){
+  var tm = m.thisMonth, cl = 0, co = 0;
+  m.days.forEach(function(d){ if (d.d.slice(0, 7) === tm.ym){ cl += d.clients; co += d.co; } });
+  return [
+    { ic:'⏰', t:'On time', ok: !tm.late, v: tm.late ? tm.late + ' late' : '✓' },
+    { ic:'💄', t:'Look', ok: tm.worked && tm.look >= tm.worked, v: tm.look + ' / ' + tm.worked },
+    { ic:'📋', t:'Check-out', ok: cl && co >= cl, v: co + ' / ' + cl }
+  ];
+}
+function pgTodayRes(m){
+  var p = m.p, tm = m.thisMonth, look = S.lookMine || {}, fy = m.fy[TODAY.slice(0, 7)] || { rev: [], back: [] };
+  var lst = !look.make || !look.hair || !look.uniform ? lkWait()
+    : look.check_ok === true ? '<span class="chip g">✓ Joana confirmed</span>'
+    : look.check_ok === false ? '<span class="chip r">✗ ' + e(look.check_note || 'Not today') + '</span>'
+    : '<span class="chip y">⏳ Waiting for Joana</span>';
+  var sc = stdCheck(m), allStd = sc.every(function(x){ return x.ok; });
+  function resCard(img, title, v, a, names, i){
+    var up = v >= Math.ceil(a);
+    return '<div class="card mc rise' + (up ? ' done' : '') + '" style="animation-delay:' + (0.16 + i * 0.08) + 's"><div class="ic"><img class="mimg" src="medals/' + img + '.webp" alt=""></div><div class="grow"><div class="t">' + title + '</div>' +
+      '<div class="n">' + v + '</div><div class="why" style="margin-top:0">you usually get ' + a + (up ? ' · ▲ more than usual' : '') + '</div>' + bar(v, Math.max(1, Math.ceil(a))) +
+      (names.length ? '<div class="miss ok" style="margin-top:10px">' + names.slice(0, 4).map(function(nm){ return '<span>' + e(nm) + '</span>'; }).join('') + (names.length > 4 ? '<span>+' + (names.length - 4) + '</span>' : '') + '</div>' : '') + '</div></div>';
+  }
+  var stdCard = '<div class="card mc rise' + (allStd ? ' done' : '') + '" style="animation-delay:.32s"><div class="ic"><img class="mimg" src="medals/ready.webp" alt=""></div><div class="grow"><div class="t">My Standard</div>' +
+    sc.map(function(x){ return '<div class="kv" style="margin-top:10px;font-size:16px"><span>' + (x.ok ? '✅' : '◻️') + ' ' + x.ic + ' ' + x.t + '</span><b>' + x.v + '</b></div>'; }).join('') +
+    '<div class="why">' + (allStd ? 'All in place' : 'This is the job, every day') + '</div></div></div>';
+  var need = 8, rv = m.review;
+  return (S.live ? '' : '<div class="prac">🧪 Practice · only you see this · counting starts ' + dShort(S.liveFrom) + '</div>') +
+    '<div class="hero2 rise">' + av(p.person, 96) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div>' +
+      '<div class="sub">' + mName(TODAY.slice(0, 7)) + ' · my performance</div></div>' +
+      '<div class="revbox"><div class="rl">💷 Salary review · Dec ' + rv.year + '</div><div class="rn"><b>' + m.aboveN + '</b> / ' + need + '</div><div class="rl">months better than usual</div>' +
+        '<div class="xpbar" style="width:100%"><i data-w="' + Math.round(Math.min(1, m.aboveN / need) * 100) + '" style="width:0"></i></div></div></div>' +
+    homeOrDetail(m, {
+      res: '<div class="mis" style="grid-template-columns:1fr 1fr">' + resCard('reviews', 'New clients who left 5★', fy.rev.length, m.aRev, fy.rev.slice().reverse(), 1) + resCard('magic', 'New clients who came back', fy.back.length, m.aBack, fy.back.slice().reverse(), 2) + '</div>' + goalCard(m),
+      care: '<div class="mis" style="grid-template-columns:1fr">' + stdCard + '</div>',
+      basics: '<div class="card rise" style="animation-delay:.08s"><div class="h">💄 My look today</div><div class="look">' +
+        lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
+        '<div class="lkst">' + lst + '</div></div>' + lookStrip(m) + '</div>' + basicsRows(m),
+      resV: fy.rev.length, resUp: fy.rev.length >= Math.ceil(m.aRev), resSub: 'you usually get ' + m.aRev + ' · 🔁 ' + fy.back.length + ' came back', resSub2: '🔁 ' + fy.back.length + ' came back', resT: 'New clients 5★'
+    });
+}
+var RES = [
+  { img:'ready', t:'My Standard', why:'On time, look and check-out, every day' },
+  { img:'reviews', t:'New clients who left 5★', why:'Compared with your own average' },
+  { img:'magic', t:'New clients who came back', why:'Compared with your own average' }
+];
+/* comissao Eminence da Michelle (plano dela): por mes, pela quantidade de produtos; a % vale sobre o total vendido */
+var COMM = [{ from: 1, pct: 5 }, { from: 11, pct: 8 }, { from: 21, pct: 12 }, { from: 31, pct: 15 }];
+function commOf(units, gbp){ gbp = gbp / 1.2; var t = null; COMM.forEach(function(c){ if (units >= c.from) t = c; }); var nx = COMM.filter(function(c){ return c.from > units; })[0];
+  return { pct: t ? t.pct : 0, gbp: t ? Math.round(gbp * t.pct) / 100 : 0, next: nx ? { left: nx.from - units, pct: nx.pct } : null }; }
+function pgCommission(m){
+  var ym = TODAY.slice(0, 7), h = m.hc[ym] || { units: 0, gbp: 0, homecare_clients: 0, facial_clients: 0 }, c = commOf(h.units, +h.gbp || 0);
+  var past = Object.keys(m.hc).sort().filter(function(k){ return k < ym; }).slice(-3).map(function(k){ var x = m.hc[k], cc = commOf(x.units, +x.gbp || 0); return '<div class="kv" style="margin-top:8px"><span>' + mName(k) + '</span><b>' + x.units + ' · £' + Math.round(+x.gbp) + ' → £' + cc.gbp.toFixed(2) + '</b></div>'; }).join('');
+  return '<div class="card grow" style="flex:1.6"><div class="h">🧴 Éminence commission · ' + mName(ym) + '</div>' +
+    '<div class="row" style="align-items:flex-end;gap:22px"><div><div class="big">£' + c.gbp.toFixed(2) + '</div><div class="mut" style="font-weight:700">you earned so far</div></div>' +
+    '<div><div class="big" style="font-size:26px">' + h.units + '</div><div class="mut" style="font-weight:700">products · £' + Math.round(+h.gbp || 0) + ' sold</div></div>' +
+    '<div><div class="big" style="font-size:26px">' + c.pct + '%</div><div class="mut" style="font-weight:700">your rate</div></div></div>' +
+    '<div class="tiers">' + COMM.map(function(t){ return '<span class="' + (c.pct === t.pct ? 'on' : c.pct > t.pct ? 'done' : '') + '">' + t.from + '+ · ' + t.pct + '%</span>'; }).join('') + '</div>' +
+    (c.next ? '<div class="chip" style="display:inline-block;margin-top:10px">' + c.next.left + ' more → ' + c.next.pct + '% on everything</div>' : '<div class="chip g" style="display:inline-block;margin-top:10px">Top rate 🎉</div>') +
+    '<div class="mut" style="font-size:12px;font-weight:600;margin-top:8px">On sales without VAT · products land when the invoice closes</div>' +
+    (past ? '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:13px">' + past + '</div>' : '') + '</div>' +
+    (function(){ var dd = (m.hcd || []).filter(function(x){ return x.facial_clients > 0 || x.units > 0; }).slice(-6).reverse(); if (!dd.length) return '';
+      return '<div class="card grow" style="overflow:hidden"><div class="h">💆 Facials vs 🧴 products · by day</div><table class="tbl" style="font-size:14px"><tr><th>Day</th><th>💆 Facial clients</th><th>🧴 Bought</th><th>Products</th></tr>' +
+        dd.map(function(x){ var pend = x.d >= addDays(TODAY, -2) && !x.units; return '<tr><td><b>' + dShort(x.d) + '</b></td><td>' + x.facial_clients + '</td><td>' + (pend ? '<span class="mut">⏳</span>' : x.buyers + ' of ' + x.facial_clients) + '</td><td>' + (x.units ? '<b>' + x.units + '</b>' : pend ? '' : '·') + '</td></tr>'; }).join('') + '</table></div>'; })();
+}
+/* MY BONUS: so extras, so para quem quer. Nada aqui pesa na performance. */
+function pgBonus(m){
+  var tm = m.thisMonth, hc = m.hc ? (m.hc[TODAY.slice(0, 7)] || { homecare_clients: 0, units: 0 }) : null;
+  var X = [
+    { ic:'🎥', t:'Videos', v: tm.content || 0, u:'approved this month', how:'You choose what and when' },
+    { ic:'🧴', t:'Homecare', v: hc ? hc.units : '·', u: hc ? 'products sold this month' : 'products sold', how:'Commission on every sale' },
+    { ic:'🎓', t:'Skills', v: m.refreshN || 0, u:'new techniques or teaching', how:'Counts for your next level' }
+  ];
+  var boxes = m.boxes.slice(0, 8);
+  if (m.hc) X = X.filter(function(x){ return x.ic !== '🧴'; });
+  /* Ligia 22/10: a Joana nao vende homecare; o extra dela e drink pago e membership (toda membership nova do salao conta) */
+  if (m.desk){ var db = m.db || { drinks_n: 0, drinks_gbp: 0, members: 0 }, dp = +S.set.desk_drink_pct || 10, mg = +S.set.desk_member_gbp || 10;
+    X = [ X[0], X[2] ]; }   /* Ligia 22/10: drinks e membership viram comissao so quando ela for Manager (aparecem no My path) */
+  var xCard = function(x){ return '<div class="card grow"><div class="h">' + x.ic + ' ' + x.t + '</div><div class="big">' + x.v + '</div><div class="mut" style="font-weight:700">' + x.u + '</div><div class="chip" style="margin-top:10px;display:inline-block">' + x.how + '</div></div>'; };
+  var surp = '<div class="card grow" style="flex:2;min-height:0"><div class="h">🎁 My surprises</div>' + (boxes.length ? '<div class="boxes">' + boxes.slice(0, m.hc ? 3 : 6).map(function(b){
+      var st = b.status === 'opened' || b.status === 'given' ? 'open' : b.status === 'ready' ? 'ready' : 'wait';
+      return '<button class="card bx ' + st + '" ' + (st === 'ready' ? 'onclick="openBox(' + b.id + ')"' : '') + '><div class="bi"><img src="medals/' + (st === 'open' ? 'chest_open' : 'chest_closed') + '.webp" alt=""></div>' +
+        '<div class="bn">' + (st === 'open' ? e(b.prize_name || '') : st === 'ready' ? 'Tap to open!' : 'Coming soon') + '</div><div class="mut" style="font-size:11px">' + e(b.reason || '') + '</div></button>';
+    }).join('') + '</div>' : '<div class="mut" style="font-weight:600">Surprises arrive when you least expect ✨</div>') + '</div>';
+  var note = '<div class="mut" style="text-align:center;font-weight:700">✨ Only if you want · it never counts against you</div>';
+  if (m.hc) return '<div class="row" style="flex:1.3;min-height:0">' + pgCommission(m) + '</div>' + '<div class="row" style="flex:1;min-height:0">' + X.map(xCard).join('') + surp + '</div>' + note;
+  return '<div class="row">' + X.map(xCard).join('') + '</div>' + note + surp;
+}
+function pgToday(m){
+  if (m.res && !m.hide) return pgTodayRes(m);
+  if (m.deskRes && !m.hide) return pgTodayDesk(m);
+  var t = m.today, p = m.p, season = (S.set.season || {})[TODAY.slice(0, 7)], look = S.lookMine || {};
+  if (m.hide){
+    var left = Math.max(0, Math.round((new Date(S.liveFrom) - new Date(TODAY)) / 864e5));
+    return '<div class="welcome"><div class="hero2">' + av(p.person, 120) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + ' ✨</div>' +
+      '<div class="sub">Your Soul Path starts ' + dShort(S.liveFrom) + '</div></div>' +
+      '<div class="flame"><div class="f">⏳</div><b>' + left + '</b><span>days to go</span></div></div>' +
+      goalCard(m) + '<div class="mis">' + (m.res ? RES : misOf(m)).map(function(x){ return '<div class="card mc"><div class="ic">' + (x.img ? '<img class="mimg" src="medals/' + x.img + '.webp" alt="">' : x.ic) + '</div><div class="grow"><div class="t">' + x.t + '</div><div class="why" style="font-size:15px">' + x.why + '</div></div></div>'; }).join('') + '</div>' +
+      '<div class="card" style="text-align:center;font-weight:700;color:var(--pur)">' + (m.res ? '🪨 every star month is a stone · 🎁 a gift on every stone' : '🔥 3 missions a day · 💄 ready every day · 🎁 surprises on the way') + '</div></div>';
+  }
+  var MIS = misOf(m), CK = 'Joana';
+  var n = t.clients ? MIS.filter(function(x){ return t[x.f] >= t.clients; }).length : 0, doneAll = t.clients > 0 && n === 3;
+  var deg = Math.round(n / 3 * 360);
+  var lst = !look.make || !look.hair || !look.uniform ? lkWait()
+    : look.check_ok === true ? '<span class="chip g">✓ ' + CK + ' confirmed</span>'
+    : look.check_ok === false ? '<span class="chip r">✗ ' + e(look.check_note || 'Not today') + '</span>'
+    : '<span class="chip y">⏳ Waiting for ' + CK + '</span>';
+  var mid = p.motivator === 'stability' && m.next ? '<div class="sub">' + m.pathPct + '% to ' + e(m.next.name) + (gbp(p, m.next.plus) ? ' · ' + gbp(p, m.next.plus) : '') + '</div>'
+    : p.motivator === 'reference' ? '<div class="sub">⭐ ' + m.newRev + ' new clients loved you · ✨ ' + m.magic + ' came back</div>'
+    : '<div class="sub">' + (doneAll ? 'All missions done. Today counts ⭐' : t.clients ? (3 - n) + ' mission' + (3 - n > 1 ? 's' : '') + ' to go today' : 'No clients yet today') + '</div>';
+  if (doneAll && S.confetti !== TODAY){ S.confetti = TODAY; setTimeout(confetti, 300); }
+  var xp = xpOf(m), lv = Math.floor(xp / 500) + 1, inLv = xp % 500;
+  var tmL = m.thisMonth.late || 0;
+  var std = '<div class="std' + (tmL ? ' warn' : '') + '">🧱 Standard ' + (tmL ? '· ' + tmL + ' late day' + (tmL > 1 ? 's' : '') + ' this month · 🔒 bonus and level wait for it' : '✓') + '</div>';
+  return (S.live ? '' : '<div class="prac">🧪 Practice · only you see this · counting starts ' + dShort(S.liveFrom) + '</div>') +
+    (season ? '<div class="banner">🏆 ' + e(mName(TODAY.slice(0, 7))) + ' · ' + e(season) + '</div>' : '') +
+    '<div class="hero2 rise">' + av(p.person, 104) + '<div style="flex:1;z-index:1"><div class="hi serif">' + greet() + ', ' + e(p.person) + '</div>' + mid +
+      '<div class="xpbar"><i data-w="' + Math.round(inLv / 5) + '" style="width:0"></i></div><div class="xptag">⭐ Lv ' + lv + ' · <span data-count="' + xp + '">0</span> XP</div>' + std + '</div>' +
+      '<div class="ring" data-deg="' + deg + '"><div class="in"><b>' + n + '/3</b><span>missions</span></div></div>' +
+      '<div class="flame"><div class="f">🔥</div><b>' + m.streak + '</b><span>days · 🧊 ' + m.freezeLeft + '</span></div></div>' +
+    '<div class="card rise" style="animation-delay:.08s"><div class="h">💄 My look today</div><div class="look">' +
+      lkBtn('make', '💄 Make-up', look) + lkBtn('hair', '💇‍♀️ Hair', look) + lkBtn('uniform', '👗 Uniform', look) +
+      '<div class="lkst">' + lst + '</div></div></div>' + goalCard(m) +
+    '<div class="mis">' + MIS.map(function(x){
+      var v = t[x.f], ok = t.clients > 0 && v >= t.clients, miss = (t[x.miss] || []).map(function(nm){ return nm || 'Client'; });
+      return '<div class="card mc rise' + (ok ? ' done' : '') + (S.justWon === x.k ? ' win' : '') + '" style="animation-delay:' + (0.16 + MIS.indexOf(x) * 0.08) + 's"><div class="ic"><img class="mimg" src="medals/' + x.img + '.webp" alt="" onerror="this.outerHTML=\'' + x.ic + '\'"></div><div class="grow"><div class="t">' + x.t + '</div>' +
+        '<div class="n">' + (t.clients ? v + ' of ' + t.clients : '·') + (ok ? ' ✓' : '') + '</div>' + bar(v, t.clients || 1) +
+        '<div class="why">' + x.why + '</div>' +
+        (miss.length && !ok ? '<div class="miss" style="margin-top:8px">' + miss.slice(0, 5).map(function(nm){ return '<span>' + e(nm) + '</span>'; }).join('') + (miss.length > 5 ? '<span>+' + (miss.length - 5) + '</span>' : '') + '</div>' : '') +
+        '</div></div>';
+    }).join('') + '</div>';
+}
+var GOALW = { facial: 'facial clients', nails: 'nail clients', massage: 'massage clients', wax: 'wax clients', brows: 'brow and lash clients', all: 'clients' };
+function goalCard(m){
+  var G = m.goal; if (!G) return '';
+  var g = G.g, ok = G.rate >= g.target, pend = (G.cur.pending || []).map(function(n){ return n || 'Client'; });
+  return '<div class="card goalc" style="display:flex;gap:18px;align-items:center;border:2px solid ' + (ok ? 'var(--grn)' : '#F1DFB2') + '">' +
+    '<div style="flex:1.2;min-width:0"><div class="h" style="margin-bottom:6px">🎯 My goal · ' + e(g.title) + '</div>' +
+      '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span class="big" style="font-size:30px;color:' + (ok ? 'var(--grn)' : 'var(--pur)') + '">' + G.rate + '%</span>' +
+      '<span style="font-weight:600">of ' + GOALW[g.preset] + ' came back · <b>' + G.cur.back + ' of ' + G.cur.clients + '</b></span><span class="chip y">goal ' + g.target + '%</span>' +
+      (G.before != null ? '<span class="mut" style="font-size:12px;font-weight:600">before: ' + G.before + '%</span>' : '') + '</div>' +
+      '<div style="margin-top:8px">' + bar(G.rate, g.target, ok ? 'var(--grn)' : 'var(--gold)') + '</div></div>' +
+    (pend.length ? '<div class="gpend" style="flex:1;min-width:0"><div class="h" style="margin-bottom:6px">💌 Next visit not booked</div><div class="miss">' + pend.slice(0, 6).map(function(n){ return '<span>' + e(n) + '</span>'; }).join('') + (pend.length > 6 ? '<span>+' + (pend.length - 6) + '</span>' : '') + '</div></div>' : '') +
+    '</div>';
+}
+function xpOf(m){ var x = 0; (m.days || []).forEach(function(d){ x += d.co * 10 + d.pr * 20 + d.pe * 30 + d.content * 30 + d.reviews5 * 50 + (d.full ? 100 : 0) + (d.look ? 10 : 0); }); return x; }
+/* depois de cada render: anel, barras e numeros andam ate o valor */
+function animateIn(){
+  requestAnimationFrame(function(){
+    document.querySelectorAll('.ring[data-deg]').forEach(function(r){ r.style.setProperty('--deg', r.getAttribute('data-deg') + 'deg'); });
+    document.querySelectorAll('.xpbar i[data-w]').forEach(function(b){ b.style.width = b.getAttribute('data-w') + '%'; });
+    document.querySelectorAll('[data-count]').forEach(function(el){ var to = +el.getAttribute('data-count'), t0 = performance.now();
+      (function step(t){ var k = Math.min(1, (t - t0) / 1100); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString('en-GB'); if (k < 1) requestAnimationFrame(step); })(t0); });
+  });
+}
+function xpFloat(txt, el){ var r = el ? el.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0 }; var d = document.createElement('div'); d.className = 'xpf'; d.textContent = txt;
+  d.style.left = (r.left + r.width / 2 - 40) + 'px'; d.style.top = (r.top + 10) + 'px'; document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 1500); }
+/* DEMO: mostra como fica quando ela fecha uma missao (so para a previa) */
+function demoWin(){ var m = S.M[S.view]; if (!m) return; var t = m.today, x = misOf(m).filter(function(q){ return t[q.f] < t.clients; })[0]; if (!x) return;
+  t[x.f] = t.clients; t[x.miss] = []; t['m' + (MIS.indexOf(x) + 1)] = true; S.justWon = x.k; render();
+  var c = document.querySelectorAll('.mc')[MIS.indexOf(x)]; xpFloat('+' + (t.clients * 30) + ' XP', c);
+  if (MIS.every(function(q){ return t[q.f] >= t.clients; })) setTimeout(function(){ confetti(); xpFloat('+100 XP ⭐', document.querySelector('.ring')); }, 500); }
+function demoLevel(name){ var d = document.createElement('div'); d.className = 'lvlup'; d.innerHTML = '<div class="box"><div class="big1">🔓</div><h2>' + e(name) + '</h2><div style="font-weight:700;opacity:.9">New level unlocked ✨</div></div>'; document.body.appendChild(d); confetti(); setTimeout(function(){ d.remove(); }, 2600); }
+function confetti(){ var em = ['✨','💜','⭐','🎉','👑','💖']; for (var i = 0; i < 46; i++){ var s = document.createElement('span'); s.className = 'conf'; s.textContent = em[i % em.length];
+  s.style.left = Math.random() * 100 + 'vw'; s.style.animationDelay = Math.random() * 0.9 + 's'; s.style.fontSize = (16 + Math.random() * 18) + 'px'; document.body.appendChild(s); setTimeout(function(x){ return function(){ x.remove(); }; }(s), 3800); } }
+/* LOOK375 (22/10) Ligia: "ela ja clica la no dash dela": o look nao se marca mais aqui. Joana marca no Check in da recepcao,
+   as terapeutas no bloco 💄 do iPad; aqui so mostra o que chegou. */
+function lkBtn(k, label, look){ var on = !!look[k]; return '<div class="lk ro' + (on ? ' on' : '') + '">' + label + (on ? ' ✓' : '') + '</div>'; }
+function lkWait(){ return '<span class="mut">' + (S.role === 'desk' || (S.view === 'Joana') ? 'Comes from your Check in' : 'Comes from the 💄 on the iPad') + '</span>'; }
+function loadMyLook(){ return get('bsb_sp_look?date=eq.' + TODAY + '&person=eq.' + encodeURIComponent(S.view)).then(function(r){ S.lookMine = r[0] || {}; }).catch(function(){ S.lookMine = {}; }); }
+function lookTap(k){
+  if (S.role !== 'therapist' && S.role !== 'admin' && S.role !== 'desk') return;
+  var L = Object.assign({ make:false, hair:false, uniform:false }, S.lookMine || {});
+  L[k] = !L[k];
+  var row = { date: TODAY, person: S.view, make: L.make, hair: L.hair, uniform: L.uniform, marked_at: new Date().toISOString(), check_ok: null, check_note: null, check_by: null, check_at: null };
+  S.lookMine = row; render();
+  upsert('bsb_sp_look', row, 'date,person').then(function(){ if (row.make && row.hair && row.uniform) toast('💄 Sent to ' + (S.role === 'desk' ? 'Aluana' : 'Joana')); }).catch(function(){ toast('Not saved. Try again.'); });
+}
+
+/* ===== MY MONTH ===== */
+function pgMonth(m){
+  var ms = m.months; if (!ms.length) return '<div class="load">No days yet</div>';
+  var i = S.mi == null || S.mi >= ms.length ? ms.length - 1 : S.mi; S.mi = i;
+  var x = ms[i], ym = x.ym, starPct = +S.set.star_pct || 80;
+  var first = new Date(ym + '-01T12:00:00Z'), lead = (first.getUTCDay() + 6) % 7;
+  var dmap = {}; m.days.forEach(function(d){ dmap[d.d] = d; });
+  var last = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 0)).getUTCDate(), cells = '';
+  var wk = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px">' + ['M','T','W','T','F','S','S'].map(function(w){ return '<div class="mut" style="font-size:11px;font-weight:700;text-align:center">' + w + '</div>'; }).join('') + '</div>';
+  for (var k = 0; k < lead; k++) cells += '<div></div>';
+  for (var dd = 1; dd <= last; dd++){
+    var ds = ym + '-' + String(dd).padStart(2, '0'), d = dmap[ds], bg = '#F6F5FB', fg = 'var(--mut)', ic = '';
+    if (m.res && d && d.w){
+      var ev = (m.feed || []).filter(function(x){ return String(x.d) === ds; }), nr2 = ev.filter(function(x){ return x.kind === 'review'; }).length, nb = ev.length - nr2;
+      var stdOk = !d.late && d.look && (!d.clients || d.co >= d.clients);
+      bg = ds === TODAY ? 'var(--pur2)' : stdOk ? 'var(--grn2)' : '#F6F5FB'; fg = ds === TODAY ? 'var(--pur)' : stdOk ? 'var(--grn)' : 'var(--mut)';
+      ic = (stdOk ? '✓ ' : '') + (nr2 ? '⭐' + (nr2 > 1 ? nr2 : '') : '') + (nb ? '🔁' + (nb > 1 ? nb : '') : '');
+    } else if (d && d.w){
+      var n = (d.m1 ? 1 : 0) + (d.m2 ? 1 : 0) + (d.m3 ? 1 : 0);
+      /* Ligia 22/10: sem "0/3" (so desanima); o dia mostra o cuidado com a cliente em % e o 💄 */
+      var cp = d.clients ? Math.round((d.pe + d.co + d.pr) / (3 * d.clients) * 100) : 0;
+      if (d.full){ bg = 'var(--grn2)'; fg = 'var(--grn)'; ic = '⭐ '; } else if (ds === TODAY){ bg = 'var(--pur2)'; fg = 'var(--pur)'; ic = cp + '% '; } else { bg = cp >= 70 ? 'var(--grn2)' : cp >= 40 ? '#FFF7E0' : '#F6F5FB'; fg = cp >= 70 ? 'var(--grn)' : cp >= 40 ? '#B07F17' : 'var(--mut)'; ic = cp + '% '; }
+      if (d.look) ic += '💄';
+    } else if (ds > TODAY || !d) { bg = '#fff'; }
+    cells += '<div style="background:' + bg + ';color:' + fg + ';border-radius:10px;padding:4px;text-align:center;font-weight:700;font-size:12px;"><div class="dn">' + dd + '</div><div style="font-size:11px">' + ic + '</div></div>';
+  }
+  var nr = m.nr[ym] || { new_clients: 0, new_reviews: 0 };
+  var tp = S.tips[ym], prevYm = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() - 1, 15)).toISOString().slice(0, 7), tq = S.tips[prevYm];
+  var tpc = tp && tp.clients ? tp.tips / tp.clients : null, tqc = tq && tq.clients ? tq.tips / tq.clients : null;
+  var MT = (S.myTips || {})[m.p.person] || {}, mt = MT[ym], mq = MT[prevYm];
+  var myTip = mt && mt.tips != null ? '£' + Math.round(mt.tips) : '·', myTipSub = (mt && mt.final ? 'paid' : 'this month so far') + (mq && mq.tips != null ? ' · last month £' + Math.round(mq.tips) : '');
+  var arrow = tpc != null && tqc != null ? (tpc > tqc ? ' <span style="color:var(--grn)">▲</span>' : tpc < tqc ? ' <span style="color:var(--red)">▼</span>' : '') : '';
+  function tile(ic, t, v, sub, ok){ return '<div class="card' + (ok ? ' gate ok' : '') + '" style="display:flex;flex-direction:column;gap:4px"><div class="h" style="margin:0;font-size:11px">' + ic + ' ' + t + '</div><div class="big" style="font-size:24px">' + v + '</div><div class="mut" style="font-size:12px;font-weight:600">' + sub + '</div></div>'; }
+  if (m.hide) return '<div class="welcome"><div class="hero2">' + av(m.p.person, 110) + '<div style="z-index:1"><div class="hi serif">Your first month starts ' + dShort(S.liveFrom) + '</div><div class="sub">Every full day turns gold ⭐ here</div></div></div></div>';
+  return '<div class="row" style="align-items:center"><button class="btn ghost sm" ' + (i > 0 ? 'onclick="S.mi=' + (i - 1) + ';render()"' : 'disabled style="opacity:.3"') + '>‹</button>' +
+    '<div class="big" style="font-size:22px">' + mName(ym) + ' ' + ym.slice(0, 4) + '</div>' +
+    '<button class="btn ghost sm" ' + (i < ms.length - 1 ? 'onclick="S.mi=' + (i + 1) + ';render()"' : 'disabled style="opacity:.3"') + '>›</button>' +
+    '<span class="chip ' + ((m.res ? x.closed && x.above : x.star) ? 'g' : x.closed ? 'k' : '') + '" style="margin-left:auto">' + (m.res ? (x.closed ? (x.above ? '▲ Better than your usual' : 'Month closed') : 'In progress') : (x.star ? '⭐ Star month' : x.closed ? 'Month closed' : 'In progress')) + '</span></div>' +
+    '<div class="card" style="flex:1;min-height:0;display:flex;flex-direction:column">' + wk + '<div class="cal">' + cells + '</div></div>' +
+      (m.res ? '<div class="strip">' + (function(){
+        var cl = 0, co = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ cl += d.clients; co += d.co; } });
+        return tile('⏰', 'On time', x.known ? x.onTimePct + '%' : '·', !x.known ? 'no data yet' : x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
+          tile('💄', 'Look', x.look + ' / ' + x.worked, 'days ready', x.worked && x.look >= x.worked) +
+          tile('📋', 'Check-out', co + ' / ' + cl, 'clients done', cl && co >= cl) +
+          tile('⭐', 'New clients 5★', x.rev || 0, 'you usually get ' + m.aRev, (x.rev || 0) >= Math.ceil(m.aRev)) +
+          tile('🔁', 'Came back', x.back || 0, 'you usually get ' + m.aBack, (x.back || 0) >= Math.ceil(m.aBack)) +
+          tile('💛', 'Your tips', myTip, myTipSub, false); })() + '</div>' :
+      '<div class="strip">' +
+        (function(){ var c = 0, a = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ c += d.clients; a += d.pe + d.co + d.pr; } }); var cp = c ? Math.round(a / (3 * c) * 100) : 0; return tile('💛', 'Client care', cp + '%', 'welcome · drink · next visit', cp >= 90); })() +
+        tile('💄', 'Look', x.look + ' / ' + x.worked, 'days ready', x.worked && x.look >= x.worked) +
+        tile('⏰', 'On time', x.known ? x.onTimePct + '%' : '·', !x.known ? 'no data yet' : x.late ? x.late + ' late day' + (x.late > 1 ? 's' : '') : 'no late days', x.known && !x.late) +
+        (m.desk ? (function(){ var c = 0, b = 0; m.days.forEach(function(d){ if (d.d.slice(0, 7) === ym){ c += d.clients; b += d.booked || 0; } });
+          return tile('📅', 'Next visit booked', b + ' of ' + c, (c ? pct(b, c) + '% of clients' : 'clients'), false) + tile('⭐', '5★ reviews', x.reviews, 'the whole team', false); })() : '') +
+        (m.desk ? '' : tile('📸', 'Videos', x.content, 'goal ' + (+S.set.content_goal || 8), x.content >= (+S.set.content_goal || 8))) +
+        (m.desk ? '' : tile('⭐', 'New clients who reviewed', nr.new_reviews + ' of ' + nr.new_clients, (nr.new_clients ? pct(nr.new_reviews, nr.new_clients) + '% · ' : '') + 'they loved the first visit', false)) +
+        (m.hc ? (function(){ var h = m.hc[ym] || { facial_clients: 0, homecare_clients: 0, gbp: 0 }; return tile('🧴', 'Éminence at home', h.homecare_clients + ' of ' + h.facial_clients, (h.facial_clients ? pct(h.homecare_clients, h.facial_clients) + '% of facial clients' : 'facial clients') + (ym === TODAY.slice(0, 7) ? ' · products land when the invoice closes' : ''), false); })() : '') +
+        tile('💛', 'Your tips', myTip, myTipSub, false) +
+      '</div>');
+}
+
+/* ===== MY PLAN ===== */
+function reviewDate(){ var rm = +S.set.review_month || 12, y = +TODAY.slice(0, 4), mo = +TODAY.slice(5, 7); if (mo > rm) y++; return mName(y + '-' + String(rm).padStart(2, '0')) + ' ' + y; }
+function pgPath(m){
+  var L = S.set.levels || [], p = m.p, tm = m.thisMonth, starPct = +S.set.star_pct || 80, goal = +S.set.content_goal || 8;
+  /* o mapa (arte da Ligia): cada parada e um nivel; o portao dourado e o My dream */
+  var SPOTS = [[26.8,57.6],[55.5,55.7],[76.7,42.7]], GATE = [84.9,17.5];
+  /* o ano ate a revisao de salario: 4 pedras = 4 trimestres; a 2a tem a reuniao dos 6 meses; o portao e dezembro */
+  var STONES = [[20.4,35.5],[26.8,57.6],[55.5,55.7],[76.7,42.7]], road2 = '';
+  if (m.res || m.deskRes){
+    var rv = m.review, mos = [], d0 = new Date(rv.from + '-15T12:00:00Z');
+    while (true){ var k = d0.toISOString().slice(0, 7); if (k > rv.to) break; mos.push(k); d0.setUTCMonth(d0.getUTCMonth() + 1); }
+    var bs = Math.floor(mos.length / 4), ex = mos.length % 4, Q = [], at = 0; for (var qi = 0; qi < 4; qi++){ var sz = bs + (qi < ex ? 1 : 0); Q.push(mos.slice(at, at + sz)); at += sz; }
+    var byYm = {}; m.months.forEach(function(x){ byYm[x.ym] = x; });
+    var cur = TODAY.slice(0, 7);
+    road2 = '<div class="card mapc"><div class="mapin">' + STONES.map(function(sp, i){
+      var q = Q[i] || [], done = q.length && q[q.length - 1] < cur, now = q.indexOf(cur) >= 0 || (i === 0 && cur < (q[0] || ''));
+      var up = q.filter(function(ym){ return byYm[ym] && byYm[ym].closed && byYm[ym].above; }).length;
+      var lbl = (q.length ? mName(q[0]).slice(0, 3) + '–' + mName(q[q.length - 1]).slice(0, 3) : '') + (done || now ? ' · ⭐ ' + up : '') + (i === 1 ? ' · 🗣' : '');
+      return '<div class="pin' + (now ? ' cur' : done ? ' done' : '') + '" style="left:' + sp[0] + '%;top:' + sp[1] + '%">' +
+        (now ? av(p.person, 70) : '<span class="lk">' + (done ? '✓' : '🔒') + '</span>') + '<span class="lbl">' + lbl + '</span></div>';
+    }).join('') + '<div class="pin gate" style="left:' + GATE[0] + '%;top:' + GATE[1] + '%"><span class="lk">💷</span><span class="lbl">Review · Dec ' + rv.year + '</span></div>' +
+      '<div class="chap">⭐ ' + m.aboveN + ' / 8 months better than usual</div></div></div>';
+  }
+  var road = '<div class="card mapc"><div class="mapin">' + L.map(function(l, i){
+    var n = i + 1, sp = SPOTS[i] || SPOTS[SPOTS.length - 1], cur = n === p.level;
+    return '<div class="pin' + (cur ? ' cur' : n < p.level ? ' done' : '') + '" style="left:' + sp[0] + '%;top:' + sp[1] + '%">' +
+      (cur ? av(p.person, 74) : '<span class="lk">' + (n < p.level ? '✓' : '🔒') + '</span>') +
+      '<span class="lbl">' + e(l.name.replace(' Soul Therapist', '')) + (n > 1 && gbp(p, l.plus) ? ' · ' + gbp(p, l.plus) : '') + '</span></div>';
+  }).join('') + '<div class="pin gate" style="left:' + GATE[0] + '%;top:' + GATE[1] + '%"><span class="lk">' + dreamOf(p).ic + '</span><span class="lbl">' + e(dreamOf(p).name) + '</span></div></div></div>';
+  function line(ok, t, v){ return '<div class="kv" style="margin-top:14px;font-size:16px"><span>' + (ok ? '✅' : '◻️') + ' ' + t + '</span><b>' + v + '</b></div>'; }
+  var shortC = '<div class="card grow"><div class="h">🌱 Now · ' + mName(TODAY.slice(0, 7)) + '</div><div class="mut" style="font-weight:600">Make it a ⭐ star month</div>' +
+    line(tm.missionPct >= starPct, 'Full days', tm.missionPct + '% / ' + starPct + '%') +
+    line(tm.worked && tm.look >= tm.worked, 'Ready every day', tm.look + ' / ' + tm.worked) +
+    line(!tm.late, 'On time', tm.late ? tm.late + ' late' : '✓') +
+    line(tm.content >= goal, 'Videos', tm.content + ' / ' + goal) +
+    (m.goal ? line(m.goal.rate >= m.goal.g.target, '🎯 ' + e(m.goal.g.title), m.goal.rate + '% / ' + m.goal.g.target + '%') : '') + '</div>';
+  var midC;
+  if (!m.next) midC = '<div class="card grow"><div class="h">🌿 This year</div><div class="big" style="font-size:22px">🏆 Top level</div></div>';
+  else midC = '<div class="card grow"' + (m.ready ? ' style="background:var(--grn2)"' : m.paused ? ' style="background:var(--gold2)"' : '') + '><div class="h">🌿 This year · review ' + reviewDate() + '</div>' +
+    '<div class="mut" style="font-weight:600">' + (m.ready ? '✓ Ready for ' + e(m.next.name) + (gbp(p, m.next.plus) ? ' · ' + gbp(p, m.next.plus) : '') : m.paused ? '🔧 Pit stop · paused, nothing is lost' : '🔒 ' + e(m.next.name) + (gbp(p, m.next.plus) ? ' · ' + gbp(p, m.next.plus) : '')) + '</div>' +
+    m.gates.map(function(g){ return line(g.ok, g.ic + ' ' + g.t, Math.min(g.v, 999) + ' / ' + g.need) + bar(g.v, g.need, g.ok ? 'var(--grn)' : ''); }).join('') +
+    ((m.steps || []).length ? '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">' + m.steps.slice(0, 6).map(function(x){ return '<div style="font-size:14px;font-weight:600;margin-top:6px">' + (x.done_at ? '✅ ' : '🔑 ') + e(x.title) + '</div>'; }).join('') + '</div>' : '') + '</div>';
+  var top = L[L.length - 1] || {};
+  var longC = '<div class="card grow"><div class="h">🌳 Later · 2 to 3 years</div><div class="mut" style="font-weight:600">Lead the team, then your dream</div>' +
+    line(p.level >= L.length, e(top.name || 'Lead'), gbp(p, top.plus)) +
+    line(m.gold >= (top.gold || 2), '🥇 Gold wins', m.gold + ' / ' + (top.gold || 2)) +
+    line(m.refreshN >= 3, '🎓 All refresh trainings', m.refreshN + ' / 3') +
+    line(false, dreamOf(p).ic + ' ' + e(dreamOf(p).name), e(dreamOf(p).sub)) + '</div>';
+  if (m.res){
+    var nowM = m.thisMonth, fy = m.fy[TODAY.slice(0, 7)] || { rev: [], back: [] }, sc = stdCheck(m);
+    shortC = '<div class="card grow"><div class="h">🌱 Now · ' + mName(TODAY.slice(0, 7)) + '</div><div class="mut" style="font-weight:600">Your month so far</div>' +
+      sc.map(function(x){ return line(x.ok, x.ic + ' ' + x.t, x.v); }).join('') +
+      line(fy.rev.length >= Math.ceil(m.aRev), '⭐ New clients 5★', fy.rev.length + ' · avg ' + m.aRev) +
+      line(fy.back.length >= Math.ceil(m.aBack), '🔁 Came back', fy.back.length + ' · avg ' + m.aBack) +
+      (m.goal ? line(m.goal.rate >= m.goal.g.target, '🎯 ' + e(m.goal.g.title), m.goal.rate + '% / ' + m.goal.g.target + '%') : '') + '</div>';
+    midC = '<div class="card grow"><div class="h">🌿 Review · December ' + m.review.year + '</div><div class="mut" style="font-weight:600">What decides your raise</div>' +
+      line(m.stdMonths >= 10, '🧱 Basics done well', m.stdMonths + ' / 12 months') +
+      line(m.aboveN >= 8, '⭐ Better than your usual', m.aboveN + ' / 8 months') + bar(m.aboveN, 8, m.aboveN >= 8 ? 'var(--grn)' : '') +
+      ((m.steps || []).length ? line(m.steps.every(function(x){ return x.done_at; }), '🔑 Steps from Ligia', m.steps.filter(function(x){ return x.done_at; }).length + ' / ' + m.steps.length) : '') +
+      '<div class="mut" style="margin-top:14px;font-weight:600;font-size:13px">🧱 Basics every month → yearly raise<br>⭐ 8 good months → ' + e(m.next ? m.next.name : 'top level') + '</div></div>';
+    road = road2;
+  }
+  if (m.deskRes){
+    var t2 = m.thisMonth;
+    shortC = '<div class="card grow"><div class="h">🌱 Now · ' + mName(TODAY.slice(0, 7)) + '</div><div class="mut" style="font-weight:600">Your month so far</div>' +
+      line(!t2.late, '⏰ On time', t2.late ? t2.late + ' late' : '✓') +
+      line(t2.worked && t2.look >= t2.worked, '💄 Look', t2.look + ' / ' + t2.worked) +
+      line(t2.worked && t2.full >= t2.worked, '🎯 Days 100%', t2.full + ' / ' + t2.worked + ' days') +
+      line(t2.cl && t2.rate >= m.aRate, '📅 Left with next visit', (t2.rate || 0) + '% · avg ' + m.aRate + '%') +
+      line(t2.reviews >= Math.ceil(m.aRev5), '⭐ 5★ reviews', (t2.reviews || 0) + ' · avg ' + m.aRev5) + '</div>';
+    /* Ligia 22/10: o path dela mostra grande quanto ela ganha por hora, com as gorjetas, e o proximo degrau */
+    var BR = S.set.base_rate || {}, base = +BR[p.person] || 0, sen = +BR[p.person + '_senior'] || 0;
+    var MTp = (S.myTips || {})[p.person] || {}, ymk = Object.keys(MTp).sort(), tph = 0;
+    for (var ti = ymk.length - 1; ti >= 0; ti--){ var tr = MTp[ymk[ti]]; if (tr && tr.hours > 20 && tr.tips != null){ tph = tr.tips / tr.hours; break; } }
+    var nowH = base + tph, senH = sen + tph;
+    midC = '<div class="card grow" style="background:linear-gradient(135deg,#F1EDFF,#FFF2F7)"><div class="h">💷 What you earn</div>' +
+      '<div style="font-size:64px;font-weight:800;color:#3F2FB8;line-height:1.05;margin-top:6px">£<span class="cnt" data-to="' + nowH.toFixed(2) + '">' + nowH.toFixed(2) + '</span>' + '<span style="font-size:22px;font-weight:700"> /hour</span></div>' +
+      '<div class="mut" style="font-weight:700;font-size:15px">£' + base.toFixed(2) + ' + £' + tph.toFixed(2) + ' tips</div>' +
+      '<div class="kv" style="margin-top:18px;font-size:17px"><span>💜 Senior</span><b>£' + senH.toFixed(2) + ' /hour</b></div>' +
+      '<div class="kv" style="margin-top:8px;font-size:17px"><span>🏆 Manager</span><b>set by results</b></div></div>';
+    var st = m.study || {}, mods = st.modules || {}, NM = 12, cert = 0, curN = 0, curS = 'todo';
+    for (var mi = 1; mi <= NM; mi++){ var ms = (mods[mi] || {}).s || 'todo'; if (ms === 'certified') cert++; else if (!curN){ curN = mi; curS = ms; } }
+    var SL = { todo: 'not started', studying: 'reading', practising: 'practice', certified: 'done' };
+    longC = '<div class="card grow"><div class="h">🌳 Next · your goal is Manager</div><div class="mut" style="font-weight:600">Front of House → Senior → Manager</div>' +
+      line(cert >= NM, '💜 Senior Front of House', cert >= NM ? '✓ ready' : 'the next step') +
+      line(cert >= NM, '📚 My study', cert + ' / ' + NM + ' modules') + bar(cert, NM, cert >= NM ? 'var(--grn)' : '') +
+      (curN ? line(curS === 'practising', '📖 Now', 'Module ' + curN + ' · ' + SL[curS]) : '') +
+      /* Ligia 22/10: membership nao paga agora; mostra que ela lidera a experiencia. Comissao so quando for Manager */
+      line((m.db || {}).drinks_gbp > 0, '🥂 Paid drinks', '£' + Math.round((m.db || {}).drinks_gbp || 0) + ' this month') +
+      line((m.db || {}).members > 0, '💎 Memberships', ((m.db || {}).members || 0) + ' this month') +
+      line(false, '🏆 Manager', '🔓 drinks + memberships pay') +
+      '<a class="btn" style="margin-top:14px;display:inline-block;text-decoration:none" href="https://bsb-joana-path.vercel.app" target="_blank">📚 Open my study</a></div>';
+    /* Ligia 22/10: o mapa da Joana segue o caminho do treino dela (Joana · My Path): estacoes, nao trimestres */
+    var JST = [['Front of House', 'started'], ['In training', 'Step ' + Math.min(cert + 1, NM) + ' of ' + NM], ['Senior Front of House', 'all 12 steps done'], ['Manager', 'when results show']];
+    road = '<div class="card mapc"><div class="mapin">' + STONES.map(function(sp, i){ var done = i === 0 || (i === 1 && cert >= NM), now = i === 1 && cert < NM;
+      return '<div class="pin' + (now ? ' cur' : done ? ' done' : '') + '" style="left:' + sp[0] + '%;top:' + sp[1] + '%">' + (now ? av(p.person, 70) : '<span class="lk">' + (done ? '✓' : '🔒') + '</span>') + '<span class="lbl">' + JST[i][0] + (now ? ' · ' + JST[i][1] : '') + '</span></div>'; }).join('') +
+      '<div class="pin gate" style="left:' + GATE[0] + '%;top:' + GATE[1] + '%"><span class="lk">' + dreamOf(p).ic + '</span><span class="lbl">' + e(dreamOf(p).name) + '</span></div>' +
+      '<div class="chap">📚 ' + cert + ' / ' + NM + ' steps done</div></div></div>';
+  }
+  /* Ligia 22/10 "ta muito poluido": o My path so responde onde estou e para onde vou; o mes fica em My performance e My month */
+  return road + '<div class="row" style="flex:1;min-height:0">' + midC + longC + '</div>';
+}
+
+/* ===== MY WINS ===== */
+function pgWins(m){
+  return '<div class="wins' + (m.ach.length > 10 ? ' w11' : '') + '">' + m.ach.map(function(x){
+    var next = x.next ? Math.min(x.v, x.next) + ' / ' + x.next : 'Complete';
+    return '<div class="card w t' + x.tier + (MEDAL[x.a.k] ? ' art' : '') + '"><div class="wi">' + (MEDAL[x.a.k] ? '<img src="' + MEDAL[x.a.k] + '" alt="">' : x.a.ic) + '</div><div><div class="wn">' + e(x.a.name) + '</div>' +
+      (x.next ? '<span class="togo">' + (x.next - Math.min(x.v, x.next)) + ' to ' + TIER[x.tier + 1] + '</span>' : '<span class="togo">🥇 Complete</span>') +
+      '<div class="wt"><b class="' + (x.tier >= 1 ? 'on' : '') + '">🥉</b><b class="' + (x.tier >= 2 ? 'on' : '') + '">🥈</b><b class="' + (x.tier >= 3 ? 'on' : '') + '">🥇</b></div>' +
+      '<div style="width:80%">' + bar(x.next ? Math.min(x.v, x.next) : 1, x.next || 1, x.tier >= 3 ? 'var(--gold)' : '') + '</div>' +
+      '<div class="wp">' + next + '<br>' + e(x.a.unit) + '</div></div></div>';
+  }).join('') + '</div>';
+}
+
+/* ===== MY PRIZES ===== */
+function pgPrizes(m){
+  var goal = +S.set.content_goal || 8, tm = m.thisMonth;
+  var boxes = m.boxes.slice(0, 12);
+  return '<div class="row">' +
+    '<div class="card grow"><div class="h">📸 Videos this month</div><div class="big">' + tm.content + ' / ' + goal + '</div><div style="margin-top:10px">' + bar(tm.content, goal, 'var(--pink)') + '</div><div class="mut" style="margin-top:6px;font-weight:600">🏆 big prize at ' + goal + '</div></div>' +
+    '<div class="card grow"><div class="h">💄 Ready every day</div><div class="big">' + tm.look + ' / ' + tm.worked + '</div><div style="margin-top:10px">' + bar(tm.look, tm.worked || 1, 'var(--pink)') + '</div><div class="mut" style="margin-top:6px;font-weight:600">🎁 prize if every day</div></div>' +
+    '<div class="card grow"><div class="h">🎟 Raffle tickets</div><div class="big">' + m.tickets + '</div><div class="mut" style="margin-top:10px;font-weight:600">1 per full day, video and 5★ review</div></div></div>' +
+    '<div class="card" style="flex:1;min-height:0"><div class="h">🎁 My boxes</div>' + (boxes.length ? '<div class="boxes">' + boxes.map(function(b){
+      var st = b.status === 'opened' || b.status === 'given' ? 'open' : b.status === 'ready' ? 'ready' : 'wait';
+      return '<button class="card bx ' + st + '" ' + (st === 'ready' ? 'onclick="openBox(' + b.id + ')"' : '') + '><div class="bi"><img src="medals/' + (st === 'open' ? 'chest_open' : 'chest_closed') + '.webp" alt=""></div>' +
+        '<div class="bn">' + (st === 'open' ? e(b.prize_name || '') : st === 'ready' ? 'Tap to open!' : 'Coming soon') + '</div><div class="mut" style="font-size:11px">' + e(b.reason || '') + '</div></button>';
+    }).join('') + '</div>' : '<div class="mut" style="font-weight:600">Your first box is waiting on the path ✨</div>') + '</div>';
+}
+function openBox(id){
+  var b = S.rewards.filter(function(x){ return x.id === id; })[0]; if (!b) return;
+  /* jogo: o bau treme, abre com luz, o premio sobe e cai confete */
+  var d = document.createElement('div'); d.className = 'reveal';
+  d.innerHTML = '<div class="card"><div class="stage2"><img class="sh" src="medals/chest_closed.webp" alt=""></div><div class="tap">✨ Opening…</div></div>';
+  document.body.appendChild(d);
+  setTimeout(function(){
+    var st = d.querySelector('.stage2'); st.innerHTML = '<div class="glow"></div><img src="medals/chest_open.webp" alt="">';
+    var c = d.querySelector('.card'); var t = d.querySelector('.tap'); if (t) t.remove();
+    c.insertAdjacentHTML('beforeend', '<div class="prize"><div class="big" style="font-size:26px;margin:10px 0 6px">🎁 ' + e(b.prize_name || 'A surprise') + '</div><div class="mut" style="font-weight:600">' + e(b.reason || '') + '</div><button class="btn" style="margin-top:18px" onclick="this.closest(\'.reveal\').remove()">Lovely ✨</button></div>');
+    try { confetti(); } catch (x) {}
+    b.status = 'opened'; render();
+  }, 1150);
+  patch('bsb_sp_rewards', 'id=eq.' + id, { status: 'opened' }).catch(function(){});
+}
+
+/* ===== ADMIN: TEAM ===== */
+function adminLoad(){
+  A.innerHTML = '<div class="load">Loading the team…</div>';
+  return rpc('bsb_sp_sync_pitstops', { p_from: S.liveFrom }).catch(function(){})
+    .then(function(){ return get('bsb_sp_pitstops?select=*&order=opened_at.desc').then(function(r){ S.pits = r; }); })
+    .then(function(){ return Promise.all(therapists().map(function(p){ return loadModel(p.person); })); })
+    .then(function(ms){ return S.live ? Promise.all(ms.map(syncRewards)) : null; })
+    .then(loadLook).then(render)
+    .catch(function(){ A.innerHTML = '<div class="load">Could not load. Check the internet and try again.</div>'; });
+}
+function pgTeam(){
+  if (!therapists().some(function(p){ return S.M[p.person]; })){ setTimeout(adminLoad, 0); return '<div class="load">Loading…</div>'; }
+  return (S.live ? '' : '<div class="prac">🧪 Practice · counting starts ' + dShort(S.liveFrom) + ' · change it in Settings</div>') +
+    '<div class="team">' + therapists().map(function(p){
+    var m = S.M[p.person]; if (!m) return '';
+    var tm = m.thisMonth;
+    return '<div class="card tc" onclick="go(\'today\',\'' + e(p.person) + '\')"><div style="display:flex;align-items:center;gap:10px">' + av(p.person, 58) + '<div class="nm serif" style="font-size:26px">' + e(p.person) + '</div></div>' +
+      '<div><span class="chip">' + e(m.level.name) + '</span></div>' +
+      '<div class="kv"><span>🔥 Streak</span><b>' + m.streak + '</b></div>' +
+      '<div class="kv"><span>🎯 Full days</span><b>' + tm.missionPct + '%</b></div>' +
+      '<div class="kv"><span>💄 Look</span><b>' + tm.lookPct + '%</b></div>' +
+      '<div class="kv"><span>⏰ On time</span><b>' + tm.onTimePct + '%</b></div>' +
+      '<div class="kv"><span>📸 Videos</span><b>' + tm.content + '</b></div>' +
+      (function(){ var nr = m.nr[TODAY.slice(0, 7)] || { new_clients: 0, new_reviews: 0 }; return '<div class="kv"><span>⭐ New clients reviewed</span><b>' + nr.new_reviews + ' / ' + nr.new_clients + '</b></div>'; })() +
+      '<div class="kv"><span>✨ New clients back</span><b>' + m.magic + '</b></div>' +
+      '<div class="kv"><span>🏅 Wins</span><b>' + m.ach.filter(function(x){ return x.tier; }).length + ' · 🥈' + m.silver + ' · 🥇' + m.gold + '</b></div>' +
+      '<div class="kv"><span>🔒 Next level</span><b>' + (m.next ? m.pathPct + '%' : 'Top') + '</b></div>' + bar(m.pathPct, 100) +
+      (m.paused ? '<span class="chip y">🔧 Pit stop · paused</span>' : '') +
+      (m.ready ? '<button class="btn g" onclick="event.stopPropagation();approveLevel(\'' + e(p.person) + '\')">🔓 Open ' + e(m.next.name) + '</button>' : '') +
+      '<div class="mut" style="font-size:12px;font-weight:600">' + MOT[p.motivator] + '</div>' +
+      '<select onclick="event.stopPropagation()" onchange="setDream(\'' + e(p.person) + '\',this.value)"><option value="">🌟 Dream: not chosen</option>' +
+        Object.keys(DREAM).map(function(k){ return '<option value="' + k + '"' + (p.dream === k ? ' selected' : '') + '>' + DREAM[k].ic + ' ' + DREAM[k].name + '</option>'; }).join('') + '</select></div>';
+  }).join('') + '</div>';
+}
+function setDream(name, v){
+  rpc('bsb_sp_set_dream', { p_code: S.code, p_person: name, p_dream: v }).then(function(ok){ if (!ok) return toast('Not saved'); var p = personOf(name); if (p) p.dream = v || null; toast(v ? DREAM[v].ic + ' ' + name + ' · ' + DREAM[v].name : '🌟 Cleared'); }).catch(function(){ toast('Not saved'); });
+}
+function approveLevel(name){
+  var p = personOf(name), m = S.M[name]; if (!p || !m || !m.next) return;
+  var nl = p.level + 1;
+  Promise.all([
+    upsert('bsb_sp_levelups', { person: name, level: nl, approved_by: S.who }),
+    savePerson(Object.assign({}, adminRow(name), { level: nl, level_since: TODAY }))
+  ]).then(function(){ toast('🔓 ' + name + ' is now ' + m.next.name); return loadBase(); }).then(adminLoad).catch(function(){ toast('Not saved'); });
+}
+
+/* ===== STEPS: os passos que a Ligia define para abrir o proximo nivel ===== */
+function pgSteps(){
+  var who = S.stepWho || (therapists()[0] || {}).person, p = personOf(who) || {}, L = S.set.levels || [], nx = L[p.level] || {};
+  var ap = S.adminPeople.filter(function(x){ return x.person === who; })[0] || {};
+  var list = S.steps.filter(function(x){ return x.person === who && x.level === p.level + 1; }), pp = pager('steps', list, 8);
+  if (!S.adminPeople.length) rpc('bsb_sp_admin_people', { p_code: S.code }).then(function(r){ S.adminPeople = r; render(); });
+  return '<div class="row" style="align-items:center;gap:10px">' + therapists().map(function(t){ return '<button class="btn ' + (t.person === who ? '' : 'ghost') + ' sm" onclick="S.stepWho=\'' + e(t.person) + '\';render()" style="display:flex;align-items:center;gap:6px">' + av(t.person, 24) + e(t.person) + '</button>'; }).join('') + '</div>' +
+    '<div class="card" style="flex:1;min-height:0"><div class="h">🔑 ' + e(who) + ' · steps to open ' + e(nx.name || 'next level') + (ap.next_rate ? ' · £' + Number(ap.next_rate).toFixed(2) + '/h' : '') + '</div>' +
+    '<div class="row" style="gap:8px;margin-bottom:10px"><input id="stN" placeholder="New step" class="grow"><button class="btn" onclick="addStep()">Add</button></div>' +
+    '<table class="tbl">' + pp.items.map(function(x){ return '<tr><td style="width:40px">' + (x.done_at ? '✅' : '🔑') + '</td><td><b>' + e(x.title) + '</b>' + (x.done_at ? '<div class="mut" style="font-size:12px">done ' + dShort(x.done_at) + '</div>' : '') + '</td>' +
+      '<td style="white-space:nowrap"><button class="btn sm ' + (x.done_at ? 'ghost' : 'g') + '" onclick="stepDone(' + x.id + ',' + (!x.done_at) + ')">' + (x.done_at ? 'Undo' : '✓ Done') + '</button> <button class="btn ghost sm" onclick="stepDel(' + x.id + ')">✕</button></td></tr>'; }).join('') + '</table>' + pp.html +
+    (list.length ? '' : '<div class="mut" style="font-weight:600">No steps yet. She sees these on her plan.</div>') + '</div>';
+}
+function addStep(){
+  var t = document.getElementById('stN').value.trim(); if (!t) return toast('Write the step');
+  var who = S.stepWho || (therapists()[0] || {}).person, p = personOf(who);
+  upsert('bsb_sp_steps', { person: who, level: p.level + 1, title: t, sort: S.steps.length }).then(function(r){ S.steps = S.steps.concat(r); S.M = {}; render(); }).catch(function(){ toast('Not saved'); });
+}
+function stepDone(id, on){ var d = on ? TODAY : null; patch('bsb_sp_steps', 'id=eq.' + id, { done_at: d }).then(function(){ S.steps.forEach(function(x){ if (x.id === id) x.done_at = d; }); S.M = {}; toast(on ? '✅ Done' : 'Undone'); render(); }); }
+function stepDel(id){ remove('bsb_sp_steps', 'id=eq.' + id).then(function(){ S.steps = S.steps.filter(function(x){ return x.id !== id; }); S.M = {}; render(); }); }
+
+/* ===== LOOK (Joana e Ligia) ===== */
+function loadLook(){ return get('bsb_sp_look?date=eq.' + TODAY).then(function(r){ S.looks = {}; r.forEach(function(x){ S.looks[x.person] = x; }); }).catch(function(){ S.looks = {}; }); }
+function pgLook(){
+  return '<div class="card" style="flex:1;min-height:0"><div class="h">💄 Look today · ' + dShort(TODAY) + '</div><table class="tbl"><tr><th>Who</th><th>Make-up</th><th>Hair</th><th>Uniform</th><th>Check</th><th></th></tr>' +
+    (S.role === 'ops' ? [] : therapists()).map(function(p){
+      var L = (S.looks || {})[p.person] || {}, all = L.make && L.hair && L.uniform;
+      return '<tr><td style="display:flex;align-items:center;gap:8px">' + av(p.person, 34) + '<b>' + e(p.person) + '</b></td><td>' + (L.make ? '✓' : '·') + '</td><td>' + (L.hair ? '✓' : '·') + '</td><td>' + (L.uniform ? '✓' : '·') + '</td>' +
+        '<td>' + (L.check_ok === true ? '<span class="chip g">👍 ' + e(L.check_by || '') + '</span>' : L.check_ok === false ? '<span class="chip r">✗ ' + e(L.check_note || '') + '</span>' : all ? '<span class="chip y">⏳ Waiting</span>' : '<span class="chip k">Not marked</span>') + '</td>' +
+        '<td style="white-space:nowrap">' + (all ? '<button class="btn g sm" onclick="lookCheck(\'' + e(p.person) + '\',true)">👍</button> <input id="ln_' + e(p.person) + '" placeholder="What is missing" style="width:150px"> <button class="btn r sm" onclick="lookCheck(\'' + e(p.person) + '\',false)">✗</button>' : '') + '</td></tr>';
+    }).join('') + '</table></div>';
+}
+function lookCheck(name, ok){
+  var inp = document.getElementById('ln_' + name), note = inp ? inp.value.trim() : '';
+  if (!ok && !note){ toast('Write what is missing'); if (inp) inp.focus(); return; }
+  var row = { check_ok: ok, check_note: ok ? null : note, check_by: S.who, check_at: new Date().toISOString() };
+  patch('bsb_sp_look', 'date=eq.' + TODAY + '&person=eq.' + encodeURIComponent(name), row).then(function(){
+    S.looks[name] = Object.assign(S.looks[name] || {}, row); toast(ok ? '👍 ' + name : '✗ ' + name); render();
+  }).catch(function(){ toast('Not saved'); });
+}
+
+/* ===== PRIZES SHELF ===== */
+function pager(key, list, n){ var pg = S.page[key] || 0, max = Math.max(0, Math.ceil(list.length / n) - 1); if (pg > max) pg = max; S.page[key] = pg; return { items: list.slice(pg * n, pg * n + n), html: list.length > n ? '<div class="pager">' + (pg + 1) + ' / ' + (max + 1) + ' <button class="btn ghost sm" onclick="pgMove(\'' + key + '\',-1)">‹</button><button class="btn ghost sm" onclick="pgMove(\'' + key + '\',1)">›</button></div>' : '' }; }
+function pgMove(k, d){ S.page[k] = Math.max(0, (S.page[k] || 0) + d); render(); }
+var SZ = { S: '🎟 Small', M: '💄 Medium', L: '🏆 Big' };
+function pgShelf(){
+  var shelf = S.prizes.filter(function(x){ return x.status === 'shelf'; });
+  var pend = S.rewards.filter(function(x){ return x.status === 'earned'; });
+  var sp = pager('shelf', shelf, 7), pp = pager('pend', pend, 6);
+  var ym = TODAY.slice(0, 7);
+  return '<div class="row" style="flex:1;min-height:0">' +
+    '<div class="card grow"><div class="h">🎁 Shelf</div>' +
+      '<div class="row" style="gap:8px;margin-bottom:10px"><input id="pzN" placeholder="Prize" class="grow"><select id="pzS"><option value="S">🎟 Small</option><option value="M">💄 Medium</option><option value="L">🏆 Big</option></select><input id="pzF" placeholder="From" style="width:110px"><button class="btn" onclick="addPrize()">Add</button></div>' +
+      '<table class="tbl">' + sp.items.map(function(x){ return '<tr><td><b>' + e(x.name) + '</b></td><td>' + SZ[x.size] + '</td><td class="mut">' + e(x.source || '') + '</td><td><button class="btn ghost sm" onclick="delPrize(' + x.id + ')">✕</button></td></tr>'; }).join('') + '</table>' + sp.html +
+      (shelf.length ? '' : '<div class="mut" style="font-weight:600">Add what the salon gets or what you buy</div>') + '</div>' +
+    '<div class="card grow"><div class="h">🎉 Earned · give a prize</div>' +
+      '<table class="tbl">' + pp.items.map(function(x){
+        var opts = shelf.filter(function(z){ return z.size === x.size; }).concat(shelf.filter(function(z){ return z.size !== x.size; }));
+        return '<tr><td><b>' + e(x.person) + '</b><div class="mut" style="font-size:12px">' + e(x.reason) + '</div></td><td>' + SZ[x.size] + '</td><td><select id="rw_' + x.id + '"><option value="">Choose</option>' + opts.map(function(z){ return '<option value="' + z.id + '">' + e(z.name) + '</option>'; }).join('') + '</select></td><td><button class="btn sm" onclick="givePrize(' + x.id + ')">Give</button></td></tr>';
+      }).join('') + '</table>' + pp.html + (pend.length ? '' : '<div class="mut" style="font-weight:600">Nothing waiting</div>') +
+      '<div style="margin-top:14px;display:flex;gap:10px;align-items:center"><button class="btn" onclick="raffle()">🎟 Raffle · ' + mName(ym) + '</button><span class="mut" style="font-size:13px;font-weight:600">' + therapists().map(function(p){ var m = S.M[p.person]; return e(p.person) + ' ' + (m ? m.tickets : 0); }).join(' · ') + '</span></div></div></div>';
+}
+function addPrize(){
+  var n = document.getElementById('pzN').value.trim(); if (!n) return toast('Write the prize');
+  upsert('bsb_sp_prizes', { name: n, size: document.getElementById('pzS').value, source: document.getElementById('pzF').value.trim() || null })
+    .then(function(r){ S.prizes = r.concat(S.prizes); render(); }).catch(function(){ toast('Not saved'); });
+}
+function delPrize(id){ remove('bsb_sp_prizes', 'id=eq.' + id).then(function(){ S.prizes = S.prizes.filter(function(x){ return x.id !== id; }); render(); }); }
+function givePrize(id){
+  var sel = document.getElementById('rw_' + id), pid = sel ? +sel.value : 0; if (!pid) return toast('Choose a prize');
+  var pz = S.prizes.filter(function(x){ return x.id === pid; })[0];
+  Promise.all([patch('bsb_sp_rewards', 'id=eq.' + id, { status: 'ready', prize_id: pid, prize_name: pz.name }), patch('bsb_sp_prizes', 'id=eq.' + pid, { status: 'given' })])
+    .then(function(){ S.rewards.forEach(function(x){ if (x.id === id){ x.status = 'ready'; x.prize_id = pid; x.prize_name = pz.name; } }); pz.status = 'given'; toast('🎁 Box ready on her page'); render(); })
+    .catch(function(){ toast('Not saved'); });
+}
+function raffle(){
+  if (!S.live) return toast('Starts ' + dShort(S.liveFrom));
+  var ym = TODAY.slice(0, 7), key = 'raffle-' + ym;
+  if (S.rewards.some(function(x){ return x.reason_key === key; })) return toast('Already drawn this month');
+  var pool = [];
+  therapists().forEach(function(p){ var m = S.M[p.person]; if (!m || m.thisMonth.onTimePct < 90) return; for (var i = 0; i < m.tickets; i++) pool.push(p.person); });
+  if (!pool.length) return toast('No tickets yet');
+  var win = pool[Math.floor(Math.random() * pool.length)];
+  upsert('bsb_sp_rewards', { person: win, reason: '🎟 Raffle · ' + mName(ym), reason_key: key, size: 'S' }).then(function(r){ S.rewards = r.concat(S.rewards); toast('🎉 ' + win + ' won the raffle'); render(); });
+}
+
+/* ===== PIT STOPS ===== */
+function pgPits(){
+  var list = S.pits.slice(), pp = pager('pits', list, 8), pd = +S.set.pitstop_days || 14;
+  return '<div class="card" style="flex:1;min-height:0"><div class="h">🔧 Pit stops · a complaint pauses the path, refresh + ' + pd + ' clean days opens it again</div>' +
+    '<table class="tbl"><tr><th>Who</th><th>Topic</th><th>Opened</th><th>Refresh</th><th>Status</th></tr>' + pp.items.map(function(x){
+      var st = !x.refresh_done_at ? '<span class="chip r">Needs refresh</span>' : addDays(x.refresh_done_at, pd) <= TODAY ? '<span class="chip g">✓ Done</span>' : '<span class="chip y">⏳ ' + Math.round((new Date(addDays(x.refresh_done_at, pd)) - new Date(TODAY)) / 864e5) + ' days</span>';
+      return '<tr><td><b>' + e(x.person) + '</b></td><td>' + e(x.topic || '') + '</td><td>' + dShort(x.opened_at) + '</td><td>' + (x.refresh_done_at ? dShort(x.refresh_done_at) : '<button class="btn sm" onclick="pitRefresh(' + x.id + ')">✓ Refresh done</button>') + '</td><td>' + st + '</td></tr>';
+    }).join('') + '</table>' + pp.html + (list.length ? '' : '<div class="mut" style="font-weight:600;margin-top:10px">No pit stops</div>') +
+    '<div class="h" style="margin-top:18px">🎓 Refresh trainings</div><table class="tbl"><tr><th>Who</th><th>Make-up</th><th>Hair</th><th>Uniform</th></tr>' + therapists().map(function(p){
+      return '<tr><td><b>' + e(p.person) + '</b></td>' + ['make','hair','uniform'].map(function(t){
+        var on = S.refresh.some(function(x){ return x.person === p.person && x.topic === t; });
+        return '<td><button class="btn sm ' + (on ? 'g' : 'ghost') + '" onclick="refTog(\'' + e(p.person) + '\',\'' + t + '\',' + on + ')">' + (on ? '✓ Done' : 'Mark') + '</button></td>';
+      }).join('') + '</tr>';
+    }).join('') + '</table></div>';
+}
+function pitRefresh(id){ patch('bsb_sp_pitstops', 'id=eq.' + id, { refresh_done_at: TODAY }).then(function(){ S.pits.forEach(function(x){ if (x.id === id) x.refresh_done_at = TODAY; }); S.M = {}; adminLoad(); }); }
+function refTog(name, t, on){
+  (on ? remove('bsb_sp_refresh', 'person=eq.' + encodeURIComponent(name) + '&topic=eq.' + t) : upsert('bsb_sp_refresh', { person: name, topic: t, done_at: TODAY }, 'person,topic'))
+    .then(function(){ return get('bsb_sp_refresh?select=*'); }).then(function(r){ S.refresh = r; S.M = {}; adminLoad(); });
+}
+
+/* ===== SETTINGS ===== */
+S.adminPeople = [];
+function adminRow(n){ return S.adminPeople.filter(function(x){ return x.person === n; })[0] || personOf(n); }
+function savePerson(row){ return rpc('bsb_sp_save_person', { p_code: S.code, p: row }); }
+function pgSet(){
+  if (!S.adminPeople.length){ rpc('bsb_sp_admin_people', { p_code: S.code }).then(function(r){ S.adminPeople = r; render(); }); return '<div class="load">Loading…</div>'; }
+  var L = S.set.levels || [];
+  return '<div class="row"><div class="card grow"><div class="h">⚙️ Rules</div><table class="tbl">' +
+      '<tr><td>Counting starts</td><td><input type="date" id="s_live" value="' + e(S.liveFrom) + '"></td></tr>' +
+      '<tr><td>📸 Videos for the big prize</td><td><input type="number" id="s_cg" value="' + e(S.set.content_goal) + '" style="width:80px"></td></tr>' +
+      '<tr><td>⭐ Star month: full days %</td><td><input type="number" id="s_sp" value="' + e(S.set.star_pct) + '" style="width:80px"></td></tr>' +
+      '<tr><td>🔧 Pit stop clean days</td><td><input type="number" id="s_pd" value="' + e(S.set.pitstop_days) + '" style="width:80px"></td></tr>' +
+      '<tr><td>💷 Girls see £ on their path</td><td><input type="checkbox" id="s_sh"' + (S.set.show_pay ? ' checked' : '') + '></td></tr>' +
+      (function(){ var y1 = TODAY.slice(0, 7), d = new Date(y1 + '-15T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1); var y2 = d.toISOString().slice(0, 7);
+        return '<tr><td>🎁 Make-up gift · ' + mName(y1) + '</td><td><input id="s_lg1" data-ym="' + y1 + '" value="' + e(lookGift(y1)) + '" placeholder="Foundation, mascara…" style="width:200px"></td></tr>' +
+          '<tr><td>🎁 Make-up gift · ' + mName(y2) + '</td><td><input id="s_lg2" data-ym="' + y2 + '" value="' + e(lookGift(y2)) + '" placeholder="Foundation, mascara…" style="width:200px"></td></tr>'; })() +
+      '<tr><td>🧊 Shields per month</td><td><input type="number" id="s_fz" value="' + e(S.set.freezes) + '" style="width:80px"></td></tr>' +
+      L.slice(1).map(function(l, i){ return '<tr><td>🔓 ' + e(l.name) + '</td><td>+£ <input type="number" step="0.25" id="s_lv' + (i + 1) + '" value="' + e(l.plus) + '" style="width:80px">/h</td></tr>'; }).join('') +
+      '</table><button class="btn" style="margin-top:10px" onclick="saveSet()">Save</button>' +
+      '<div class="h" style="margin-top:16px">🎯 Goals</div><table class="tbl">' + therapists().map(function(p, i){ var g = S.goals[p.person] || {};
+        return '<tr><td><b>' + e(p.person) + '</b></td><td><input id="gt' + i + '" value="' + e(g.title || '') + '" placeholder="Goal" style="width:170px"></td>' +
+          '<td><select id="gp' + i + '">' + Object.keys(GOALW).map(function(k){ return '<option value="' + k + '"' + (k === (g.preset || 'facial') ? ' selected' : '') + '>' + k + '</option>'; }).join('') + '</select></td>' +
+          '<td><input type="number" id="gv' + i + '" value="' + e(g.target || 40) + '" style="width:58px">%</td></tr>'; }).join('') +
+      '</table><button class="btn" style="margin-top:10px" onclick="saveGoals()">Save goals</button></div>' +
+    '<div class="card grow"><div class="h">👥 People</div><table class="tbl"><tr><th>Who</th><th>Code</th><th>Since</th><th>Level</th><th>Moves her</th><th>On</th></tr>' +
+      S.adminPeople.map(function(p, i){
+        return '<tr><td><b>' + e(p.person) + '</b><div class="mut" style="font-size:11px">' + e(p.role) + '</div></td><td><input id="pc' + i + '" value="' + e(p.code || '') + '" style="width:64px"></td>' +
+          '<td><input type="date" id="pd' + i + '" value="' + e(p.start_date || '') + '" style="width:130px"></td>' +
+          '<td><select id="pl' + i + '">' + L.map(function(l){ return '<option value="' + l.n + '"' + (l.n === p.level ? ' selected' : '') + '>' + l.n + '</option>'; }).join('') + '</select></td>' +
+          '<td><select id="pm' + i + '">' + Object.keys(MOT).map(function(k){ return '<option value="' + k + '"' + (k === p.motivator ? ' selected' : '') + '>' + MOT[k] + '</option>'; }).join('') + '</select></td>' +
+          '<td><input type="checkbox" id="pa' + i + '"' + (p.active ? ' checked' : '') + '></td></tr>';
+      }).join('') + '</table><button class="btn" style="margin-top:10px" onclick="savePeople()">Save</button></div></div>';
+}
+function saveGoals(){
+  var rows = therapists().map(function(p, i){ var t = document.getElementById('gt' + i).value.trim();
+    return { person: p.person, title: t || 'My goal', preset: document.getElementById('gp' + i).value, target: +document.getElementById('gv' + i).value || 40, days: 60, active: !!t, updated_at: new Date().toISOString() }; });
+  upsert('bsb_sp_goals', rows, 'person').then(function(){ toast('✓ Goals saved'); S.M = {}; return loadBase(); }).then(adminLoad).catch(function(){ toast('Not saved'); });
+}
+function saveSet(){
+  var L = (S.set.levels || []).map(function(l, i){ if (!i) return l; var v = document.getElementById('s_lv' + i); return Object.assign({}, l, { plus: v ? +v.value : l.plus }); });
+  var rows = [
+    { key: 'live_from', value: document.getElementById('s_live').value },
+    { key: 'content_goal', value: +document.getElementById('s_cg').value },
+    { key: 'star_pct', value: +document.getElementById('s_sp').value },
+    { key: 'pitstop_days', value: +document.getElementById('s_pd').value },
+    { key: 'freezes', value: +document.getElementById('s_fz').value },
+    { key: 'levels', value: L },
+    { key: 'show_pay', value: document.getElementById('s_sh').checked },
+    { key: 'look_gift', value: (function(){ var g = Object.assign({}, S.set.look_gift || {}); ['s_lg1','s_lg2'].forEach(function(id){ var el = document.getElementById(id); if (el) g[el.getAttribute('data-ym')] = el.value.trim(); }); return g; })() }
+  ];
+  upsert('bsb_sp_settings', rows, 'key').then(function(){ toast('✓ Saved'); S.M = {}; return loadBase(); }).then(adminLoad).catch(function(){ toast('Not saved'); });
+}
+function savePeople(){
+  Promise.all(S.adminPeople.map(function(p, i){
+    return savePerson(Object.assign({}, p, { code: document.getElementById('pc' + i).value.trim(), start_date: document.getElementById('pd' + i).value || '',
+      level: +document.getElementById('pl' + i).value, motivator: document.getElementById('pm' + i).value, active: document.getElementById('pa' + i).checked, level_since: p.level_since || '' }));
+  })).then(function(){ toast('✓ Saved'); S.adminPeople = []; S.M = {}; return loadBase(); }).then(adminLoad).catch(function(){ toast('Not saved'); });
+}
+
+/* menina: carrega o look dela junto */
+var _render = render;
+var _r2;
+render = function(){
+  if (S.view && S.lookMine === undefined){ S.lookMine = {}; loadMyLook().then(function(){ _render(); animateIn(); }); }
+  if (S.view && S.lookFor !== S.view){ S.lookFor = S.view; S.lookMine = undefined; S.lookMine = {}; loadMyLook().then(function(){ _render(); animateIn(); }); }
+  _render(); animateIn(); S.justWon = null;
+};
+renderLogin();
+</script>
+<script>/*ANIM-COUNT*/(function(){var seen={};new MutationObserver(function(){document.querySelectorAll('.cnt[data-to]').forEach(function(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,dec=(el.dataset.to.split('.')[1]||'').length,t0=null;function f(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/900),v=to*(1-Math.pow(1-p,3));el.textContent=v.toFixed(dec);if(p<1)requestAnimationFrame(f);}el.textContent=(0).toFixed(dec);requestAnimationFrame(f);});}).observe(document.body,{childList:true,subtree:true});})();</script>
+</body>
+</html>
