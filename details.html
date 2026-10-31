@@ -34,7 +34,7 @@ label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--i
 input[type=text],input[type=email],input[type=tel],input[type=date],textarea,select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:0;background:#FBF9F5;font:inherit;font-weight:300;font-size:15px;color:var(--ink);outline:none}
 input:focus,textarea:focus{border-color:var(--bronze)}
 textarea{resize:none;height:110px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.row .f{min-width:0}input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;display:block;min-height:45px;text-align:left}input[type=date]::-webkit-date-and-time-value{text-align:left}@media(max-width:820px){input[type=text],input[type=email],input[type=tel],input[type=date],textarea{font-size:16px}}
 .f{display:flex;flex-direction:column}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chip{padding:8px 14px;border:1px solid var(--line);font-size:14px;cursor:pointer;background:#FBF9F5;user-select:none;transition:border-color .2s}
@@ -340,7 +340,7 @@ document.querySelectorAll('[data-chip]').forEach(g=>{
 document.querySelectorAll('input[data-file]').forEach(inp=>{
   inp.addEventListener('change',()=>{
     const k=inp.dataset.file; const list=[...inp.files]; if(!list.length) return;
-    files[k]=list;
+    files[k]=list; draftUpload(k);
     if(k==='photo'){ $('photoBox').style.backgroundImage='url('+URL.createObjectURL(list[0])+')'; $('photoBox').firstChild.textContent=''; $('photoRm').classList.remove('hide'); return; }
     const box=inp.closest('.up'); box.classList.add('done');
     box.querySelector('.s').textContent='✓ '+(list.length>1?list.length+' files':list[0].name);
@@ -351,7 +351,7 @@ document.querySelectorAll('label.up').forEach(box=>{
   const s=box.querySelector('.s'); s.dataset.orig=s.textContent;
   const b=document.createElement('button'); b.className='rm hide'; b.type='button'; b.textContent='✕'; b.setAttribute('aria-label','Remove');
   b.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation(); const inp=box.querySelector('input'); delete files[inp.dataset.file]; inp.value='';
-    box.classList.remove('done'); s.textContent=s.dataset.orig; b.classList.add('hide'); });
+    box.classList.remove('done'); s.textContent=s.dataset.orig; b.classList.add('hide'); saveDraft(); });
   box.appendChild(b);
 });
 $('photoRm').onclick=()=>{ const inp=document.querySelector('input[data-file=photo]'); delete files.photo; inp.value='';
@@ -367,6 +367,36 @@ cv.addEventListener('pointermove',e=>{ if(!drawing) return; ctx.lineTo(...pt(e))
 cv.addEventListener('pointerup',()=>drawing=false);
 $('clearSig').onclick=()=>{ ctx.clearRect(0,0,cv.width,cv.height); signed=false; };
 
+
+/* ---- draft: save each screen to the Hub, resume later ---- */
+const HUBU='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/',HKEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+const HH={apikey:HKEY,Authorization:'Bearer '+HKEY,'Content-Type':'application/json'};
+const CAN_DRAFT=()=>PERSON&&PCODE&&!PREVIEW;
+let PHOTO_SMALL=null;
+function smallPhoto(file){return new Promise(res=>{const img=new Image();img.onload=()=>{const s=Math.min(img.width,img.height),c=document.createElement('canvas');c.width=c.height=160;c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,160,160);res(c.toDataURL('image/jpeg',.7))};img.onerror=()=>res(null);img.src=URL.createObjectURL(file)})}
+async function draftUpload(k){if(!CAN_DRAFT()||!files[k])return;const out=[];for(let i=0;i<files[k].length;i++){const f=files[k][i];if(f.draft){out.push(f);continue}
+  const ext=(f.name.split('.').pop()||'jpg').toLowerCase().slice(0,5),path=`draft/${PERSON}_${PCODE}/${k}_${Date.now()}_${i}.${ext}`;
+  try{const {error}=await SB.storage.from(BUCKET).upload(path,f,{upsert:false,contentType:f.type||undefined});if(error)throw error;if(k==='photo')PHOTO_SMALL=await smallPhoto(f);out.push({draft:true,path,name:f.name})}catch(e){out.push(f)}}
+ files[k]=out;saveDraft()}
+function formState(){const vals={};document.querySelectorAll('.page input[id],.page textarea[id]').forEach(e=>{if(e.type==='checkbox'||e.type==='file')return;if(e.value)vals[e.id]=e.value});
+ const fm={};for(const k in files){const d=files[k].filter(f=>f.draft);if(d.length)fm[k]=d}return {vals,chips,files:fm,page:cur}}
+let SAVING=null;
+async function saveDraft(){if(!CAN_DRAFT())return;const st=JSON.stringify(formState());const rows=[];for(let i=0;i<8;i++)rows.push({module:'00-details-draft',field:'form_'+i,answer:st.slice(i*3900,(i+1)*3900)||' '});
+ const ph=PHOTO_SMALL||'';for(let i=0;i<8;i++)rows.push({module:'00-details-draft',field:'photo_'+i,answer:ph.slice(i*3900,(i+1)*3900)||' '});
+ try{SAVING=fetch(HUBU+'onb_save',{method:'POST',headers:HH,body:JSON.stringify({p_person:PERSON,p_code:PCODE,p_rows:rows})});await SAVING}catch(e){}}
+async function clearDraft(){if(!CAN_DRAFT())return;PHOTO_SMALL=null;const rows=[];for(let i=0;i<8;i++){rows.push({module:'00-details-draft',field:'form_'+i,answer:' '},{module:'00-details-draft',field:'photo_'+i,answer:' '})}
+ try{await fetch(HUBU+'onb_save',{method:'POST',headers:HH,body:JSON.stringify({p_person:PERSON,p_code:PCODE,p_rows:rows})})}catch(e){}}
+async function loadDraft(){if(!CAN_DRAFT())return;try{const r=await (await fetch(HUBU+'onb_load',{method:'POST',headers:HH,body:JSON.stringify({p_person:PERSON,p_code:PCODE})})).json();
+  const g=(f)=>{let o='';for(let i=0;i<8;i++){const x=r.find(z=>z.module==='00-details-draft'&&z.field===f+i);o+=x&&x.answer!==' '?x.answer:''}return o};
+  if(r.some(z=>z.module==='00-details'&&z.field==='__done'))return;
+  const raw=g('form_');if(!raw)return;const st=JSON.parse(raw);PHOTO_SMALL=g('photo_')||null;
+  for(const id in st.vals){const e=$(id);if(e)e.value=st.vals[id]}
+  for(const k in st.chips){const val=st.chips[k],grp=document.querySelector(`[data-chip="${k}"]`);if(!grp)continue;const vs=Array.isArray(val)?val:[val];
+   grp.querySelectorAll('.chip').forEach(c=>{if(vs.includes(c.dataset.v)){if(Array.isArray(val))c.classList.add('on');else c.click()}});chips[k]=val}
+  for(const k in st.files){files[k]=st.files[k];if(k==='photo'){if(PHOTO_SMALL){$('photoBox').style.backgroundImage='url('+PHOTO_SMALL+')';$('photoBox').firstChild.textContent='';$('photoRm').classList.remove('hide')}continue}
+   const inp=document.querySelector(`input[data-file="${k}"]`);if(!inp)continue;const box=inp.closest('.up');box.classList.add('done');box.querySelector('.s').textContent='✓ '+(files[k].length>1?files[k].length+' files':files[k][0].name);box.querySelector('.rm').classList.remove('hide')}
+  if(st.page>1&&st.page<=LAST){$('go').textContent='Continue ›';$('go').onclick=()=>show(Math.min(st.page,LAST))}
+ }catch(e){console.error(e)}}
 const v=id=>($(id).value||'').trim();
 function check(n){
   const need=(ids)=>{ for(const id of ids){ if(!v(id)) return 'Please fill in everything.'; } return ''; };
@@ -398,6 +428,7 @@ function check(n){
 }
 
 async function up(id,key,file,i){
+  if(file.draft) return file.path;
   const ext=(file.name.split('.').pop()||'jpg').toLowerCase().slice(0,5);
   const path=`${id}/${key}${i!=null?'_'+(i+1):''}.${ext}`;
   const {error}=await SB.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type||undefined});
@@ -406,6 +437,7 @@ async function up(id,key,file,i){
 
 // photo -> small JPEG for the PDF
 function photoJpeg(file){
+  if(file.draft) return Promise.resolve(PHOTO_SMALL);
   return new Promise(res=>{
     const img=new Image(); img.onload=()=>{ const s=Math.min(img.width,img.height); const c=document.createElement('canvas'); c.width=c.height=400;
       c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,400,400); res(c.toDataURL('image/jpeg',.85)); };
@@ -472,6 +504,7 @@ async function send(){
 $('pdfBtn').onclick=()=>{ if(PDF) PDF.save(PDFNAME); };
 
 $('next').onclick=async()=>{
+  saveDraft();
   if(PREVIEW){ if(cur<LAST) show(cur+1); else $('err').textContent='Preview only. Nothing is sent.'; return; }
   const m=check(cur);
   if(cur<LAST){ if(m&&SKIP!==cur){ SKIP=cur; $('err').innerHTML=m+' <a href="#" id="later">Fill in later ›</a>'; $('later').onclick=e=>{e.preventDefault();$('next').click()}; return; }
@@ -479,12 +512,13 @@ $('next').onclick=async()=>{
   if(missing().length){ $('err').textContent='Please complete the missing parts above.'; return; }
   if(m){ $('err').textContent=m; return; }
   $('next').disabled=true; $('next').textContent='Sending…';
-  try{ await send(); await markHub(v('full_name')); show(LAST+1); }
+  try{ await send(); await markHub(v('full_name')); clearDraft(); show(LAST+1); }
   catch(e){ $('err').textContent='Could not send. Please try again.'; $('next').disabled=false; $('next').textContent='Send'; console.error(e); }
 };
 $('back').onclick=()=>show(cur-1);
 $('go').onclick=()=>$('next').click();
 show(0);
+loadDraft();
 </script>
 </body>
 </html>

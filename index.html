@@ -85,6 +85,7 @@ h1 em{font-style:italic}
 .chap button[disabled]{cursor:default;opacity:.55}
 .chap img{width:22px;height:22px;vertical-align:middle}
 @media(max-width:820px){#pic.paper{background-size:auto max(560px,147vw)!important;background-position:50% 46%!important}}
+.who{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}.who button[data-w]{flex:1;border-bottom:0!important}.who .lk,.shb{background:none;border:1px solid var(--line);padding:6px 12px;font:inherit;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);cursor:pointer;text-decoration:none}.lnk{border:1px solid var(--line);background:#fff;padding:12px 14px;font-size:14px;word-break:break-all;user-select:all}.shr{display:flex;gap:10px}.shb{padding:12px 20px}
 .main{scrollbar-width:none}.main::-webkit-scrollbar{display:none}
 .main.ph{gap:14px}.stp{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--ink);margin-top:6px}.main.ph h1{font-size:clamp(30px,3vw,44px);line-height:1.05}
 .chap.path button{padding:9px 0}
@@ -403,8 +404,24 @@ async function repLoad(who){RP.who=who;RP.A={};RP.pg=0;RP.open=null;try{const r=
 const rg=f=>RP.A[PC+'|'+f];
 function report(){
  frame('reception','Team answers','',0);$('bk').style.visibility='visible';
- if(!RP.who){$('main').innerHTML=`<div class="num">Team answers</div><h1>Who?</h1><div class="chap">${RP.people.map(p=>`<button data-w="${esc(p.person)}"><span class="r">·</span><span class="t">${esc(p.person)}</span><span class="s">${p.n} answers</span></button>`).join('')}</div>`;
+ if(RP.share){const p=RP.share,url=location.origin+location.pathname.replace(/[^/]*$/,'')+'?p='+encodeURIComponent(p.person)+'&c='+p.code;
+  const msg='Hi '+p.person+'! Welcome to Brazilian Soul Beauty. Please open this link and fill in My details: '+url;
+  $('main').innerHTML=`<div class="num">New starter</div><h1>${esc(p.person)}</h1><p class="lede">Send this link to her.</p><div class="lnk" id="lnk">${esc(url)}</div>
+  <div class="shr"><a class="shb" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a><button class="shb" id="cp">Copy link</button></div>`;
+  $('cp').onclick=async()=>{try{await navigator.clipboard.writeText(url);$('cp').textContent='Copied ✓'}catch(e){const r=document.createRange();r.selectNode($('lnk'));getSelection().removeAllRanges();getSelection().addRange(r)}};
+  $('nx').textContent='Team answers';$('nx').disabled=false;$('nx').onclick=()=>{RP.share=null;report()};return}
+ if(RP.add){$('main').innerHTML=`<div class="num">New starter</div><h1>Her <em>name</em></h1><div class="f"><input id="nn" class="wi-search" placeholder="First name" autocomplete="off"></div>
+  <div class="wi-chips" id="nr">${[['nails','Nails'],['beauty','Beauty'],['reception','Reception']].map(([v,t],i)=>`<button data-r="${v}" class="${i==0?'on':''}">${t}</button>`).join('')}</div><p class="meta" id="nerr"></p>`;
+  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-r]').forEach(x=>x.classList.remove('on'));b.classList.add('on')});
+  $('nx').textContent='Create link';$('nx').disabled=false;$('nx').onclick=async()=>{const nm=$('nn').value.trim();if(nm.length<2){$('nerr').textContent='Write her name.';return}
+   $('nx').disabled=true;try{const r=await rpc('onb_add_person',{p_person:person,p_code:CODE,p_name:nm,p_role:document.querySelector('[data-r].on').dataset.r});if(!r.ok)throw 0;RP.share=await r.json();RP.add=false;RP.list=null;report()}catch(e){$('nerr').textContent='Could not create. Try again.';$('nx').disabled=false}};
+  setTimeout(()=>$('nn').focus(),50);return}
+ if(!RP.who){if(!RP.list){rpc('onb_list_people',{p_person:person,p_code:CODE}).then(r=>r.json()).then(l=>{RP.list=Array.isArray(l)?l:[];if(view=='rep'&&!RP.who&&!RP.add&&!RP.share)report()}).catch(()=>{RP.list=[]})}
+  const cnt={};RP.people.forEach(p=>cnt[p.person]=p.n);const names=[...new Set([...(RP.list||[]).map(p=>p.person),...RP.people.map(p=>p.person)])].slice(0,8);
+  $('main').innerHTML=`<div class="num">Team answers</div><h1>Who?</h1><div class="chap">${names.map(nm=>{const L=(RP.list||[]).find(x=>x.person==nm);return `<div class="who"><button data-w="${esc(nm)}"><span class="r">·</span><span class="t">${esc(nm)}</span><span class="s">${cnt[nm]||0} answers</span></button>${L?`<button class="lk" data-l="${esc(nm)}">Link</button>`:''}</div>`}).join('')}</div><button class="adm" id="add">+ New starter</button>`;
   $('nx').textContent='My path';$('nx').disabled=false;$('nx').onclick=()=>{view='home';render()};
+  $('add').onclick=()=>{RP.add=true;report()};
+  document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{RP.share=(RP.list||[]).find(x=>x.person==b.dataset.l);report()});
   document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>repLoad(b.dataset.w));return}
  if(RP.open!=null){const p=POL[RP.open],sg=rg(p.id+'_sign');
   $('main').innerHTML=`<div class="num">${esc(RP.who)} · Policy ${String(RP.open+1).padStart(2,'0')}</div><h1 class="rep-h">${esc(p.title)}</h1>
@@ -559,7 +576,7 @@ async function next(){
  if(si<C.S.length-1){si++;CALSEL=null;screen()}
 }
 function goNext(){const nk=CH.findIndex((x,k)=>k>ci&&!x.soon&&!chDone(x));if(nk<0){view='home';return render()}if(!unlocked(nk)){view='home';return render()}ci=nk;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';return render()}
-function back(){if(view=='tr'||view=='pol'){view='home';return render()}if(view=='ps')return polBack();if(view=='rep'){if(RP.open!=null){RP.open=null;return report()}if(RP.who){RP.who=null;return report()}view='home';return render()}if(view=='wi'){if(WI.open!=null){WI.open=null;return whatif()}view='home';return render()}if(view=='ch'){CALSEL=null;if(si>0){si--;screen()}else{view='home';render()}}}
+function back(){if(view=='tr'||view=='pol'){view='home';return render()}if(view=='ps')return polBack();if(view=='rep'){if(RP.add||RP.share){RP.add=false;RP.share=null;return report()}if(RP.open!=null){RP.open=null;return report()}if(RP.who){RP.who=null;return report()}view='home';return render()}if(view=='wi'){if(WI.open!=null){WI.open=null;return whatif()}view='home';return render()}if(view=='ch'){CALSEL=null;if(si>0){si--;screen()}else{view='home';render()}}}
 
 /* ---------- WHAT IF ---------- */
 async function loadWI(){if(!WI.rows.length){try{WI.rows=await (await fetch(SBU+'bsb_onb_whatif?active=is.true&order=sort',{headers:H})).json()}catch(e){WI.rows=[]}}whatif()}
