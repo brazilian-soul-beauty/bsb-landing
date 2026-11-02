@@ -703,14 +703,18 @@ function vereditoEstampa(cores){const av=cores.map(c=>({...c,a:avaliarHex(c.hex)
   const ruim=av.filter(c=>c.a.chip==='n').reduce((s,c)=>s+c.pct,0)/tot;
   const chip=fundoOk&&boa>=.7?'c':ruim>=.3?'n':'q';return {chip,av,boa,fundo,estampa:true,melhor:fundo.a.melhor,motivo:fundo.a.motivo}}
 const NOMEV={p:'Perfeita',c:'Sua',q:'Longe do rosto',n:'Não é sua'};
-function mtAuto(){
+async function mtAuto(){
   const im=MT.img,S=Math.min(1,360/Math.max(im.width,im.height)),W=Math.round(im.width*S),H=Math.round(im.height*S);
   const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.drawImage(im,0,0,W,H);const d=x.getImageData(0,0,W,H).data;
+  mtPasso('Analisando…');let alfa=null;try{alfa=await mascaraIA(c)}catch(e){alfa=null}if(MT.img!==im)return;
+  if(alfa){let n=0;for(let i=0;i<alfa.length;i++)if(alfa[i]>128)n++;if(n<alfa.length*.05)alfa=null}
+  const roupa=i=>!alfa||alfa[i]>128;
   const centro=(px,py)=>px>W*.3&&px<W*.7&&py>H*.3&&py<H*.7,largo=(px,py)=>px>W*.15&&px<W*.85&&py>H*.15&&py<H*.85;
   const neutros=[],meio=[],amplo=[];
   for(let py=0;py<H;py++)for(let px=0;px<W;px++){const o=(py*W+px)*4,r=d[o],g=d[o+1],b=d[o+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);
-    if(largo(px,py)&&(px+py)%2===0)amplo.push([lin(r/255),lin(g/255),lin(b/255)]);
-    if(centro(px,py))meio.push([lin(r/255),lin(g/255),lin(b/255)]);
+    const ii=py*W+px;if((alfa?roupa(ii):largo(px,py))&&(px+py)%2===0)amplo.push([lin(r/255),lin(g/255),lin(b/255)]);
+    if(alfa?roupa(ii)&&centro(px,py):centro(px,py))meio.push([lin(r/255),lin(g/255),lin(b/255)]);
+    else if(alfa&&!roupa(ii)&&mx>=170&&mx<252&&(mx-mn)/mx<.22)neutros.push([lin(r/255),lin(g/255),lin(b/255),r+g+b,(mx-mn)/mx]);
     else if(mx>=170&&mx<252&&(mx-mn)/mx<.22)neutros.push([lin(r/255),lin(g/255),lin(b/255),r+g+b,(mx-mn)/mx])}
   // referência de branco: os neutros mais claros fora do centro (papel, parede, etiqueta)
   MT.ganho=[1,1,1];MT.ref=false;
@@ -719,6 +723,7 @@ function mtAuto(){
     const med=[0,1,2].map(k=>{const a=top.map(t=>t[k]).sort((p,q)=>p-q);return a[a.length>>1]});
     const Y=.2126*med[0]+.7152*med[1]+.0722*med[2];const ex=Y>.5?Math.min(1.25,.9/Y):1;MT.ganho=med.map(m=>Math.min(2.5,ex*Y/m));MT.ref=true}
   // a peça: as cores do centro, sem sombra; se tiver várias, é estampa
+  if(!meio.length)for(const v of amplo)meio.push(v);
   const labs=meio.map(v=>linParaLab(...v.map((t,k)=>Math.min(1,t*MT.ganho[k])))),cores=coresDaPeca(labs);
   $('#mtAlvo').hidden=true;mtPasso('');
   const coresL=coresDaPeca(amplo.map(v=>linParaLab(...v.map((t,k)=>Math.min(1,t*MT.ganho[k])))));
@@ -740,16 +745,17 @@ function mtCartao(chip,sub,extra,salvarHex){const [tit,txt,ic]=RESP[chip],r=$('#
   $('#mtOutra').onclick=mtReset;const bt=$('#mtTenho');
   if(bt){if(!dbDoc)bt.remove();else{const on=()=>bt.innerHTML=ICS['coat-hanger']+(SALVOS.tenho.has(salvarHex)?' Salva':' Tenho');on();bt.onclick=()=>{SALVOS.tenho.add(salvarHex);salvarNuvem();on()}}}}
 function mtEstampa(cores){const v=vereditoEstampa(cores);
-  mtCartao(v.chip,`Estampa · ${Math.round(v.boa*100)}% nas suas cores`,`<div class="est-bar">${v.av.map(c=>`<i style="flex:${c.pct};background:${c.hex}"></i>`).join('')}</div>`,null)}
+  mtCartao(v.chip,`Estampa · ${Math.round(v.boa*100)}% nas suas cores`,`<div class="est-bar">${v.av.map(c=>`<i style="flex:${c.pct};background:${c.hex}"></i>`).join('')}</div>
+  <div class="est-lista">${v.av.slice(0,6).map(c=>`<div><i style="background:${c.hex}"></i><span>${c.pct}%</span><b class="${c.a.chip}">${NOMEV[c.a.chip]}</b></div>`).join('')}</div>`,null)}
 function mtResultado(v,auto){
-  const lab=linParaLab(...v),p=lab.C<12?0:lab.C/Math.max(cmax(lab.L,lab.h),1e-6),motivo=regraEstacao(lab.L,lab.C,lab.h,p);
+  const lab=linParaLab(...v),motivo=motivoCor(lab);
   let melhor=null,dm=1e9;for(const o of labsCartela()){const d=de2000(lab,o.lab);if(d<dm){dm=d;melhor=o.c}}
   const hex='#'+v.map(x=>Math.round(gam(Math.max(0,x))*255).toString(16).padStart(2,'0')).join('').toUpperCase();
   let chip;if(!motivo&&(melhor.perf&&dm<6))chip='p';else if(!motivo||dm<3)chip='c';else if(dm<10)chip='q';else chip='n';
   const sub=chip==='n'&&motivo?'Cor '+motivo+' para '+EST:null;
   mtCartao(chip,sub,`<div class="par"><i style="background:${hex}"></i><span>Peça</span><i style="background:${melhor.hex}"></i><span>Sua cor mais próxima</span></div>${MT.ref?'':'<div class="mo">Dica: inclua algo branco na foto para mais precisão</div>'}`,melhor.hex)
 }
-$('#navMatch').onclick=()=>{aba('t4');if(MT.img)requestAnimationFrame(mtDesenhar)};
+$('#navMatch').onclick=()=>{modeloRecorte();aba('t4');if(MT.img)requestAnimationFrame(mtDesenhar)};
 /* ===== Consultora: mede a estampa e a IA explica ===== */
 let sampleFn=null;const CS={img:null,blob:null,cores:[],resumo:''};
 (async()=>{try{const s=await window.claude?.use?.('sample');if(!s)return;const lim=await s.limits().catch(()=>null);if(!lim?.images)return;sampleFn=s;$('#csAbrir').hidden=false}catch(e){}})();
@@ -852,8 +858,9 @@ const CHIP={p:'★ Perfeita',c:'Sua',q:'Longe do rosto',n:'Não é sua'},CHIPCOR
 function linDeHex(hex){return [1,3,5].map(i=>lin(parseInt(hex.substr(i,2),16)/255))}
 function hexDeLin(v){return '#'+v.map(x=>Math.round(gam(Math.max(0,Math.min(1,x)))*255).toString(16).padStart(2,'0')).join('').toUpperCase()}
 const _aval=new Map();
+function motivoCor(lab){const C=lab.L<22&&lab.C<24?Math.min(lab.C,11):lab.C,p=C<12?0:C/Math.max(cmax(lab.L,lab.h),1e-6);return regraEstacao(lab.L,C,lab.h,p)}
 function avaliarHex(hex){const k=EST+hex;if(_aval.has(k))return _aval.get(k);
-  const lab=hexLab(hex),p=lab.C<12?0:lab.C/Math.max(cmax(lab.L,lab.h),1e-6),motivo=regraEstacao(lab.L,lab.C,lab.h,p);
+  const lab=hexLab(hex),motivo=motivoCor(lab);
   let melhor=null,dm=1e9;for(const o of labsCartela()){const d=de2000(lab,o.lab);if(d<dm){dm=d;melhor=o.c}}
   let chip;if(!motivo&&melhor.perf&&dm<6)chip='p';else if(!motivo||dm<3)chip='c';else if(dm<10)chip='q';else chip='n';
   const r={hex,chip,motivo,melhor,dm};_aval.set(k,r);return r}
@@ -1200,7 +1207,7 @@ const ICS={'check-circle':'<svg class="ic" aria-hidden="true" viewBox="0 0 256 2
 /* ===================== Início: um toque e já está no lugar ===================== */
 $('#navInicio').onclick=$('#logo').onclick=()=>aba('t0');
 $('#inCores').onclick=()=>{aba('t1');if(vista.modo==='junto')mosaico()};
-$('#inMatch').onclick=()=>{aba('t4');$('#mtCam').click()};
+$('#inMatch').onclick=()=>{modeloRecorte();aba('t4');$('#mtCam').click()};
 $('#inArm').onclick=()=>{modeloRecorte();aba('t3');estado.minha='armario';verMinhas();if(pecasCol&&!PECAS.length)$('#armFotos').click()};
 $('#inLook').onclick=()=>{aba('t5');renderPv()};
 $('#inDesc').onclick=()=>$('#estDesc').click();
