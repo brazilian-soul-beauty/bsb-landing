@@ -283,7 +283,7 @@ function start(){document.getElementById('login').style.display='none';document.
   setWho(S.who);S.anchor=today();load()}
 
 /* ---------- data ---------- */
-function load(){document.getElementById('per').textContent=label();
+function load(){var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):pd('2026-11-01');document.getElementById('per').textContent=label()+(range()[1]<s0?' · not counted':'');
   document.getElementById('next').disabled=range()[1]>=today();
   var r=range();document.getElementById('main').classList.add('load');
   var b={p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])};
@@ -401,9 +401,9 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
       rpc('soul_today',{p_code:S.code,p_person:S.who,p_date:day}).catch(function(){return null})]).then(function(x){if(S.tdk!==key)return;S.td={std:x[0]||{},t:x[1]||{}};if(S.tab==='today')renderToday(M)});return}
   var st=S.td.std,t=S.td.t,L=st.lunch_max||30,days=st.days||[],by={};days.forEach(function(x){by[x.d]=x});
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,tds=ymd(td);
-  var streak=0;for(var i=0;i<40;i++){var d=new Date(td);d.setDate(d.getDate()-i);if(st0&&d<st0&&!S.admin)break;var x=by[ymd(d)];
+  var streak=0;for(var i=0;i<40;i++){var d=new Date(td);d.setDate(d.getDate()-i);if((st0&&d<st0)||d.getMonth()!==td.getMonth())break;var x=by[ymd(d)];
     if(!x||!x.worked)continue;if(dayGreen(x,L)){streak++;continue}if(i===0)continue;break}
-  var wk=[];for(var j=6;j>=0;j--){var d2=new Date(td);d2.setDate(d2.getDate()-j);var x2=by[ymd(d2)],k=ymd(d2);
+  var wk=[];for(var j=6;j>=0;j--){var d2=new Date(td);d2.setDate(d2.getDate()-j);var k=ymd(d2),pre=(st0&&d2<st0)||d2.getMonth()!==td.getMonth(),x2=pre?null:by[k];
     wk.push('<button class="'+(k===day?'on':'')+'" onclick="S.tday=\''+k+'\';renderToday(document.getElementById(\'main\'))"><i class="'+(x2&&x2.worked&&dayGreen(x2,L)?'g':k===tds?'t':x2&&x2.worked?'y':'')+'">'+(x2&&x2.worked&&dayGreen(x2,L)?'✓':k===tds?'•':x2&&x2.worked?'!':'')+'</i>'+DW[(d2.getDay()+6)%7].slice(0,1)+'<span style="opacity:.7">'+d2.getDate()+'</span></button>')}
   var x=by[day]||{},isT=day===tds,ap=t.appts||[],dn=ap.filter(function(a){return a.done}).length,nx=ap.filter(function(a){return !a.done})[0];
   var hr=+(t.now||'12:00').slice(0,2),hi=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',fn=(S.who||'').split(' ')[0];
