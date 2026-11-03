@@ -280,7 +280,7 @@ function key(k){if(k==='⌫'){PIN=PIN.slice(0,-1);return renderLogin()}
     S.admin=r[0].role==='admin';S.code=tried;PIN='';
     S.who=S.admin?(PICK===r[0].person?firstGirl():PICK):PICK;start()}).catch(function(){PIN='';renderLogin('No internet')})}}
 function firstGirl(){var g=PEOPLE.filter(function(p){return p.role==='therapist'})[0];return g?g.person:'Dania'}
-function lvl(n){var p=PEOPLE.filter(function(x){return x.person===n})[0],L=['Soul','Soul+','Senior Soul','Soul Educator','Soul Lead'],v=(p&&p.level)||1;return L[v-1]+' · Level '+v}
+function lvl(n){var p=PEOPLE.filter(function(x){return x.person===n})[0],L=['Soul','Soul+','Senior Soul','Soul Lead','Soul Manager'],v=(p&&p.level)||1;return L[v-1]+' · Level '+v}
 function setWho(n){S.who=n;document.getElementById('nm').textContent=n;document.getElementById('lv').textContent=lvl(n);
   var av=document.getElementById('av');av.innerHTML=avHtml(n).replace(/^<div class="av">|<\/div>$/g,'');
   if(S.admin)document.getElementById('team').innerHTML=PEOPLE.filter(function(p){return p.role==='therapist'}).map(function(p){return '<button class="'+(p.person===n?'on':'')+'" onclick="setWho(\''+p.person+'\');load()" title="'+p.person+'">'+avHtml(p.person)+'</button>'}).join('')}
@@ -382,7 +382,7 @@ function renderXM(M){var x=S.xm||{},P=x.pers||{clients:0,pe:0},pp=P.clients?Math
   requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b,.lad b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},60)})}
 
 /* ---------- Soul Path ---------- */
-var LV=['Soul','Soul+','Senior Soul','Soul Educator','Soul Lead'];
+var LV=['Soul','Soul+','Senior Soul','Soul Lead','Soul Manager'];
 function gbp(v){return '£'+(Math.round(v)).toLocaleString()}
 function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(String(s.start).replace(/"/g,'')):null;
   var tc=s.tips,py=s.pay||{},hrs=py.hours!=null?+py.hours:(tc?+tc.hours:0),rate=+s.base_rate||0,pay=py.gross!=null?+py.gross:hrs*rate,bon=+py.bonus||0,tips=tc?+tc.tips:0,perks=s.perks||[];if(py.salaried&&hrs)rate=(+py.basic)/hrs;
