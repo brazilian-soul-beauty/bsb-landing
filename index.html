@@ -136,6 +136,9 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .boom{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
 .boom i{position:absolute;top:-30px;font-style:normal;font-size:26px;animation:fall 2.2s cubic-bezier(.2,.7,.4,1) forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.strip{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+.strip i{width:9px;height:9px;border-radius:3px;background:#EEEDF3}
+.strip i.g{background:#3CC48A}.strip i.r{background:#E46A7C}.strip i.p{background:#C9C6D6}
 /* sheet */
 .sheet{position:fixed;inset:0;background:rgba(31,29,43,.35);display:none;align-items:center;justify-content:center;z-index:9}
 .sheet.on{display:flex}
@@ -322,14 +325,18 @@ function render(){
   if(S.tab==='path')return renderPath(M);
   var C=calc(S.data),x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,rp=n?Math.round(100*nr/n):null,topR=rp!=null&&rp>=lad[0];
   C.push({k:'newrev',ic:'✍️',t:'New client reviews',ok:rp==null?null:topR,big:rp==null?'–':rp,of:rp==null?'':'%',sub:rp==null?'No new clients yet':(S.admin?nr+' of '+n+' new clients':nr+' reviews'),pct:rp==null?0:Math.min(1,rp/lad[0])});
+  var s0h=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,PRE0=s0h&&range()[1]<s0h;
   var scored=C.filter(function(c){return c.ok!==null}),met=scored.filter(function(c){return c.ok}).length,tot=scored.length;
   var all=tot&&met===tot,R=82,CF=2*Math.PI*R;
   var h='<div class="hero"><small>This is your job</small><h2>BSB Standard</h2><p>'+label()+'</p>'+(topR?'<p style="margin-top:10px"><span class="top-rated">🏆 Top Rated</span></p>':'')+
    '<div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="'+R+'" stroke="rgba(255,255,255,.18)" stroke-width="14" fill="none"/>'+
    '<circle id="arc" cx="95" cy="95" r="'+R+'" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/></svg>'+
    '<div class="c"><div><b id="cnt">0</b><span>of '+tot+' standards</span></div></div></div>'+
-   '<div class="verdict"><em>'+(all?'💜':'🎯')+'</em><span>'+(all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div></div><div class="bands">';
-  function tile(c,i){var st=c.ok===null?'na':(c.ok?'ok':'no'),s='<button class="tile '+st+'" style="animation-delay:'+(i*50)+'ms" onclick="openT(\''+c.k+'\')"><div class="h"><em>'+c.ic+'</em>'+c.t+'<span class="chip '+st+'">'+(c.ok===null?'–':c.ok?'✓':'Fix')+'</span></div>';
+   '<div class="verdict"><em>'+(PRE0?'🗂️':all?'💜':'🎯')+'</em><span>'+(PRE0?'Reference only. Before your Soul Path started.':all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div></div><div class="bands">';
+  var st0x=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,PRE=st0x&&range()[1]<st0x,Lm=(S.data&&S.data.lunch_max)||30,DD=(S.data&&S.data.days)||[];
+  var DF={time:function(x){return x.worked?!(x.late_min>0):null},lunch:function(x){return x.worked&&x.lunch_min!=null?x.lunch_min<=Lm:null},abs:function(x){return x.absent&&!x.on_leave?false:(x.worked?true:null)},look:function(x){return x.worked?(x.look_marked&&x.look_ok!==false):null},tasks:function(x){return x.worked?(x.t_morning>0&&x.t_day>0&&x.t_close>0):null}};
+  function strip(k){if(!DF[k]||S.mode==='day'||!DD.length)return '';return '<div class="strip">'+DD.map(function(x){var v=DF[k](x);return '<i class="'+(v===null?'':(PRE?'p':v?'g':'r'))+'" title="'+x.d+'"></i>'}).join('')+'</div>'}
+  function tile(c,i){var st=PRE||c.ok===null?'na':(c.ok?'ok':'no'),s='<button class="tile '+st+'" style="animation-delay:'+(i*50)+'ms" onclick="openT(\''+c.k+'\')"><div class="h"><em>'+c.ic+'</em>'+c.t+'<span class="chip '+st+'">'+(PRE||c.ok===null?'–':c.ok?'✓':'Fix')+'</span></div>'+strip(c.k);
     if(c.tri)s+='<div class="tri">'+['AM','Day','Close'].map(function(l,j){return '<div><b style="font-size:16px">'+c.tri[j]+'<small style="font-size:11px;color:var(--faint)">/'+c.n+'</small></b><span>'+l+'</span></div>'}).join('')+'</div>';
     else s+='<div class="big">'+c.big+'<small>'+c.of+'</small></div>';
     return s+'<div class="sub">'+esc(c.sub)+'</div><div class="bar"><b data-w="'+Math.round(c.pct*100)+'"></b></div></button>'}
