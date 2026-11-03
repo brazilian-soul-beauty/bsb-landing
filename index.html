@@ -141,6 +141,12 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .strip i.g{background:#3CC48A}.strip i.r{background:#E46A7C}.strip i.p{background:#C9C6D6}
 .bands.b1{grid-template-rows:auto 1fr}.bands.b2{grid-template-rows:auto 1fr auto auto}
 .bands.b1 .row{grid-template-rows:1fr 1fr}.bands.b2 .row{grid-template-rows:1fr 1fr}
+.hr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.hr div{background:rgba(255,255,255,.16);border-radius:14px;padding:10px 12px}
+.hr b{display:block;font-size:22px;font-weight:800}.hr span{font-size:11.5px;opacity:.9}
+.nx{background:rgba(0,0,0,.14);border-radius:14px;padding:10px 12px;margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.nh{font-size:12px;opacity:.95;display:flex;gap:6px;align-items:center}.nh b{font-size:14px}.nh span{margin-left:auto;background:#fff;color:#0F6B47;font-weight:800;border-radius:99px;padding:2px 8px;font-size:11.5px}
+.ni{font-size:12.5px;display:flex;align-items:center;gap:8px}.ni i{width:13px;height:13px;border-radius:4px;border:1.5px solid rgba(255,255,255,.8);flex:none}.ni em{font-style:normal;opacity:.8;margin-left:auto}
 /* sheet */
 .sheet{position:fixed;inset:0;background:rgba(31,29,43,.35);display:none;align-items:center;justify-content:center;z-index:9}
 .sheet.on{display:flex}
@@ -389,8 +395,11 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
   var disc=perks.filter(function(p){return p.kind==='discount'}).reduce(function(a,p){return a+(+p.value)},0),gift=perks.filter(function(p){return p.kind==='gift'}).reduce(function(a,p){return a+(+p.value)},0);
   var tot=pay+tips+disc+gift,allh=hrs?tot/hrs:0;
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#5FD3A0 0%,#1F9D6B 50%,#0F6B47 100%)"><small>This is your path</small><h2>Soul Path</h2><p>'+LV[lv-1]+' · Level '+lv+'</p>'+
-   '<div style="margin:auto 0;display:flex;flex-direction:column;gap:10px">'+LV.map(function(n,i){var on=i+1===lv,done=i+1<lv;return '<div style="display:flex;align-items:center;gap:10px;opacity:'+(on||done?1:.5)+'"><span style="width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:'+(on?'#fff':'rgba(255,255,255,.18)')+';color:'+(on?'#1F9D6B':'#fff')+';font-weight:800;font-size:13px">'+(done?'✓':i+1)+'</span><b style="font-size:'+(on?17:14)+'px">'+n+'</b>'+(on?'<span style="margin-left:auto;font-size:11px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:99px">You are here</span>':'')+'</div>'}).join('')+'</div>'+
-   '<div class="verdict"><em>🗓️</em><span>'+(st&&today()<st?'Your path starts on '+st.getDate()+' '+MN[st.getMonth()]+'.':'○○○ 3 months = <b>£'+(s.bonus||250)+' bonus</b> · ○○○○○○ 6 months = next level')+'</span></div></div><div class="grid">';
+   '<div style="margin:auto 0 0;display:flex;flex-direction:column;gap:7px">'+LV.map(function(n,i){var on=i+1===lv,done=i+1<lv;return '<div style="display:flex;align-items:center;gap:10px;opacity:'+(on||done?1:.5)+'"><span style="width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:'+(on?'#fff':'rgba(255,255,255,.18)')+';color:'+(on?'#1F9D6B':'#fff')+';font-weight:800;font-size:13px">'+(done?'✓':i+1)+'</span><b style="font-size:'+(on?17:14)+'px">'+n+'</b>'+(on?'<span style="margin-left:auto;font-size:11px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:99px">You are here</span>':'')+'</div>'}).join('')+'</div>'+
+   (function(){var hr=(+s.base_rate||0)+(+s.bonus_rate||0),sal=s.pay&&s.pay.salaried,NX={1:['Training and trial passed','1 month of Standard all green'],2:['6 months with 4 of 5','A speciality approved by Ligia','Book 1 + reflection'],3:['6 more months with 4 of 5','Train a new Soul','Create an Academy module','Book 2 + reflection'],4:['Chosen by Ligia']}[lv]||[];
+   return '<div class="hr"><div><b>'+(sal?'Salary':'£'+hr.toFixed(2))+'</b><span>'+(sal?'Fixed':'Your hour')+'</span></div><div><b>'+(sal?'+£2/h':'£'+(hr+2).toFixed(2))+'</b><span>🌟 Extraordinary month</span></div></div>'+
+   (lv<5?'<div class="nx"><div class="nh">Next · <b>'+LV[lv]+'</b><span>+£1/h</span></div>'+NX.map(function(t,i){return '<div class="ni"><i></i>'+t+(i===0&&/months/.test(t)?' <em>0/6</em>':'')+'</div>'}).join('')+'</div>':'')})()+
+   '</div><div class="grid">';
   var goals=(s.goals||[]).filter(function(g){return g.kind!=='eminence'});
   if(!goals.length)h+='<div class="tile span2"><div class="h"><em>🎯</em>My goals</div><div class="sub" style="margin-top:auto">Your goals from the meeting will appear here.</div></div>';
   var hasEm=(s.goals||[]).some(function(g){return g.kind==='eminence'});
