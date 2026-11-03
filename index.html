@@ -230,7 +230,6 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
     <button class="tab" data-t="std">✅ <span><span class="hm">BSB </span>Standard</span></button>
     <button class="tab" data-t="xm">⭐ Extra mile</button>
     <button class="tab" data-t="path">🌱 Soul Path</button>
-    <button class="tab" data-t="em" id="tabEm" style="display:none">🌿 Eminence</button>
   </div>
   <main id="main"></main>
 </div>
@@ -314,8 +313,7 @@ function render(){
   var M=document.getElementById('main');
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null;
   if(!S.admin&&st0&&range()[1]<st0){M.innerHTML='<div class="wait"><em>✨</em><b style="font-size:22px;color:var(--ink)">Your Soul Path starts on '+st0.getDate()+' '+MN[st0.getMonth()]+'</b>Everything counts from that day.</div>';return}
-  var hasEm=((S.sp&&S.sp.goals)||[]).some(function(g){return g.kind==='eminence'});document.getElementById('tabEm').style.display=hasEm?'':'none';
-  if(S.tab==='em'&&!hasEm)S.tab='path';
+  if(S.tab==='em')S.tab='path';
   document.getElementById('seg').style.display=document.querySelector('.nav').style.display=S.tab==='today'?'none':'';
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
@@ -375,15 +373,20 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
    '<div class="verdict"><em>🗓️</em><span>'+(st&&today()<st?'Your path starts on '+st.getDate()+' '+MN[st.getMonth()]+'.':'○○○ 3 months = <b>£'+(s.bonus||250)+' bonus</b> · ○○○○○○ 6 months = next level')+'</span></div></div><div class="grid">';
   var goals=(s.goals||[]).filter(function(g){return g.kind!=='eminence'});
   if(!goals.length)h+='<div class="tile span2"><div class="h"><em>🎯</em>My goals</div><div class="sub" style="margin-top:auto">Your goals from the meeting will appear here.</div></div>';
+  var hasEm=(s.goals||[]).some(function(g){return g.kind==='eminence'});
+  if(hasEm){var bk=S.who+'|'+ymd(range()[0]);if(S.brk!==bk){S.brk=bk;S.br=null;rpc('soul_brand',{p_code:S.code,p_person:S.who,p_month:ymd(range()[0])}).then(function(r){S.br=r||{};if(S.tab==='path')render()}).catch(function(){S.br={}})}}
+  var nG=Math.min(goals.length,2)+(hasEm?1:0),SP=function(i){return nG<=2?'span2':(i===0?'span2':'')};
   goals.slice(0,2).forEach(function(g,i){
     if(g.kind==='facial_share'){var mx=s.mix||[],last=mx[mx.length-1]||{facials:0,massages:0},sh=(last.facials+last.massages)?Math.round(100*last.facials/(last.facials+last.massages)):0,mxv=Math.max.apply(null,mx.map(function(m){return m.facials+m.massages}).concat([1]));
       h+='<div class="tile span2 ok" style="animation-delay:'+(i*60)+'ms"><div class="h"><em>🎯</em>'+esc(g.title)+'<span class="chip ok">'+sh+'% skin</span></div>'+
        '<div style="display:flex;align-items:flex-end;gap:10px;height:110px;margin-top:auto">'+mx.map(function(m){var f=m.facials/mxv*100,ms=m.massages/mxv*100;return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;display:flex;flex-direction:column-reverse;height:90px"><i style="display:block;height:'+f+'%;background:var(--ok);border-radius:0 0 6px 6px"></i><i style="display:block;height:'+ms+'%;background:#D9D6E6;border-radius:6px 6px 0 0"></i></div><span style="font-size:10.5px;color:var(--muted)">'+MN[+m.m.slice(5)-1]+'</span></div>'}).join('')+'</div>'+
        '<div class="sub" style="min-height:0;margin-top:6px"><b style="color:var(--ok)">■</b> Facials '+last.facials+' · <b style="color:#B9B5CC">■</b> Massages '+last.massages+' · '+esc(g.note||'')+'</div></div>';}
     else if(g.kind==='content'){var exp=Math.floor((x.free_min||0)/60),v=(x.v_nails||0)+(x.v_content||0);
-      h+='<div class="tile span2" style="animation-delay:'+(i*60)+'ms"><div class="h"><em>🎯</em>'+esc(g.title)+'<span class="chip '+(exp&&v>=exp?'ok':'no')+'">'+v+'/'+exp+'</span></div><div class="big">'+v+'<small> videos</small></div><div class="sub">'+esc(g.note||'')+'</div><div class="bar"><b data-w="'+(exp?Math.min(100,100*v/exp):0)+'"></b></div></div>';}
-    else h+='<div class="tile span2"><div class="h"><em>🎯</em>'+esc(g.title)+'</div><div class="sub" style="margin-top:auto">'+esc(g.note||'')+'</div></div>';});
-  if(goals.length===1)h+='<div class="tile span2"></div>';
+      h+='<div class="tile '+SP(i)+'" style="animation-delay:'+(i*60)+'ms"><div class="h"><em>🎯</em>'+esc(g.title)+'<span class="chip '+(exp&&v>=exp?'ok':'no')+'">'+v+'/'+exp+'</span></div><div class="big">'+v+'<small> videos</small></div><div class="sub">'+esc(g.note||'')+'</div><div class="bar"><b data-w="'+(exp?Math.min(100,100*v/exp):0)+'"></b></div></div>';}
+    else h+='<div class="tile '+SP(i)+'"><div class="h"><em>🎯</em>'+esc(g.title)+'</div><div class="sub" style="margin-top:auto">'+esc(g.note||'')+'</div></div>';});
+  if(hasEm){var b=S.br||{},cs=b.cards||[],kn=b.known||[],pr=cs.filter(function(c){return c.section==='product'||c.section==='study'}),kc=pr.filter(function(c){return kn.indexOf(c.id)>=0}).length,pc=pr.length?Math.round(100*kc/pr.length):0,nf=b.new_facial||0,nb=b.new_buyers||0,rp=nf?Math.round(100*nb/nf):0;
+    h+='<div class="tile" style="background:#F1FAF5;border-color:#CDEBDB"><div class="h"><em>🌿</em>Eminence<span class="chip '+(rp>=20?'ok':'na')+'">'+(rp>=33?'🥇':rp>=20?'🥉':'🎯 20%')+'</span></div><div class="big" style="color:#0F6B47">'+rp+'<small>%</small></div><div class="sub">new facial clients took it home'+(S.admin&&nf?' · '+nb+' of '+nf:'')+'</div><div class="sub" style="min-height:0;margin-top:4px">📚 Learned '+pc+'%</div><div class="bar"><b data-w="'+pc+'" style="background:#1F9D6B"></b></div></div>';}
+  if(nG===1)h+='<div class="tile span2"></div>';
   h+='<div class="tile" style="grid-column:span 4;animation-delay:150ms"><div class="h"><em>💷</em>My month, all in · '+label()+(S.admin?'<button class="chip ok" style="cursor:pointer" onclick="perkForm()">+ Add discount or gift</button>':'')+'</div>'+
      '<div class="earn allin" style="border:0;padding:8px 0 0;grid-template-columns:2.6fr repeat(5,1fr);align-items:stretch">'+'<div style="background:var(--ok);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:22px">'+'<div><b style="color:#fff;font-size:38px;line-height:1">'+gbp(tot)+'</b><span style="color:#fff;opacity:.9">All in this month</span></div>'+'<i style="width:1px;align-self:stretch;background:rgba(255,255,255,.4)"></i>'+'<div><b style="color:#fff;font-size:38px;line-height:1">£'+allh.toFixed(2)+'<small style="font-size:15px;font-weight:600">/h</small></b><span style="color:#fff;opacity:.9">Your real hour</span></div></div>'+'<div><b>£'+rate.toFixed(2)+'</b><span>Per hour</span></div><div><b>'+gbp(pay)+'</b><span>Pay · '+Math.round(hrs)+'h</span></div><div><b>'+gbp(tips)+'</b><span>Tips</span></div>'+'<div><b>'+gbp(disc)+'</b><span>💅 Discounts</span></div><div><b>'+gbp(gift)+'</b><span>🎁 Gifts</span></div></div>'+
      (perks.length?'<div class="sub" style="margin-top:8px;min-height:0">'+perks.map(function(p){return (p.kind==='gift'?'🎁 ':p.auto?'🧾 ':'💅 ')+esc(p.what)+' · £'+(+p.value).toFixed(0)+(p.kind==='gift'?'':' off')+(S.admin&&p.id?' <a style="color:var(--no);cursor:pointer" onclick="perkDel(\''+p.id+'\')">✕</a>':'')}).join(' · ')+'</div>':'')+'</div></div>';
@@ -417,7 +420,7 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   var onT=x.first_in?(x.late_min>0?{ok:false,b:x.late_min+'<small> min late</small>',s:'In at '+String(x.first_in).slice(0,5)}:{ok:true,b:String(x.first_in).slice(0,5),s:'On time'}):{ok:null,b:'⏳',s:ap.length?'Updates tonight':'No clock in'};
   var lu=x.lunch_min!=null?{ok:x.lunch_min<=L,s:'Lunch '+x.lunch_min+' min'}:null;
   h+='<div class="tile '+(onT.ok===true?'ok':onT.ok===false?'no':'')+'"><div class="h"><em>⏰</em>Arrival'+(onT.ok!=null?'<span class="chip '+(onT.ok?'ok':'no')+'">'+(onT.ok?'✓':'Fix')+'</span>':'')+'</div><div class="big">'+onT.b+'</div><div class="sub">'+onT.s+(lu?' · '+(lu.ok?'':'⚠️ ')+lu.s:'')+'</div></div>';
-  var lk=x.look_marked?(x.look_ok===false?{c:'no',b:'Fix',s:x.look_note||'Not to standard'}:{c:'ok',b:'✓',s:x.look_ok?'Checked by Joana':'Confirmed'}):{c:'',b:'–',s:'Tap the lipstick in your run'};
+  var lk=x.look_marked?(x.look_ok===false?{c:'no',b:'Fix',s:x.look_note||'Not to standard'}:{c:'ok',b:'✓',s:x.look_ok?'Checked by Joana':'Confirmed'}):{c:'',b:'–',s:'Not confirmed'};
   h+='<div class="tile '+lk.c+'"><div class="h"><em>💄</em>Look</div><div class="big">'+lk.b+'</div><div class="sub">'+esc(lk.s)+'</div></div>';
   h+='<div class="tile '+(x.t_morning>0&&x.t_day>0&&x.t_close>0?'ok':'')+'"><div class="h"><em>☑️</em>Tasks</div><div class="pills"><span class="'+(x.t_morning>0?'ok':'')+'">'+(x.t_morning>0?'✓ ':'')+'AM</span><span class="'+(x.t_day>0?'ok':'')+'">'+(x.t_day>0?'✓ ':'')+'Day</span><span class="'+(x.t_close>0?'ok':'')+'">'+(x.t_close>0?'✓ ':'')+'Close</span></div></div>';
   h+='<div class="tile '+(exp?(vd>=exp?'ok':''):'')+'"><div class="h"><em>🎬</em>Content'+(exp?'<span class="chip '+(vd>=exp?'ok':'na')+'">'+vd+'/'+exp+'</span>':'')+'</div><div class="big">'+(t.free_min?Math.floor(t.free_min/60)+'<small>h</small>'+(t.free_min%60?' '+(t.free_min%60)+'<small>m</small>':''):'0<small>h</small>')+'</div><div class="sub">free today · '+(exp?exp+' video'+(exp>1?'s':'')+' to film':'no gaps today')+'</div></div>';
@@ -425,9 +428,7 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
     '<div class="tl">'+ap.map(function(a){var n=isT&&nx&&a===nx;return '<div class="'+(a.done?'d':n?'n':'')+'"><b></b><span>'+a.s+'</span></div>'}).join('')+'</div></div>';
   var rv=(t.reviews||[])[0];
   h+='<div class="tile"><div class="h"><em>⭐</em>Latest review</div>'+(rv?'<div style="color:#E8A93B;margin-top:8px;font-size:15px">'+'★★★★★'.slice(0,Math.round(rv.rating))+'</div><div class="quote">"'+esc(rv.content||'')+'"</div>':'<div class="sub" style="margin-top:auto">No new reviews this week</div>')+'</div>';
-  var hasEm=((S.sp&&S.sp.goals)||[]).some(function(g){return g.kind==='eminence'});
-  h+=hasEm?'<div class="tile pc" onclick="S.tab=\'em\';S.ems=\'product\';[].forEach.call(document.getElementById(\'tabs\').children,function(b){b.classList.toggle(\'on\',b.getAttribute(\'data-t\')===\'em\')});render()" style="background:#E3F6EE;border-color:#BFE6D3"><div class="h"><em>🌿</em>Today\'s topic</div><div style="font-weight:800;font-size:17px;margin-top:auto;color:#0F6B47">Learn one Eminence product</div><div class="sub" style="color:#0F6B47">Tap to open ›</div></div>'
-    :'<div class="tile"><div class="h"><em>🌱</em>Soul Path</div><div style="font-weight:800;font-size:17px;margin-top:auto">'+LV[((S.sp&&S.sp.level)||1)-1]+'</div><div class="sub">Every green day counts</div></div>';
+  h+='<div class="tile"><div class="h"><em>🌱</em>Soul Path</div><div style="font-weight:800;font-size:17px;margin-top:auto">'+LV[((S.sp&&S.sp.level)||1)-1]+'</div><div class="sub">Every green day counts</div></div>';
   h+='</div>';M.innerHTML=h;
   if(green&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
 /* ---------- Eminence ---------- */
@@ -461,7 +462,7 @@ function renderEm(M){var key=S.who+'|'+ymd(range()[0]);
       return '<div class="tile pc'+(k?' known':'')+'" style="animation-delay:'+(i*60)+'ms" onclick="emCard('+c.id+')"><div class="h">'+esc(c.title)+'<span class="chip '+(k||c.id===nextId?'ok':'na')+'">'+(k?'✓ Watched':c.id===nextId?'✨ Today':'New')+'</span></div><div class="thumb" style="background-image:url(https://img.youtube.com/vi/'+c.video+'/mqdefault.jpg)"></div></div>'}).join('')+'</div>';}
   else {var nf=b.new_facial||0,nb=b.new_buyers||0,fc=b.facial_clients||0,by=b.buyers||0,rp=nf?Math.round(100*nb/nf):0,lst=b.list;
     h+='<div class="grid">'+
-     '<div class="tile span2"><div class="h"><em>🆕</em>New facial clients who took Eminence home<span class="chip '+(rp>=33?'ok':rp>=20?'ok':'no')+'">'+(rp>=33?'🥇':rp>=20?'🥉':'Goal 20%')+'</span></div><div class="big">'+rp+'<small>%</small></div><div class="sub">'+(S.admin?nb+' of '+nf+' new facial clients · ':'')+'🥉 1 in 5 · 🥇 1 in 3</div><div class="bar"><b data-w="'+Math.min(100,rp*3)+'"></b></div></div>'+
+     '<div class="tile span2"><div class="h"><em>🆕</em>New facial clients who took Eminence home<span class="chip '+(rp>=33?'ok':rp>=20?'ok':'no')+'">'+(rp>=33?'🥇':rp>=20?'🥉':'🎯 20%')+'</span></div><div class="big">'+rp+'<small>%</small></div><div class="sub">'+(S.admin?nb+' of '+nf+' new facial clients · ':'')+'🥉 1 in 5 · 🥇 1 in 3</div><div class="bar"><b data-w="'+Math.min(100,rp*3)+'"></b></div></div>'+
      '<div class="tile"><div class="h"><em>👩</em>All facial clients</div><div class="big">'+(fc?Math.round(100*by/fc):0)+'<small>%</small></div><div class="sub">took Eminence home'+(S.admin?' · '+by+' of '+fc:'')+'</div></div>'+
      '<div class="tile"><div class="h"><em>💷</em>Eminence sold</div><div class="big">'+gbp(b.sales||0)+'</div><div class="sub">'+(b.items||0)+' products</div></div>'+
      (S.admin&&lst?'<div class="tile span2" style="overflow:auto"><div class="h"><em>✅</em>Bought</div><div class="list" style="margin-top:8px">'+((lst.bought||[]).map(function(x){return '<div class="li"><b>'+esc(x.name)+'</b>'+esc(x.item)+'<span style="margin-left:auto">£'+Math.round(x.gbp)+'</span></div>'}).join('')||'<div class="sub">Nobody yet</div>')+'</div></div>'+
