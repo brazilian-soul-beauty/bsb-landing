@@ -340,7 +340,7 @@ function render(){
   var s0h=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,PRE0=s0h&&range()[1]<s0h;
   var scored=C.filter(function(c){return KS.indexOf(c.k)>=0&&c.ok!==null}),met=scored.filter(function(c){return c.ok}).length,tot=scored.length;
   var all=tot&&met===tot,R=82,CF=2*Math.PI*R;
-  var h='<div class="hero'+(PERF?' gold':'')+'"><small>'+(PERF?'What you deliver':'How you work')+'</small><h2>'+(PERF?'Performance':'Behaviour')+'</h2><p>'+label()+'</p>'+(PERF&&topR?'<p style="margin-top:10px"><span class="top-rated">🏆 Top Rated</span></p>':'')+
+  var h='<div class="hero'+(PERF?' gold':'')+'"><small>'+(PERF?'Your numbers':'Behaviour · how you work')+'</small><h2>'+(PERF?'Performance':'BSB Standard')+'</h2><p>'+label()+'</p>'+(PERF&&topR?'<p style="margin-top:10px"><span class="top-rated">🏆 Top Rated</span></p>':'')+
    '<div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="'+R+'" stroke="rgba(255,255,255,.18)" stroke-width="14" fill="none"/>'+
    '<circle id="arc" cx="95" cy="95" r="'+R+'" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/></svg>'+
    '<div class="c"><div><b id="cnt">0</b><span>of '+tot+(PERF?' going beyond':' standards')+'</span></div></div></div>'+
@@ -355,10 +355,9 @@ function render(){
   var by={};C.forEach(function(c){by[c.k]=c});
   if(!PERF){h+='<div class="bh">🤝 Your day-to-day</div><div class="row" style="grid-template-columns:repeat(2,1fr)">'+KB.map(function(k,i){return tile(by[k],i)}).join('')+'</div></div>';M.innerHTML=h;S.C=C;
     var a0=document.getElementById('arc');setTimeout(function(){if(a0)a0.style.strokeDashoffset=CF*(1-(tot?met/tot:0));var ce=document.getElementById('cnt');if(ce)ce.textContent=met;document.querySelectorAll('.bar b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},80);return}
-  h+='<div class="bh">🌟 What you deliver</div><div class="row" style="grid-template-columns:repeat(3,1fr)">'+KP.map(function(k,i){return tile(by[k],i)}).join('')+'</div>';
-  var ym=ymd(range()[0]).slice(0,7),tc=(x.tips||[]).filter(function(q){return q.ym===ym})[0],py=x.pay||{},hrs=py.hours!=null?+py.hours:(tc?+tc.hours:0),pay=py.gross!=null?+py.gross:hrs*(+x.base_rate||0),bon=+py.bonus||0,tips=tc?+tc.tips:0,pk=((S.sp&&S.sp.perks)||[]).reduce(function(a,p){return a+(+p.value||0)},0);
-  h+='<div class="bh">💷 What you earn · '+label()+'</div><div class="earn"><div><b>£'+Math.round(pay).toLocaleString()+'</b><span>Pay · '+Math.round(hrs)+'h'+(bon?' · incl. £'+Math.round(bon)+' bonus':'')+'</span></div><div><b>£'+Math.round(tips)+'</b><span>Tips · £'+(hrs?(tips/hrs).toFixed(2):'0')+'/h</span></div><div class="tot"><b>£'+Math.round(pay+tips+pk).toLocaleString()+'</b><span>All in'+(pk?' · incl. £'+Math.round(pk)+' perks':'')+(hrs?' · £'+((pay+tips+pk)/hrs).toFixed(2)+'/h':'')+(tc&&!tc.final?' · so far':'')+'</span></div>'+
-     '<div class="coh">'+(S.admin?'🆕 '+n+' new clients · ':'')+'✍️ '+nr+' reviews · 💷 £'+Math.round(tips)+' tips<br><span style="color:var(--muted)">Happy clients leave reviews and tips. Your service shows here.</span></div></div></div>';
+  h+='<div class="bh">🌟 Your numbers</div><div class="row" style="grid-template-columns:repeat(3,1fr)">'+KP.map(function(k,i){return tile(by[k],i)}).join('')+'</div>';
+  h+='</div>';
+
   M.innerHTML=h;S.C=C;
   requestAnimationFrame(function(){setTimeout(function(){
     var a=document.getElementById('arc');if(a)a.style.strokeDashoffset=CF*(1-(tot?met/tot:0));
