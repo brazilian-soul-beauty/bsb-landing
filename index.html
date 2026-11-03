@@ -227,6 +227,38 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .faces{gap:12px}.face .av{width:64px;height:64px}
 }
 @media(max-width:700px){.g4{height:100%;grid-auto-rows:1fr;align-content:stretch}.g4 .tile .big{font-size:56px}}
+
+.td{grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr}
+.td .span2{grid-column:span 2}
+.tt{border-radius:24px;background:#fff;border:2px dashed #E4DFF1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;transition:.3s}
+.tt .h{position:absolute;top:16px;left:20px;font-weight:700;font-size:15px;color:var(--muted)}
+.tt .ic{font-size:72px;line-height:1;filter:grayscale(1);opacity:.35}
+.tt .m{font-weight:800;font-size:22px;margin-top:12px;color:#2A2440}
+.tt .s{font-size:14px;color:var(--muted);margin-top:4px}
+.tt.ok,.tt.fix{border:0;color:#fff;box-shadow:0 12px 30px rgba(122,63,209,.18)}
+.tt.ok .h,.tt.ok .m,.tt.ok .s,.tt.fix .h,.tt.fix .m,.tt.fix .s{color:#fff}
+.tt.ok .ic,.tt.fix .ic{filter:none;opacity:1}
+.tt.look.ok{background:linear-gradient(135deg,#FF8FB1,#E2557A)}
+.tt.fix{background:linear-gradient(135deg,#FFC66E,#F08A3E)}
+.tt.tasks.ok{background:linear-gradient(135deg,#5FD39A,#1F9D6B)}
+.tt.ct.ok{background:linear-gradient(135deg,#FFB86E,#F0663E)}
+.tt.cl.ok{background:linear-gradient(135deg,#B48CFF,#7A3FD1)}
+.cir{display:flex;gap:18px}
+.cir .c{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:13px;color:var(--muted)}
+.cir .c i{font-style:normal;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:#F3F0FA;filter:grayscale(.6)}
+.cir .c.on i{background:linear-gradient(135deg,#9B6BFF,#7A3FD1);color:#fff;filter:none;font-weight:800}
+.tt.ok .cir .c,.tt.ok .cir .c i{color:#fff}.tt.ok .cir .c.on i{background:rgba(255,255,255,.25)}
+.stars{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.stars i{font-style:normal;font-size:44px;color:#D9D3EA;line-height:1}
+.stars i.on{animation:pop .5s both}
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.score{display:flex;align-items:baseline;justify-content:center;font-weight:800;line-height:1}
+.score b{font-size:96px}.score span{font-size:36px;opacity:.75}
+.bdgs{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.bdg{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:rgba(255,255,255,.15);filter:grayscale(1);opacity:.6}
+.bdg.on{background:#fff;filter:none;opacity:1;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.stk{margin-top:12px;font-weight:700;font-size:14px;opacity:.95}
+@media(max-width:700px){.tt .ic{font-size:56px}.cir{gap:10px}.cir .c i{width:52px;height:52px;font-size:22px}.tt .m{font-size:18px}.stars i{font-size:32px}}
 </style>
 </head>
 <body>
@@ -442,19 +474,26 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   var hr=+(t.now||'12:00').slice(0,2),hi=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening',fn=(S.who||'').split(' ')[0];
   var left=[];if(x.worked||ap.length){if(!x.look_marked)left.push('💄 Look');if(!(x.t_morning>0))left.push('☀️ AM tasks');if(!(x.t_day>0))left.push('☑️ Day tasks');if(!(x.t_close>0))left.push('🌙 Close');}
   var green=dayGreen(x,L),dd=pd(day);
+  var pe=(t.pers&&+t.pers.pe)||0,nc=ap.length;if(pe>nc)pe=nc;
+  var lkOk=x.look_marked&&x.look_ok!==false,tkOk=x.t_morning>0&&x.t_day>0&&x.t_close>0,clOk=nc?pe>=nc:!!x.worked;
+  var exp=Math.floor((t.free_min||0)/60),vd=t.videos||0,ctOk=exp>0&&vd>=exp,ITM=[['💄',lkOk],['☑️',tkOk],['🌟',clOk]];if(exp>0)ITM.push(['🎬',ctOk]);
+  var TOT=ITM.length,sc=ITM.filter(function(q){return q[1]}).length;
+  var bd=ITM.map(function(q){return '<span class="bdg'+(q[1]?' on':'')+'">'+q[0]+'</span>'}).join('');
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+(isT?DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]:'Your day')+'</p>'+
-    '<div style="margin:auto 0;display:flex;align-items:center;gap:16px"><span class="flame">'+(streak?'🔥':'🌱')+'</span><div><b style="font-size:52px;line-height:1;font-weight:800">'+streak+'</b><div style="font-size:14px;opacity:.9">'+(streak===1?'day':'days')+' all green in a row</div></div></div>'+
+    '<div style="margin:auto 0;text-align:center"><div class="score"><b>'+sc+'</b><span>/'+TOT+'</span></div><div class="bdgs">'+bd+'</div>'+
+    (streak?'<div class="stk">🔥 '+streak+' '+(streak===1?'day':'days')+' all green</div>':'')+'</div>'+
     '<div class="wk">'+wk.join('')+'</div>'+
-    '<div class="verdict" style="margin-top:14px"><em>'+(green?'💜':left.length?'🎯':'✨')+'</em><span>'+(green?(isT?'All green today. Keep the flame alive.':'All green this day.'):left.length?(isT?'Still today: ':'Missed: ')+'<b>'+left.join(' · ')+'</b>':(ap.length?'Have a beautiful day.':'Day off. Rest well.'))+'</span></div></div><div class="grid g4" style="grid-template-columns:repeat(2,1fr)">';
-  var lk=x.look_marked?(x.look_ok===false?{c:'no',b:'Fix',s:x.look_note||'Not to standard'}:{c:'ok',b:'✓',s:x.look_ok?'Checked by Joana':'Confirmed'}):{c:'',b:'–',s:'Not confirmed'};
-  h+='<div class="tile '+lk.c+'"><div class="h"><em>💄</em>Look</div><div class="big">'+lk.b+'</div><div class="sub">'+esc(lk.s)+'</div></div>';
-  h+='<div class="tile '+(x.t_morning>0&&x.t_day>0&&x.t_close>0?'ok':'')+'"><div class="h"><em>☑️</em>Tasks</div><div class="pills"><span class="'+(x.t_morning>0?'ok':'')+'">'+(x.t_morning>0?'✓ ':'')+'AM</span><span class="'+(x.t_day>0?'ok':'')+'">'+(x.t_day>0?'✓ ':'')+'Day</span><span class="'+(x.t_close>0?'ok':'')+'">'+(x.t_close>0?'✓ ':'')+'Close</span></div></div>';
-  var tp=t.tips_pct;
-  h+='<div class="tile"><div class="h"><em>💜</em>Tips</div><div class="big">'+(tp==null?'–':tp+'<small>%</small>')+'</div><div class="sub">'+(tp==null?'of your clients left a tip · coming soon':'of your clients left a tip')+'</div></div>';
-  var pe=(t.pers&&+t.pers.pe)||0,nc=ap.length;
-  h+='<div class="tile '+(nc&&pe>=nc?'ok':'')+'"><div class="h"><em>🌟</em>Amazing clients</div><div class="big">'+pe+'<small>/'+nc+'</small></div><div class="sub">clients you made feel special today</div><div class="bar"><b data-w="'+(nc?Math.min(100,100*pe/nc):0)+'"></b></div></div>';
+    '<div class="verdict" style="margin-top:14px"><em>'+(sc===TOT?'💜':'🎯')+'</em><span>'+(sc===TOT?(isT?'Perfect day. Keep the flame alive.':'Perfect day.'):(!x.worked&&!nc)?'Day off. Rest well.':(isT?'You are '+(TOT-sc)+' away from a perfect day':(TOT-sc)+' missing this day'))+'</span></div></div><div class="grid g4 td">';
+  var lkS=x.look_marked?(x.look_ok===false?'fix':'ok'):'';
+  h+='<div class="tt look '+lkS+'"><div class="h">Look</div><div class="ic">💄</div><div class="m">'+(lkS==='ok'?'Look on point':lkS==='fix'?esc(x.look_note||'Needs a fix'):'Not yet')+'</div><div class="s">'+(lkS==='ok'?(x.look_ok?'Checked by Joana':'Confirmed'):lkS==='fix'?'Fix it and shine':'Show your best look')+'</div></div>';
+  var TK=[['☀️','AM',x.t_morning>0],['☑️','Day',x.t_day>0],['🌙','Close',x.t_close>0]];
+  h+='<div class="tt tasks '+(tkOk?'ok':'')+'"><div class="h">Tasks</div><div class="cir">'+TK.map(function(q){return '<div class="c'+(q[2]?' on':'')+'"><i>'+(q[2]?'✓':q[0])+'</i><span>'+q[1]+'</span></div>'}).join('')+'</div><div class="m">'+(tkOk?'All done':TK.filter(function(q){return q[2]}).length+' of 3 done')+'</div></div>';
+  var stars='';for(var q=0;q<Math.min(nc,10);q++)stars+='<i class="'+(q<pe?'on':'')+'">'+(q<pe?'⭐':'☆')+'</i>';
+  h+='<div class="tt cl'+(exp>0?'':' span2')+' '+(clOk&&nc?'ok':'')+'"><div class="h">Amazing clients</div><div class="stars">'+(stars||'<i>🌙</i>')+'</div><div class="m">'+(nc?(pe?pe+(pe===1?' client':' clients')+' felt amazing today':'Make your first client feel amazing'):'No clients today')+'</div>'+(nc?'<div class="s">'+pe+' of '+nc+'</div>':'')+'</div>';
+  if(exp>0){var vs='';for(var q=0;q<Math.min(exp,8);q++)vs+='<i class="'+(q<vd?'on':'')+'">'+(q<vd?'🎬':'○')+'</i>';
+    h+='<div class="tt ct '+(ctOk?'ok':'')+'"><div class="h">Content</div><div class="stars">'+vs+'</div><div class="m">'+(ctOk?'Content done':vd?vd+' of '+exp+' videos':'You have free time for '+exp+(exp===1?' video':' videos'))+'</div><div class="s">'+(ctOk?'Thank you for creating':'One video per free hour')+'</div></div>';}
   h+='</div>';M.innerHTML=h;
-  if(green&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
+  if(sc===TOT&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
 /* ---------- Eminence ---------- */
 var EMS=[['story','🌿','We are Eminence'],['why','💚','Why only Eminence'],['product','🧴','Know every product'],['study','🎬','Study to grow'],['mine','🛍️','My Eminence']];
 var EMI={story:['🇭🇺','🌾','🍃','🏆','🌳','💧'],why:['🏠','🤝','🚫','💬','🌱','🗣️']};
