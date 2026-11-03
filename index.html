@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Brazilian Soul Beauty · Treatment Plans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lime-cream:#FAF5EC; --lime-warm:#F7F0E2; --lime-deep:#F1E8D5; --boucle:#DCC6A3;
+  --bronze:#A88862; --bronze-deep:#8A6D4A; --ink:#4A443C; --ink-soft:#7A6F61; --hairline:rgba(168,136,98,.16);
+  --warn:#9A5B3A; --warn-soft:#F3E2D2;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--lime-cream);color:var(--ink);font:300 14px/1.6 var(--sans);margin:0}
+[hidden]{display:none!important}
+.limewash{position:relative;isolation:isolate}
+.limewash::before{content:'';position:absolute;inset:0;background-image:radial-gradient(ellipse at 20% 30%,rgba(168,136,98,.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(200,165,135,.04) 0%,transparent 60%),radial-gradient(ellipse at 50% 40%,rgba(232,221,199,.08) 0%,transparent 70%);pointer-events:none;z-index:-1}
+.limewash::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.65  0 0 0 0 0.55  0 0 0 0 0.4  0 0 0 0.022 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");opacity:.5;mix-blend-mode:multiply;pointer-events:none;z-index:-1}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+header.hero{background:var(--lime-cream);padding-block:44px 28px;border-bottom:1px solid var(--hairline)}
+.eyebrow{font:500 10.5px/1 var(--sans);letter-spacing:.35em;text-transform:uppercase;color:var(--bronze-deep)}
+h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;text-wrap:balance;color:var(--ink)}
+h1{font-size:clamp(34px,5vw,52px);line-height:1.05;margin-top:14px}
+h1 em,h2 em{color:var(--bronze);font-style:italic}
+.lead{font:300 italic 19px/1.5 var(--serif);color:var(--ink-soft);max-width:60ch;margin:12px 0 0}
+.rules{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:20px;font-size:12.5px;color:var(--ink-soft)}
+.rules b{font-weight:500;color:var(--bronze-deep)}
+main{background:var(--lime-warm)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:28px;padding-block:28px 60px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--lime-cream);border:1px solid var(--hairline);border-radius:3px;padding:22px}
+.stack{display:grid;gap:22px}
+h2{font-size:26px;line-height:1.15}
+.sub{font-size:12.5px;color:var(--ink-soft);margin:4px 0 14px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label.f{display:grid;gap:5px;font:500 10px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+input[type=text],input[type=date]{font:300 14px var(--sans);color:var(--ink);background:var(--lime-warm);border:1px solid var(--hairline);border-radius:2px;padding:9px 10px;width:100%;min-width:0}
+input:focus-visible,button:focus-visible{outline:1px solid var(--bronze);outline-offset:2px}
+.cat{margin-top:16px}
+.cat h3{font-size:19px;color:var(--bronze-deep);font-style:italic;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+.svc{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--hairline)}
+.svc .nm{min-width:0}
+.svc .nm span{display:block;font-size:12px;color:var(--ink-soft)}
+.svc .pr{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-size:13px;white-space:nowrap}
+.step{display:inline-flex;align-items:center;border:1px solid var(--hairline);border-radius:2px}
+.step button{background:none;border:0;color:var(--bronze-deep);font:300 18px/1 var(--sans);width:32px;height:32px;cursor:pointer}
+.step button:hover{background:var(--lime-deep)}
+.step output{min-width:24px;text-align:center;font-variant-numeric:tabular-nums}
+.svc.on .nm{color:var(--bronze-deep)}
+.gift{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hairline);cursor:pointer}
+.gift input{accent-color:var(--bronze);width:16px;height:16px}
+.meter{height:4px;background:var(--lime-deep);border-radius:2px;overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;background:var(--bronze);transition:width .25s}
+.meter.over i{background:var(--warn)}
+.dates{display:grid;gap:8px}
+.drow{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:10px;align-items:center}
+.drow .nm{font-size:13.5px;min-width:0}
+@media (max-width:480px){.drow{grid-template-columns:minmax(0,1fr)}}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px);display:grid;gap:16px}
+@media (max-width:900px){.side{position:static}}
+.card{background:var(--lime-deep);border:1px solid var(--hairline);border-radius:3px;padding:24px}
+.card .eyebrow{color:var(--bronze)}
+.card h2{margin-top:10px}
+.sum{display:grid;gap:8px;margin-top:18px;font-variant-numeric:tabular-nums}
+.sum div{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.sum .big{font:300 30px/1.1 var(--serif);color:var(--ink);padding-top:10px;border-top:1px solid var(--hairline);margin-top:4px}
+.sum .save{font:300 italic 22px/1.2 var(--serif);color:var(--bronze-deep)}
+.pill{display:inline-block;font:500 10px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--bronze);color:var(--bronze-deep);padding:6px 9px;border-radius:2px}
+.alerts{display:grid;gap:8px}
+.alert{background:var(--warn-soft);color:var(--warn);font-size:12.5px;padding:9px 11px;border-radius:2px}
+.alert.ok{background:var(--lime-cream);color:var(--bronze-deep);border:1px solid var(--hairline)}
+.btn{padding:14px 26px;font:400 11px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;border:1px solid var(--bronze);border-radius:2px;background:transparent;color:var(--bronze-deep);cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:var(--bronze);color:var(--lime-cream)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+textarea#out{width:100%;min-height:340px;font:300 12.5px/1.55 var(--sans);color:var(--ink);background:var(--lime-cream);border:1px solid var(--hairline);border-radius:2px;padding:12px;resize:vertical}
+.note{font-size:11.5px;color:var(--ink-soft)}
+.prop{background:var(--lime-cream)}
+.prop .pwrap{max-width:760px;margin:0 auto;padding-inline:22px}
+.p-hero{padding-block:56px 34px;text-align:center;background:var(--lime-cream);border-bottom:1px solid var(--hairline)}
+.p-hero h1{font-size:clamp(36px,6vw,58px)}
+.p-hero .meta{margin-top:14px;font-size:12px;letter-spacing:.06em;color:var(--ink-soft)}
+.p-note{background:var(--lime-warm);padding-block:34px}
+.p-note blockquote{margin:0 auto;max-width:620px;border-top:1px solid var(--bronze);border-bottom:1px solid var(--bronze);padding:22px 4px;font:300 italic 21px/1.55 var(--serif);color:var(--ink);text-align:center}
+.p-note .sig{display:block;margin-top:12px;font:500 10px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--bronze-deep);font-style:normal}
+.p-phases{background:var(--lime-cream);padding-block:40px}
+.phase{display:grid;grid-template-columns:70px minmax(0,1fr);gap:18px;padding-block:22px;border-bottom:1px solid var(--hairline)}
+.phase .rn{font:300 italic 52px/1 var(--serif);color:var(--bronze)}
+.phase h3{font-size:27px}
+.phase .when{font:500 10px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--bronze-deep);margin-top:6px}
+.phase p{margin:8px 0 10px;color:var(--ink-soft);max-width:56ch}
+.phase ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.phase li{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;font-size:13.5px}
+.phase li b{font-weight:400;color:var(--bronze-deep);font-variant-numeric:tabular-nums}
+.phase li.gift span::after{content:" · complimentary";color:var(--bronze);font-style:italic;font-family:var(--serif);font-size:15px}
+.phase li.event{color:var(--bronze-deep)}
+.p-incl{background:var(--lime-warm);padding-block:36px}
+.incl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 28px;margin-top:16px}
+.incl div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--hairline);padding-block:7px;font-size:13.5px}
+.incl div span:last-child{color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+.p-inv{background:var(--lime-deep);padding-block:44px;text-align:center}
+.inv-was{font-size:13px;color:var(--ink-soft);letter-spacing:.06em}
+.inv-was s{text-decoration-color:var(--bronze)}
+.inv-price{font:300 64px/1 var(--serif);color:var(--ink);margin-top:10px;font-variant-numeric:tabular-nums}
+.inv-save{font:300 italic 24px/1.3 var(--serif);color:var(--bronze-deep);margin-top:8px}
+.inv-pay{margin-top:14px;font-size:13px;color:var(--ink-soft)}
+.p-next{background:var(--lime-cream);padding-block:40px;text-align:center}
+.p-next .hold{font:300 italic 20px/1.5 var(--serif);color:var(--ink);max-width:52ch;margin:10px auto 0}
+.p-next .step3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin-top:24px;text-align:left}
+.p-next .step3 div{border-top:1px solid var(--bronze);padding-top:12px;font-size:13px;color:var(--ink-soft)}
+.p-next .step3 b{display:block;font:300 italic 26px/1 var(--serif);color:var(--bronze);margin-bottom:6px}
+.p-terms{background:var(--lime-warm);padding-block:26px;font-size:11.5px;color:var(--ink-soft);text-align:center}
+.p-terms .addr{margin-top:12px;letter-spacing:.06em}
+.ptools{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--lime-warm);border-bottom:1px solid var(--hairline);padding-block:10px}
+.ptools .pwrap{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;max-width:760px}
+textarea.f2{font:300 14px/1.5 var(--sans);color:var(--ink);background:var(--lime-warm);border:1px solid var(--hairline);border-radius:2px;padding:9px 10px;width:100%;min-height:90px;resize:vertical}
+select{font:300 14px var(--sans);color:var(--ink);background:var(--lime-warm);border:1px solid var(--hairline);border-radius:2px;padding:9px 10px;width:100%}
+.plist{display:grid;gap:6px;max-height:260px;overflow:auto;margin-top:10px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--hairline);border-radius:2px;background:var(--lime-warm);cursor:pointer;text-align:left;font:300 13px var(--sans);color:var(--ink)}
+.prow:hover,.prow.on{border-color:var(--bronze)}.prow{grid-template-columns:minmax(0,1fr) auto auto 32px}.pdel{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--hairline);border-radius:2px;color:var(--ink-soft);font:300 15px/1 var(--sans);background:transparent}.pdel:hover{border-color:#A3473A;color:#A3473A;background:#fff}
+.ladder{margin-top:16px;border-top:1px solid var(--hairline);padding-top:12px}.ladder .lh{font:500 9.5px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}.lr{display:grid;grid-template-columns:1.25fr .8fr 1fr;gap:6px;padding:7px 9px;font:300 12.5px var(--sans);color:var(--ink-soft);border:1px solid transparent;border-radius:2px}.lr.on{border-color:var(--bronze);color:var(--ink);background:var(--lime-warm);font-weight:400}.ln{font:300 12px/1.45 var(--sans);color:var(--bronze);margin:8px 0 0}.prow small{display:block;color:var(--ink-soft);font-size:11.5px}
+.st{font:500 9px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;padding:5px 7px;border-radius:2px;border:1px solid var(--hairline);color:var(--ink-soft)}
+.st.sent{color:var(--bronze-deep);border-color:var(--bronze)}.st.to_send{color:var(--bronze-deep);border-color:var(--bronze);background:var(--lime-warm)}
+.st.won{background:var(--bronze);color:var(--lime-cream);border-color:var(--bronze)}
+.st.lost{color:var(--warn);border-color:var(--warn-soft)}
+.daylist{display:grid;gap:6px;margin:14px 0 4px;max-height:300px;overflow:auto}
+.dc{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;background:var(--lime-warm);border:1px solid var(--hairline);border-radius:2px;padding:9px 11px;font:300 13.5px var(--sans);color:var(--ink);cursor:pointer}
+.dc:hover,.dc.on{border-color:var(--bronze)}
+.dc.on{background:var(--lime-deep)}.csearch{display:block;width:100%;box-sizing:border-box;margin:14px 0 10px;padding:11px 13px;border:1px solid var(--hairline);border-radius:2px;background:var(--lime-warm);font:300 14px var(--sans);color:var(--ink)}.csearch:focus{outline:none;border-color:var(--bronze)}
+.dc b{font-weight:400;color:var(--bronze-deep);font-variant-numeric:tabular-nums}
+.dc small{display:block;color:var(--ink-soft);font-size:11.5px}
+.dc .th{font-size:11.5px;color:var(--ink-soft)}
+.cloud{font-size:11.5px;color:var(--ink-soft);margin-top:10px}
+.cloud.err{color:var(--warn)}
+@media print{
+  @page{size:A4;margin:12mm}
+  .noprint{display:none!important}
+  body,.prop section{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .phase{break-inside:avoid}
+  .limewash::after{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/*BSB-BACKHUB*/
+#builder .backhub{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:9px 16px;border:1px solid #DADAE6;border-radius:999px;background:#fff;color:#4634C7;font:600 13px/1 var(--sans);text-decoration:none}
+#builder .backhub:hover{background:#F1EEFF}
+/*BSB-STEPS*/
+#builder .panel:has(#viewBtn){display:none}
+#builder .steps2{display:grid;gap:8px;margin-top:14px}
+#builder .s2{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--hairline);border-radius:12px;background:#fff}
+#builder .s2>b{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:#F1EEFF;color:#4634C7;font-weight:700}
+#builder .s2 strong{display:block;font-weight:600;font-size:14px;color:var(--ink)}
+#builder .s2 span{display:block;font-size:12px;color:var(--ink-soft)}
+#builder .s2.done>b{background:#22B66E;color:#fff}
+#builder .s2.now{border-color:#5B47E0;box-shadow:0 0 0 3px rgba(91,71,224,.10)}
+#builder .s2.yes{background:#E9F8F0;border-color:#C8EED9}
+#builder .s2.no{background:#FDECEC;border-color:#F5C2C3}
+#builder .s2 .btn{padding:9px 16px!important}
+#builder .s2 .btn:disabled{background:#E9F8F0!important;border-color:#C8EED9!important;color:#178A52!important;cursor:default}
+#builder .dellink{background:none!important;border:0!important;color:#C9353A!important;font:500 12px var(--sans);cursor:pointer;margin-top:12px;padding:0;text-decoration:underline}
+#builder .pstats{display:grid;gap:8px;margin:12px 0}
+#builder .ps{display:grid;grid-template-columns:minmax(70px,1fr) repeat(5,minmax(0,1fr));gap:8px;align-items:center;background:#F7F7FB;border:1px solid var(--hairline);border-radius:12px;padding:10px 12px}
+#builder .pst{font-weight:600;font-size:14px}
+#builder .psn b{display:block;font:700 17px/1.1 var(--sans);color:var(--ink)}
+#builder .psn span{font-size:11px;color:var(--ink-soft)}
+#builder .psn.good b{color:#178A52}
+#builder .psn.low b{color:#B07207}
+/*BSB-DASHLOOK*/
+body:has(#builder:not([hidden])){background:#F4F4F9}
+#builder{--lime-cream:#FFFFFF;--lime-warm:#F7F7FB;--lime-deep:#EEEBFF;--boucle:#D9D4FF;--bronze:#5B47E0;--bronze-deep:#4634C7;--ink:#1F2235;--ink-soft:#585A75;--hairline:#E6E6F0;--warn:#E5484D;--warn-soft:#FDECEC;--serif:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:#F4F4F9;color:var(--ink);font-weight:400}
+#builder .limewash::before,#builder .limewash::after{display:none}
+#builder header.hero{background:#fff;padding-block:22px 18px;border-bottom:1px solid var(--hairline)}
+#builder main{background:#F4F4F9}
+#builder h1,#builder h2,#builder h3{font-family:var(--sans);font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+#builder h1{font-size:26px;margin-top:6px}
+#builder h2{font-size:18px}
+#builder h1 em,#builder h2 em{font-style:normal;color:inherit}
+#builder .lead{font:400 14px/1.5 var(--sans);color:var(--ink-soft);margin-top:6px}
+#builder .eyebrow{font:600 11px/1 var(--sans);letter-spacing:.06em;color:var(--bronze-deep)}
+#builder .rules{gap:8px;margin-top:14px}
+#builder .rules>div{background:#F4F4F9;border:1px solid var(--hairline);border-radius:999px;padding:5px 11px;font-size:12px}
+#builder .rules b{font-weight:600;color:var(--ink)}
+#builder .panel{background:#fff;border:1px solid var(--hairline);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+#builder .card{background:#fff;border:1px solid var(--hairline);border-radius:16px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+#builder .sub{font-size:13px}
+#builder label.f{font:600 11px/1 var(--sans);letter-spacing:.04em;text-transform:none;color:var(--ink-soft)}
+#builder input[type=text],#builder input[type=date],#builder input[type=search],#builder select,#builder textarea.f2,#builder textarea#out,#builder .csearch{font:400 14px var(--sans);background:#fff;border:1px solid #DADAE6;border-radius:10px;color:var(--ink)}
+#builder input:focus,#builder select:focus,#builder textarea:focus{outline:none;border-color:var(--bronze);box-shadow:0 0 0 3px rgba(91,71,224,.12)}
+#builder .btn{font:600 13px/1 var(--sans);letter-spacing:0;text-transform:none;border-radius:999px;padding:11px 18px;border:1px solid var(--bronze);color:var(--bronze-deep);background:#fff}
+#builder .btn:hover{background:#F1EEFF;color:var(--bronze-deep)}
+#builder [data-status="to_send"]{background:var(--bronze)!important;color:#fff!important}
+#builder [data-status="won"]{border-color:#22B66E!important;color:#178A52!important}
+#builder [data-status="lost"],#builder #delBtn{border-color:#E5484D!important;color:#C9353A!important}
+#builder .st,#builder .pill{font:600 10.5px/1 var(--sans);letter-spacing:.04em;border-radius:999px;padding:5px 9px}
+#builder .st.won{background:#22B66E;border-color:#22B66E;color:#fff}
+#builder .st.lost{color:#C9353A;border-color:#F5C2C3}
+#builder .dc,#builder .prow{border-radius:12px;background:#fff;font-weight:400}
+#builder .dc.on,#builder .prow.on{background:#F1EEFF;border-color:var(--bronze)}
+#builder .dc b{color:var(--bronze-deep);font-weight:600}
+#builder .svc .nm{font-weight:500}
+#builder .svc.on .nm{color:var(--bronze-deep)}
+#builder .svc .pr{font-weight:500}
+#builder .gift span::after{font-family:var(--sans);font-style:normal;font-size:12px;color:#178A52}
+#builder .gift input{accent-color:#22B66E}
+#builder .meter{height:8px;border-radius:999px;background:#EEEBFF}
+#builder .meter i{background:#22B66E;border-radius:999px}
+#builder .meter.over i{background:#E5484D}
+#builder .sum div{font-size:14px}
+#builder .sum .big,#builder .big{font:700 26px/1.1 var(--sans);color:var(--ink)}
+#builder .sum .save,#builder .save{font:600 18px/1.2 var(--sans);font-style:normal;color:#178A52}
+#builder .lr{border-radius:10px}
+#builder .lr.on{background:#F1EEFF;border-color:var(--bronze);color:var(--ink);font-weight:600}
+#builder .ln{color:var(--bronze-deep);font-weight:500}
+#builder .pdel{border-radius:999px}
+#builder .cloud{font-size:12px}
+#builder .cat h3{font:700 12px/1 var(--sans);font-style:normal;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:14px 0 8px}
+#builder .step{border-radius:10px;border-color:#DADAE6;overflow:hidden;background:#fff}
+#builder .step button{width:38px;height:38px;font:500 20px/1 var(--sans)}
+#builder .step button:hover{background:#F1EEFF}
+#builder .step output{font-weight:600}
+#builder .alert{border-radius:12px;font-weight:500}
+#builder .alert.ok{background:#E9F8F0;color:#178A52;border-color:#C8EED9}
+
+body.noprog .prog{display:none!important}
+.kinds{display:flex;gap:10px;margin:14px 0 6px}
+.kinds button{flex:1;padding:16px 10px;border-radius:14px;border:1.5px solid var(--hairline);background:#fff;font:500 15px var(--sans);color:var(--ink-soft);cursor:pointer}
+.kinds button.on{background:var(--bronze);border-color:var(--bronze);color:#fff}
+.acl{font:500 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--bronze-deep);margin:18px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{padding:9px 14px;border-radius:99px;border:1px solid var(--hairline);background:#fff;font:400 13px var(--sans);color:var(--ink);cursor:pointer}
+.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pg{font:400 11px var(--sans);color:var(--ink-soft);margin:10px 0 6px}
+.ac-hero{padding:56px 0 30px;text-align:center}
+.ac-hero .p3-made{margin-bottom:12px}
+.ac-hero h1{font:300 40px/1.1 var(--serif);margin:0}
+.ac-hero h1 em{font-style:italic;color:var(--bronze-deep)}
+.ac-done{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+.ac-done span{padding:7px 14px;border-radius:99px;background:var(--lime-deep);font-size:13px}
+.ac-steps{display:grid;gap:10px}
+.ac-step{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--hairline);border-radius:16px;padding:14px 16px}
+.ac-step b{width:34px;height:34px;border-radius:50%;background:var(--lime-deep);display:grid;place-items:center;font:500 13px var(--sans);color:var(--bronze-deep);flex:none}
+.ac-step div{display:flex;flex-direction:column}.ac-step small{color:var(--ink-soft);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.ac-step strong{font:400 17px var(--serif)}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media(max-width:700px){.slots{grid-template-columns:1fr 1fr}}
+.slot{display:flex;flex-direction:column;gap:4px;font:500 11px var(--sans);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.slot select{font:400 13px var(--sans);padding:10px;border-radius:10px;border:1px solid var(--hairline);background:#fff;color:var(--ink);text-transform:none;letter-spacing:0}
+.slot input{font:400 13px var(--sans);padding:9px 10px;border-radius:10px;border:1px solid var(--ink);text-transform:none;letter-spacing:0}
+.othc{font:400 13px var(--sans);padding:8px 14px;border-radius:99px;border:1px dashed var(--hairline);background:#fff;min-width:170px}
+.slot.on select{border-color:var(--ink);font-weight:500}
+.ac-when{font:500 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--bronze-deep);margin:18px 0 8px}
+.ac-pr{margin-left:auto;font:500 15px var(--sans);font-style:normal;color:var(--bronze-deep)}
+.ac-rec{background:#fff;border:2px solid var(--bronze);border-radius:18px;padding:18px 20px}
+.ac-rec>div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}
+.ac-rec .ac-rh{font:600 13px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--bronze-deep);padding-bottom:10px}
+.ac-rec .ac-tot{border-top:1px solid var(--hairline);margin-top:6px;padding-top:12px;font-size:17px}
+.ac-back{text-align:center;font:300 22px var(--serif)}.ac-back b{font-weight:400;color:var(--bronze-deep)}
+</style>
+<style>/*BSB-PROP2*/
+.prop{padding-bottom:84px}
+.prop .p3-hero{padding:40px 0 30px;text-align:center;background:var(--lime-cream);border-bottom:1px solid var(--hairline)}
+.prop .p3-made{display:inline-block;background:#fff;border:1px solid var(--boucle);border-radius:999px;padding:7px 14px;font:600 12.5px/1 var(--sans);color:var(--bronze-deep)}
+.prop .p3-hero h1{font:400 clamp(32px,7vw,48px)/1.12 var(--serif);color:var(--ink);margin-top:16px}
+.prop .p3-hero h1 em{color:var(--bronze-deep);font-style:italic}
+.prop .p3-future{max-width:440px;margin:16px auto 0;font:400 16px/1.5 var(--sans);color:var(--ink)}
+.prop .p3-future b{font-weight:700}
+.prop .p3-sec{padding:26px 0;background:var(--lime-warm)}
+.prop .p3-sec h2{font:500 26px/1.2 var(--serif);color:var(--ink);margin:0 0 14px}
+.prop .p3-phases{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.prop .p3-phases>div{background:#fff;border:1px solid var(--hairline);border-radius:16px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.prop .p3-phases .ic{font-size:24px}
+.prop .p3-phases b{font:700 15px/1.2 var(--sans);color:var(--ink)}
+.prop .p3-phases small{font:400 12.5px/1.35 var(--sans);color:var(--ink-soft);flex:1}
+.prop .p3-phases em{font:600 12px/1 var(--sans);font-style:normal;color:var(--bronze-deep);margin-top:4px}
+.prop .p3-price{padding:8px 0 22px;background:var(--lime-warm)}
+.prop .p3-card{background:#fff;border:1px solid var(--boucle);border-radius:22px;padding:22px 18px;text-align:center;box-shadow:0 8px 28px rgba(138,109,74,.12)}
+.prop .p3-stack{text-align:left;border-bottom:1px dashed var(--boucle);padding-bottom:12px;margin-bottom:14px}
+.prop .p3-stack div{display:flex;justify-content:space-between;font:400 14px/1.9 var(--sans);color:var(--ink-soft)}
+.prop .p3-stack .tot{font-weight:600;color:var(--ink)}
+.prop .p3-lbl{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--bronze-deep)}
+.prop .p3-big{font:500 clamp(50px,12vw,66px)/1 var(--serif);color:var(--ink);margin-top:8px}
+.prop .p3-save{display:inline-block;margin-top:12px;background:#EAF5EE;color:#2F7A4F;border-radius:999px;padding:8px 14px;font:700 14.5px/1 var(--sans)}
+.prop .p3-split{margin-top:10px;font:500 13.5px/1.4 var(--sans);color:var(--ink-soft)}
+.prop .p3-yes{display:block;margin-top:18px;background:#2F7A4F;color:#fff!important;text-decoration:none;border-radius:999px;padding:17px 18px;font:700 17px/1 var(--sans);text-align:center;box-shadow:0 6px 18px rgba(47,122,79,.28)}
+.prop .p3-hold{margin-top:12px;font:500 13.5px/1.4 var(--sans);color:var(--ink);background:#FFF6E6;border:1px solid #F1DDB4;border-radius:12px;padding:10px 12px}
+.prop .p3-steps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.prop .p3-steps li{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:center;background:#fff;border:1px solid var(--hairline);border-radius:16px;padding:14px}
+.prop .p3-steps li>b{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--bronze);color:#fff;font:700 16px/1 var(--sans)}
+.prop .p3-steps strong{display:block;font:600 16px/1.3 var(--sans);color:var(--ink)}
+.prop .p3-steps span{display:block;font:400 13.5px/1.4 var(--sans);color:var(--ink-soft);margin-top:2px}
+.prop .p3-month{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--bronze-deep);margin:18px 0 8px}
+.prop .p3-month:first-child{margin-top:0}
+.prop .p3-row{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:center;background:#fff;border:1px solid var(--hairline);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.prop .p3-row.gift{background:#FFFBF2;border-color:#F1DDB4}
+.prop .p3-row.event{background:var(--bronze);border-color:var(--bronze)}
+.prop .p3-row.event *{color:#fff!important}
+.prop .p3-date{text-align:center;border-right:1px solid var(--hairline);padding-right:8px}
+.prop .p3-date b{display:block;font:600 22px/1 var(--sans);color:var(--ink)}
+.prop .p3-date span{font:500 11px/1 var(--sans);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.prop .p3-what div{font:500 15px/1.3 var(--sans);color:var(--ink)}
+.prop .p3-what small{display:block;margin-top:3px;font:500 12px/1.2 var(--sans);color:var(--bronze-deep)}
+.prop .p3-notebox blockquote{margin:0;border-left:3px solid var(--bronze);padding:4px 0 4px 16px;font:400 italic 19px/1.55 var(--serif);color:var(--ink)}
+.prop .p3-notebox .sig{display:block;margin-top:10px;font:600 12px/1 var(--sans);font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--bronze-deep)}
+.prop .p3-end .p3-yes{margin-top:0}
+.prop .p3-ask{display:block;margin-top:10px;text-align:center;border:1px solid var(--bronze);color:var(--bronze-deep)!important;text-decoration:none;border-radius:999px;padding:14px;font:600 15px/1 var(--sans);background:#fff}
+.prop .p3-terms{padding:22px 0 30px;background:var(--lime-cream);font:400 13px/1.5 var(--sans);color:var(--ink-soft)}
+.prop .p3-terms .pwrap>div{margin-bottom:6px}
+.prop .p3-terms .addr{margin-top:12px;font-size:12px;opacity:.85}
+.prop .p3-bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--boucle);box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+.prop .p3-bar b{display:block;font:700 20px/1 var(--sans);color:var(--ink)}
+.prop .p3-bar small{font:600 12px/1.4 var(--sans);color:#2F7A4F}
+.prop .p3-bar a{background:#2F7A4F;color:#fff!important;text-decoration:none;border-radius:999px;padding:14px 18px;font:700 15px/1 var(--sans);white-space:nowrap}
+@media (min-width:760px){.prop .p3-bar{left:50%;right:auto;transform:translateX(-50%);width:min(680px,100%);border-radius:18px 18px 0 0;border:1px solid var(--boucle)}}
+@media print{.prop .p3-bar,.prop .p3-yes,.prop .p3-ask{display:none!important}.prop{padding-bottom:0}.prop .p3-card{box-shadow:none}}
+
+.prop img.i{width:18px;height:18px;vertical-align:-3px;margin-right:6px;display:inline-block}
+.prop .p3-what small img.i{width:16px;height:16px;vertical-align:-2px;margin-right:5px}
+.prop .p3-phases img.ic{width:38px;height:38px;margin:0 auto 4px;display:block}
+.prop .p3-ask img.i{width:18px;height:18px;vertical-align:-4px}
+</style>
+<style>/*BSB-PROP5*/
+.prop .p3-row{grid-template-columns:58px 1fr auto}
+.prop .p3-row.has{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.prop .p3-i{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--bronze);color:var(--bronze-deep);display:grid;place-items:center;font:italic 600 13px/1 Georgia,serif;transition:.15s}
+.prop .p3-row.open .p3-i{background:var(--bronze);color:#fff}
+.prop .p3-info{grid-column:1/-1;display:none;border-top:1px solid var(--hairline);padding-top:10px;margin-top:2px}
+.prop .p3-row.open .p3-info{display:block}
+.prop .p3-info b{display:block;font:500 italic 17px/1.35 var(--serif);color:var(--bronze-deep)}
+.prop .p3-info span{display:block;margin-top:4px;font:400 14px/1.5 var(--sans);color:var(--ink)}
+.prop .p3-tap{font:400 13.5px/1.4 var(--sans);color:var(--ink-soft);margin:-8px 0 14px}
+</style>
+</head><body>
+<div id="builder" class="noprint"><header class="hero limewash">
+  <div class="wrap">
+    <a class="backhub" id="backHub" href="https://bsb-therapists.vercel.app/">&#8592; Back to my day</a><div class="eyebrow">Brazilian Soul Beauty · Treatment Plans</div>
+    <h1>Build a client <em>package</em></h1>
+    <p class="lead">Choose the treatments and the gifts, set the dates. The price, the gift allowance and the proposal for the client are done for you.</p>
+    <div class="rules prog">
+      <div><b>6+ sessions</b> to be a package</div>
+      <div><b>10%</b> off up to £2,000</div>
+      <div><b>15%</b> off over £2,000</div>
+      <div><b>Gifts</b> up to 30 min · 1 h · 2 h</div>
+      <div>Price rounded <b>down</b> to £10</div>
+      <div><b>No discount</b> on products</div>
+    </div>
+  </div>
+</header>
+<main class="limewash">
+  <div class="wrap grid">
+    <div class="stack">
+      <section class="panel">
+        <div class="eyebrow">Saved packages</div>
+        <h2 style="margin-top:8px">All <em>packages</em></h2>
+        <p class="sub">Everything is saved in the BSB Hub, so the whole team sees the same list. <button class="btn" id="clearBtn" style="padding:7px 12px;font-size:9.5px">New package</button></p>
+        <div class="pstats" id="pstats"></div><div class="plist" id="plist"><p class="note">Loading packages from the Hub...</p></div>
+      </section>
+      <section class="panel">
+        <div class="eyebrow">i. The client</div>
+        <h2 style="margin-top:8px">Who is it <em>for</em></h2>
+        <p class="sub">Choose the day of her appointment, then tap her name. Reception receives her contact details automatically.</p>
+        <div class="fields">
+          <label class="f">Appointment day<input type="date" id="visitDay"></label>
+          <label class="f">Therapist<select id="dayTh"><option value="">Everyone</option></select></label>
+          <label class="f">Client<span style="display:flex;gap:6px"><input type="text" id="client" readonly placeholder="Tap her name below"><button type="button" class="btn" id="clrClient" style="padding:0 13px;font-size:18px;letter-spacing:0;line-height:1" aria-label="Remove client" title="Remove client">&times;</button></span></label>
+        </div>
+        <input type="search" id="cSearch" class="csearch" placeholder="Or type her name to find her" autocomplete="off"><div class="daylist" id="dayList"><p class="note">Loading the day...</p></div>
+        <div class="fields prog" style="margin-top:14px">
+          <label class="f">Occasion<select id="eventName"><option value="">No special date</option><option>Wedding</option><option>Holiday</option><option>Birthday</option><option>Anniversary</option><option>Photoshoot</option><option>Special event</option></select></label>
+          <label class="f">Plan name<select id="title"><option>Bridal Skin Journey</option><option>Holiday Glow Plan</option><option>Birthday Glow Plan</option><option>Anniversary Glow Plan</option><option>Photoshoot Ready Plan</option><option>Event Ready Plan</option><option>Skin Renewal Journey</option><option>Clear Skin Plan</option><option>Age-Defying Journey</option><option>Body Sculpt &amp; Glow Plan</option></select></label>
+          <label class="f">Event date<input type="date" id="eventDate"></label>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="eyebrow">What to send</div>
+        <h2 style="margin-top:8px">Today's <em>aftercare</em></h2>
+        <div class="kinds"><button type="button" data-kind="ac">🧴 Aftercare</button><button type="button" data-kind="prog">📋 Programme</button></div>
+        <div id="acBox">
+          <div class="acl">✨ What we did today</div><div class="chips" id="acDone"></div>
+          <div class="acl">🎯 Skin goals</div><div class="chips" id="acGoals"></div>
+          <div class="acl">☀️ Morning</div><div class="slots" id="acAM"></div>
+          <div class="acl">🌙 Evening</div><div class="slots" id="acPM"></div>
+          <div class="acl">🗓 Once a week</div><div class="slots" id="acWK"></div>
+          <div class="acl">🔜 Next facial focus</div><div class="chips" id="acFocus"></div>
+          <div class="acl">📅 Come back in</div><div class="chips" id="acBack"></div>
+          <label class="f" style="margin-top:14px">Note for her<textarea class="f2" id="acNote" style="min-height:70px"></textarea></label>
+        </div>
+      </section>
+      <section class="panel prog">
+        <div class="eyebrow">ii. Treatments</div>
+        <h2 style="margin-top:8px">What she will <em>have</em></h2>
+        <p class="sub">Use + and − to set how many sessions of each.</p>
+        <div id="svcList"></div>
+      </section>
+      <section class="panel prog">
+        <div class="eyebrow">iii. Complimentary</div>
+        <h2 style="margin-top:8px">Her <em>gifts</em></h2>
+        <p class="sub" id="giftSub"></p>
+        <div class="meter" id="meter"><i></i></div>
+        <div id="giftList" style="margin-top:6px"></div>
+      </section>
+      <section class="panel prog">
+        <div class="eyebrow">iv. The plan</div>
+        <h2 style="margin-top:8px">When each session <em>happens</em></h2>
+        <p class="sub">Add a date to every session. The plan is sorted by date and checked against our treatment rules.</p>
+        <div class="dates" id="dateList"></div>
+      </section>
+      <section class="panel prog">
+        <div class="eyebrow">v. The proposal</div>
+        <h2 style="margin-top:8px">What she will <em>read</em></h2>
+        <p class="sub">This becomes the page the client opens. Payment options and the hold period follow Ligia's rules.</p>
+        <div class="fields">
+          <label class="f">Therapist<input type="text" id="therapist" placeholder="e.g. Michelle"></label>
+          <label class="f">Payments<select id="pays"><option value="1">Pay in full</option><option value="2">2 payments</option><option value="3">3 payments</option></select></label>
+          <label class="f">Hold dates for (days)<input type="text" id="hold" inputmode="numeric" placeholder="5"></label>
+        </div>
+        <label class="f" style="margin-top:12px">Personal note<textarea class="f2" id="note"></textarea></label>
+      </section>
+    </div>
+    <aside class="side">
+      <div class="card limewash">
+        <div class="eyebrow" id="cEyebrow">Package</div>
+        <h2 id="cTitle">Your skin <em>journey</em></h2>
+        <div class="sum prog">
+          <div><span>Sessions</span><span id="sSessions">0</span></div>
+          <div><span>Total value</span><span id="sTotal">£0</span></div>
+          <div><span>Package discount <span class="pill" id="sTier">10%</span></span><span id="sDisc">£0</span></div>
+          <div><span>Complimentary gifts</span><span id="sGifts">£0</span></div>
+          <div class="big"><span>Package price</span><span id="sPrice">£0</span></div>
+          <div class="save"><span>She saves</span><span id="sSave">£0</span></div>
+        </div>
+        <div class="ladder prog" id="ladder"></div><div style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="st" id="stPill">Draft</span><span class="note" id="stWhen"></span></div>
+        <div class="steps2">
+          <div class="s2" id="s2a"><b>1</b><div><strong>Check the proposal</strong><span>See exactly what she will receive.</span></div><button class="btn" type="button" id="viewBtn2">Preview</button></div>
+          <div class="s2" id="s2b"><b>2</b><div><strong>Send to reception</strong><span>Joana sends it from the salon number.</span></div><button class="btn" type="button" data-status="to_send">Send</button></div>
+          <div class="s2" id="s2c"><b>3</b><div><strong>Her answer</strong><span id="s2cTxt">Joana marks it here when she replies.</span></div></div>
+        </div>
+        <button class="dellink" id="delBtn" type="button">Delete this package</button>
+        <div class="cloud" id="cloud">Not saved yet</div>
+      </div>
+      <div class="alerts prog" id="alerts"></div>
+      <div class="panel">
+        <div class="eyebrow">Send to the client</div>
+        <div class="btns" style="margin-top:12px">
+          <button class="btn" id="viewBtn">Generate proposal</button>
+          <button class="btn" id="dlBtn">Download HTML</button>
+          <button class="btn" id="linkBtn">Copy client link</button>
+        </div>
+        <textarea id="out" aria-label="Short message with the link" style="min-height:110px;margin-top:12px"></textarea>
+        <p class="note" id="copyNote">Generate proposal opens it as she will see it. When it is ready, tap Send to reception: Joana sends it from the salon number. Instalments are always due before the sessions they cover.</p>
+      </div>
+    </aside>
+  </div>
+</main></div>
+<div id="proposal" class="prop" hidden></div>
+<script>
+const SERVICES=[
+ {cat:"Facials",items:[
+  ["gem","Gemstone Radiance Facial",30,55,"facial"],
+  ["ess","Essential Facial",60,85,"facial"],
+  ["ext","Luxe Extraction Facial",70,95,"extraction"],
+  ["mdb","Luxe Microdermabrasion Facial",70,105,"facial"],
+  ["led","Luminous LED Facial",70,100,"facial"],
+  ["drm","Dermaplaning Glass Skin Facial",75,95,"extraction"],
+  ["sig","Signature Bespoke Facial",85,135,"facial"]]},
+ {cat:"Advanced Skin",items:[
+  ["peel","Medical-Grade Chemical Peel",60,110,"peel"],
+  ["emn","Essential Microneedling",80,140,"mn"],
+  ["elmn","Elite Microneedling",80,195,"mn"]]},
+ {cat:"Skin Boosters & Injectables",items:[
+  ["prof","Profhilo®",55,280,"inj"],
+  ["jal","Jalupro®",40,165,"inj"],
+  ["sev","Seventy Hyal 2000",40,220,"inj"],
+  ["jye","Jalupro® Young Eye",40,175,"inj"],
+  ["pli","Plinest® Eye",40,295,"inj"],
+  ["vit","Vitaran®",45,250,"inj"]]},
+ {cat:"Massage & Body",items:[
+  ["fls","Face Lymphatic & Sculpt Massage",30,45,"gentle"],
+  ["head","Head Massage",30,45,"gentle"],
+  ["bns","Back, Neck & Shoulders Massage",30,45,"gentle"],
+  ["lym","Lymphatic Drainage Massage",60,80,"gentle"],
+  ["swe","Swedish Massage",60,75,"gentle"],
+  ["deep","Deep Tissue Massage",60,89,"gentle"],
+  ["hot","Hot Stone Massage",60,89,"gentle"],
+  ["bci","Back Cleanse: Instant Glow",30,55,"gentle"],
+  ["bcd","Back Cleanse: Deep Cleanse",80,95,"extraction"],
+  ["scrub","Amazonian Glow Body Scrub",65,125,"gentle"],
+  ["ult","Brazilian Glow Ultimate Scrub & Massage",110,225,"gentle"]]},
+ {cat:"Enhancements",items:[
+  ["eled","LED Light Therapy",15,15,"gentle"],
+  ["mil","Milia Removal",20,30,"facial"]]}
+];
+const GIFTS=[["g-led","LED Light Therapy",15,15],["g-fls","Face Lymphatic & Sculpt Massage",30,45],["g-head","Head Massage",30,45],["g-lym","Body Lymphatic Drainage",60,80],["g-scrub","Amazonian Glow Body Scrub",65,125]];
+const S={};SERVICES.forEach(c=>c.items.forEach(i=>S[i[0]]={id:i[0],n:i[1],m:i[2],p:i[3],t:i[4]}));
+const G={};GIFTS.forEach(g=>G[g[0]]={id:g[0],n:g[1],m:g[2],p:g[3]});
+const FIELDS=["client","title","eventName","eventDate","therapist","pays","hold","note"];
+const BLANK={therapist:"",pays:"3",hold:"5",note:"",client:"",clientId:null,clientExt:null,visit:"",title:"Skin Renewal Journey",eventName:"",eventDate:"",qty:{},gifts:{},dates:{},status:"draft",kinds:{ac:1,prog:0},ac:{done:[],goals:[],r:{},focus:[],back:"",note:""}};
+let st=JSON.parse(JSON.stringify(BLANK));let PKG=null;
+const SBU="https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/",SBK="sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R";
+async function sb(path,o={}){const r=await fetch(SBU+path,{method:o.method||"GET",headers:{apikey:SBK,"Content-Type":"application/json",Prefer:o.prefer||"return=representation"},body:o.body?JSON.stringify(o.body):undefined});const t=await r.text();if(!r.ok)throw new Error(t||r.status);return t?JSON.parse(t):null}
+const $=id=>document.getElementById(id);
+const gbp=n=>"£"+(Math.round(n*100)/100).toLocaleString("en-GB",{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function calc(){
+  let total=0,sessions=0;
+  Object.entries(st.qty).forEach(([id,q])=>{if(S[id]&&q>0){total+=S[id].p*q;sessions+=q}});
+  const rate=total>2000?.15:.10;
+  const price=Math.floor(total*(1-rate)/10)*10;
+  const giftLimit=total>2000?120:total>1000?60:30;
+  let gMin=0,gVal=0;Object.keys(st.gifts).forEach(id=>{if(st.gifts[id]&&G[id]){gMin+=G[id].m;gVal+=G[id].p}});
+  return{total,sessions,rate,price,disc:total-price,giftLimit,gMin,gVal,saves:total-price+gVal};
+}
+function sessionsList(){
+  const out=[];
+  SERVICES.forEach(c=>c.items.forEach(i=>{const q=st.qty[i[0]]||0;for(let k=0;k<q;k++)out.push({key:i[0]+"#"+k,svc:S[i[0]],label:S[i[0]].n+(q>1?" ("+(k+1)+" of "+q+")":"")})}));
+  GIFTS.forEach(g=>{if(st.gifts[g[0]])out.push({key:g[0],gift:G[g[0]],label:G[g[0]].n+" (gift)"})});
+  return out;
+}
+function renderServices(){
+  $("svcList").innerHTML=SERVICES.map(c=>`<div class="cat"><h3>${c.cat}</h3>${c.items.map(i=>{const s=S[i[0]],q=st.qty[s.id]||0;return`<div class="svc${q?" on":""}"><div class="nm">${esc(s.n)}<span>${s.m} min</span></div><div class="pr">£${s.p}</div><div class="step"><button data-d="-1" data-id="${s.id}" aria-label="Remove one ${esc(s.n)}">−</button><output>${q}</output><button data-d="1" data-id="${s.id}" aria-label="Add one ${esc(s.n)}">+</button></div></div>`}).join("")}</div>`).join("");
+}
+function renderGifts(c){
+  const lim=c.giftLimit;
+  $("giftSub").innerHTML=`No-product treatments, plus one Body Scrub. This package allows <b style="font-weight:500;color:var(--bronze-deep)">${lim>=60?lim/60+" h":lim+" min"}</b> of gifts · chosen: ${c.gMin} min (${gbp(c.gVal)}).`;
+  $("meter").classList.toggle("over",c.gMin>lim);
+  $("meter").firstElementChild.style.width=Math.min(100,c.gMin/lim*100)+"%";
+  $("giftList").innerHTML=GIFTS.map(g=>`<label class="gift"><input type="checkbox" id="${g[0]}" ${st.gifts[g[0]]?"checked":""}><span>${esc(g[1])} <span class="note">· ${g[2]} min</span></span><span class="pr">worth £${g[3]}</span></label>`).join("");
+}
+function renderDates(){
+  const L=sessionsList();
+  $("dateList").innerHTML=L.length?L.map(s=>`<div class="drow"><div class="nm">${esc(s.label)}</div><input type="date" id="d-${s.key}" data-k="${s.key}" value="${st.dates[s.key]||""}" aria-label="Date for ${esc(s.label)}"></div>`).join(""):'<p class="note">Add treatments above and a date row appears for every session.</p>';
+}
+const day=d=>{const[y,m,dd]=d.split("-").map(Number);return Date.UTC(y,m-1,dd)/864e5};
+function checks(c){
+  const a=[];const L=sessionsList();
+  if(c.sessions&&c.sessions<6)a.push(["warn",`Only ${c.sessions} sessions. A package needs 6 or more.`]);
+  if(c.gMin>c.giftLimit)a.push(["warn",`Gifts are ${c.gMin} min, the allowance is ${c.giftLimit} min. Needs Ligia's approval.`]);
+  const missing=L.filter(s=>!st.dates[s.key]).length;if(missing)a.push(["warn",`${missing} session${missing>1?"s":""} without a date.`]);
+  const dated=L.filter(s=>st.dates[s.key]).map(s=>({...s,d:day(st.dates[s.key]),t:s.svc?s.svc.t:"gentle"}));
+  const mn=[...new Set(dated.filter(s=>s.t==="mn").map(s=>s.d))].sort((x,y)=>x-y);
+  for(let i=1;i<mn.length;i++){const g=mn[i]-mn[i-1];if(g<28)a.push(["warn",`Microneedling only ${g} days apart (${fmt(mn[i-1])} and ${fmt(mn[i])}). Keep 4 weeks.`]);else if(g>42)a.push(["warn",`Long gap of ${Math.round(g/7)} weeks between microneedling sessions (${fmt(mn[i-1])} to ${fmt(mn[i])}).`])}
+  const inj=[...new Set(dated.filter(s=>s.t==="inj").map(s=>s.d))].sort((x,y)=>x-y);
+  for(let i=1;i<inj.length;i++){const g=inj[i]-inj[i-1];if(g<21||g>35)a.push(["warn",`Injectables ${Math.round(g/7)} weeks apart (${fmt(inj[i-1])} to ${fmt(inj[i])}). Aim for 3 to 4 weeks.`])}
+  mn.forEach(m=>inj.forEach(j=>{if(Math.abs(m-j)<14)a.push(["warn",`Microneedling on ${fmt(m)} is within 2 weeks of injectables on ${fmt(j)}. Check with Michelle.`])}));
+  if(st.eventDate){const ev=day(st.eventDate);
+    dated.forEach(s=>{const b=ev-s.d;if(b<0)a.push(["warn",`${s.label} is after the event.`]);
+      else if((s.t==="mn"||s.t==="peel"||s.t==="inj")&&b<28)a.push(["warn",`${s.label} is ${b} days before the event. Keep 4 weeks.`]);
+      else if(s.t==="extraction"&&b<14)a.push(["warn",`${s.label} is ${b} days before the event. Keep 2 weeks.`]);
+      else if(s.t!=="gentle"&&b<7)a.push(["warn",`${s.label} is in the final week. Only gentle treatments then.`]);});}
+  if(!a.length&&c.sessions)a.push(["ok","Everything follows the package rules."]);
+  return [...new Map(a.map(x=>[x[1],x])).values()];
+}
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const fmt=d=>{const x=new Date(d*864e5);return x.getUTCDate()+" "+MONTHS[x.getUTCMonth()].slice(0,3)};
+function render(full){
+  const c=calc();
+  if(full){FIELDS.forEach(k=>{const el=$(k),v=st[k]||"";if(el.tagName==="SELECT"&&v&&![...el.options].some(o=>o.value===v))el.add(new Option(v,v));el.value=v});$("note").placeholder=defNote();renderServices();renderDates()}
+  renderGifts(c);
+  $("cEyebrow").textContent=st.client?`Package for ${st.client}`:"Package";
+  const t=(st.title||"Your skin journey").trim().split(" ");const last=t.pop();$("cTitle").innerHTML=esc(t.join(" "))+(t.length?" ":"")+"<em>"+esc(last)+"</em>";
+  $("sSessions").textContent=c.sessions;$("sTotal").textContent=gbp(c.total);$("sTier").textContent=Math.round(c.rate*100)+"%";/*BSB-LADDER*/{const T=[[0,"Up to £1,000","10% off","30 min gifts"],[1000,"Over £1,000","10% off","1 hr gifts"],[2000,"Over £2,000","15% off","2 hr gifts"]];const k=c.total>2000?2:c.total>1000?1:0,nx=k<2?T[k+1][0]-c.total:0;
+$("ladder").innerHTML='<div class="lh">What she can give</div>'+T.map((t,i)=>`<div class="lr${i===k?" on":""}"><span>${t[1]}</span><span>${t[2]}</span><span>${t[3]}</span></div>`).join("")+(c.total&&k<2?`<p class="ln">${nx>0?"More than "+gbp(nx)+" in treatments":"One more treatment"} takes her to ${T[k+1][2]!==T[k][2]?T[k+1][2]+" and ":""}${T[k+1][3]}.</p>`:"")};
+  $("sDisc").textContent="−"+gbp(c.disc);$("sGifts").textContent=gbp(c.gVal);$("sPrice").textContent=gbp(c.price);$("sSave").textContent=gbp(c.saves);
+  $("alerts").innerHTML=checks(c).map(x=>`<div class="alert${x[0]==="ok"?" ok":""}">${esc(x[1])}</div>`).join("");
+  renderAc();$("out").value=shortMsg();renderStatus();if(!full)queueSave();
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-d]");if(b){const id=b.dataset.id;st.qty[id]=Math.max(0,(st.qty[id]||0)+ +b.dataset.d);
+    if(+b.dataset.d<0){const q=st.qty[id];Object.keys(st.dates).forEach(k=>{if(k.startsWith(id+"#")&&+k.split("#")[1]>=q)delete st.dates[k]})}
+    renderServices();renderDates();render()}
+});
+document.addEventListener("change",e=>{const el=e.target;
+  if(el.type==="checkbox"&&G[el.id]){st.gifts[el.id]=el.checked?1:0;if(!el.checked)delete st.dates[el.id];renderDates();render()}
+  else if(el.dataset.k){st.dates[el.dataset.k]=el.value;render()}});
+FIELDS.forEach(k=>$(k).addEventListener("input",()=>{st[k]=$(k).value;render()}));
+const OCC={Wedding:"Bridal Skin Journey",Holiday:"Holiday Glow Plan",Birthday:"Birthday Glow Plan",Anniversary:"Anniversary Glow Plan",Photoshoot:"Photoshoot Ready Plan","Special event":"Event Ready Plan","":"Skin Renewal Journey"};
+$("eventName").addEventListener("change",()=>{st.title=OCC[st.eventName]||st.title;$("title").value=st.title;render()});
+$("clearBtn").addEventListener("click",()=>{st=JSON.parse(JSON.stringify(BLANK));PKG=null;cloud("New package. It saves as soon as you add a treatment.");render(true);loadList();syncDay()});
+const MON=MONTHS;
+const dLong=iso=>{const[y,m,d]=iso.split("-").map(Number);return d+" "+MON[m-1]+" "+y};
+const dShort=iso=>{const[y,m,d]=iso.split("-").map(Number);return d+" "+MON[m-1].slice(0,3)};
+const isoAdd=(iso,n)=>{const[y,m,d]=iso.split("-").map(Number);return new Date(Date.UTC(y,m-1,d+n)).toISOString().slice(0,10)};
+const todayIso=()=>{const t=new Date();return new Date(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate())).toISOString().slice(0,10)};
+function defNote(){const ev=(st.eventName||"").toLowerCase();return `I have built this plan around you${ev?" and your "+ev:""}, so every step is timed for your skin to be at its very best${st.eventDate?" on the day":""}. I will be with you at every session, and we will adjust as your skin responds.`}
+const dec=t=>JSON.parse(decodeURIComponent(escape(atob(t.replace(/-/g,"+").replace(/_/g,"/")))));
+function snapshot(){return{v:1,client:st.client,title:st.title,eventName:st.eventName,eventDate:st.eventDate,therapist:st.therapist,pays:st.pays,note:st.note,created:st.created||todayIso(),hold:+st.hold||5,qty:st.qty,gifts:st.gifts,dates:st.dates,kinds:st.kinds||{ac:0,prog:1},ac:st.ac||{}}}
+function linkFor(){return PKG?location.href.split("#")[0]+"#p."+PKG:"(the link appears once the package is saved)"}
+function shortMsg(){const K=st.kinds||{prog:1};if(K.ac&&!K.prog){const n=(st.client||"").trim().split(" ")[0];return `Hello ${n}, ${(st.therapist||"Michelle").trim().split(" ")[0]} here :)\nThank you for today. Here is your aftercare and your routine for home:\n${linkFor()}\n\nAny question, just reply here.`}const n=(st.client||"").trim().split(" ")[0];const t=st.title||"skin plan";return `Hello ${n}, ${(st.therapist||"Michelle").trim().split(" ")[0]} here :)\nHere is your ${t}, built just for you:\n${linkFor()}\n\nI am holding your dates for ${+st.hold||5} days. Any question, just reply here.`}
+const PH=[["Prepare","We clear, calm and renew, so your skin is ready to respond to everything that follows."],["Transform","The deeper work. Firmness, hydration and glow, built from within over the weeks."],["Glow","The finishing touches, timed so your skin is calm, bright and at its best on the day."]];
+const RN=["i.","ii.","iii."];
+function paySchedule(P,c,ses){
+  const n=+P.pays||1;const base=Math.floor(c.price/n);const amts=Array.from({length:n},(_,i)=>i===0?c.price-base*(n-1):base);
+  const hold=isoAdd(P.created||todayIso(),P.hold||5);const out=[{amt:amts[0],by:hold}];
+  const paid=ses.filter(x=>!x.gift).map(x=>({d:x.d,v:x.v})).sort((a,b)=>a.d.localeCompare(b.d));
+  const tot=paid.reduce((a,x)=>a+x.v,0)||1;let cum=0;const marks=paid.map(x=>{cum+=x.v;return{d:x.d,cov:cum/tot*c.price}});
+  let covered=amts[0];
+  for(let k=1;k<n;k++){const need=marks.find(m=>m.cov>covered+0.01);const by=need?isoAdd(need.d,-1):hold;out.push({amt:amts[k],by:by<hold?hold:by});covered+=amts[k]}
+  return out;
+}
+const IC={"prep": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUAAACPcU1nUTYVDQomGhNLOSc0JxtkFBOigVf///93X0WGaEb9AgJSNShzcQ2oqFaNJhObAAAAEHRSTlMB+/Fbo+vTD/0B9acEoQMD/GDNSgAAAtZJREFUeNrllEFoFGcUx38z3xenE9fNvjEblpTgzmQPC16moc1FlMmGSAi0uMZDL4W4ObSllwHBq00O4qWwNxFEXQhehBJK6aUU5uJRyOaQk8LWBhUM7SaNqLCb9TC76SbRzaEggu/yzXv///zfm3nfe/ChW/JpT7jcEw0BfPwelM89ryLn2k79AOyXJHNNJGtiAaT241ObJ0je/ycFqijS96UiJnbsbGXBmwQE85MIEqcGvMnXXfjY43Aj+QfX/yVAy6e//+LlF2R+F7ZxnQshgBYfjGxc0uJs2GEUJBczDYGb1VQLUFP5XQ2dGfKJAMyrUBsbsoEy4xUniAvtl2/bVGPEBtMJQ7BgKhMLKxns/OuJO5DUErT90mIA0DfcCeBmASXcbOfO5wC74oSg3aCGkmwZ+Ho0bm1IwfFBuVmwLspyDWLxiXZKCy0kk1qCBOMyZIPpAJ3DzAHFwRuYaULlpgNgZtAGogcyBxgL84SmUK+OwJjMAqqdXBVJgi46AcckCKdHy8pN+zUwZa6GCT+9XtyCxnrrSfRbqla2mzTrZ1ayMG2sZCHC7hfAprSI9R3IsuWmAaiMXAciUPkcgHbT9I8oCY7ILMBlOVcGM4Dm8N8BJBtu486r76GujUcQWc91LYwVIp3PUQPtLplpJcpIAYzHOnFbC85sfJwSJV/InAWqXUinC+mA25YWT/6SqkOIKrUFOpcw40wCxbtySdwlUAVJ+wkAMyZUZ1qrgc+fPwD1Bqe/WjNOrmx3EZqVYqO69avGaKLveet+87Mo3DspquBeE5GhhCuS+dHbvTNG17ClqtD3zc91jj/sevG/x2cbpe1W6+Xjws7a26f5Shm0nBewrXfPvOtd3VfbXveWubK61XOxVGW09+IZi2/6u83cHaNOABJ7I/UDhO0u1945ZHMOIBxQ6LbNo/QmDLw4hMBhCm/57n3+e0jxvwmbhxEsU/go7Q2RwKZeaqP4kQAAAABJRU5ErkJggg==", "trans": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUAAACQcU1mUDQYDwwlGxP///93YkZPNyc0JxtqDhFwcnH8AgJPMCRmYQpQJiBiUygqHPJiAAAAEHRSTlMB/e9fngH16NYOAwadCWdljrnDTQAAAzpJREFUeNqVlU1oHGUYx38z7+wmu9PUeYaY7SG0O1o/iWWoYg5aWKOEeuqAB7FQ2IX24EWyBA+5RcWDKCWgweuCxPOiFA9etvTSY6BU0IurtBQFzTbNR7uT7HqY3dn3nU0V97DvvO/7n+f5Px//Z+D//V4erO4r4VHXOWaSc9e1ygAu2DogPht7AOzuVpM1A+AC7eRBNYmOcKECmb4IgCMnB2e6halc58neT5sAPbq5IyyclW0p5wAs8StjFtziVl48YsAp5/t3GKPhSJmPZmiiPpardX8562DNlgqv+hXOB+IzL/J8u2GmabEEkaywKnIVVRevCig3HgKsvya3i7ce3d7P7z288dzWMz9Lv20YmJDV91hb9EOcQJbr8km2EAt+B7ClDMcCvzadDbP3q+8BVvWtqLAT9JtzGQMbtixFAHkJG9hyYiyNi6UQYH1SVsCR2bFC1S8PnoLZNVTt6Uwar/0gLySFZMEPQcrjMYQp9P0iZQ3wY9IKmrPpS5yvaFUENvLyUuo0P6N1rA27QPga3w/fWbfjt0cAK1mOv6MefTM4KuwHW50sxa+F4mibEk5T/fmLVriXnq1/2O9czLazua1VM3VAiwHILfoZDnkxpNiwJcMxmL5k+pAP9DCLjvL/fKADCifiP+JRFN/u8JRxz/7dODYVFXKyqPu0TVLXS8OMjjRUHYSlAIJb3dfVQVcDWO+2bmqZbFu0Dg0Wh6fUFADNJKgqMmW4iK6fMqJGScUkcd8zitWCbIGPGYClxw9G+78mZwrw/gWkBCQzbzIkPbyMUDaf0ACHeJR3mgag9dsI4Lqeiho9cy62dYvRG7PYZqacVJs2EG3E2OjzKNfD4GRLuBaUjA5J1Wcnf5E3010dqbVxwbpiUKpXcUSTkwrOGJmMbn8XWnv9B2nJtzrbrg641upX4onqwaBnCnxleZ9mpFcC58ZwOynelFmsw6C7zMG54YdlhaUvM4PeCUrh4KUi92rjQ5IFOT28dwL5bOy+4QTyxSDL9SHWECPzNevZNymoMJBk5LqacOCAuz5/3ztuT9x/aM3dBMjH+hADmP8lOTnT0m3rmlTnfqd3Z27zca057BjzS/YPrcq+U9tHoKEAAAAASUVORK5CYII=", "glow": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUBAACRck1jTjQWDgomGxR1dTFnUTMxJRpKNyalhFhhFw/+AgH///9lTTJ2YkZILSBlPuhbAAAAEHRSTlMC/e5doAdk1u39EQUBq/SjBpsrLQAAA0hJREFUeNq1lk9oHHUUxz/7mx2zmd1N8qbLbhQxu91tQg5ph2WRXIqTjWIuylyKBy8plXjwYIoU2Rza3daLeMmGYgWhLKKXijCg0JM4YvWgl2gPgtKSLeKhIAZttHSp62F2d/7YNPTgXGbee9/5zvf3fu/33sAjXpoVcyRitkr2e1FHnGIq/sZB3/xfAf6CHgJ4fWcEyM49IH7t6iEd0ADG3lz4ZpgX4+4//tPOjdmbo6+1Ch0guw0qr2ey1wFt/heAtAK4f/XeT8CdFwC4eOQroL/7ZFhwq+CAugQqr3/3dtnAKJluJ4RYlA34RCxUHhKbHi9J0yBKAVq3icob1wSD09NWJ7KoRdmARpEPplAmjMmFeNpaBaje1p7ZtdRFj6WteF2wKOt8OiYics42XInvOq7WKngr4yIi7QoT0ktH406a+uUxuVWxtHqp/cZ4Dj6KUTjYE1PLALWW+exzRix8CqB9ATpkWJQy8HRE5tZbcHba8gB0SiaslIpBOM28TCaDpaee6j0vW9tBRe0xuX3e4MYQ0HvtyA90o5moFZfMwJrIqeWoyAw0ZgNLhcDoDgBet+gNXQbi81+5EtoMsZ2wEUSsoS8sSvzbmkby81dUEcj89VtE1OQhgPdlIpFN+p7+9zOd1YDhyy+aAKlXE6zBvcfgcnbGz4zrAPL1pu/+NqRroMGNikxwAlyHntv9fXfkTWZnzrx8AuDjQFYjyENGmeBFU5lcWMoF1snCTTsar7Wk/t4wETqlYzL9Z6SmS+1jn0lxUEYdJTt/iLkdKZgKdOcYnJW6abEyHy5sbZUMVXN9oGe+AhxfjZXl5N+lads/Q+Y5Oyi24eUl2nUxl6F2WCrjhf8AMkhOOysy15THTSsRZHLYxO68yNr92ZPcbtM/+nOfH2MCMknJQbVcUwvXj5fxaK/HEEti4zWK8CvqErilQrQ9JCWHQaKI2iQpFtyVjTiBhyMWKq9r3XfSnUHjCxMAhTQqr3uNsg4pORMCnBYbGJ8Blded6rs6Lq1CsIQPfYKU30jJTgGkpBm0/LY9LA+V10ctJ9itbCXADgFQLT5wfowA3j4DJmB42MRJHwTYSx84s9x9h5yv4UCGvX0BiSd6j/g78C+WSLO4znsKmgAAAABJRU5ErkJggg==", "gift": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUBAACOcExsVTkjGxKkgVcUDgv///82Khx3YEREMSNPOCf9/X1qFhFycCB2XUKQYzYIYLfJAAAAEHRSTlMC+tyZ/lsBzeej5gIMBbrf+pEj1QAAAvJJREFUeNqVlUtoFGkQx3/dM9P46NauICZmJenOKCp46DhBJHiIp1wbRYLZlW2EHRQvKvgAQTP4QlAMMSdPE1AvexnY6x4afCA+cGD36B7c0152HTGL2hrjoWfSX49tWuvU/6qiqr7/v77+ILYA1dIotv37VXSAUld8RqTsmx20Q6SvbilhY4WISDlsw0kRkd74Wwcg8rQZt3egEZcobNHWzbuR10wqWLUyTNRuxGhYTgI1Rx1BbAxzVGyAQHoh5LajtIAW0fyT6dMA76jC2O+pM5jiBMDPezxg7gpAKd1i7ioQIDaBLlMAukyrCcP9PsBwD6He4wOrd/UQpni4QwiPxMAdALjnllN8l9x+Hyi5TqF2DeCEtNKC7JUy0Dxur5JpC0alH1LH/M3+7wIYL/Wt2ql9TIxrp7rVnKj1lH00Ob6B0qgrJ5VQm/JJV/pLiFxaOSeybSlaBC/ehF93tN5a9isW/nE4/GI7wIcGaDC5ZZqv2KHraJQ2tr4WR9v0uFD9Y6FvZ3nI0SqIrLn4fOP5hz/IsCYiFf2vMw9aoMcsxzbiMKKINGcD+njieDGbTtBsS4ePxpLjz/QITYXJTPPyEjpaJHfErxMo9yrmWB9PPMGsw6xjgFGtAsFL2+rareIUxSllSy5RtCJmhpZci/rQop7AV0fPauC2Cl7H86zgPVOQNtAswt/n7lbanvcHL1cOXq4AH++PEXLzx/haOSrVygziN2MewmrnFAGrvXqbWauA6bWJutXhAf4PiGLwBuY7TKobXk+R2EV1I4U+kanFwpdaKFWzxUoSfKCQkRAu84/UAZy8Fo6fk5CqWs9L6LIiwNjY97TIqpAs7Uh2hby1X/YlWU7NrCHr3zWDnpfw6duHNPP6zOepaf+UbJRy/Ze2092c/RNbKz7oENj/+s2nPKWJGdAA0wzBNEtHtEbyji7K4mupiQy+FhEZlD4REdsCDfhl97HM+Vaur3toAIXBDg13IyMyIoK6EcGaZp7UAfAZ1aeo4xxsJM4AAAAASUVORK5CYII=", "hour": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUAAACRck1pUjcvJBmmg1kXEAsyJhp1XUVKOSZ4XkFIMSJkZWX///9fCwtnZhtnTjUcypubAAAAEHRSTlMC/OSf/l3U6+q6nQYBEgprfoskFAAAAxlJREFUeNqNldFrHFUUxn8707tTMrPJ3k1ah4jszja7RTAwTo3xzbZBHwLWIYJ5KTQplPpUkoAF30wg+Fr/AyP6ID44+g80CKLWiqNBEQtm9EGQSDebZmPDsqkPbnZn7uxY5+nee7455zvnO/ceeMyXA0A88/M7b93qHl03KivA4Udf9AFzt8+lfv02/2cfsLG056qAS+/eB9AA0E+9F7cZBvCp6HOIVhpsJV10tiZ/PNjvk+yUm8UEQOwUh8P4gWLHuNhdaBnpf5NPAiJGhuN2yz1KAiqKg/3e6thDkb0kpGMlAOFB8zGaaDNWfBvMj6sAO7lvlpMcLA79uP3u+XwhAdjPERH07OaL59sPki6FrMW3unSjZCXb/l/1vlzBq7lKRSn1Afd/P0YEtZETC6k85XXH9s1/43nyTVMRq6AXP5k6/OklACa3mW4pgAcfL7V/cXa2fBDPbyMm0rUckqNiVVbPudWxqlwwe/n0AO2nG7XPTjValx4+vPLlV+3kvejmrt2pbdxrff33vcZgwTy5ADDknCYcZLf0VZsInpU3MiQPTkpM7sjTmU0hVm9aGNLNbpt56bN4M9u+OSQvh85/NZ6Qt5BE6fehB7Aa40Yhijd48mZ14I+Z1u3MCIVFG7xSdhZ5uU5Hk2fICCGWjSd/eOWo2MhyMSfX0WYxlusDzcO6Y/uEHfAuvm0OUsKT64BPqDv2wCI5NoThqAmeXDJTJMPO7hvgutMt+L6ot1IlYNUGEGKYwbUYkusA+ICpS/XJIZqTuwAnR00AZ/SuwiHavhYCzE63gOi3qedUF04NYFOf6gZUSeiyEgBcGfEJQKgkLKQPiJWJC1UX2JxQWWolQFwdK529YLvARlkFvGwhrso6vC9LbiFS3+5gfjzCk3kf8MbqPtqsUoZcmReWbQhM8GRdfTeJmsXXl4/rKxblGWNGnX7FCflhX9gn1pQQNGXpWn/3miNLybn51KPdXIJ3I9cdSScAwrXPJ0OtmpiaWvm7mIcP1gop/R/9GlZ6anb20i3oapVYiEOZAmwfxUl6OwPuQcj/+f4BXTTC9hxrHxgAAAAASUVORK5CYII=", "cal": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUDAgGPcExoUTd5YEGjgVj+/X5JNyX///9dDg1tVjUuIxiqqlVycilnUjU1KhuIaUlR+anfAAAAEHRSTlMG+eW1/gKZARBapQMGqsihOywZbAAAA5dJREFUeNqFlU2IW1UUx3/3JjN5mXy9G1GaSuXNoxQtWKuIW4OWIoISumgXoqalCC7ECF1IQb111YXFycKVm1QRVLAdUSgIQhCX48dMN1YwzQxY6yzmZTKZzGQmk+fivrwkdZ6ezXn3nv893+c8CCmx72dImR30xOkemhZqHK2UE3zKgPdtDoWK699Aa1JBvWp/Yo9ZtqU9qWEefha9SnBZEbGM0AyPVIDFQvgGqBYyQ5cEQO19fK+dG7l5+8BqVnG3C8SBlcfMtTdyAfBIHF7SWgAKwG+Nx2mtZkdPRB5YtKW6PBR/UC3ElAXCRkvgAFAH3h4COhVgG66KMiBUDajaKD2WlZwCMspBIigDZOTIg1Yls4GGjRaAfDEBiLx4aJRJmRc2ULlaSEnoA4krvi2nwmqnffsgUKyzGSjuXayqZmcI6LU/VO+YzxTI5/drDwBKZwspCQwA9DjM0mFTCeSJo38yvXPj24/GEDc6U6WXPpMXn2uDfJZIeryQisMvf5S7k/dfnqZWBlhDCGQuWgPWhgT/PwD4IF+IFi+aMKOpDBL2pqLk9eMgoS+B9MICAAsL2jCAOdOTcYDOk+bRJDNz0Qe47vs1IOP7vwMzt/2dzw0gbow9c+4cAqbjeWg+vH3mCUgmerAVlHvuVfB9rZMAxe2KBro9IBmGmfN20LqD57VgjpznTc5mzGIKNGhujs1cZSsc/+2A6/SvQAwkGuaSIeCuaRt051Fgrxkct4IoKP5QtD6FGe68VgI4UuxfB0juGsD81/c1ALrZBq0cadYae0GRYwh3eQ/9m+ep9vf+Qc9Lvnf8O2feX2/92L9866YP8uQ+XW3meP7sRLnHceEcD5203qT5epH0bmnwoK2x3mjKLwDYjDAxOTjAjOs6j2BRc90scEW6jjOe6vpfbXf2b7an33LdGHAh784OTKJAnpyidP7YtRWFzqm1a3GHyvKx1ZW8MRE4ydKpnCTVyS6dimNRbz+AmtzVw91dPFMDYiSkb0xMtv0M9OpBZQVAkn/NxXzR7JDBPb+DbHMDNiWO/TLMFVmTwiTKACo/3Tmf80nvcljYwKHO6afTUIYgUcVb2YayudBdb6hcEy5lG8sro1pI6DbMcWD4u6FLQob12odq5nU0wNH4IFX0+AsHmbai5a/YIDtd29ERgBNoDayroxGA2bzJ+GwryoZnUn0pSn7/sGZflZ4ycZfN/jS7NP3xEf6HEsA/2qQQXOYyDmMAAAAASUVORK5CYII=", "clock": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUAAACRck1mUDUTDg0qIBVLOCYyJxt4YUVjCwlraw7//v5GNiX//31gYGKlgldMLB2/Fxf1AAAAEHRSTlMB/fJenuXR+Q4HA6ACA/5lH7Z0eQAAA2ZJREFUeNp1lU1oHGUYx3/7ziTdWXbYeabdrdDLTiyhUCHjbtKAXwxbcvG0IRdPmqaCipcERfC2BwXxIHvMcUsvehDTi4cedPFmER1qRSiGSJUixDQbUnfbbTbrYedrvwaWfXjmP8/zPh///wvxUwuNr5n2lD3Qy5PfpZu4GyIiInkv4U/F5sofLSDVxzw+m/VDrwrzpys/ta5dn5t7NLegc9BujSQwWBG53AJlgTabkoI7HKFz5YXU1d8s4B5mr1suPHs8HEF35G2yPqh9ABa37LUhwIZcDCIOAJQk72aiFLVPv9ezwyF/vnGy0E4UK9X0cAQ+cfJRJfdnt+ZDO5cOkJRkzQzMTEWq463VnLwbnOHpXn8n6ngYgJ6cvJ4BBb7eipv/5Elk3rW6bdCg1HnY/2fC+L54utMBBe/deTMaDeriV6HZWuxXt4HMjPBl6KxzIWqIkdt6HqC+bCdGp84lOuYUfKBxq5BIrP5OAJTtkjJ4Tu0mfA8uxXOcyS5UQZdiMwHYT0TQtoooTrG8yWua6bU0dEj5U3a83ZDbWThKnnE4hb+cR282u9nHU0K4KofydtZT03iU6ePqNPvH0wBtHRQtDH6c+N7Y/gUfpMi0TqLJ4IcRA6zIzEFZUIDI7/FHd6MaL4mchMxajgFL64kU94I0aFFhs1KoxSk0QfUoQi8qrFt99ldgHwX/UjTYTrBU7JfCMo2b4oEzVCbmSkhTQBdX4R2aSUDvO+9RRKlToHHLGmngkpN3Q6YKkLrw+QiiEibxOzaKF/9rjwA21g8GzfBvqyyo8+7olK7I5sB3DRSq+2p9ZIp3qjf6AJpVBLQBf4Yla9UanNGrQ2O1YIwvG0DtjO0ClOyxQ2RC6t1Hkfm1744uftsEyFXNeYCcWBM3rjYj7w6O/854DoDaakB7/4y8kZ4A0J0PIz2boT4OKMlmOLSKvW5OksFoPWdlvhHtmRkLaTrQSbdr/RtKxPGfAc9uHuq7kSTWlRMWErG7ImvxhfLxqdMfYfjSnr4bXwcdfrAOrhORrsniK0ev+e3hFbDXajQyat/IwqKT2NyBhlOR8++3QJ0D7VuRj9yRe7P+wTdvkbJzvbMt88Eh+Yw/erHWNyt7geKax/H7xM3b9F5+OEDol5tTJOezsgdcdadJUnaS83+XAdnmaLqdGwAAAABJRU5ErkJggg==", "lock": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUBAACOcExmUDUSDQktIhikglhKMiL//v82Kh1KNyZkFA12XkJYKSR1XUL/AABqVTdaURQPAAAAEHRSTlMC++ljov+cAcvmDeBktAWkVlTDIgAAArZJREFUeNqlVUFPE1EQ/vZtZUsF3Nk2FaLYLRq9kbX2oBFileBZ/sE2HvRk+gM8QJSroZZ48LQcvah4ViweCAcSCInIgZQSEzUapAmytASKh213H7uPYuI7zbx8O++bmW9mgROOfNQb2Pry+cyPY9HpPBGRNsTfSZwd6q04d/1F35dlJ36e3m0b8mCSNEMRPXCDNPNWZ2V7IEkFwROR2rOxq+E5AFF1s3p2qXnPmsaLttGpxBwAbFaoej/4QG5MS5M2acipJA1Na4KCJC/dpicAcJ1iKcoEAIxs6nbYjFGI9Iifw8fwEB4CAOwreDO6b/spZOOz55rOdCIbU3y9mB/Z+LW603DaV+2tP34OpEt6zjEVRikKJEEg3SNskOEniWtwUwtxKmCBngE44NPn7Iqohewkyf0/IMQ7ilOIWkEA7KAFKoqcRgR5s3sBK3cB6AC+zr/HirHk9aIsf38KqcTC4XC4Wq1W20rtpRl2ebvmavLOIgio84zX1egap6YeE8BrnlRbXnNLbzEqiKbAbR5u9hgRfwRLTsZdJ6uKSnQ6pjQqmdOjOQFgt15rljp0MNGsJeBhD11rXBe2iYLNskL5o9uhwcH1zN6ivGgEgw27T4z09dHbFk98mr+wocrBCC7JbBxYjrsRrKCi4oBRd/eP6QGas/zT11MvQmMm9oodedREgK4yAExJmX2983jRRmwklvV1NRChCGg6ALvr3k7mlNqiUJYUm1UjwUJluLws2C0myxKN3m/OM8HMAODozqyLlKFIbjelhKQGBaNMeuC9CRElTnJE51tK7puFRy32A0ykU3EBy/GLOf+iAxTm5ZeNiZLjbwX/D0Sc2WQArFeHgunur7zkNrl/XIB0kh6A3zDB42wYpw6zApFIHTnuvykPfiizNZaZ2W1HH9NLGH7+eAn/dP4C9p+kiW8bwmYAAAAASUVORK5CYII=", "chat": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAMFBMVEUAAACRck1mUDYTDQkkGxJNOif+AQA1KBz///94YERiY2ZjCxFubwdOMiOqqlVdRi+0y8MDAAAAEHRSTlMB/fFfmuoC1QH3BRAFnwOh0VkhawAAAqFJREFUeNq1VbFrE3EYffe7S7zG1OQdPaRTc2lAEdSQprjZM6V00MFqF3G5qZuQptlU6CgKQmoHcerg4iBkaMXx/oKSFsEiCgEdOslhS1traxyu115z96sF8Vvy497L7/vu+973ToEskg7wylmQoA6Q9E9KF/Id+JHDKWPKiX+uhvJ0ISNzFkkjP1+M/edIjVRIUmH/DFJdqItKg2T9CzIfLNIoRPBV0tg4uLqcJ7sZFfIyAB1ueh3AdoOTzTB+jcYkEGrbsMWZUBmLFuvHLmxjnHOhd6lFUgJVFmaDc4JmzJtbhp0EBADcUu5/jhL6Ol93fcKSa2Q3o4Rle8ufOyzDTse1dpjVZwCgWQXE6iLTyAIASryUih2OfsMEANwzJXpY6KGtA+BgRG9TByfmAD3BqhsR7AHDGoDY0RTXjty+6/+83wKwcl4qSl2wKHD7Z0rKeBsUIguNnlDhzUoJHWSh0j5hNZgTCrwTt0fs/WW9BP6ZoCErR1W0oNJbkBMIRT2Xacvw9E7vgNi3kZYR9n4DAt7mIxnhZVFvASVDXuR0ny7Q6qxJZ5XL7AC9jRcywhIfukhjQpajueIjgvF7A83KAAKOwLdNN071V7xtv4cTxk09ro2WWWwCQDPBC3EZSrx7NnACIprjtWWuBeMmmhHdqcve9YuBIfWYDvDkOGEs5DpPp+cBAM+DBylgvGFUQ+XmAPWqDfgLMAu1YnHGOTTKMwT0Ck07uLNcO+60pSywaJHMa0NFqGVhkY+PvgZJWAZQ42Te93qSytzgodur2Nc6GW/snbL/aWPVF59effMRv45mVmIrqHmoDGijIVNNAsC0eSfHOoD1ozmFDekB+ykKQavb5yKqaJL99ZN2K2HkRwE3/usKAKoK+WacLtr4v/EHq9KPhBwCR0kAAAAASUVORK5CYII="};
+/*BSB-PROP5*/const INFO={"gem": ["A quick glow in 30 minutes.", "Using Éminence Organics, we cleanse, exfoliate and apply a nourishing mask chosen for your skin, then finish with moisturiser and SPF."], "ess": ["A fresh start for your skin.", "We begin with a skin analysis, then deep cleanse, gently exfoliate and apply a mask chosen for your complexion, using Éminence Organics. Finished with hydration and SPF."], "ext": ["Clear, clean skin that can breathe again.", "We cleanse, exfoliate and use steam to soften the skin, then gently clear blackheads, whiteheads and blocked pores (extractions), mainly around the nose, chin and cheeks. Some areas can feel a little uncomfortable."], "mdb": ["The smoothest your skin has felt in months.", "Microdermabrasion uses a small wand with a diamond tip that gently polishes away dead skin, while light suction lifts it away. We finish with an Éminence Organics treatment to hydrate and calm."], "led": ["Our Essential Facial, with the added power of LED light.", "Everything in the Essential Facial, plus 10 to 15 minutes of LED light therapy: coloured lights that work beneath the skin. Red light supports collagen and repair, blue light helps with breakouts."], "drm": ["The smoothest, most luminous skin you have ever had.", "Dermaplaning uses a sterile blade to gently remove dead skin and fine facial hair (peach fuzz). It is painless. We follow with an Éminence Organics facial chosen for your skin."], "sig": ["Our most complete facial: we choose everything your skin needs on the day.", "It begins with an in-depth consultation and skin analysis, so we understand your skin, your routine and your goals."], "peel": ["Brighter, smoother skin through professional renewal.", "A chemical peel is a professional solution applied to the skin that dissolves dead and damaged surface cells, so fresher skin can come through. Your specialist chooses the right peel for you after a consultation."], "emn": ["Smoother, plumper skin, from within.", "Microneedling uses a device with very fine needles to create tiny channels in the skin. This triggers your skin to make new collagen, and lets us deliver hyaluronic acid, a deep hydrator, where it is needed most."], "elmn": ["Our most advanced microneedling, for real skin transformation.", "We combine microneedling, which triggers new collagen through tiny channels in the skin, with a premium serum rich in polynucleotides, ingredients that support your skin's natural repair at a deeper level."], "prof": ["Skin that looks hydrated, firm and fresh, not different.", "Often called the injectable moisturiser, Profhilo® is pure hyaluronic acid placed with a few small injections. It spreads under the skin to boost hydration and help your skin make new collagen."], "jal": ["Fresher, firmer skin that repairs itself from within.", "Jalupro® combines hyaluronic acid, a deep hydrator, with amino acids, the building blocks your skin uses to make new collagen. It is delivered with fine injections across the face, neck or décolletage."], "sev": ["Deep hydration for skin that glows.", "Seventy Hyal 2000 is a high-concentration hyaluronic acid skin booster, placed with fine injections just under the skin. It replaces the hyaluronic acid your skin loses with age, holding water where your skin needs it most."], "jye": ["Brighter, fresher eyes, without filler.", "A treatment made only for the thin, delicate skin around the eyes."], "pli": ["Real repair for tired, thin skin around the eyes.", "Polynucleotides are purified DNA fragments that work like a repair signal for your skin, encouraging it to renew itself and make new collagen."], "vit": ["Deep skin repair, for results that last.", "Vitaran® is a polynucleotide skin booster: purified DNA fragments that act as a repair signal, helping your skin renew, heal and make new collagen. It is delivered with fine injections across the face."], "fls": ["A lifted, defined face, without needles.", "A facial massage that combines lymphatic drainage, a light, rhythmic technique that moves trapped fluid away from the face, with sculpting movements along the jaw, cheekbones and brow."], "head": ["A quiet mind in 30 minutes.", "Slow, circular movements across the scalp, with gentle pressure on the temples, jaw and back of the neck, where mental tension tends to build."], "bns": ["Release for the tension you carry in your upper body.", "Your therapist works on your back, neck and shoulders with slow, firm strokes and pressure on the tightest points, easing knots and stiffness."], "lym": ["Feel lighter, less swollen and more energised.", "A Brazilian massage with light, rhythmic movements that follow your lymphatic system, the body's natural drainage network. It helps move retained fluid, so the body feels less heavy."], "swe": ["Classic full-body massage for complete relaxation.", "Long, gliding strokes, gentle kneading and a steady rhythm across your back, legs, arms and neck, using warm oil. Your therapist adjusts the pressure to what feels right for you."], "deep": ["For deep knots that stretching cannot reach.", "Slow, firm pressure and deep strokes work into the deeper layers of muscle, where long-held tension hides. It can feel intense in tight areas, and you may feel a little tender for a day or two."], "hot": ["Warmth that melts tension away.", "Smooth, heated basalt stones glide slowly across your body, while long, flowing strokes relax your muscles layer by layer."], "bci": ["A clearer, smoother back in 30 minutes.", "We cleanse and exfoliate the skin on your back, remove build-up and finish with brightening care."], "bcd": ["A deep clean for breakouts and congestion on your back.", "We cleanse and exfoliate, use steam to open the pores, then gently clear blackheads and blocked pores by hand (extractions). Microdermabrasion, a gentle machine exfoliation, smooths rough areas. We finish with calming care."], "scrub": ["Polished, glowing skin from head to toe.", "A rich full-body scrub, with extra attention on dry and rough areas. After a warm shower, we finish with a nourishing lotion. No massage."], "ult": ["Our most complete body treatment: scrub, massage and total calm.", "A full-body scrub polishes the skin. After a warm shower, a long, flowing lymphatic massage with our own blend of oils releases tension and helps the body feel lighter. We finish with a calming scalp massage."], "eled": ["Calm the skin and boost your results.", "After your microneedling, 15 minutes of LED light therapy helps calm redness and supports the skin's repair."], "g-led": ["Our gift to you: a glow boost with light.", "Coloured lights that work beneath the skin. Red light supports collagen and repair, blue light helps with breakouts. It is painless and there is no downtime."], "g-fls": ["A lifted, defined face, without needles.", "A facial massage that combines lymphatic drainage, a light, rhythmic technique that moves trapped fluid away from the face, with sculpting movements along the jaw, cheekbones and brow."], "g-head": ["A quiet mind in 30 minutes.", "Slow, circular movements across the scalp, with gentle pressure on the temples, jaw and back of the neck, where mental tension tends to build."], "g-scrub": ["Polished, glowing skin from head to toe.", "A rich full-body scrub, with extra attention on dry and rough areas. After a warm shower, we finish with a nourishing lotion. No massage."], "g-lym": ["Feel lighter, less swollen and more energised.", "A Brazilian massage with light, rhythmic movements that follow your lymphatic system, the body's natural drainage network. It helps move retained fluid, so the body feels less heavy."], "mil": ["Small white bumps, gently cleared.", "Milia are tiny, hard white bumps that sit just under the skin. We remove them carefully with sterile tools, as many as fit in your booked time."]};
+function p3t(el){if(!el.classList.contains("has"))return;const o=el.classList.contains("open");document.querySelectorAll(".prop .p3-row.open").forEach(r=>r.classList.remove("open"));if(!o)el.classList.add("open")}
+
+/*BSB-AFTERCARE*/
+const EM={"cl": ["Acne Advanced Cleansing Foam", "Barbados Cherry Enzyme Cleansing Powder", "Bright Skin Cleanser", "Calm Skin Chamomile Cleanser", "Charcoal Exfoliating Gel Cleanser", "Clear Skin Probiotic Cleanser", "Coconut Milk Cleanser", "Firm Skin Acai Cleanser", "Herbal Eye Make-up Remover", "Kombucha Microbiome Foaming Cleanser", "Lemon Grass Cleanser", "Mangosteen Daily Resurfacing Cleanser", "Monoi Age Corrective Exfoliating Cleanser", "Stone Crop Cleansing Oil", "Stone Crop Gel Wash", "Tulsi & Snow Mushroom Cleansing Milk"], "se": ["Bright Skin Licorice Root Booster-Serum", "Calm Skin Arnica Booster-Serum", "Camellia Glow Solid Face Oil", "Charcoal & Black Seed Clarifying Oil", "Citrus & Kale Potent C+E Serum", "Clear Skin Willow Bark Booster-Serum", "Copper Tripeptide Serum", "Cornflower Recovery Serum", "Eight Greens Youth Serum", "Facial Recovery Oil", "Firm Skin Acai Booster-Serum", "Kombucha Microbiome Luminosity Serum", "Marine Flower Peptide Serum", "Stone Crop Serum", "Strawberry Rhubarb Hyaluronic Serum", "Vitamin C+ Serum"], "mo": ["Apricot Calendula Nourishing Cream", "Apricot Whip Moisturiser", "Arctic Berry Peptide Radiance Cream", "Ashwagandha Ultra-Rich Restorative Cream", "Bakuchiol + Niacinamide Moisturiser", "Blueberry Soy Night Recovery Cream", "Bright Skin Overnight Correcting Cream", "Calm Skin Chamomile Moisturiser", "Ceramide Repair Balm", "Clear Skin Probiotic Moisturiser", "Coconut Age Corrective Moisturiser", "Echinacea Recovery Cream", "Firm Skin Acai Moisturiser", "Mangosteen Gel Moisturiser", "Marine Flower Peptide Night Cream", "Monoi Age Corrective Night Cream for Face & Neck", "Shea Butter & Mint Moisture Balm", "Stone Crop Whip Moisturiser"], "spf": ["Bright Skin Moisturiser SPF40", "Daily Defense Tinted SPF50+", "Lilikoi Mineral Defense Moisturiser SPF40", "Radiant Protection SPF Fluid SPF30", "Sun Defense Minerals SPF30"], "nt": ["Blueberry Soy Night Recovery Cream", "Bright Skin Overnight Correcting Cream", "Marine Flower Peptide Night Cream", "Monoi Age Corrective Night Cream for Face & Neck"], "eye": ["Bearberry Eye Repair Cream", "Hibiscus Ultra Lift Eye Cream", "Lavender Age Corrective Night Eye Cream", "Marine Flower Peptide Eye Cream", "Neroli Age Corrective Eye Serum", "Snow Mushroom Moisture Cloud Eye Cream", "Vitamin C+ Eye Cream", "Wild Plum Eye Cream"], "mist": ["Mangosteen Revitalising Mist", "Neroli Age Corrective Hydrating Mist", "Shiitake & Ashwagandha Bi-Phase Mist", "Stone Crop Hydrating Mist"], "wk": ["Acne Advanced Clarifying Masque", "Arctic Berry Peel & Peptide Illuminating System", "Bamboo Age Corrective Masque", "Bright Skin Licorice Root Exfoliating Peel", "Bright Skin Masque", "Calm Skin Arnica Masque", "Calm Skin Chamomile Exfoliating Peel", "Charcoal & Black Seed Clay Masque", "Chocolate Mousse Hydration Masque", "Citrus & Kale Potent C+E Masque", "Clear Skin Probiotic Masque", "Clear Skin Willow Bark Exfoliating Peel", "Eight Greens Phyto Masque HOT", "Eight Greens Phyto Masque NOT HOT", "Firm Skin Acai Exfoliating Peel", "Firm Skin Acai Masque", "Kombucha Microbiome Leave-On Masque", "Lime Stimulating Masque", "Mango Exfoliating Enzyme Masque", "Pumpkin Latte Hydration Masque", "Radish Seed Refining Peel", "Raspberry Pore Refining Masque", "Seabuckthorn Balancing Masque", "Snow Mushroom & Reishi Masque", "Stone Crop Masque", "Strawberry Rhubarb Masque", "Yam & Pumpkin Enzyme Peel 5%", "Yellow Sweet Clover Anti-Redness Masque"]};
+const PR={"Acne Advanced Clarifying Masque": 61, "Acne Advanced Cleansing Foam": 46, "Apricot Calendula Nourishing Cream": 73, "Apricot Whip Moisturiser": 60, "Arctic Berry Peel & Peptide Illuminating System": 125, "Arctic Berry Peptide Radiance Cream": 92, "Ashwagandha Ultra-Rich Restorative Cream": 56, "Bakuchiol + Niacinamide Moisturiser": 78, "Bamboo Age Corrective Masque": 61, "Barbados Cherry Enzyme Cleansing Powder": 60, "Blueberry Soy Night Recovery Cream": 67, "Bright Skin Cleanser": 45, "Bright Skin Licorice Root Booster-Serum": 60, "Bright Skin Licorice Root Exfoliating Peel": 81, "Bright Skin Masque": 59, "Bright Skin Moisturiser SPF40": 63, "Bright Skin Overnight Correcting Cream": 73, "Calm Skin Arnica Booster-Serum": 60, "Calm Skin Arnica Masque": 59, "Calm Skin Chamomile Cleanser": 45, "Calm Skin Chamomile Exfoliating Peel": 81, "Calm Skin Chamomile Moisturiser": 63, "Camellia Glow Solid Face Oil": 80, "Ceramide Repair Balm": 78, "Charcoal & Black Seed Clarifying Oil": 104, "Charcoal & Black Seed Clay Masque": 61, "Charcoal Exfoliating Gel Cleanser": 55, "Chocolate Mousse Hydration Masque": 54, "Citrus & Kale Potent C+E Masque": 61, "Citrus & Kale Potent C+E Serum": 104, "Clear Skin Probiotic Cleanser": 45, "Clear Skin Probiotic Masque": 59, "Clear Skin Probiotic Moisturiser": 63, "Clear Skin Willow Bark Booster-Serum": 60, "Clear Skin Willow Bark Exfoliating Peel": 81, "Coconut Age Corrective Moisturiser": 67, "Coconut Milk Cleanser": 45, "Copper Tripeptide Serum": 150, "Cornflower Recovery Serum": 60, "Daily Defense Tinted SPF50+": 56, "Echinacea Recovery Cream": 73, "Eight Greens Phyto Masque HOT": 57, "Eight Greens Phyto Masque NOT HOT": 57, "Eight Greens Youth Serum": 56, "Facial Recovery Oil": 80, "Firm Skin Acai Booster-Serum": 60, "Firm Skin Acai Cleanser": 45, "Firm Skin Acai Exfoliating Peel": 81, "Firm Skin Acai Masque": 59, "Firm Skin Acai Moisturiser": 63, "Herbal Eye Make-up Remover": 32, "Kombucha Microbiome Foaming Cleanser": 43, "Kombucha Microbiome Leave-On Masque": 66, "Kombucha Microbiome Luminosity Serum": 104, "Lemon Grass Cleanser": 60, "Lilikoi Mineral Defense Moisturiser SPF40": 65, "Lime Stimulating Masque": 65, "Mango Exfoliating Enzyme Masque": 62, "Mangosteen Daily Resurfacing Cleanser": 43, "Mangosteen Gel Moisturiser": 65, "Mangosteen Revitalising Mist": 37, "Marine Flower Peptide Night Cream": 92, "Marine Flower Peptide Serum": 104, "Monoi Age Corrective Exfoliating Cleanser": 45, "Monoi Age Corrective Night Cream for Face & Neck": 73, "Neroli Age Corrective Hydrating Mist": 37, "Pumpkin Latte Hydration Masque": 58, "Radiant Protection SPF Fluid SPF30": 56, "Radish Seed Refining Peel": 60, "Raspberry Pore Refining Masque": 55, "Seabuckthorn Balancing Masque": 55, "Shea Butter & Mint Moisture Balm": 17, "Shiitake & Ashwagandha Bi-Phase Mist": 45, "Snow Mushroom & Reishi Masque": 65, "Stone Crop Cleansing Oil": 55, "Stone Crop Gel Wash": 43, "Stone Crop Hydrating Mist": 37, "Stone Crop Masque": 55, "Stone Crop Serum": 56, "Stone Crop Whip Moisturiser": 67, "Strawberry Rhubarb Hyaluronic Serum": 56, "Strawberry Rhubarb Masque": 57, "Sun Defense Minerals SPF30": 55, "Tulsi & Snow Mushroom Cleansing Milk": 55, "Vitamin C+ Serum": 150, "Yam & Pumpkin Enzyme Peel 5%": 48, "Yellow Sweet Clover Anti-Redness Masque": 55};let REC=false;
+const SLOTS={am:[["am_cl","Cleanser","cl"],["am_se","Serum","se"],["am_mo","Moisturiser","mo"],["am_spf","SPF","spf"]],pm:[["pm_cl","Cleanser","cl"],["pm_se","Serum","se"],["pm_mo","Moisturiser","mo"]],wk:[["wk","Masque / Peel","wk"]]};
+const GOALS=["Hydration","Brightness","Sensitivity / Redness","Skin Barrier Repair","Breakouts","Pigmentation","Anti-ageing","Oil control"];
+const FOCUS=["Deep Hydration","Skin Barrier Repair","Brightening","Calming","Clarifying","Firming","Resurfacing"];
+const ACBACK=["2 weeks","3 weeks","4 weeks","6 weeks"];
+const ACSVC=()=>SERVICES.filter(c=>["Facials","Advanced Skin","Skin Boosters & Injectables"].includes(c.cat)).flatMap(c=>c.items).concat(SERVICES.flatMap(c=>c.items).filter(i=>i[0]==="fls"));
+function acN(A){return Object.values(A.r||{}).filter(Boolean).length}
+function acTog(arr,v){const i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v)}
+const chipsH=(L,sel,attr)=>L.map(x=>`<button type="button" class="${sel.includes(x)?"on":""}" ${attr}="${esc(x)}">${esc(x)}</button>`).join("");
+function slotsH(key,A){A.o=A.o||{};return SLOTS[key].map(([k,lab,c])=>{const oth=false;return `<label class="slot${A.r[k]?" on":""}"><span>${lab}</span><select data-slot="${k}"><option value="">–</option>${EM[c].map(n=>`<option${!oth&&A.r[k]===n?" selected":""}>${esc(n)}</option>`).join("")}</select></label>`}).join("")}
+function otherH(f){return `<input type="text" class="othc" data-oth="${f}" placeholder="✏️ Other, then Enter">`}
+function renderAc(){st.kinds=st.kinds||{ac:0,prog:1};st.ac=Object.assign({done:[],goals:[],r:{},focus:[],back:"",note:""},st.ac||{});const A=st.ac;
+  document.body.classList.toggle("noprog",!st.kinds.prog);
+  document.querySelectorAll("[data-kind]").forEach(b=>b.classList.toggle("on",!!st.kinds[b.dataset.kind]));
+  $("acBox").hidden=!st.kinds.ac;
+  $("acDone").innerHTML=chipsH([...new Set(ACSVC().map(i=>i[1]).concat(A.done))],A.done,"data-acd")+otherH("done");
+  $("acGoals").innerHTML=chipsH([...new Set(GOALS.concat(A.goals))],A.goals,"data-acg")+otherH("goals");
+  $("acFocus").innerHTML=chipsH([...new Set(FOCUS.concat(A.focus))],A.focus,"data-acf")+otherH("focus");
+  $("acAM").innerHTML=slotsH("am",A);$("acPM").innerHTML=slotsH("pm",A);$("acWK").innerHTML=slotsH("wk",A);
+  $("acBack").innerHTML=chipsH(ACBACK,[A.back],"data-acb");
+  if(document.activeElement!==$("acNote"))$("acNote").value=A.note||"";
+  {const a=document.querySelector("#s2a strong"),b=document.querySelector("#s2a span"),v=$("viewBtn2");if(a){a.textContent=st.kinds.prog?"Check the proposal":"Show her in the room";b.textContent=st.kinds.prog?"See exactly what she will receive.":"Turn the iPad to her.";v.textContent=st.kinds.prog?"Preview":"Show"}}
+  if(!st.kinds.prog){$("cEyebrow").textContent=st.client?"Aftercare for "+st.client:"Aftercare";$("cTitle").innerHTML="Today's <em>aftercare</em>"}}
+document.addEventListener("click",e=>{const k=e.target.closest("[data-kind]");if(k){const K=st.kinds;K[k.dataset.kind]=K[k.dataset.kind]?0:1;if(!K.ac&&!K.prog)K[k.dataset.kind]=1;render();return}
+  for(const [at,f] of [["data-acd","done"],["data-acg","goals"],["data-acf","focus"]]){const d=e.target.closest("["+at+"]");if(d){acTog(st.ac[f],d.getAttribute(at));render();return}}
+  const b=e.target.closest("[data-acb]");if(b){st.ac.back=st.ac.back===b.dataset.acb?"":b.dataset.acb;render()}});
+document.addEventListener("change",e=>{const el=e.target;if(el.dataset&&el.dataset.slot){const k=el.dataset.slot;st.ac.o=st.ac.o||{};if(el.value==="__o"){st.ac.o[k]=1;st.ac.r[k]="";render();const i=document.querySelector('[data-oslot="'+k+'"]');if(i)i.focus()}else{delete st.ac.o[k];st.ac.r[k]=el.value;render()}}});
+document.addEventListener("input",e=>{const el=e.target;if(el.dataset&&el.dataset.oslot){st.ac.r[el.dataset.oslot]=el.value;queueSave()}});
+document.addEventListener("keydown",e=>{const el=e.target;if(el.dataset&&el.dataset.oth&&e.key==="Enter"){e.preventDefault();const v=el.value.trim();if(v&&!st.ac[el.dataset.oth].includes(v))st.ac[el.dataset.oth].push(v);render();const n=document.querySelector('[data-oth="'+el.dataset.oth+'"]');if(n)n.focus()}});
+document.addEventListener("input",e=>{if(e.target.id==="acNote"){st.ac.note=e.target.value;queueSave()}});
+function acHTML(P,alone){const A=Object.assign({done:[],goals:[],r:{},focus:[]},P.ac||{}),first=P.client?esc(P.client.trim().split(" ")[0]):"",th=esc((P.therapist||"Your therapist").trim().split(" ")[0]);
+  const wa=t=>"https://wa.me/447447028566?text="+encodeURIComponent(t);
+  const tags=(L,left)=>L.length?`<div class="ac-done"${left?' style="justify-content:flex-start"':""}>${L.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:"";
+  const rt=(key,h)=>{const L=SLOTS[key].filter(x=>A.r[x[0]]);return L.length?`<div class="ac-when">${h}</div><div class="ac-steps">${L.map((x,i)=>`<div class="ac-step"><b>${i+1}</b><div><small>${x[1]}</small><strong>${esc(A.r[x[0]])}</strong></div>${REC&&PR[A.r[x[0]]]?`<em class="ac-pr">£${PR[A.r[x[0]]]}</em>`:""}</div>`).join("")}</div>`:""};
+  const rout=rt("am","Morning")+rt("pm","Evening")+rt("wk","Once a week");
+  const its=[...new Set(Object.values(A.r||{}).filter(Boolean))],tot=its.reduce((a,n)=>a+(PR[n]||0),0);
+  const recBox=REC&&its.length?`<section class="p3-sec"><div class="pwrap"><div class="ac-rec"><div class="ac-rh">🧾 Reception · Eminence for her</div>${its.map(n=>`<div><span>${esc(n)}</span><b>£${PR[n]||"?"}</b></div>`).join("")}<div class="ac-tot"><span>${its.length} products</span><b>£${tot}</b></div></div></div></section>`:"";
+  const sec=(h,b)=>b?`<section class="p3-sec"><div class="pwrap"><h2>${h}</h2>${b}</div></section>`:"";
+  const head=alone?`<section class="ac-hero p3-hero"><div class="pwrap"><div class="p3-made">From today's visit with ${th}</div><h1>${first?first+", your":"Your"}<br><em>aftercare</em></h1>${tags(A.done)}</div></section>`:sec("From today's visit",tags(A.done,1));
+  const note=(A.note||"").trim()?`<section class="p3-sec p3-notebox"><div class="pwrap"><blockquote>${esc(A.note)}<span class="sig">${esc(P.therapist||"")} · your skin therapist</span></blockquote></div></section>`:"";
+  const next=(A.focus.length||A.back)?sec("Your next facial",(A.back?`<p class="ac-back">In <b>${esc(A.back)}</b></p>`:"")+tags(A.focus)):"";
+  const end=alone?`<section class="p3-sec p3-end"><div class="pwrap"><a class="p3-ask" href="${wa("Hi! It's "+(P.client?P.client.trim().split(" ")[0]:"me")+". A question about my aftercare:")}" target="_blank" rel="noopener">I have a question</a></div></section><section class="p3-terms"><div class="pwrap"><div class="addr">Brazilian Soul Beauty · Caring for London skin since 2012 · 36 Bromell's Road, Clapham, SW4 0BG</div></div></section>`:"";
+  return recBox+head+sec("Your skin goals",tags(A.goals,1))+sec("Your routine at home",rout)+next+note+end}
+function proposalHTML(P){const K=P.kinds||{prog:1};if(K.ac&&!K.prog)return acHTML(P,true);const h=progHTML(P);if(!K.ac)return h;const a=acHTML(P,false),m='<section class="p3-sec p3-notebox">';return h.includes(m)?h.replace(m,a+m):h+a}
+function progHTML(P){
+  const save=st;st=P;const c=calc();st=save;
+  const ses=[];
+  SERVICES.forEach(cc=>cc.items.forEach(i=>{const q=P.qty[i[0]]||0;for(let k=0;k<q;k++){const d=P.dates[i[0]+"#"+k];if(d)ses.push({d,n:S[i[0]].n,v:S[i[0]].p,id:i[0]})}}));
+  GIFTS.forEach(g=>{if(P.gifts[g[0]]&&P.dates[g[0]])ses.push({d:P.dates[g[0]],n:g[1],gift:1,id:g[0]})});
+  ses.sort((a,b)=>a.d.localeCompare(b.d));
+  const PHN=[["Prepare",IC.prep],["Transform",IC.trans],["Glow",IC.glow]];const ii=(s,c)=>`<img class="${c||"i"}" src="${s}" alt="">`;
+  const ph=i=>{const t=ses.length;return i<t/3?0:i<2*t/3?1:2};
+  const byMonth=[];ses.forEach((x,i)=>{x.p=ph(i);const k=x.d.slice(0,7);let m=byMonth[byMonth.length-1];if(!m||m.k!==k){m={k,items:[]};byMonth.push(m)}m.items.push(x)});
+  const mName=k=>MON[+k.slice(5,7)-1]+" "+k.slice(0,4);
+  const wk=d=>["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(d+"T12:00:00").getDay()];
+  const tl=byMonth.map(m=>`<div class="p3-month">${mName(m.k)}</div>`+m.items.map(x=>`<div class="p3-row${x.gift?" gift":""}${INFO[x.id]?" has":""}" onclick="p3t(this)"><div class="p3-date"><b>${+x.d.slice(8,10)}</b><span>${wk(x.d)}</span></div><div class="p3-what"><div>${esc(x.n)}</div><small>${x.gift?ii(IC.gift)+"Our gift to you":ii(PHN[x.p][1])+PHN[x.p][0]}</small></div>${INFO[x.id]?`<span class="p3-i">i</span><div class="p3-info"><b>${esc(INFO[x.id][0])}</b><span>${esc(INFO[x.id][1])}</span></div>`:""}</div>`).join("")).join("")+(P.eventDate?`<div class="p3-row event"><div class="p3-date"><b>${+P.eventDate.slice(8,10)}</b><span>${MON[+P.eventDate.slice(5,7)-1].slice(0,3)}</span></div><div class="p3-what"><div>${esc(P.eventName||"Your day")}</div><small>Your big day</small></div></div>`:"");
+  const sched=paySchedule(P,c,ses);
+  const created=P.created||todayIso();
+  const fut=ses.filter(x=>x.d>=created);const start=fut.length?fut[0].d:"";const end=ses.length?ses[ses.length-1].d:"";
+  const holdIso=isoAdd(created,P.hold||5);const holdUntil=dLong(holdIso);
+  const daysLeft=Math.max(0,Math.round((new Date(holdIso+"T12:00:00")-new Date(todayIso()+"T12:00:00"))/864e5));
+  const valid=P.eventDate?dLong(P.eventDate):"12 months from your first session";
+  const first=P.client?esc(P.client.trim().split(" ")[0]):"";
+  const thFull=P.therapist||"Your therapist";const th=esc(thFull.trim().split(" ")[0]);
+  const note=(P.note&&P.note.trim())?P.note:(()=>{const s2=st;st=P;const n=defNote();st=s2;return n})();
+  const nG=GIFTS.filter(g=>P.gifts[g[0]]).length;
+  const giftNames=GIFTS.filter(g=>P.gifts[g[0]]).map(g=>esc(g[1]));
+  const cnt=[0,0,0];ses.forEach(x=>{if(!x.gift)cnt[x.p]++});
+  const title=esc(P.title||"Skin Journey");
+  const wa=t=>"https://wa.me/447447028566?text="+encodeURIComponent(t);
+  const yesMsg=`Hi! It's ${P.client?P.client.trim().split(" ")[0]:"me"} 😊 Yes, I'd like to go ahead with my ${P.title||"treatment plan"}. Please hold my dates!`;
+  const qMsg=`Hi! It's ${P.client?P.client.trim().split(" ")[0]:"me"}. I have a quick question about my ${P.title||"treatment plan"}:`;
+  const yesBtn=`<a class="p3-yes" href="${wa(yesMsg)}" target="_blank" rel="noopener">Yes, hold my dates</a>`;
+  return `
+  <section class="p3-hero"><div class="pwrap">
+    <div class="p3-made">Made just for you by ${th}</div>
+    <h1>${first?first+", your":"Your"}<br><em>${title}</em><br>is ready</h1>
+    ${end?`<p class="p3-future">Picture your skin on <b>${dLong(end)}</b>: smoother, brighter, and glowing with confidence.</p>`:""}
+  </div></section>
+  <section class="p3-sec"><div class="pwrap">
+    <h2>Your journey in 3 steps</h2>
+    <div class="p3-phases">
+      ${PHN.map((p,i)=>cnt[i]?`<div>${ii(p[1],"ic")}<b>${p[0]}</b><small>${["We calm and clear your skin","We renew it, layer by layer","We lock in your glow"][i]}</small><em>${cnt[i]} ${cnt[i]>1?"visits":"visit"}</em></div>`:"").join("")}
+    </div>
+  </div></section>
+  <section class="p3-price"><div class="pwrap"><div class="p3-card">
+    <div class="p3-stack">
+      <div><span>${c.sessions} treatments</span><s>${gbp(c.total)}</s></div>
+      ${nG?`<div><span>${ii(IC.gift)}${nG} ${nG>1?"gifts":"gift"} from us</span><s>${gbp(c.gVal)}</s></div>`:""}
+      <div class="tot"><span>Total value</span><s>${gbp(c.total+c.gVal)}</s></div>
+    </div>
+    <div class="p3-lbl">Your price</div>
+    <div class="p3-big">${gbp(c.price)}</div>
+    <div class="p3-save">You keep ${gbp(c.saves)} in your pocket</div>
+    ${sched.length>1?`<div class="p3-split">${sched.map((x,i)=>`${gbp(x.amt)} ${i===0?"now":"by "+dShort(x.by)}`).join(" · ")}</div>`:""}
+    ${yesBtn}
+    <div class="p3-hold">${ii(IC.hour)}${daysLeft>0?`Your dates are reserved for <b>${daysLeft} more ${daysLeft>1?"days":"day"}</b> (until ${holdUntil})`:`Your dates are reserved until <b>${holdUntil}</b>`}</div>
+  </div></div></section>
+  <section class="p3-sec"><div class="pwrap">
+    <h2>Saying yes is easy</h2>
+    <ol class="p3-steps">
+      <li><b>1</b><div><strong>Tap “Yes, hold my dates”</strong><span>It opens WhatsApp with your message ready.</span></div></li>
+      <li><b>2</b><div><strong>Pay ${gbp(sched[0].amt)} by ${dLong(sched[0].by)}</strong><span>Your dates are then yours.</span></div></li>
+      <li><b>3</b><div><strong>${start?"Your first visit: "+dLong(start):"We book your first visit"}</strong><span>${th} is with you at every session.</span></div></li>
+    </ol>
+  </div></section>
+  <section class="p3-sec"><div class="pwrap">
+    <h2>Your dates</h2>
+    <p class="p3-tap">Tap a treatment to see what it does</p>
+    <div class="p3-tl">${tl||'<p class="note">Dates to be confirmed together.</p>'}</div>
+  </div></section>
+  <section class="p3-sec p3-notebox"><div class="pwrap"><blockquote>${esc(note)}<span class="sig">${esc(thFull)} · your skin therapist</span></blockquote></div></section>
+  <section class="p3-sec p3-end"><div class="pwrap">
+    ${yesBtn}
+    <a class="p3-ask" href="${wa(qMsg)}" target="_blank" rel="noopener">${ii(IC.chat)}I have a question first</a>
+  </div></section>
+  <section class="p3-terms"><div class="pwrap">
+    <div>${ii(IC.cal)}Valid until ${valid}</div>
+    <div>${ii(IC.clock)}48 hours' notice to move a visit. Missed visits count as used.</div>
+    <div>${ii(IC.lock)}${sched.length>1?"Payments as above.":"Paid in full to confirm."} Non-refundable, non-transferable.</div>
+    <div class="addr">Brazilian Soul Beauty · Caring for London skin since 2012 · 36 Bromell's Road, Clapham, SW4 0BN</div>
+  </div></section>
+  <div class="p3-bar"><div><b>${gbp(c.price)}</b><small>you keep ${gbp(c.saves)}</small></div><a href="${wa(yesMsg)}" target="_blank" rel="noopener">Yes, hold my dates</a></div>`;
+}
+
+function saveFile(name,data){const a=document.createElement("a");a.href=URL.createObjectURL(data instanceof Blob?data:new Blob([data],{type:"text/html"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}
+function showProposal(P,client){
+  if(client)document.title=(P.client?P.client.trim().split(" ")[0]+"'s ":"Your ")+(P.title||"Treatment Plan")+" · Brazilian Soul Beauty";
+  $("builder").hidden=true;const el=$("proposal");el.hidden=false;
+  el.innerHTML=`<div class="ptools noprint"><div class="pwrap">${client?'<span class="eyebrow">Brazilian Soul Beauty</span>':'<button class="btn" id="backBtn">Back to builder</button><button class="btn" id="sendRecBtn">Send to reception</button>'}<button class="btn" id="pdfBtn">Save as PDF</button></div></div>`+proposalHTML(P);
+  $("pdfBtn").onclick=()=>window.print();if(!client){const b=$("sendRecBtn");if(["to_send","sent","won","lost"].includes(st.status)){b.disabled=true;b.textContent="Sent to reception ✓"}b.onclick=async()=>{await setStatus("to_send");if(st.status==="to_send"){b.disabled=true;b.textContent="Sent to reception ✓"}}}
+  if(!client)$("backBtn").onclick=()=>{el.hidden=true;$("builder").hidden=false;window.scrollTo(0,0)};
+  window.scrollTo(0,0);
+}
+$("viewBtn").addEventListener("click",()=>showProposal(snapshot(),false));$("viewBtn2").addEventListener("click",()=>showProposal(snapshot(),false));$("backHub").addEventListener("click",e=>{if(window.opener&&!window.opener.closed){e.preventDefault();window.close()}});
+$("linkBtn").addEventListener("click",async()=>{const t=$("out");t.value=shortMsg();try{await navigator.clipboard.writeText(t.value);$("copyNote").textContent="Copied: message and link. Paste it into WhatsApp or email."}catch(err){t.focus();t.select();$("copyNote").textContent="Text selected. Press Ctrl+C (or Cmd+C) to copy."}});
+$("dlBtn").addEventListener("click",()=>{
+  const P=snapshot();const css=document.querySelector("style").textContent;
+  const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc((P.client?P.client+"'s ":"")+(P.title||"Treatment Plan"))} · Brazilian Soul Beauty</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"><style>${css}</style></head><body><div class="prop">${proposalHTML(P)}</div></body></html>`;
+  saveFile(`BSB_Plan_${(P.client||"client").replace(/[^a-z0-9]+/gi,"_")}.html`,html);$("copyNote").textContent="Proposal saved as an HTML file. You can send the file or the link.";
+});
+function cloud(t,err){const el=$("cloud");el.textContent=t;el.classList.toggle("err",!!err)}
+const STL={draft:"Draft",to_send:"With reception",sent:"Sent to client",won:"Client said yes",lost:"Lost"}/*BSB-TOSEND*/;
+function renderStatus(){const p=$("stPill");p.textContent=STL[st.status]||"Draft";p.className="st "+(st.status||"draft");{const s=st.status||"draft",out=["to_send","sent","won","lost"].includes(s),A=$("s2a"),B=$("s2b"),C=$("s2c");if(A){A.className="s2"+(out?" done":" now");B.className="s2"+(out?" done":"");C.className="s2"+(s==="won"?" done yes":s==="lost"?" no":out?" now":"");$("s2cTxt").textContent=s==="won"?"She said yes. Joana is booking her sessions.":s==="lost"?"She said no this time.":s==="sent"?"Joana sent it. Waiting for her answer.":s==="to_send"?"With Joana, ready to send.":"Joana marks it here when she replies.";const sbt=B.querySelector("button");sbt.disabled=out;sbt.textContent=out?"Sent ✓":"Send"}}}
+let saveT=null,saving=false,again=false;
+function hasC(){const K=st.kinds||{prog:1};return (K.prog&&calc().sessions>0)||(K.ac&&st.ac&&acN(st.ac)>0)}
+async function dropEmpty(){if(!PKG||hasC()||(st.status||"draft")!=="draft")return;try{await sb("bsb_packages?id=eq."+PKG,{method:"DELETE",prefer:"return=minimal"});PKG=null;loadList();cloud("Nothing saved yet. Add a product or a treatment and it saves itself.")}catch(e){}}
+function queueSave(){if(!st.client.trim())return;/*BSB-EMPTY*/if(!hasC()){clearTimeout(saveT);if(PKG){saveT=setTimeout(dropEmpty,900)}else cloud("Not saved yet. Add a product or a treatment and it saves itself.");return}clearTimeout(saveT);saveT=setTimeout(saveNow,900)}
+function sessRows(){return sessionsList().map(x=>({package_id:PKG,session_key:x.key,date:st.dates[x.key]||null,service:x.svc?x.svc.n:x.gift.n,minutes:x.svc?x.svc.m:x.gift.m,is_gift:!!x.gift}))}
+async function saveNow(){st.kinds=st.kinds||{ac:0,prog:1};if(!PKG&&!hasC())return;
+  if(saving){again=true;return}saving=true;cloud("Saving...");
+  try{const c=calc();
+    const row={client_id:st.clientId||null,client_name:st.client.trim(),client_ext_id:st.clientExt||null,title:(st.kinds.prog?(st.title||"")+(st.kinds.ac?" + Aftercare":""):"Aftercare")||null,event_name:st.eventName||null,event_date:st.eventDate||null,therapist:st.therapist||null,pays:+st.pays||1,hold_days:+st.hold||5,note:st.note||null,total:c.total,price:c.price,gifts_value:c.gVal,status:st.status||"draft",data:{qty:st.qty,gifts:st.gifts,dates:st.dates,visit:st.visit||"",kinds:st.kinds,ac:st.ac},updated_at:new Date().toISOString()};
+    if(!PKG){const r=await sb("bsb_packages",{method:"POST",body:row});PKG=r[0].id}else await sb("bsb_packages?id=eq."+PKG,{method:"PATCH",body:row,prefer:"return=minimal"});
+    const rows=sessRows();
+    if(rows.length)await sb("bsb_package_sessions?on_conflict=package_id,session_key",{method:"POST",body:rows,prefer:"resolution=merge-duplicates,return=minimal"});
+    const keep=rows.map(r=>'"'+r.session_key+'"').join(",");
+    await sb("bsb_package_sessions?package_id=eq."+PKG+(rows.length?"&session_key=not.in."+encodeURIComponent("("+keep+")"):""),{method:"DELETE",prefer:"return=minimal"});
+    cloud("Saved to the BSB Hub · "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));$("out").value=shortMsg();loadList();
+  }catch(e){cloud("Not saved. Check the internet connection, it will try again on the next change.",true)}
+  saving=false;if(again){again=false;saveNow()}
+}
+async function setStatus(v){if(!st.client.trim()){cloud("Choose the client first.",true);return}if(v!=="lost"&&!calc().sessions){cloud("Add the treatments first.",true);return}if(v==="won"){const L=sessionsList();if(!L.length){cloud("Add the treatments first.",true);return}const miss=L.filter(x=>!st.dates[x.key]).length;if(miss&&!confirm(miss+(miss>1?" sessions have":" session has")+" no date yet. Send to reception anyway?"))return}st.status=v;const extra=v==="to_send"?{send_requested_at:new Date().toISOString()}:v==="sent"?{sent_at:new Date().toISOString()}:v==="won"?{won_at:new Date().toISOString()}:{};renderStatus();await saveNow();if(PKG&&Object.keys(extra).length){try{await sb("bsb_packages?id=eq."+PKG,{method:"PATCH",body:extra,prefer:"return=minimal"})}catch(e){}}
+  $("stWhen").textContent=v==="won"?"Sessions are now on the reception list to book.":v==="to_send"?"Joana will send it to the client from the salon number.":"";}
+document.querySelectorAll("[data-status]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.status)));
+/*BSB-STATS*/function renderStats(L){const by={};L.forEach(p=>{const t=String(p.therapist||"Other").trim().split(" ")[0]||"Other";const b=by[t]=by[t]||{n:0,out:0,won:0,lost:0,val:0};b.n++;if(["to_send","sent","won","lost"].includes(p.status))b.out++;if(p.status==="won"){b.won++;b.val+=+p.price||0}if(p.status==="lost")b.lost++});
+const T=Object.entries(by).sort((a,b)=>b[1].n-a[1].n);
+$("pstats").innerHTML=T.map(([t,b])=>{const d=b.won+b.lost,r=d?Math.round(b.won/d*100):null;return `<div class="ps"><div class="pst">${esc(t)}</div><div class="psn"><b>${b.n}</b><span>plans</span></div><div class="psn"><b>${b.out}</b><span>sent</span></div><div class="psn"><b>${b.won}</b><span>said yes</span></div><div class="psn ${r==null?"":r>=50?"good":"low"}"><b>${r==null?"-":r+"%"}</b><span>yes rate</span></div><div class="psn"><b>${gbp(b.val)}</b><span>accepted</span></div></div>`}).join("")}
+async function loadList(){
+  try{const L=await sb("bsb_packages?select=id,client_name,title,price,status,updated_at,event_date,therapist&order=updated_at.desc&limit=300");
+    $("plist").innerHTML=L.length?L.map(p=>`<button class="prow${p.id===PKG?" on":""}" data-open="${p.id}"><span>${esc(p.client_name||"No client yet")}<small>${esc(p.title||"Package")} · updated ${new Date(p.updated_at).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</small></span><span class="pr">${p.price!=null?gbp(+p.price):""}</span><span class="st ${p.status}">${STL[p.status]||p.status}</span><span class="pdel" role="button" title="Remove" data-del="${p.id}" data-st="${p.status}" data-nm="${esc(p.client_name||"")}">&#10005;</span></button>`).join(""):'<p class="note">No packages yet. Choose the client and a treatment, and it saves itself.</p>';renderStats(L);
+  }catch(e){$("plist").innerHTML='<p class="note" style="color:var(--warn)">Could not reach the BSB Hub. Check the internet connection and reload.</p>'}
+}
+/*BSB-ROWDEL*/document.addEventListener("click",async e=>{const d=e.target.closest("[data-del]");if(!d)return;e.preventDefault();e.stopPropagation();const id=d.dataset.del,won=d.dataset.st==="won";if(!confirm("Remove the package for "+(d.dataset.nm||"this client")+"?"+(won?" Its sessions also leave the reception list.":"")+" This cannot be undone."))return;try{await sb("bsb_packages?id=eq."+id,{method:"DELETE",prefer:"return=minimal"});if(id===PKG){PKG=null;st=JSON.parse(JSON.stringify(BLANK));render(true);syncDay()}loadList();cloud("Package removed.")}catch(err){cloud("Could not remove. Check the internet connection.",true)}},true);
+function fromRow(r){const d=r.data||{};return{therapist:r.therapist||"",pays:String(r.pays||1),hold:String(r.hold_days||5),note:r.note||"",client:r.client_name||"",clientId:r.client_id||null,clientExt:r.client_ext_id||null,visit:d.visit||"",title:(r.title||"").replace(/ \+ Aftercare$/,"").replace(/^Aftercare$/,"Skin Renewal Journey"),eventName:r.event_name||"",eventDate:r.event_date||"",qty:d.qty||{},gifts:d.gifts||{},dates:d.dates||{},kinds:d.kinds||{ac:0,prog:1},ac:Object.assign({done:[],goals:[],r:{},focus:[],back:"",note:""},d.ac||{}),status:r.status||"draft",created:(r.sent_at||r.created_at||"").slice(0,10)}}
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-open]");if(!b)return;try{const r=await sb("bsb_packages?id=eq."+b.dataset.open+"&select=*");if(r[0]){PKG=r[0].id;st=fromRow(r[0]);render(true);loadList();syncDay();cloud("Opened from the BSB Hub.");window.scrollTo({top:0,behavior:"smooth"})}}catch(err){cloud("Could not open this package.",true)}});
+let DAY=[];
+const canon=t=>(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/^michele\b/,"michelle").trim();
+function cleanSvc(x){return String(x||"").split(" - ").filter((v,i,a)=>v.trim()&&a.findIndex(w=>w.trim()===v.trim())===i).join(" · ").replace(/\s+/g," ").trim()}
+function renderDay(){
+  const th=$("dayTh").value;const L=DAY.filter(x=>!th||canon(x.therapist)===th);
+  $("dayList").innerHTML=L.length?L.map(x=>`<button type="button" class="dc${st.clientExt===x.ext_id?" on":""}" data-ext="${esc(x.ext_id)}"><b>${esc(x.start_time||"")}</b><span>${esc(x.client)}<small>${esc(cleanSvc(x.service))}</small></span><span class="th">${esc(x.therapist||"")}</span></button>`).join(""):'<p class="note">No clients on this day'+(th?" for this therapist":"")+'.</p>';
+}
+async function loadDay(){
+  const d=$("visitDay").value;if(!d)return;$("dayList").innerHTML='<p class="note">Loading the day...</p>';
+  try{DAY=await sb("bsb_pkg_day_clients?select=ext_id,date,start_time,therapist,client,client_id,service&date=eq."+d+"&order=start_time");
+    const ths=[...new Map(DAY.filter(x=>x.therapist).map(x=>[canon(x.therapist),x.therapist])).entries()].sort((a,b)=>a[1].localeCompare(b[1]));
+    const cur=$("dayTh").value||canon(st.therapist)||"michelle";
+    $("dayTh").innerHTML='<option value="">Everyone</option>'+ths.map(([k,n])=>`<option value="${esc(k)}">${esc(n)}</option>`).join("");
+    $("dayTh").value=ths.some(t=>t[0]===cur)?cur:"";{const me=DAY.find(x=>x.ext_id===st.clientExt);if(me&&$("dayTh").value&&canon(me.therapist)!==$("dayTh").value)$("dayTh").value=""}renderDay();
+  }catch(e){$("dayList").innerHTML='<p class="note" style="color:var(--warn)">Could not load the day from the BSB Hub.</p>'}
+}
+$("visitDay").addEventListener("change",()=>{st.visit=$("visitDay").value;loadDay()});
+$("dayTh").addEventListener("change",renderDay);
+function pick(x){
+  st.client=String(x.client).trim();st.clientId=x.client_id||null;st.clientExt=x.ext_id;st.visit=x.date;if(!st.therapist&&x.therapist){st.therapist=x.therapist;$("therapist").value=st.therapist}
+  {const sv=canon(cleanSvc(x.service||""));st.ac=st.ac||{done:[],goals:[],r:{},focus:[],back:"",note:""};ACSVC().forEach(i=>{if(sv&&sv.includes(canon(i[1]).replace(/®/g,""))&&!st.ac.done.includes(i[1]))st.ac.done.push(i[1])})}
+  $("client").value=st.client;renderDay();render()}
+$("dayList").addEventListener("click",e=>{const b=e.target.closest("[data-ext]");if(!b)return;const x=DAY.find(y=>y.ext_id===b.dataset.ext);if(x)pick(x)});
+/*BSB-SRCH*/let SQ=null,SRES=[];
+const srow=x=>`<button type="button" class="dc${st.clientExt===x.ext_id?" on":""}" data-sext="${esc(x.ext_id)}"><b>${dShort(String(x.date))}</b><span>${esc(x.client)}<small>${esc((x.start_time?x.start_time+" · ":"")+cleanSvc(x.service))}</small></span><span class="th">${esc(x.therapist||"")}</span></button>`;
+$("cSearch").addEventListener("input",()=>{clearTimeout(SQ);const t=$("cSearch").value.trim();if(t.length<2){renderDay();return}
+  SQ=setTimeout(async()=>{$("dayList").innerHTML='<p class="note">Searching...</p>';
+    const q="bsb_pkg_day_clients?select=ext_id,date,start_time,therapist,client,client_id,service&client=ilike.*"+encodeURIComponent(t.replace(/[%*,()."]/g," ").trim().split(/\s+/).join("*"))+"*",td=todayIso();
+    try{const [A,B]=await Promise.all([sb(q+"&date=lte."+td+"&order=date.desc,start_time&limit=25"),sb(q+"&date=gt."+td+"&order=date,start_time&limit=15")]);
+      if($("cSearch").value.trim()!==t)return;SRES=A.concat(B);
+      $("dayList").innerHTML=SRES.length?(A.length?'<p class="note">Today and past visits</p>'+A.map(srow).join(""):"")+(B.length?'<p class="note">Coming up</p>'+B.map(srow).join(""):""):'<p class="note">No client found with this name.</p>'}
+    catch(e){$("dayList").innerHTML='<p class="note" style="color:var(--warn)">Could not search the BSB Hub.</p>'}},300)});
+$("dayList").addEventListener("click",e=>{const b=e.target.closest("[data-sext]");if(!b)return;const x=SRES.find(y=>y.ext_id===b.dataset.sext);if(!x)return;
+  $("cSearch").value="";pick(x);$("visitDay").value=String(x.date);loadDay()});
+function syncDay(){$("visitDay").value=st.visit||todayIso();return loadDay()}
+const Q=new URLSearchParams(location.search);
+const nm=t=>(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z]/g,"");
+function fromCard(){const t=Q.get("t")||"",cid=Q.get("cid")||"",n=nm(Q.get("n"));
+  const x=DAY.find(y=>y.start_time===t&&((cid&&String(y.client_id)===cid)||nm(y.client)===n))||DAY.find(y=>(cid&&String(y.client_id)===cid)||(n&&nm(y.client)===n));
+  if(x)pick(x);history.replaceState(null,"",location.pathname)}
+/*BSB-DEL*/
+/*BSB-CLR2*/$("clrClient").addEventListener("click",async()=>{if(!st.client)return;st.client="";st.clientId=null;st.clientExt=null;$("client").value="";renderDay();render();
+  if(PKG){try{await sb("bsb_packages?id=eq."+PKG,{method:"PATCH",body:{client_name:"",client_id:null,client_ext_id:null,client_phone:null,client_email:null,updated_at:new Date().toISOString()},prefer:"return=minimal"});loadList();cloud("Client removed. Tap the right client in the list.")}catch(e){cloud("Could not remove the client. Check the internet connection.",true)}}else cloud("Client removed.")});
+$("delBtn").addEventListener("click",async()=>{
+  if(!PKG){st=JSON.parse(JSON.stringify(BLANK));render(true);syncDay();cloud("Cleared. Nothing was saved.");return}
+  if(!confirm("Delete the package for "+(st.client||"this client")+"?"+(st.status==="won"?" Its sessions also leave the reception list.":"")+" This cannot be undone."))return;
+  try{await sb("bsb_packages?id=eq."+PKG,{method:"DELETE",prefer:"return=minimal"});PKG=null;st=JSON.parse(JSON.stringify(BLANK));render(true);loadList();syncDay();cloud("Package deleted.")}
+  catch(e){cloud("Could not delete. Check the internet connection.",true)}});
+const H0=(location.hash||"").slice(1);
+if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
+else if(Q.get("d")){st.visit=Q.get("d");const th=Q.get("th")||"";if(th)st.therapist=th.charAt(0).toUpperCase()+th.slice(1);render(true);loadList();syncDay().then(fromCard)}
+else{render(true);loadList();syncDay()}
+</script>
+</body></html>
