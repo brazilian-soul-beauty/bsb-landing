@@ -229,7 +229,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 @media(max-width:700px){.g4{height:100%;grid-auto-rows:1fr;align-content:stretch}.g4 .tile .big{font-size:56px}}
 
 .td{grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr}
-.td .span2{grid-column:span 2}
+.td .span2{grid-column:span 2}.td.td5{grid-template-columns:repeat(3,1fr);grid-auto-flow:row dense}.tt.ac.ok{background:linear-gradient(135deg,#7FCFA9,#2E8B6E)}
 .tt{border-radius:24px;background:#fff;border:2px dashed #E4DFF1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;transition:.3s}
 .tt .h{position:absolute;top:16px;left:20px;font-weight:700;font-size:15px;color:var(--muted)}
 .tt .ic{font-size:72px;line-height:1;filter:grayscale(1);opacity:.35}
@@ -498,7 +498,8 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   if(S.tdk!==key){S.tdk=key;S.td=null;M.innerHTML='<div class="wait"><em>☀️</em>Loading…</div>';
     var f=new Date(td);f.setDate(f.getDate()-39);
     Promise.all([rpc('soul_standard',{p_code:S.code,p_person:S.who,p_from:ymd(f),p_to:ymd(td)}).catch(function(){return null}),
-      rpc('soul_today',{p_code:S.code,p_person:S.who,p_date:day}).catch(function(){return null})]).then(function(x){if(S.tdk!==key)return;S.td={std:x[0]||{},t:x[1]||{}};if(S.tab==='today')renderToday(M)});return}
+      rpc('soul_today',{p_code:S.code,p_person:S.who,p_date:day}).catch(function(){return null}),
+      SKIN.indexOf(S.who)>=0?rpc('soul_care',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null}):Promise.resolve(null)]).then(function(x){if(S.tdk!==key)return;S.td={std:x[0]||{},t:x[1]||{},ac:x[2]};if(S.tab==='today')renderToday(M)});return}
   var st=S.td.std,t=S.td.t,L=st.lunch_max||30,days=st.days||[],by={};days.forEach(function(x){by[x.d]=x});
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,tds=ymd(td);
   var streak=0;for(var i=0;i<40;i++){var d=new Date(td);d.setDate(d.getDate()-i);if((st0&&d<st0)||d.getMonth()!==td.getMonth())break;var x=by[ymd(d)];
@@ -512,21 +513,24 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   var pe=(t.pers&&+t.pers.pe)||0,nc=ap.length;if(pe>nc)pe=nc;
   var lkOk=x.look_marked&&x.look_ok!==false,tkOk=x.t_morning>0&&x.t_day>0&&x.t_close>0,clOk=nc?pe>=nc:!!x.worked;
   var exp=Math.floor((t.free_min||0)/60),vd=t.videos||0,ctOk=exp>0&&vd>=exp,ITM=[['💄',lkOk],['☑️',tkOk],['🌟',clOk]];if(exp>0)ITM.push(['🎬',ctOk]);
+  var AC=S.td.ac,fc=AC?+AC.facials||0:0,acn=AC?Math.min(+AC.aftercare||0,fc):0,acOk=fc>0&&acn>=fc;if(fc>0)ITM.push(['🧴',acOk]);
   var TOT=ITM.length,sc=ITM.filter(function(q){return q[1]}).length;
   var bd=ITM.map(function(q){return '<span class="bdg'+(q[1]?' on':'')+'">'+q[0]+'</span>'}).join('');
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+(isT?DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]:'Your day')+'</p>'+
     '<div style="margin:auto 0;text-align:center"><div class="score"><b>'+sc+'</b><span>/'+TOT+'</span></div><div class="bdgs">'+bd+'</div>'+
     (streak?'<div class="stk">🔥 '+streak+' '+(streak===1?'day':'days')+' all green</div>':'')+'</div>'+
     '<div class="wk">'+wk.join('')+'</div>'+
-    '<div class="verdict" style="margin-top:14px"><em>'+(sc===TOT?'💜':'🎯')+'</em><span>'+(sc===TOT?(isT?'Perfect day. Keep the flame alive.':'Perfect day.'):(!x.worked&&!nc)?'Day off. Rest well.':(isT?'You are '+(TOT-sc)+' away from a perfect day':(TOT-sc)+' missing this day'))+'</span></div></div><div class="grid g4 td">';
+    '<div class="verdict" style="margin-top:14px"><em>'+(sc===TOT?'💜':'🎯')+'</em><span>'+(sc===TOT?(isT?'Perfect day. Keep the flame alive.':'Perfect day.'):(!x.worked&&!nc)?'Day off. Rest well.':(isT?'You are '+(TOT-sc)+' away from a perfect day':(TOT-sc)+' missing this day'))+'</span></div></div><div class="grid g4 td'+(fc>0&&exp>0?' td5':'')+'">';
   var lkS=x.look_marked?(x.look_ok===false?'fix':'ok'):'';
   h+='<div class="tt look '+lkS+'"><div class="h">Look</div><div class="ic">💄</div><div class="m">'+(lkS==='ok'?'Look on point':lkS==='fix'?esc(x.look_note||'Needs a fix'):'Not yet')+'</div><div class="s">'+(lkS==='ok'?(x.look_ok?'Checked by Joana':'Confirmed'):lkS==='fix'?'Fix it and shine':'Show your best look')+'</div></div>';
   var TK=[['☀️','AM',x.t_morning>0],['☑️','Day',x.t_day>0],['🌙','Close',x.t_close>0]];
   h+='<div class="tt tasks '+(tkOk?'ok':'')+'"><div class="h">Tasks</div><div class="cir">'+TK.map(function(q){return '<div class="c'+(q[2]?' on':'')+'"><i>'+(q[2]?'✓':q[0])+'</i><span>'+q[1]+'</span></div>'}).join('')+'</div><div class="m">'+(tkOk?'All done':TK.filter(function(q){return q[2]}).length+' of 3 done')+'</div></div>';
   var stars='';for(var q=0;q<Math.min(nc,10);q++)stars+='<i class="'+(q<pe?'on':'')+'">'+(q<pe?'⭐':'☆')+'</i>';
-  h+='<div class="tt cl'+(exp>0?'':' span2')+' '+(clOk&&nc?'ok':'')+'"><div class="h">Amazing clients</div><div class="stars">'+(stars||'<i>🌙</i>')+'</div><div class="m">'+(nc?(pe?pe+(pe===1?' client':' clients')+' felt amazing today':'Make your first client feel amazing'):'No clients today')+'</div>'+(nc?'<div class="s">'+pe+' of '+nc+'</div>':'')+'</div>';
+  h+='<div class="tt cl'+(exp>0||fc>0?'':' span2')+(fc>0&&exp>0?' span2':'')+' '+(clOk&&nc?'ok':'')+'"><div class="h">Amazing clients</div><div class="stars">'+(stars||'<i>🌙</i>')+'</div><div class="m">'+(nc?(pe?pe+(pe===1?' client':' clients')+' felt amazing today':'Make your first client feel amazing'):'No clients today')+'</div>'+(nc?'<div class="s">'+pe+' of '+nc+'</div>':'')+'</div>';
   if(exp>0){var vs='';for(var q=0;q<Math.min(exp,8);q++)vs+='<i class="'+(q<vd?'on':'')+'">'+(q<vd?'🎬':'○')+'</i>';
     h+='<div class="tt ct '+(ctOk?'ok':'')+'"><div class="h">Content</div><div class="stars">'+vs+'</div><div class="m">'+(ctOk?'Content done':vd?vd+' of '+exp+' videos':'You have free time for '+exp+(exp===1?' video':' videos'))+'</div><div class="s">'+(ctOk?'Thank you for creating':'One video per free hour')+'</div></div>';}
+  if(fc>0){var bs='';for(var q=0;q<Math.min(fc,8);q++)bs+='<i class="'+(q<acn?'on':'')+'">'+(q<acn?'🧴':'○')+'</i>';
+    h+='<div class="tt ac '+(acOk?'ok':'')+'"><div class="h">Eminence ritual</div><div class="stars">'+bs+'</div><div class="m">'+(acOk?'Every facial client has her ritual':acn?acn+' of '+fc+' facial clients':'Send her Eminence ritual')+'</div><div class="s">'+(acOk?'Aftercare sent to reception':'Aftercare for every facial')+'</div></div>';}
   h+='</div>';M.innerHTML=h;
   if(sc===TOT&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
 /* ---------- Eminence ---------- */
