@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tasks · BSB reception</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>/*BSB-LOCK347*/html.bsbLk body>*:not(#bsbLock){visibility:hidden!important}#bsbLock{position:fixed;inset:0;z-index:2147483647;background:#F6F5FA;display:flex;align-items:center;justify-content:center;font-family:Inter,system-ui,sans-serif}#bsbLock .bx{background:#fff;border:1px solid #ECECF4;border-radius:18px;padding:26px 28px;width:300px;text-align:center;box-shadow:0 10px 30px rgba(31,34,53,.06)}#bsbLock h2{margin:0 0 4px;font-size:20px;color:#1F2235}#bsbLock p{margin:0 0 14px;font-size:13px;color:#8B8DA8}#bsbLock input{width:100%;box-sizing:border-box;border:1px solid #E4E4EC;border-radius:12px;padding:12px;font:600 22px Inter,sans-serif;letter-spacing:8px;text-align:center}#bsbLock button{margin-top:12px;width:100%;background:#5B47E0;color:#fff;border:0;border-radius:12px;padding:12px;font:600 15px Inter,sans-serif;cursor:pointer}#bsbLock .who{display:flex;gap:6px;margin:10px 0 12px}#bsbLock .who button{margin:0;flex:1;background:#fff;color:#1F2235;border:1px solid #E4E4EC;padding:9px;font-size:13.5px}#bsbLock .who button.on{background:#EFEAFF;border-color:#5B47E0;color:#5B47E0}#bsbLock .er{color:#B3261E;font-size:12.5px;min-height:18px;margin-top:8px}</style>
+<script>/*BSB-LOCK347-INICIO*/(function(){var K='bsb_rec_ok',HX='8e55591e339f847cbff8bd7ba99d770919accd58b4a5dbbb45b590b42ada0aad';var ok=false;try{ok=sessionStorage.getItem(K)===HX}catch(e){}if(!ok){try{ok=(window.parent!==window)||!!localStorage.getItem('bsb_gate347')}catch(e){}}/*LOCK352*/if(ok)return;document.documentElement.classList.add('bsbLk');
+function hex(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
+function show(){if(document.getElementById('bsbLock'))return;var d=document.createElement('div');d.id='bsbLock';d.innerHTML='<div class="bx"><h2>&#128274; Reception</h2><div class="who"><button type="button" data-w="jo" class="on">Joana</button><button type="button" data-w="adm">Admin</button></div><p id="bsbLkLbl">Joana PIN</p><input id="bsbLkPin" type="password" inputmode="numeric" autocomplete="off" maxlength="8"><button type="button" id="bsbLkGo">Enter</button><div class="er" id="bsbLkEr"></div></div>';document.body.appendChild(d);
+var i=document.getElementById('bsbLkPin'),w='jo';i.focus();
+d.querySelectorAll('[data-w]').forEach(function(b){b.onclick=function(){w=b.dataset.w;d.querySelectorAll('[data-w]').forEach(function(x){x.classList.toggle('on',x===b)});document.getElementById('bsbLkLbl').textContent=w==='jo'?'Joana PIN':'Ligia PIN';document.getElementById('bsbLkEr').textContent='';i.value='';i.focus()}});
+function open(){try{sessionStorage.setItem(K,HX)}catch(e){}document.documentElement.classList.remove('bsbLk');d.remove();try{window.dispatchEvent(new Event('resize'))}catch(e){}}
+function bad(){document.getElementById('bsbLkEr').textContent='Wrong PIN';i.value='';i.focus()}
+function go(){var v=i.value.trim();if(!v)return;
+ if(w==='adm'){fetch('https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/inc_login',{method:'POST',headers:{apikey:'sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',Authorization:'Bearer sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R','Content-Type':'application/json'},body:JSON.stringify({p_name:'Ligia',p_pin:v})}).then(function(r){return r.json()}).then(function(r){if(r&&r.ok)open();else bad()}).catch(function(){document.getElementById('bsbLkEr').textContent='No connection, try again'});return}
+ crypto.subtle.digest('SHA-256',new TextEncoder().encode('bsb-recepcao:'+v)).then(function(b){if(hex(b)===HX)open();else bad()})}
+document.getElementById('bsbLkGo').onclick=go;i.onkeydown=function(e){if(e.key==='Enter')go()}}
+if(document.body)show();else document.addEventListener('DOMContentLoaded',show)})();/*BSB-LOCK347-FIM*/</script>
+</head><body>
+<script>
+/* /tasks (07/10/2026): o lugar UNICO das tasks da recepcao ("quero um lugar so para tasks: check in, day, check out").
+   Listas do Hub (bsb_task_defs rec_* e also rec_*); tick em bsb_task_log, o MESMO do app das meninas e do iPad.
+   Check in: Clean Soul Standard (rec_morning:look-*) = o check-in do dia, com a semana. Day: entregas que chegaram
+   (check & put away) + a caminho (compras do stock + robo do Gmail). Check out: PS no topo (bsb_task_notes).
+   Editar + historico so pela engrenagem com a senha de admin do dash; o historico e gravado pelo banco (bsb_task_edits). */
+(function(){
+  var SBU = 'https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/';
+  var SBK = 'sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+  var H = { apikey: SBK, Authorization: 'Bearer ' + SBK, 'Content-Type': 'application/json' };
+  var TABS = [ { k:'rec_morning', n:'Check in', ic:'🔑' }, { k:'rec_daytime', n:'Day', ic:'💆' }, { k:'rec_closing', n:'Check out', ic:'🔒' }, { k:'my', n:'My list', ic:'📝' } ];/*MYTAB390*/
+  var T = { defs: [], log: {}, dl: [], notes: {}, hist: [], tab: 'rec_morning', ok: false, busy: false, edit: false, view: 'list' };
+  var PNAME = { rec_morning: 'Check in', rec_daytime: 'Day', rec_closing: 'Check out', morning: 'Check in (girls)', daytime: 'Day (girls)', closing: 'Check out (girls)', note: 'PS' };
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function today(){ var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  function e(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function k(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]/g, ''); }
+  function nice(s){ s = String(s || ''); return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+  function me(){ try { return localStorage.getItem('bsb_recep_nome') || 'Joana'; } catch (x) { return 'Joana'; } }
+  function hm(iso){ var d = new Date(iso); return isNaN(d) ? '' : pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function ago(n){ var d = new Date(); d.setDate(d.getDate() - n); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  function dd(s){ var d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); }
+  function days(s){ return Math.max(0, Math.round((new Date(today() + 'T12:00:00') - new Date(String(s).slice(0, 10) + 'T12:00:00')) / 864e5)); }
+  /* entregas a caminho: compras do stock em aberto + o que o robo leu no Gmail (sem repetir as ligadas a uma compra) */
+  function wayList(){
+    var L = (T.pur || []).map(function(p){ return { kind: 'p', id: p.id, sup: p.bought_from || '', what: ((T.prods || {})[p.product_id] || ('Item #' + p.product_id)) + ' x' + p.qty, st: 'ordered', when: p.order_date, p: p }; });
+    (T.way || []).forEach(function(w){ if (w.purchase_id && L.some(function(x){ return x.kind === 'p' && x.id === w.purchase_id; })) { L.forEach(function(x){ if (x.kind === 'p' && x.id === w.purchase_id) { x.st = w.status; x.w = w; } }); return; }
+      L.push({ kind: 'w', id: w.id, sup: w.supplier, what: w.items || '', st: w.status, when: w.out_at || w.shipped_at || w.ordered_at, w: w }); });
+    var R = { out: 0, shipped: 1, ordered: 2 };
+    return L.sort(function(a, b){ return (R[a.st] - R[b.st]) || String(a.when).localeCompare(String(b.when)); });
+  }
+  function wayHTML(){
+    var L = wayList(); if (!L.length) return '';
+    var ST = { ordered: '🛒 Ordered', shipped: '🚚 On its way', out: '🚚 Out for delivery today' };
+    return '<details class="rtk-way"' + (T.wayOpen ? ' open' : '') + ' ontoggle="bsbTkWay(this.open)"><summary>🚚 On the way <span>' + L.length + '</span><em>tap when a box comes in</em></summary>' +
+      L.map(function(x){ var late = x.st === 'ordered' && days(x.when) > 7;
+        return '<div class="rtk-wr' + (x.st === 'out' ? ' out' : '') + (late ? ' late' : '') + '"><div class="rtk-t"><b>' + e(x.sup) + '</b><small>' + e(x.what) + '</small><small class="w">' + ST[x.st] + ' · ' + dd(x.when) + (late ? ' · ⚠ late' : '') + '</small></div>' +
+          '<button class="rtk-arr" onclick="bsbTkArrived(\'' + x.kind + '\',\'' + e(x.id) + '\')">📦 Arrived</button><button class="rtk-cx" title="Cancelled / lost" onclick="bsbTkCancel(\'' + x.kind + '\',\'' + e(x.id) + '\')">✖</button></div>'; }).join('') + '</details>';
+  }
+  /*BSB-WAYCX349-INICIO*/
+  window.bsbTkCancel = function(kind, id){
+    var x = wayList().filter(function(y){ return y.kind === kind && String(y.id) === String(id); })[0]; if (!x || T.busy) return;
+    if (!confirm('✖ ' + x.sup + '\n' + x.what + '\n\nThis order is NOT coming (cancelled or lost)?')) return;
+    var why = prompt('Why? (optional, e.g. not delivered, refunded)', '') || '';
+    T.busy = true;
+    fetch(SBU + 'rpc/bsb_way_encerrar', { method: 'POST', headers: H, body: JSON.stringify({ p_kind: kind, p_id: String(id), p_status: 'cancelled', p_quem: me(), p_motivo: why }) })
+      .then(function(r){ if (!r.ok) throw 0; jToast('✖ Cancelled · removed from the list'); return load(); })
+      .catch(function(){ alert('⚠ Not saved, check the wi-fi and try again'); })
+      .then(function(){ T.busy = false; });
+  };
+  (function(){ if (document.getElementById('waycx349css')) return; var s = document.createElement('style'); s.id = 'waycx349css';
+    s.textContent = '.rtk-cx{flex:none;border:1px solid #E7C3C3;background:#fff;color:#B4232A;font:600 12.5px Inter,sans-serif;border-radius:999px;padding:7px 10px;cursor:pointer;margin-left:-4px}';
+    (document.head || document.documentElement).appendChild(s); })();
+  /*BSB-WAYCX349-FIM*/
+  window.bsbTkWay = function(o){ T.wayOpen = o; };
+  /* a semana do Clean Soul Standard: um ponto por dia (verde = 5/5, com a hora em que ficou pronta) */
+  function weekHTML(n){
+    var by = {}; (T.week || []).forEach(function(r){ var x = by[r.date] = by[r.date] || { c: 0, t: '' }; x.c++; if (r.done_at > x.t) x.t = r.done_at; });
+    var td = today(), lk = Object.keys(T.log).filter(function(id){ return /:look-/.test(id); });
+    by[td] = { c: lk.length, t: lk.reduce(function(m, id){ return T.log[id].done_at > m ? T.log[id].done_at : m; }, '') };
+    var out = '';
+    for (var i = 6; i >= 0; i--) { var d = ago(i), x = by[d], dt = new Date(d + 'T12:00:00'), wd = dt.toLocaleDateString('en-GB', { weekday: 'short' }).slice(0, 2);
+      if (dt.getDay() === 0) continue;
+      var st = !x || !x.c ? 'no' : x.c >= n ? 'ok' : 'half';
+      out += '<div class="rtk-wd ' + st + (d === td ? ' td' : '') + '" title="' + d + '"><i>' + (st === 'ok' ? '✓' : st === 'half' ? x.c : '·') + '</i><b>' + wd + '</b>' + (st === 'ok' ? '<small>' + hm(x.t) + '</small>' : '') + '</div>'; }
+    return '<div class="rtk-week">' + out + '</div>';
+  }
+  window.bsbTkArrived = function(kind, id){
+    var x = wayList().filter(function(y){ return y.kind === kind && String(y.id) === String(id); })[0]; if (!x || T.busy) return;
+    if (!confirm('📦 ' + x.sup + '\n' + x.what + '\n\nArrived today?')) return;
+    T.busy = true; var now = new Date().toISOString(), jobs = [];
+    if (x.kind === 'p') {
+      jobs.push(send('bsb_inv_purchases?id=eq.' + x.id, 'PATCH', { received_date: today(), order_note: (x.p.order_note ? x.p.order_note + ' · ' : '') + 'arrived, marked by ' + me() }));
+      jobs.push(x.w ? send('bsb_deliveries?id=eq.' + encodeURIComponent(x.w.id), 'PATCH', { status: 'delivered', delivered_at: now })
+        : fetch(SBU + 'bsb_deliveries', { method: 'POST', headers: Object.assign({ Prefer: 'resolution=ignore-duplicates,return=minimal' }, H), body: JSON.stringify({ id: 'pur-' + x.id, supplier: x.sup || 'Parcel', items: x.what, status: 'delivered', delivered_at: now, purchase_id: x.id, source: 'reception' }) }));
+    } else jobs.push(send('bsb_deliveries?id=eq.' + encodeURIComponent(x.id), 'PATCH', { status: 'delivered', delivered_at: now }));
+    Promise.all(jobs).then(function(){ jToast('📦 Arrived · now check & put away'); return load(); })
+      .catch(function(){ alert('⚠ Not saved, check the wi-fi and try again'); })
+      .then(function(){ T.busy = false; });
+  };
+  function get(p){ return fetch(SBU + p, { headers: H }).then(function(r){ if (!r.ok) throw 0; return r.json(); }); }
+  function load(){
+    return Promise.all([
+      get('bsb_task_defs?select=id,label,period,also,sort,freq,weekday&active=eq.true&or=(period.like.rec_*,also.like.rec_*)'),
+      get('bsb_task_log?select=id,task_id,done_by,done_at&date=eq.' + today()),
+      get('bsb_deliveries?select=id,supplier,items,delivered_at&status=eq.delivered&stored_at=is.null&order=delivered_at.asc').catch(function(){ return []; }),
+      get('bsb_task_notes?select=id,text').catch(function(){ return []; }),
+      get('bsb_inv_purchases?select=id,product_id,order_date,qty,bought_from,order_note&received_date=is.null&cancelled_at=is.null&order_date=gte.' + ago(60) + '&order=order_date.asc').catch(function(){ return []; }),
+      get('bsb_deliveries?select=id,supplier,items,status,ordered_at,shipped_at,out_at,purchase_id&status=in.(ordered,shipped,out)&order=created_at.asc').catch(function(){ return []; }),
+      T.prods ? Promise.resolve(null) : get('bsb_inv_products?select=product_id,name').catch(function(){ return []; }),
+      /* v317 Ligia 07/10: a lista propria da Joana, a mesma do quadro dela no Hub (bsb_todo, assignee Joana) */
+      get('bsb_todo?select=id,title,status,done_at,created_by&assignee=eq.Joana&or=(status.neq.done,done_at.gte.' + today() + 'T00:00:00)&order=position.asc,created_at.asc').catch(function(){ return null; })
+    ]).then(function(a){
+      if (a[7]) T.my = a[7];
+      T.pur = a[4] || []; T.way = a[5] || [];
+      get('bsb_task_log?select=date,task_id,done_at&task_id=like.*look-*&date=gte.' + ago(6)).then(function(r){ T.week = r || []; if (isOpen() && !T.edit) paint(); }).catch(function(){});
+      if (a[6]) { T.prods = {}; a[6].forEach(function(p){ T.prods[p.product_id] = String(p.name || '').replace(/\s*-\s*Non Prescription Item/i, ''); }); }
+      T.notes = {}; (a[3] || []).forEach(function(n){ T.notes[n.id] = n.text; });
+      T.defs = a[0] || []; T.log = {}; (a[1] || []).forEach(function(l){ T.log[l.task_id] = l; }); T.dl = a[2] || []; T.ok = true;
+      badges(); if (isOpen() && !T.edit) paint();
+    }).catch(function(){});
+  }
+  function listOf(tab){
+    var dow = new Date().getDay();
+    return T.defs.filter(function(d){ return (d.period === tab || d.also === tab) && (d.freq !== 'weekly' || d.weekday === dow); })
+      /* as tasks das meninas que tambem sao da recepcao (lixos, hoover) entram antes dos Final check */
+      .sort(function(a, b){ var sa = a.period === tab ? (a.sort || 0) : 75 + (a.sort || 0) / 1000, sb = b.period === tab ? (b.sort || 0) : 75 + (b.sort || 0) / 1000; return sa - sb || String(a.id).localeCompare(String(b.id)); });
+  }
+  function left(tab){ if (tab === 'my') return (T.my || []).filter(function(x){ return x.status !== 'done'; }).length; return listOf(tab).filter(function(d){ return !T.log[d.id]; }).length + (tab === 'rec_daytime' ? T.dl.length + (window.bsbShopN ? window.bsbShopN() : 0) : 0); }
+  function isOpen(){ var o = document.getElementById('rtkOv'); return o && o.style.display === 'flex'; }
+  window.bsbTkPaint = function(){ if (isOpen() && !T.edit) paint(); };
+  function paint(){
+    var o = document.getElementById('rtkOv'); if (!o) return;
+    var L = listOf(T.tab), done = L.filter(function(d){ return T.log[d.id]; }).length, tot = L.length;
+    var dt = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
+    var h = '<div class="rtk-card"><div class="rtk-top"><div><div class="rtk-k">✅ Tasks</div><div class="rtk-d">' + e(dt) + ' · ' + e(me()) + '</div></div><div class="rtk-hb">' + (T.edit ? '<button class="rtk-ed on" onclick="bsbTkEdit()">✓ Done</button>' : '<button class="rtk-gear" title="Settings" onclick="bsbTkGate()">⚙️</button>') + '<button class="rtk-x" title="Back to the dash" onclick="bsbTkClose()">' + (T.edit ? '×' : '←') + '</button></div></div>';
+    if (T.view === 'hist') { o.innerHTML = h + histHTML() + '</div>'; return; }
+    if (T.tab === 'my' && T.edit) T.tab = 'rec_morning';
+    if (T.tab === 'my') { h += '<div class="rtk-tabs">' + TABS.map(function(t){ var n = left(t.k); return '<button class="rtk-tab' + (t.k === T.tab ? ' on' : '') + '" onclick="bsbTkTab(\'' + t.k + '\')">' + t.ic + ' ' + t.n + (n ? ' <i>' + n + '</i>' : (t.k === 'my' ? '' : ' <i class="ok">✓</i>')) + '</button>'; }).join('') + '</div><div class="rtk-body">' + myHTML() + '</div></div>'; var f0 = document.getElementById('rtkMyNew'), v0 = f0 ? f0.value : '', fo = f0 && document.activeElement === f0; o.innerHTML = h; var f = document.getElementById('rtkMyNew'); if (f) { f.value = v0; if (fo || !T.myF) { T.myF = 1; setTimeout(function(){ try { f.focus(); } catch (x) {} }, 50); } } return; }
+    h += '<div class="rtk-tabs">' + TABS.map(function(t){ var n = left(t.k); return '<button class="rtk-tab' + (t.k === T.tab ? ' on' : '') + '" onclick="bsbTkTab(\'' + t.k + '\')">' + t.ic + ' ' + t.n + (n ? ' <i>' + n + '</i>' : ' <i class="ok">✓</i>') + '</button>'; }).join('') + '</div>';
+    h += '<div class="rtk-bar"><b style="width:' + Math.round(100 * done / Math.max(1, tot)) + '%"></b></div><div class="rtk-cnt">' + done + ' of ' + tot + ' done</div>';
+    h += '<div class="rtk-body">';
+    /* Ligia 07/10: o PS fica no TOPO do Check out */
+    if (T.tab === 'rec_closing') h += T.edit
+      ? '<div class="rtk-ps ed"><b>PS:</b><textarea rows="2" onchange="bsbTkNote(\'closing_ps\', this.value)">' + e(T.notes.closing_ps || '') + '</textarea></div>'
+      : (T.notes.closing_ps ? '<div class="rtk-ps"><b>PS:</b> ' + e(T.notes.closing_ps) + '</div>' : '');
+    if (T.edit) {
+      h += '<div class="rtk-eh">✏️ Change the words, 🗑 remove, or add a new task. Every change is saved with your name and the time.</div>';
+      h += L.map(function(d){ return '<div class="rtk-er"><textarea rows="2" onchange="bsbTkSave(\'' + e(d.id) + '\', this.value)">' + e(d.label) + '</textarea><span class="rtk-mvw"><button class="rtk-mv" title="Move up" onclick="bsbTkMove(\'' + e(d.id) + '\',-1)">↑</button><button class="rtk-mv" title="Move down" onclick="bsbTkMove(\'' + e(d.id) + '\',1)">↓</button></span><button class="rtk-del" title="Remove" onclick="bsbTkDel(\'' + e(d.id) + '\')">🗑</button></div>'; }).join('');
+      h += '<div class="rtk-er add"><textarea id="rtkNew" rows="2" placeholder="New task for ' + PNAME[T.tab] + '…"></textarea><button class="rtk-add" onclick="bsbTkAdd()">+ Add</button></div>';
+      h += '<button class="rtk-hist" onclick="bsbTkHist()">🕓 See every change (history)</button>';
+      h += '</div></div>'; o.innerHTML = h; return;
+    }
+    if (T.tab === 'rec_daytime' && T.dl.length) {
+      h += '<div class="rtk-dl"><div class="rtk-dlh">📦 Arrived · check & put away <span>' + T.dl.length + '</span></div>' +
+        T.dl.map(function(d){ return '<button class="rtk-dlr" onclick="bsbTkDl(\'' + e(d.id) + '\')"><span class="rtk-dli">📦</span><span class="rtk-t"><b>' + e(d.supplier || 'Parcel') + '</b>' + (d.items ? '<small>' + e(d.items) + '</small>' : '') + '<small class="w">Arrived ' + hm(d.delivered_at) + '</small></span><span class="rtk-go">✓ Put away</span></button>'; }).join('') +
+        '<div class="rtk-dlf">Open it · check it matches · put it in its place ✨</div></div>';
+    }
+    if (T.tab === 'rec_daytime' && window.bsbShopHTML) h += window.bsbShopHTML();
+    
+    if (T.tab === 'rec_daytime') h += wayHTML();
+    /* Ligia 07/10: o check-in do dia, "Clean Soul Standard" (clean girl + Brazilian Soul) */
+    var LK = L.filter(function(d){ return /:look-/.test(d.id); }); L = L.filter(function(d){ return !/:look-/.test(d.id); });
+    if (LK.length) {
+      var lkd = LK.filter(function(d){ return T.log[d.id]; }).length, IC = ['💇','👗','✨','💅','🌸'];
+      h = h.replace('<div class="rtk-body">', '<div class="rtk-body"><div class="rtk-look' + (lkd === LK.length ? ' ok' : '') + '"><div class="rtk-lh"><div><b>🪞 Clean Soul Standard</b><small>the BSB clean girl look · check it in the mirror</small></div><span>' + (lkd === LK.length ? '✓ Ready' : lkd + '/' + LK.length) + '</span></div>' +
+        LK.map(function(d, i){ var l = T.log[d.id], p = String(d.label).split(' · ');
+          return '<button class="rtk-lr' + (l ? ' on' : '') + '" onclick="bsbTkTick(\'' + e(d.id) + '\')"><span class="rtk-li">' + (IC[i] || '•') + '</span><span class="rtk-t"><b>' + e(p[0]) + '</b>' + (p[1] ? '<small>' + e(p.slice(1).join(' · ')) + '</small>' : '') + '</span><span class="rtk-ck">' + (l ? '✓' : '') + '</span></button>'; }).join('') +
+        (lkd === LK.length ? '<div class="rtk-lok">✨ Ready to receive · now the house</div>' : '<div class="rtk-lwait">Your check-in of the day · confirm all 5 before the first client</div>') + weekHTML(LK.length) + '</div>');
+    }
+    var todo = L.filter(function(d){ return !T.log[d.id]; }), fin = L.filter(function(d){ return T.log[d.id]; });
+    /* v319 Ligia 07/10: "nao quero que ela pense nossa quanta coisa". So as proximas 3 aparecem; o resto fica num
+       "+ N more". O que ela marca some da lista e vira uma linha "✓ N done" (toca para ver e desfazer). */
+    function row(d){
+      var l = T.log[d.id];
+      return '<button class="rtk-i' + (l ? ' ok' : '') + '" onclick="bsbTkTick(\'' + e(d.id) + '\')"><span class="rtk-ck">' + (l ? '✓' : '') + '</span><span class="rtk-t">' + e(d.label) +
+        (l ? '<small class="by">' + e(nice(l.done_by)) + ' · ' + hm(l.done_at) + ' · tap to undo</small>' : '') + '</span></button>';
+    }
+    T.more = T.more || {}; T.showDone = T.showDone || {};
+    var SHOW = T.more[T.tab] ? todo.length : 3;
+    h += todo.slice(0, SHOW).map(row).join('');
+    if (todo.length > SHOW) h += '<button class="rtk-more" onclick="bsbTkMore()">+ ' + (todo.length - SHOW) + ' more</button>';
+    if (fin.length) h += '<button class="rtk-donel" onclick="bsbTkDoneT()">✓ ' + fin.length + ' done <span>' + (T.showDone[T.tab] ? '▴' : '▾') + '</span></button>' + (T.showDone[T.tab] ? fin.map(row).join('') : '');
+    if (tot && done === tot) h += '<div class="rtk-all">🎉 ' + TABS.filter(function(t){ return t.k === T.tab; })[0].n + ' all done!</div>';
+    h += '</div></div>';
+    /* v319: Clean Soul completo vira uma linha so; toca para abrir */
+    if (T.lookOpen) h = h.replace('rtk-look ok"', 'rtk-look ok open"');
+    o.innerHTML = h;
+  }
+  window.bsbTkMore = function(){ T.more = T.more || {}; T.more[T.tab] = !T.more[T.tab]; paint(); };
+  window.bsbTkDoneT = function(){ T.showDone = T.showDone || {}; T.showDone[T.tab] = !T.showDone[T.tab]; paint(); };
+  document.addEventListener('click', function(ev){ var x = ev.target.closest && ev.target.closest('.rtk-look.ok .rtk-lh'); if (x) { T.lookOpen = !T.lookOpen; paint(); } });
+  /* v319: no ⚙️ (com senha) as setinhas mudam a ordem; o banco grava no historico quem mudou e quando */
+  window.bsbTkMove = function(id, dir){
+    var L = listOf(T.tab).filter(function(d){ return d.period === T.tab && !/:look-/.test(d.id); });
+    var i = L.findIndex(function(d){ return d.id === id; }), j = i + dir; if (i < 0 || j < 0 || j >= L.length) return;
+    var t = L[i]; L[i] = L[j]; L[j] = t;
+    var jobs = [];
+    L.forEach(function(d, n){ var s = (n + 1) * 10; if (d.sort !== s) { d.sort = s; jobs.push(send('bsb_task_defs?id=eq.' + encodeURIComponent(d.id), 'PATCH', { sort: s, edited_by: k(me()) })); } });
+    paint(); Promise.all(jobs).then(saved).catch(oops);
+  };
+  function badges(){
+    document.title = '✅ Tasks · ' + left(T.tab) + ' left';
+    /* v317: a bola flutuante do dash le daqui quanto falta em cada aba */
+    try { if (window.parent !== window) window.parent.postMessage({ bsbTasks: { ok: !!T.ok, ci: left('rec_morning'), day: left('rec_daytime'), co: left('rec_closing'), closed: !!T.log['rec_closing:day-closed'] || (listOf('rec_closing').length > 0 && left('rec_closing') === 0) } }, '*'); } catch (x) {}
+  }
+  /* ---- v317 My list: ela poe e tira o que quiser; e o mesmo quadro dela no Hub ---- */
+  function myHTML(){
+    var M = T.my || [], open = M.filter(function(x){ return x.status !== 'done'; }), fin = M.filter(function(x){ return x.status === 'done'; });
+    return '<div class="rtk-my"><div class="rtk-myh">📝 My list' + (open.length ? ' <span>' + open.length + '</span>' : '') + '</div>' +
+      '<div class="rtk-mya"><input id="rtkMyNew" placeholder="What do you need to remember? e.g. Eminence order" onkeydown="if(event.key===\'Enter\')bsbMyAdd()"><button onclick="bsbMyAdd()">+ Add</button></div>' +
+      (M.length ? '' : '<div class="rtk-myh" style="font-weight:400;color:#9A9BB4">Nothing yet · write it above and tap + Add</div>') +
+      open.concat(fin).map(function(x){ var d = x.status === 'done';
+        return '<div class="rtk-myr' + (d ? ' ok' : '') + '"><button class="rtk-myc" onclick="bsbMyTick(\'' + e(x.id) + '\')"><span class="rtk-ck">' + (d ? '✓' : '') + '</span><span class="rtk-t">' + e(x.title) + (d ? '<small class="by">done ' + hm(x.done_at) + ' · tap to undo</small>' : '') + '</span></button>' +
+          '<button class="rtk-myd" title="Remove" onclick="bsbMyDel(\'' + e(x.id) + '\')">🗑</button></div>'; }).join('') +
+      '</div>';
+  }
+  window.bsbMyAdd = function(){
+    var i = document.getElementById('rtkMyNew'), t = i && i.value.trim(); if (!t) return;
+    i.value = '';
+    fetch(SBU + 'bsb_todo', { method: 'POST', headers: Object.assign({ Prefer: 'return=minimal' }, H), body: JSON.stringify({ title: t, assignee: 'Joana', created_by: me(), status: 'todo', day: today(), source: 'reception' }) })
+      .then(function(r){ if (!r.ok) throw 0; saved(); return load(); }).catch(oops);
+  };
+  window.bsbMyTick = function(id){
+    var x = (T.my || []).filter(function(y){ return y.id === id; })[0]; if (!x) return;
+    var d = x.status !== 'done'; x.status = d ? 'done' : 'todo'; x.done_at = d ? new Date().toISOString() : null; paint(); badges();
+    send('bsb_todo?id=eq.' + id, 'PATCH', { status: x.status, done_at: x.done_at, updated_at: new Date().toISOString() }).then(load).catch(oops);
+  };
+  window.bsbMyDel = function(id){
+    var x = (T.my || []).filter(function(y){ return y.id === id; })[0]; if (!x || !confirm('🗑 Remove "' + x.title + '"?')) return;
+    T.my = T.my.filter(function(y){ return y.id !== id; }); paint(); badges();
+    fetch(SBU + 'bsb_todo?id=eq.' + id, { method: 'DELETE', headers: H }).then(function(r){ if (!r.ok) throw 0; }).catch(oops);
+  };
+  window.bsbTkTab = function(t){ if (t === 'my') T.myF = 0; T.tab = t; T.view = 'list'; paint(); badges(); };
+  function send(path, method, body){ return fetch(SBU + path, { method: method, headers: Object.assign({ Prefer: 'return=minimal' }, H), body: JSON.stringify(body) }).then(function(r){ if (!r.ok) throw 0; }); }
+  function oops(){ alert('⚠ Not saved, check the wi-fi and try again'); load(); }
+  function saved(){ jToast('✓ Saved'); }
+  window.bsbTkEdit = function(){ T.edit = !T.edit; T.view = 'list'; paint(); if (!T.edit) load(); };
+  window.bsbTkAdmin = function(tab){ T.edit = true; T.view = 'list'; bsbTkOpen(tab || T.tab); };
+  window.bsbTkSave = function(id, v){
+    v = String(v || '').trim(); var d = T.defs.filter(function(x){ return x.id === id; })[0]; if (!d || !v || v === d.label) return;
+    send('bsb_task_defs?id=eq.' + encodeURIComponent(id), 'PATCH', { label: v, edited_by: k(me()) }).then(function(){ d.label = v; saved(); }).catch(oops);
+  };
+  window.bsbTkDel = function(id){
+    var d = T.defs.filter(function(x){ return x.id === id; })[0]; if (!d) return;
+    if (!confirm('🗑 Remove this task?\n\n' + d.label)) return;
+    send('bsb_task_defs?id=eq.' + encodeURIComponent(id), 'PATCH', { active: false, edited_by: k(me()) }).then(function(){ T.defs = T.defs.filter(function(x){ return x.id !== id; }); paint(); saved(); }).catch(oops);
+  };
+  window.bsbTkAdd = function(){
+    var t = document.getElementById('rtkNew'), v = String(t && t.value || '').trim(); if (!v) return;
+    var own = T.defs.filter(function(x){ return x.period === T.tab; }), mx = own.reduce(function(m, x){ return Math.max(m, x.sort || 0); }, 0);
+    var row = { id: T.tab + ':j' + Date.now(), label: v, period: T.tab, sort: mx + 10, freq: 'daily', active: true, edited_by: k(me()) };
+    send('bsb_task_defs', 'POST', row).then(function(){ T.defs.push(row); paint(); saved(); }).catch(oops);
+  };
+  window.bsbTkNote = function(id, v){
+    v = String(v || '').trim(); if (v === (T.notes[id] || '')) return;
+    send('bsb_task_notes?id=eq.' + encodeURIComponent(id), 'PATCH', { text: v, edited_by: k(me()) }).then(function(){ T.notes[id] = v; saved(); }).catch(oops);
+  };
+  window.bsbTkHist = function(){
+    T.view = 'hist'; T.hist = null; paint();
+    get('bsb_task_edits?select=at,by,what,period,before,after&order=at.desc&limit=300').then(function(r){ T.hist = r || []; paint(); }).catch(function(){ T.hist = []; paint(); });
+  };
+  window.bsbTkBack = function(){ T.view = 'list'; paint(); };
+  function histHTML(){
+    var h = '<div class="rtk-body"><button class="rtk-back" onclick="bsbTkBack()">← Back to the list</button><div class="rtk-k2">🕓 Every change to the task lists</div>';
+    if (T.hist === null) return h + '<div class="rtk-eh">Loading…</div></div>';
+    if (!T.hist.length) return h + '<div class="rtk-eh">No changes yet</div></div>';
+    var IC = { added: '➕ Added', changed: '✏️ Changed', removed: '🗑 Removed', restored: '↩ Back' }, last = '';
+    T.hist.forEach(function(x){
+      var d = new Date(x.at), day = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      if (day !== last) { h += '<div class="rtk-hd">' + e(day) + '</div>'; last = day; }
+      h += '<div class="rtk-hr ' + e(x.what) + '"><div class="rtk-hm"><b>' + (IC[x.what] || e(x.what)) + '</b> · ' + e(PNAME[x.period] || x.period || '') + '<span>' + hm(x.at) + ' · ' + e(nice(x.by) || '?') + '</span></div>' +
+        (x.what === 'changed' && x.before ? '<div class="rtk-hb4">' + e(x.before) + '</div>' : '') +
+        '<div class="rtk-ha">' + e(x.what === 'removed' ? (x.before || x.after) : x.after) + '</div></div>';
+    });
+    return h + '</div>';
+  }
+  window.bsbTkClose = function(){ if (T.edit) { T.edit = false; T.view = 'list'; paint(); load(); return; } if (window.parent !== window) { try { window.parent.postMessage({ bsbTasksClose: 1 }, '*'); } catch (x) {} return; } location.href = '/'; };
+  var ADMIN_PW = "202637322", unlocked = false;
+  window.bsbTkGate = function(){
+    if (!unlocked) { var p = prompt('🔐 Password to edit the task lists:'); if (p === null) return; if (p !== ADMIN_PW && p !== '7531') { alert('Wrong password'); return; } unlocked = true; }
+    bsbTkAdmin(T.tab);
+  };
+  window.bsbTkOpen = function(tab){
+    var o = document.getElementById('rtkOv');
+    if (!o) { o = document.createElement('div'); o.id = 'rtkOv'; document.body.appendChild(o); }
+    if (tab) T.tab = tab; o.style.display = 'flex'; paint(); load();
+  };
+  window.bsbTkTick = function(id){
+    if (T.busy) return; T.busy = true;
+    var lid = today() + '|' + id, was = T.log[id];
+    if (was) delete T.log[id]; else T.log[id] = { id: lid, task_id: id, done_by: k(me()), done_at: new Date().toISOString() };
+    paint(); badges();
+    var req = was ? fetch(SBU + 'bsb_task_log?id=eq.' + encodeURIComponent(lid), { method: 'DELETE', headers: H })
+      : fetch(SBU + 'bsb_task_log', { method: 'POST', headers: Object.assign({ Prefer: 'resolution=ignore-duplicates,return=minimal' }, H), body: JSON.stringify({ id: lid, date: today(), task_id: id, done_by: k(me()), done_at: T.log[id].done_at }) });
+    req.then(function(r){ if (!r.ok) throw 0;
+      /* v317: Check out completo = o dia fechado, com a hora, para a Ligia ver */
+      if (!was && T.tab === 'rec_closing' && left('rec_closing') === 0 && !T.log['rec_closing:day-closed']) { var cid = today() + '|rec_closing:day-closed'; T.log['rec_closing:day-closed'] = { id: cid }; fetch(SBU + 'bsb_task_log', { method: 'POST', headers: Object.assign({ Prefer: 'resolution=ignore-duplicates,return=minimal' }, H), body: JSON.stringify({ id: cid, date: today(), task_id: 'rec_closing:day-closed', done_by: k(me()), done_at: new Date().toISOString() }) }); if (window.jToast) jToast('🌙 Day closed · thank you!'); badges(); }
+      if (!was) jToast('✓ ' + ['Nice!','Lovely!','Done!','One more ✨'][Math.floor(Math.random()*4)]); })
+      .catch(function(){ if (was) T.log[id] = was; else delete T.log[id]; paint(); badges(); alert('⚠ Not saved, check the wi-fi and try again'); })
+      .then(function(){ T.busy = false; });
+  };
+  window.bsbTkDl = function(id){
+    var d = T.dl.filter(function(x){ return x.id === id; })[0]; if (!d || T.busy) return;
+    if (!confirm('📦 ' + (d.supplier || 'Parcel') + '\n\nChecked it matches and put it away?')) return;
+    T.busy = true;
+    fetch(SBU + 'bsb_deliveries?id=eq.' + encodeURIComponent(id), { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, H), body: JSON.stringify({ stored_at: new Date().toISOString(), stored_by: k(me()) }) })
+      .then(function(r){ if (!r.ok) throw 0; T.dl = T.dl.filter(function(x){ return x.id !== id; }); paint(); badges(); jToast('📦 Put away, thank you!'); })
+      .catch(function(){ alert('⚠ Not saved, check the wi-fi and try again'); })
+      .then(function(){ T.busy = false; });
+  };
+  window.jToast = function(m){ var t = document.getElementById('rtkToast'); if (!t) { t = document.createElement('div'); t.id = 'rtkToast'; document.body.appendChild(t); } t.textContent = m; t.className = 'on'; clearTimeout(t._h); t._h = setTimeout(function(){ t.className = ''; }, 1600); };
+  var css = document.createElement('style');
+  css.textContent =
+    'html,body{margin:0;background:#F6F5FB}#rtkOv{display:none;justify-content:center;padding:24px 16px 60px}' +
+    '.rtk-gear{border:0;background:#fff;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;opacity:.55}.rtk-gear:hover{opacity:1}' +
+    '.rtk-card{background:#F7F6FC;border-radius:22px;width:100%;max-width:640px;padding:18px;box-shadow:0 2px 12px rgba(16,24,40,.08);font-family:Inter,sans-serif;color:#1F2235}' +
+    '.rtk-top{display:flex;justify-content:space-between;align-items:flex-start}.rtk-k{font-size:20px;font-weight:800}.rtk-d{font-size:13px;color:#8B8DA8;margin-top:2px}' +
+    '.rtk-x{border:0;background:#fff;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer;color:#585A75}' +
+    '.rtk-tabs{display:flex;gap:6px;margin:14px 0 10px}.rtk-tab{flex:1;border:0;background:#fff;border-radius:14px;padding:10px 6px;font:600 14px Inter,sans-serif;color:#585A75;cursor:pointer;box-shadow:0 1px 3px rgba(16,24,40,.06)}' +
+    '.rtk-tab.on{background:#5B47E0;color:#fff}.rtk-tab i{font-style:normal;font-size:11px;background:#EF4444;color:#fff;border-radius:999px;padding:1px 7px;margin-left:3px}.rtk-tab i.ok{background:#22B66E}' +
+    '.rtk-bar{height:8px;background:#E7E5F3;border-radius:999px;overflow:hidden}.rtk-bar b{display:block;height:100%;background:#22B66E;border-radius:999px}' +
+    '.rtk-cnt{font-size:12px;color:#8B8DA8;margin:5px 0 10px;text-align:right}' +
+    '.rtk-i{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:0;background:#fff;border-radius:14px;padding:12px;margin-bottom:6px;font:500 14.5px/1.35 Inter,sans-serif;color:#1F2235;cursor:pointer;box-shadow:0 1px 3px rgba(16,24,40,.05)}' +
+    '.rtk-ck{flex:none;width:24px;height:24px;border-radius:8px;border:2px solid #CFCDE3;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px}' +
+    '.rtk-i.ok{background:#F2FBF6;color:#8B8DA8}.rtk-i.ok .rtk-ck{background:#22B66E;border-color:#22B66E}.rtk-i.ok .rtk-t{text-decoration:line-through}' +
+    '.rtk-t{flex:1;display:flex;flex-direction:column;gap:2px}.rtk-t small{font-size:11.5px;text-decoration:none;display:inline-block}.rtk-t small.by{color:#1B7A4A;font-weight:600}' +
+    '.rtk-dl{background:#FFF8EA;border:2px solid #F3D9A4;border-radius:16px;padding:10px;margin-bottom:10px}' +
+    '.rtk-dlh{font-size:12.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#8A5A00;margin-bottom:6px;display:flex;justify-content:space-between}.rtk-dlh span{background:#B07207;color:#fff;border-radius:999px;padding:1px 8px}' +
+    '.rtk-dlr{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:#fff;border-radius:12px;padding:10px;margin-bottom:5px;cursor:pointer;font:500 14px Inter,sans-serif;color:#1F2235}' +
+    '.rtk-dli{font-size:22px}.rtk-dlr small{color:#585A75;font-size:12px}.rtk-dlr small.w{color:#B07207;font-weight:600}' +
+    '.rtk-go{flex:none;background:#22B66E;color:#fff;font-weight:700;font-size:12.5px;border-radius:999px;padding:7px 12px}' +
+    '.rtk-dlf{font-size:12px;color:#8A5A00;text-align:center;padding-top:2px}.rtk-hb{display:flex;gap:6px;align-items:center}.rtk-ed{border:1px solid #DCD8F5;background:#fff;color:#5B47E0;border-radius:999px;padding:7px 12px;font:600 13px Inter,sans-serif;cursor:pointer}.rtk-ed.on{background:#22B66E;border-color:#22B66E;color:#fff}' +
+    '.rtk-ps.ed{display:flex;gap:8px;align-items:flex-start}.rtk-ps textarea,.rtk-er textarea{flex:1;font:500 14px/1.35 Inter,sans-serif;color:#1F2235;border:1px solid #DCD8F5;border-radius:10px;padding:8px 10px;resize:vertical;background:#fff}' +
+    '.rtk-eh{font-size:12.5px;color:#585A75;background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:8px}' +
+    '.rtk-er{display:flex;gap:8px;align-items:center;margin-bottom:6px}.rtk-del{border:0;background:#fff;border-radius:10px;width:40px;height:40px;font-size:17px;cursor:pointer;flex:none}' +
+    '.rtk-er.add textarea{border-style:dashed}.rtk-add{border:0;background:#5B47E0;color:#fff;border-radius:10px;padding:10px 12px;font:600 13px Inter,sans-serif;cursor:pointer;flex:none}' +
+    '.rtk-hist,.rtk-back{width:100%;border:1px solid #DCD8F5;background:#fff;color:#5B47E0;border-radius:12px;padding:11px;font:600 13.5px Inter,sans-serif;cursor:pointer;margin-top:8px}.rtk-back{width:auto;margin:0 0 10px}' +
+    '.rtk-k2{font-size:16px;font-weight:800;margin-bottom:6px}.rtk-hd{font-size:12px;font-weight:700;color:#8B8DA8;text-transform:uppercase;letter-spacing:.4px;margin:12px 0 6px}' +
+    '.rtk-hr{background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:6px;border-left:4px solid #5B47E0}.rtk-hr.added{border-color:#22B66E}.rtk-hr.removed{border-color:#EF4444}' +
+    '.rtk-hm{font-size:12.5px;color:#585A75;display:flex;gap:4px;flex-wrap:wrap}.rtk-hm span{margin-left:auto;color:#8B8DA8}.rtk-hb4{font-size:13px;color:#B42318;text-decoration:line-through;margin-top:4px}.rtk-ha{font-size:13.5px;color:#1F2235;margin-top:3px}.rtk-hr.removed .rtk-ha{text-decoration:line-through;color:#8B8DA8}' +
+    '.rtk-ps{margin:0 0 10px;padding:12px 14px;border-radius:14px;background:#F3F0FC;color:#4A3BB8;font-size:14px;line-height:1.4}' +
+    '#rtkToast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#1F2235;color:#fff;font:600 14px Inter,sans-serif;padding:10px 18px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none}#rtkToast.on{opacity:1;transform:translateX(-50%)}' +
+    '.rtk-way{background:#fff;border-radius:16px;padding:4px 12px;margin-bottom:10px;box-shadow:0 1px 3px rgba(16,24,40,.05)}.rtk-way summary{cursor:pointer;padding:10px 0;font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center}.rtk-way summary span{background:#5B47E0;color:#fff;border-radius:999px;font-size:11px;padding:1px 8px}.rtk-way summary em{margin-left:auto;font-style:normal;font-size:12px;font-weight:500;color:#8B8DA8}' +
+    '.rtk-wr{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:12px;background:#F8F7FC;margin-bottom:6px}.rtk-wr.out{background:#EAF7F0}.rtk-wr.late{background:#FEF6E7}.rtk-wr small{color:#585A75;font-size:12px}.rtk-wr small.w{color:#8B8DA8}.rtk-wr.late small.w{color:#B07207;font-weight:600}' +
+    '.rtk-arr{flex:none;border:1px solid #22B66E;background:#fff;color:#1B7A4A;font:600 12.5px Inter,sans-serif;border-radius:999px;padding:7px 12px;cursor:pointer}' +
+    '.rtk-look{background:linear-gradient(135deg,#FFF6F0,#F7F1FF);border:2px solid #EADFF7;border-radius:18px;padding:12px;margin-bottom:12px}.rtk-look.ok{border-color:#BFE8D2;background:#F2FBF6}' +
+    '.rtk-lh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.rtk-lh b{font-size:16px;display:block}.rtk-lh small{font-size:12px;color:#8B8DA8}.rtk-lh span{font-weight:800;font-size:13px;color:#5B47E0;background:#fff;border-radius:999px;padding:4px 10px}.rtk-look.ok .rtk-lh span{background:#22B66E;color:#fff}' +
+    '.rtk-lr{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:#fff;border-radius:12px;padding:10px;margin-bottom:5px;cursor:pointer;font:500 14px Inter,sans-serif;color:#1F2235}.rtk-li{font-size:20px;width:26px;text-align:center}.rtk-lr small{color:#585A75;font-size:12px}' +
+    '.rtk-lr.on .rtk-ck{background:#22B66E;border-color:#22B66E}.rtk-lok{text-align:center;font-weight:700;color:#1B7A4A;font-size:13px;padding-top:4px}.rtk-lwait{text-align:center;font-size:12.5px;color:#8B8DA8;padding-top:4px}' +
+    '.rtk-week{display:flex;gap:6px;justify-content:center;margin-top:10px;padding-top:10px;border-top:1px dashed #E4DDF3}.rtk-wd{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:#8B8DA8;min-width:34px}.rtk-wd i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;background:#EEECF6;color:#B5B3CC}.rtk-wd.ok i{background:#22B66E;color:#fff}.rtk-wd.half i{background:#F3D9A4;color:#8A5A00}.rtk-wd.td b{color:#5B47E0}.rtk-wd small{font-size:9.5px}' +
+    '.rtk-all{text-align:center;font-weight:700;color:#1B7A4A;padding:10px}' +
+    '.rtk-more{display:block;width:100%;border:1px dashed #D9D5EE;background:none;border-radius:12px;padding:9px;margin:2px 0 6px;font:600 13px Inter,sans-serif;color:#5B47E0;cursor:pointer}' +
+    '.rtk-donel{display:flex;justify-content:center;gap:6px;width:100%;border:0;background:#F2FBF6;border-radius:12px;padding:8px;margin:8px 0 6px;font:600 12.5px Inter,sans-serif;color:#1B7A4A;cursor:pointer}' +
+    '.rtk-look.ok:not(.open) .rtk-lr,.rtk-look.ok:not(.open) .rtk-week,.rtk-look.ok:not(.open) .rtk-lok{display:none}.rtk-look.ok .rtk-lh{cursor:pointer;margin-bottom:0}.rtk-look.ok.open .rtk-lh{margin-bottom:8px}' +
+    '.rtk-mvw{display:flex;flex-direction:column;gap:2px}.rtk-mv{border:1px solid #E6E4F0;background:#fff;border-radius:8px;width:28px;height:24px;cursor:pointer;font-size:13px;color:#5B47E0;padding:0}' +
+    '.rtk-my{background:#fff;border:2px solid #E9E4FB;border-radius:18px;padding:12px;margin-bottom:12px}.rtk-myh{font-weight:800;font-size:15px;margin-bottom:8px}.rtk-myh span{background:#5B47E0;color:#fff;border-radius:999px;font-size:12px;padding:1px 8px;margin-left:4px}' +
+    '.rtk-myr{display:flex;gap:6px;align-items:center;margin-bottom:5px}.rtk-myc{flex:1;display:flex;gap:10px;align-items:center;text-align:left;border:0;background:#F8F7FC;border-radius:12px;padding:10px;cursor:pointer;font:500 14px Inter,sans-serif;color:#1F2235}' +
+    '.rtk-myr.ok .rtk-myc{background:#F2FBF6;color:#8B8DA8}.rtk-myr.ok .rtk-ck{background:#22B66E;border-color:#22B66E;color:#fff}.rtk-myd{border:0;background:none;font-size:15px;cursor:pointer;opacity:.5;padding:6px}.rtk-myd:hover{opacity:1}' +
+    '.rtk-mya{display:flex;gap:6px;margin-top:8px}.rtk-mya input{flex:1;min-width:0;border:1px solid #E6E4F0;border-radius:12px;padding:10px 12px;font:500 14px Inter,sans-serif;outline:none}.rtk-mya input:focus{border-color:#5B47E0}.rtk-mya button{border:0;background:#5B47E0;color:#fff;border-radius:12px;padding:0 14px;font:600 13px Inter,sans-serif;cursor:pointer}';
+  document.head.appendChild(css);
+  function start(){
+    var hh = (location.hash || '').replace('#', ''), hr = new Date().getHours(), auto = hr < 11 ? 'rec_morning' : hr >= 18 ? 'rec_closing' : 'rec_daytime';
+    bsbTkOpen({ opening: 'rec_morning', checkin: 'rec_morning', day: 'rec_daytime', closing: 'rec_closing', checkout: 'rec_closing' }[hh] || auto);
+    setInterval(load, 60000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+<script>/*BSB-TKSHOP344-INICIO*/
+/* 14/10/2026 · decisão da Ligia no Inventário: a Loja (pedidos do Shopify) sai do balcão e mora aqui, na aba Day.
+   Mesmos dados e mesma gravação de antes: lê bsb_shopify_fila, grava os marcos em bsb_shopify_prep. Nada fica no computador. */
+(function(){
+  var SBU = 'https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/';
+  var SBK = 'sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+  var H = { apikey: SBK, Authorization: 'Bearer ' + SBK, 'Content-Type': 'application/json' };
+  var S = { rows: [], busy: false };
+  function e(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function me(){ try { return localStorage.getItem('bsb_recep_nome') || 'Joana'; } catch (x) { return 'Joana'; } }
+  function lb(v){ var n = Number(v || 0); return '£' + (n % 1 === 0 ? n.toFixed(0) : n.toFixed(2)); }
+  function itens(a){ try { if (typeof a === 'string') a = JSON.parse(a); return (a || []).map(function(i){ var q = Number(i.q || 1); return (q > 1 ? q + '× ' : '') + String(i.t || ''); }).join(', '); } catch (x) { return ''; } }
+  function repinta(){ try { if (window.bsbTkPaint) window.bsbTkPaint(); } catch (x) {} }
+  function load(){
+    return fetch(SBU + 'bsb_shopify_fila?select=*&etapa=neq.enviado&order=created_at.asc&limit=100', { headers: H, cache: 'no-store' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(rows){ if (rows) { S.rows = rows; repinta(); } }).catch(function(){});
+  }
+  window.bsbShopN = function(){ return S.rows.length; };
+  window.bsbShopHTML = function(){
+    if (!S.rows.length) return '';
+    return '<div class="rtk-shop"><div class="rtk-shh">🛍 Shop orders <span>' + S.rows.length + '</span><em>prepare, then send</em></div>' +
+      S.rows.map(function(r){
+        var id = e(r.order_id), d = Number(r.dias || 0), late = d >= 2, it = itens(r.itens);
+        var acao = r.etapa === 'preparado'
+          ? '<select id="tks' + id + '" class="rtk-shs"><option value="email">by email</option><option value="post">by post</option><option value="mao">collected here</option></select><button class="rtk-shb go" onclick="bsbShopMarca(\'' + id + '\',\'sent\')">✓ Sent</button>'
+          : '<button class="rtk-shb ok" onclick="bsbShopMarca(\'' + id + '\',\'prep\')">✓ Prepared</button>';
+        return '<div class="rtk-shr' + (late ? ' late' : '') + '"><div class="rtk-t"><b>' + e(r.order_name || '') + ' · ' + e(r.customer_name || 'no name') + '</b>' +
+          (it ? '<small>' + e(it) + '</small>' : '') +
+          '<small class="w">' + lb(r.total) + ' · ' + (d === 0 ? 'today' : d === 1 ? '1 day' : d + ' days') + (r.etapa === 'preparado' ? ' · prepared' + (r.prep_by ? ' by ' + e(r.prep_by) : '') : '') + (r.is_giftcard ? ' · gift card' : '') + (late ? ' · ⚠ waiting' : '') + '</small></div>' +
+          '<div class="rtk-sha">' + (r.phone ? '<button class="rtk-shb" onclick="bsbShopWa(\'' + id + '\')">💬</button>' : '') + (r.email ? '<button class="rtk-shb" onclick="bsbShopMail(\'' + id + '\')">✉</button>' : '') + acao + '</div></div>';
+      }).join('') + '</div>';
+  };
+  function acha(id){ return S.rows.filter(function(r){ return String(r.order_id) === String(id); })[0]; }
+  function texto(r){
+    var pri = String(r.customer_name || '').trim().split(/\s+/)[0] || 'there', it = itens(r.itens);
+    if (r.is_giftcard) return 'Hello ' + pri + ', ' + me() + ' here :)\n\nThank you so much for your order (' + (r.order_name || '') + '). Your gift card is on its way to you by email today.\n\nIf it is a present and you would like it to arrive on a certain day, or you would rather collect it here, just tell me and I will sort it :)';
+    return 'Hello ' + pri + ', ' + me() + ' here :)\n\nThank you so much for your order (' + (r.order_name || '') + ')' + (it ? ', your ' + it : '') + '.\n\nIt is being packed today. Would you like us to post it, or would you rather collect it next time you are in? :)';
+  }
+  window.bsbShopWa = function(id){ var r = acha(id); if (!r) return; var p = String(r.phone || '').replace(/\D/g, ''); window.open('https://web.whatsapp.com/send?phone=' + p + '&text=' + encodeURIComponent(texto(r)), 'bsbwa'); };
+  window.bsbShopMail = function(id){ var r = acha(id); if (!r) return; var t = texto(r); try { navigator.clipboard.writeText(r.email + '\n\n' + t); } catch (x) {} location.href = 'mailto:' + encodeURIComponent(r.email) + '?subject=' + encodeURIComponent('Your order ' + (r.order_name || '') + ' · Brazilian Soul Beauty') + '&body=' + encodeURIComponent(t); };
+  window.bsbShopMarca = function(id, o){
+    var r = acha(id); if (!r || S.busy) return; S.busy = true;
+    var agora = new Date().toISOString(), body = { order_id: String(id), updated_at: agora };
+    if (o === 'prep') { body.prep_at = agora; body.prep_by = me(); body.sent_at = null; body.sent_by = null; body.how = null; }
+    else { var sel = document.getElementById('tks' + id); body.prep_at = r.prep_at || agora; body.prep_by = r.prep_by || me(); body.sent_at = agora; body.sent_by = me(); body.how = (sel && sel.value) || 'email'; }
+    fetch(SBU + 'bsb_shopify_prep?on_conflict=order_id', { method: 'POST', headers: Object.assign({ Prefer: 'resolution=merge-duplicates,return=minimal' }, H), body: JSON.stringify(body) })
+      .then(function(res){ if (!res.ok) throw 0;
+        if (o === 'sent') S.rows = S.rows.filter(function(x){ return x !== r; }); else { r.etapa = 'preparado'; r.prep_at = body.prep_at; r.prep_by = body.prep_by; }
+        repinta(); if (window.jToast) jToast(o === 'sent' ? '📦 Sent ✓' : '✓ Prepared'); })
+      .catch(function(){ alert('⚠ Not saved, check the wi-fi and try again'); })
+      .then(function(){ S.busy = false; });
+  };
+  var css = document.createElement('style');
+  css.textContent = '.rtk-shop{background:#fff;border:2px solid #E9E4FB;border-radius:18px;padding:12px;margin-bottom:12px;font-family:Inter,sans-serif}' +
+    '.rtk-shh{font-weight:800;font-size:15px;margin-bottom:8px;display:flex;gap:6px;align-items:center}.rtk-shh span{background:#5B47E0;color:#fff;border-radius:999px;font-size:12px;padding:1px 8px}.rtk-shh em{margin-left:auto;font-style:normal;font-size:12px;font-weight:500;color:#8B8DA8}' +
+    '.rtk-shr{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;background:#F8F7FC;margin-bottom:6px}.rtk-shr.late{background:#FEF6E7}.rtk-shr small{color:#585A75;font-size:12px}.rtk-shr small.w{color:#8B8DA8}.rtk-shr.late small.w{color:#B07207;font-weight:600}' +
+    '.rtk-sha{display:flex;gap:6px;align-items:center;flex:none}.rtk-shb{border:1px solid #DCD8F5;background:#fff;color:#5B47E0;border-radius:999px;padding:7px 11px;font:600 12.5px Inter,sans-serif;cursor:pointer}.rtk-shb.ok{border-color:#22B66E;color:#1B7A4A}.rtk-shb.go{background:#22B66E;border-color:#22B66E;color:#fff}' +
+    '.rtk-shs{border:1px solid #DCD8F5;border-radius:10px;padding:6px;font:500 12.5px Inter,sans-serif}';
+  document.head.appendChild(css);
+  load(); setInterval(load, 60000);
+})();
+/*BSB-TKSHOP344-FIM*/</script>
+<style>/*BSB-GIFT376-INICIO*/.bsbGift{margin:8px 0 2px;padding:8px 12px;border-radius:12px;background:#FFEAF3;color:#C2185B;font:600 13px/1.35 Inter,system-ui,sans-serif}.bsbGift b{color:#8E1450}/*BSB-GIFT376-FIM*/</style>
+<script>/*BSB-GIFT376-JS*/
+/* Ligia 22/10: no check do make (Skin) da Joana, o lembrete do presente do mes */
+(function(){
+  var K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',G='';
+  function ym(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit'}).format(new Date()).slice(0,7);}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  fetch('https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/bsb_sp_settings?select=value&key=eq.look_gift',{headers:{apikey:K,Authorization:'Bearer '+K}})
+    .then(function(r){return r.json()}).then(function(r){G=((r[0]||{}).value||{})[ym()]||'';put();}).catch(function(){});
+  function chip(){var s=document.createElement('div');s.className='bsbGift';s.innerHTML='🎁 This month’s make-up gift: <b>'+esc(G)+'</b> · look ready every day = 🔑';return s;}
+  function put(){if(!G)return;document.querySelectorAll('body *').forEach(function(el){if(el.children.length===0&&/^(Make-up|Skin) · fresh and glowy/.test((el.textContent||'').trim())&&!(el.parentNode&&el.parentNode.querySelector('.bsbGift'))){el.insertAdjacentElement('afterend',chip());}});}
+  new MutationObserver(function(){put();}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+</body></html>
