@@ -252,6 +252,9 @@ body.noprog .prog{display:none!important}
 .ac-rec>div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}
 .ac-rec .ac-rh{font:600 13px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--bronze-deep);padding-bottom:10px}
 .ac-rec .ac-tot{border-top:1px solid var(--hairline);margin-top:6px;padding-top:12px;font-size:17px}
+.ac-sub{font:300 16px var(--serif);font-style:italic;color:var(--ink-soft);margin:10px 0 0}
+.ac-trust{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.ac-trust span{background:#fff;border:1px solid var(--hairline);border-radius:999px;padding:8px 14px;font-size:13px}.ac-trust b{color:var(--bronze-deep);font-weight:500}
+.ac-cta{text-align:center;display:flex;flex-direction:column;gap:12px}.ac-ready{font:300 20px var(--serif);margin:0}
 .ac-back{text-align:center;font:300 22px var(--serif)}.ac-back b{font-weight:400;color:var(--bronze-deep)}
 
 .tabs{display:flex;gap:8px;padding:18px 0 4px}
@@ -262,6 +265,15 @@ body.tab-list .grid>.stack>section:not(#savedPanel),body.tab-list .grid>aside{di
 body.tab-list .grid{grid-template-columns:1fr!important}
 .nowc{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;padding:14px 18px;border-radius:16px;border:0;background:linear-gradient(135deg,#7A5CFF,#5B47E0);color:#fff;text-align:left;cursor:pointer;box-shadow:0 8px 20px rgba(91,71,224,.25)}
 .nowc em{font-style:normal;font-size:26px}.nowc span{display:flex;flex-direction:column;gap:2px}.nowc small{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.85}.nowc b{font:700 18px var(--sans)}.nowc i{font-style:normal;font-size:13px;opacity:.9}.nowc strong{margin-left:auto;background:rgba(255,255,255,.2);padding:8px 14px;border-radius:999px;font:600 13px var(--sans)}
+#brWarn{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);max-width:560px;width:calc(100% - 32px);background:#B3261E;color:#fff;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:6px;box-shadow:0 14px 34px rgba(0,0,0,.25);z-index:9999;transition:transform .3s;font:400 14px/1.45 var(--sans)}#brWarn.on{transform:translate(-50%,0)}#brWarn b{font-size:16px}
+.pol{margin:18px 0 4px;border:1.5px solid #F2C9C4;background:#FFFBFA;border-radius:14px;padding:12px 16px}
+.pol summary{list-style:none;display:flex;align-items:center;gap:12px;cursor:pointer;flex-wrap:wrap}.pol summary::-webkit-details-marker{display:none}
+.pol .polt{font:600 13px var(--sans);color:#B3261E}.pol .pols{font:400 13px var(--sans);color:var(--ink);background:none;border:0;padding:0;width:auto;min-height:0}.pol .polm{margin-left:auto;font:600 12px var(--sans);color:#B3261E}
+.pol[open] .polm{display:none}.pol ol{margin:12px 0 0;padding-left:20px;display:grid;gap:6px;font-size:13px;line-height:1.45}.pol ol b{color:#B3261E}
+.pol .why{margin-top:12px;padding-top:12px;border-top:1px solid #F2C9C4;font-size:13px}.pol .why>div{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin-top:8px;color:var(--ink-soft)}.pol .why span b{color:#3E8E4E}
+.why2{margin:18px 0 0;padding:14px 16px;border-radius:14px;background:#EEF7EE;border:0;font-size:13px}.why2>b{font:700 14px var(--sans);color:#1E5B37}
+.why2>div{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.why2 span{display:flex;flex-direction:column;gap:3px;background:#fff;border-radius:12px;padding:10px 12px;color:var(--ink-soft);line-height:1.4}.why2 span b{color:#3E8E4E}
+.pol{margin-top:10px}
 </style>
 <style>/*BSB-PROP2*/
 .prop{padding-bottom:84px}
@@ -385,6 +397,13 @@ body.tab-list .grid{grid-template-columns:1fr!important}
         <div id="acBox">
           <div class="acl">✨ What we did today</div><div class="chips" id="acDone"></div>
           <div class="acl">🎯 Skin goals</div><div class="chips" id="acGoals"></div>
+          <div class="why why2"><b>💚 Why Eminence</b><div><span>🌱 <b>Organic results.</b> The same line you use in every BSB facial.</span><span>🏠 <b>Her result lasts.</b> Following your ritual at home, her skin keeps improving.</span><span>💜 <b>She comes back.</b> Clients who continue at home come back for the next step.</span><span>✨ <b>Your expertise.</b> One brand, one clear voice.</span></div></div>
+          <details class="pol"><summary><span class="polt">📜 BSB policy · Retail</span><span class="pols">Eminence only. BSB has a partner contract with Eminence.</span><span class="polm">See all ›</span></summary>
+            <ol><li><b>BSB recommends Eminence only.</b> BSB has a partner contract with Eminence and you represent the brand in the room.</li>
+            <li><b>No other brands.</b> Do not recommend, name or sell another brand to a BSB client.</li>
+            <li><b>Every facial client leaves with her Eminence aftercare</b>, sent through this app.</li>
+            <li>This is part of BSB company policy and of the contract with Eminence. Not following it is handled under BSB policy.</li></ol>
+            </details>
           <div class="acl">☀️ Morning</div><div class="slots" id="acAM"></div>
           <div class="acl">🌙 Evening</div><div class="slots" id="acPM"></div>
           <div class="acl">🗓 Once a week</div><div class="slots" id="acWK"></div>
@@ -648,11 +667,17 @@ function acHTML(P,alone){const A=Object.assign({done:[],goals:[],r:{},focus:[]},
   const its=[...new Set(Object.values(A.r||{}).filter(Boolean))],tot=its.reduce((a,n)=>a+(PR[n]||0),0);
   const recBox=REC&&its.length?`<section class="p3-sec"><div class="pwrap"><div class="ac-rec"><div class="ac-rh">🧾 Reception · Eminence for her</div>${its.map(n=>`<div><span>${esc(n)}</span><b>£${PR[n]||"?"}</b></div>`).join("")}<div class="ac-tot"><span>${its.length} products</span><b>£${tot}</b></div></div></div></section>`:"";
   const sec=(h,b)=>b?`<section class="p3-sec"><div class="pwrap"><h2>${h}</h2>${b}</div></section>`:"";
-  const head=alone?`<section class="ac-hero p3-hero"><div class="pwrap"><div class="p3-made">From today's visit with ${th}</div><h1>${first?first+", your":"Your"}<br><em>aftercare</em></h1>${tags(A.done)}</div></section>`:sec("From today's visit",tags(A.done,1));
+  const head=alone?`<section class="ac-hero p3-hero"><div class="pwrap"><div class="p3-made">From today's facial with ${th}</div><h1>${first?first+", your":"Your"}<br><em>skin ritual</em></h1><p class="ac-sub">Chosen by ${th} for your skin, today.</p>${tags(A.done)}</div></section>`:sec("From today's visit",tags(A.done,1));
   const note=(A.note||"").trim()?`<section class="p3-sec p3-notebox"><div class="pwrap"><blockquote>${esc(A.note)}<span class="sig">${esc(P.therapist||"")} · your skin therapist</span></blockquote></div></section>`:"";
   const next=(A.focus.length||A.back)?sec("Your next facial",(A.back?`<p class="ac-back">In <b>${esc(A.back)}</b></p>`:"")+tags(A.focus)):"";
+  const fn=P.client?P.client.trim().split(" ")[0]:"me";
+  const buyMsg=`Hi! It's ${fn} 😊 I'd like my skin ritual from today, please:\n`+its.map(n=>"• "+n).join("\n");
+  const bookMsg=`Hi! It's ${fn}. I'd like to book my next facial with ${(P.therapist||"").trim().split(" ")[0]}`+(A.back?` in ${A.back}`:"")+".";
+  const trust=alone&&its.length?`<section class="p3-sec"><div class="pwrap"><div class="ac-trust"><span>🌱 <b>Organic</b> Éminence</span><span>🧪 <b>Clinically</b> tested</span><span>✨ <b>Used</b> in your facial today</span></div></div></section>`:"";
+  const cta=alone&&its.length?`<section class="p3-sec"><div class="pwrap ac-cta"><p class="ac-ready">Your ritual is ready for you at reception.</p><a class="p3-yes" href="${wa(buyMsg)}" target="_blank" rel="noopener">Yes, I'd like my ritual</a>${A.back?`<a class="p3-ask" href="${wa(bookMsg)}" target="_blank" rel="noopener">Book my next facial</a>`:""}</div></section>`:"";
+  const bar=alone&&its.length?`<div class="p3-bar"><div><b>Your skin ritual</b><small>${its.length} ${its.length>1?"products":"product"} chosen for you</small></div><a href="${wa(buyMsg)}" target="_blank" rel="noopener">Yes, I'd like it</a></div>`:"";
   const end=alone?`<section class="p3-sec p3-end"><div class="pwrap"><a class="p3-ask" href="${wa("Hi! It's "+(P.client?P.client.trim().split(" ")[0]:"me")+". A question about my aftercare:")}" target="_blank" rel="noopener">I have a question</a></div></section><section class="p3-terms"><div class="pwrap"><div class="addr">Brazilian Soul Beauty · Caring for London skin since 2012 · 36 Bromell's Road, Clapham, SW4 0BG</div></div></section>`:"";
-  return recBox+head+sec("Your skin goals",tags(A.goals,1))+sec("Your routine at home",rout)+next+note+end}
+  return recBox+head+sec("Your skin goals",tags(A.goals,1))+sec("Your routine at home",rout)+trust+(REC?"":cta)+next+note+end+(REC?"":bar)}
 function proposalHTML(P){const K=P.kinds||{prog:1};if(K.ac&&!K.prog)return acHTML(P,true);const h=progHTML(P);if(!K.ac)return h;const a=acHTML(P,false),m='<section class="p3-sec p3-notebox">';return h.includes(m)?h.replace(m,a+m):h+a}
 function progHTML(P){
   const save=st;st=P;const c=calc();st=save;
@@ -777,7 +802,7 @@ async function setStatus(v){if(!st.client.trim()){cloud("Choose the client first
 document.querySelectorAll("[data-status]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.status)));
 /*BSB-STATS*/function renderStats(L){const by={};L.forEach(p=>{const t=String(p.therapist||"Other").trim().split(" ")[0]||"Other";const b=by[t]=by[t]||{n:0,out:0,won:0,lost:0,val:0};b.n++;if(["to_send","sent","won","lost"].includes(p.status))b.out++;if(p.status==="won"){b.won++;b.val+=+p.price||0}if(p.status==="lost")b.lost++});
 const T=Object.entries(by).sort((a,b)=>b[1].n-a[1].n);
-$("pstats").innerHTML=T.map(([t,b])=>{const d=b.won+b.lost,r=d?Math.round(b.won/d*100):null;return `<div class="ps"><div class="pst">${esc(t)}</div><div class="psn"><b>${b.n}</b><span>plans</span></div><div class="psn"><b>${b.out}</b><span>sent</span></div><div class="psn"><b>${b.won}</b><span>said yes</span></div><div class="psn ${r==null?"":r>=50?"good":"low"}"><b>${r==null?"-":r+"%"}</b><span>yes rate</span></div><div class="psn"><b>${gbp(b.val)}</b><span>accepted</span></div></div>`}).join("")}
+$("pstats").innerHTML=T.map(([t,b])=>{const d=b.won+b.lost,r=d?Math.round(b.won/d*100):null;return `<div class="pols"><div class="pst">${esc(t)}</div><div class="psn"><b>${b.n}</b><span>plans</span></div><div class="psn"><b>${b.out}</b><span>sent</span></div><div class="psn"><b>${b.won}</b><span>said yes</span></div><div class="psn ${r==null?"":r>=50?"good":"low"}"><b>${r==null?"-":r+"%"}</b><span>yes rate</span></div><div class="psn"><b>${gbp(b.val)}</b><span>accepted</span></div></div>`}).join("")}
 async function loadList(){
   try{const L=await sb("bsb_packages?select=id,client_name,title,price,status,updated_at,event_date,therapist&order=updated_at.desc&limit=300");
     $("plist").innerHTML=L.length?L.map(p=>`<button class="prow${p.id===PKG?" on":""}" data-open="${p.id}"><span>${esc(p.client_name||"No client yet")}<small>${esc(p.title||"Package")} · updated ${new Date(p.updated_at).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</small></span><span class="pr">${p.price!=null?gbp(+p.price):""}</span><span class="st ${p.status}">${STL[p.status]||p.status}</span><span class="pdel" role="button" title="Remove" data-del="${p.id}" data-st="${p.status}" data-nm="${esc(p.client_name||"")}">&#10005;</span></button>`).join(""):'<p class="note">No packages yet. Choose the client and a treatment, and it saves itself.</p>';renderStats(L);
@@ -853,5 +878,13 @@ setTab("build");
 <script>/*BSB-NOW2*/
 document.getElementById("nowBox").addEventListener("click",e=>{const b=e.target.closest("[data-ext]");if(!b)return;const x=DAY.find(y=>y.ext_id===b.dataset.ext);if(x)pick(x)});
 document.getElementById("chgClient").addEventListener("click",()=>{S_CHG=true;renderDay()});
+</script>
+<script>/*BSB-BRANDBLOCK*/
+const NOBR=["academie scientifique", "acad\u00e9mie", "aesop", "alumier", "anua", "aromatherapy associates", "avene", "av\u00e8ne", "babor", "beauty of joseon", "bioderma", "biologique recherche", "bobbi brown", "bondi sands", "bulldog", "byoma", "caudalie", "cera ve", "cerave", "charlotte tilbury", "circadia", "clarins", "clarisonic", "clinique", "comfort zone", "cosmedix", "cosrx", "darphin", "decleor", "decl\u00e9or", "dennis gross", "dermalogica", "dermaquest", "dr dennis gross", "dr sam", "dr. sam", "drunk elephant", "elemis", "elizabeth arden", "emma hardie", "environ", "estee lauder", "esthederm", "est\u00e9e lauder", "eucerin", "eve lom", "exuviance", "faace", "fenty", "first aid beauty", "foreo", "garnier", "germaine de capuccini", "glossier", "glow recipe", "grown alchemist", "guinot", "heliocare", "hydropeptide", "image skin care", "image skincare", "inkey", "is clinical", "jan marini", "kate somerville", "kiehl", "la mer", "la roche", "lancome", "lanc\u00f4me", "laroche", "liz earle", "lumity", "mario badescu", "medi-peel", "medicube", "medik8", "mesoestetic", "murad", "neostrata", "neutrogena", "nivea", "no 7", "no7", "nuface", "obagi", "olay", "omorovicza", "origins", "osmosis", "paula's choice", "paulas choice", "payot", "pca skin", "peter thomas roth", "pevonia", "pixi", "rejuvi", "ren clean", "revolution skincare", "rhode", "shiseido", "simple skincare", "sisley", "sk-ii", "sk2", "skin better", "skin ceuticals", "skinbetter", "skinceuticals", "skingredients", "sothys", "summer fridays", "sunday riley", "tata harper", "tatcha", "thalgo", "the ordinary", "ultrasun", "vichy", "zo skin"];
+function brandHit(t){t=(t||"").toLowerCase();return NOBR.find(b=>new RegExp("(^|[^a-z])"+b.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"($|[^a-z])").test(t))}
+function brandWarn(b){let w=document.getElementById("brWarn");if(!w){w=document.createElement("div");w.id="brWarn";document.body.appendChild(w)}
+  w.innerHTML='<b>🚫 "'+esc(b.replace(/\b\w/g,c=>c.toUpperCase()))+'" is another brand</b><span>You cannot recommend other brands to BSB clients. BSB has a partner contract with Eminence, and as a BSB therapist you represent Eminence.</span>';w.className="on";clearTimeout(w._t);w._t=setTimeout(()=>w.className="",6000)}
+document.addEventListener("keydown",e=>{const el=e.target;if(el.dataset&&el.dataset.oth&&e.key==="Enter"){const b=brandHit(el.value);if(b){e.preventDefault();e.stopImmediatePropagation();el.value="";brandWarn(b)}}},true);
+document.addEventListener("input",e=>{const el=e.target;if(el.id==="acNote"||el.id==="note"){const b=brandHit(el.value);if(b){el.value=el.value.replace(new RegExp(b.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"ig"),"").replace(/\s{2,}/g," ");if(el.id==="acNote")st.ac.note=el.value;else st.note=el.value;brandWarn(b)}}},true);
 </script>
 </body></html>
