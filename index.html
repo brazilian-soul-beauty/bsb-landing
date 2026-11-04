@@ -21261,7 +21261,7 @@ try{ cxPerfilCarrega(); }catch(e){}
   function hm(t){var d=new Date(t);return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
   function acCard(x){var it=acItems(x),tot=acTotal(x),msg=acMsg(x),w=wa(x.client_phone,msg),sent=x.status!=='to_send',
       bWarn=x.ac_bought===true&&!x.auto_bought, nx=x.auto_next?new Date(x.auto_next+'T12:00:00'):null;
-    var h='<div class="pks-c ac'+(acOpen(x)?'':' acdone')+'">'+'<div class="pks-h"><div><div class="nm">🧴 '+e(x.client_name)+'</div><div class="meta">Aftercare · with '+e(th(x))+' · '+it.length+' products · <b>'+gbp(tot)+'</b></div>'+(x.client_phone?'<div class="meta">📞 '+e(x.client_phone)+'</div>':'<div class="meta" style="color:#E5484D">No phone on file</div>')+'</div><a class="acr" href="'+APP+e(x.id)+'.r" target="_blank" rel="noopener">See with prices ›</a></div>';
+    var h='<div class="pks-c ac'+(acOpen(x)?'':' acdone')+'" data-acid="'+e(x.id)+'">'+'<div class="pks-h"><div><div class="nm">🧴 '+e(x.client_name)+'</div><div class="meta">Aftercare · with '+e(th(x))+' · '+it.length+(it.length===1?' product':' products')+' · <b>'+gbp(tot)+'</b></div>'+(x.client_phone?'<div class="meta">📞 '+e(x.client_phone)+'</div>':'<div class="meta" style="color:#E5484D">No phone on file</div>')+'</div><a class="acr" href="'+APP+e(x.id)+'.r" target="_blank" rel="noopener">See with prices ›</a></div>';
     h+='<div class="acit">'+it.map(function(n){return '<span>'+e(n)+' <b>'+(PR[n]?'£'+PR[n]:'')+'</b></span>'}).join('')+'</div>';
     if(!sent)h+='<textarea readonly>'+e(msg)+'</textarea>';
     h+='<div class="acst">';
@@ -23587,6 +23587,35 @@ try{ cxPerfilCarrega(); }catch(e){}
   new MutationObserver(pass).observe(document.body, { childList: true, subtree: true });
 })();
 /*BSB-TRAIL331-FIM*/</script>
+<script>/*BSB-ACSTEP-INICIO*/
+/* 04/11/2026 Ligia: no card da cliente de facial, a trilha da Joana ganha a parada "Aftercare"
+   depois do Charge: welcome > room > compliment > rebook > charge > AFTERCARE > newsletter.
+   Pronta sozinha quando o aftercare da terapeuta foi enviado (bsb_aftercare_desk). */
+(function(){
+  var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',C={},L={};
+  function isFac(g){try{var ap=(g&&g.appts)||[g&&g.anchor];if(ap.some(function(x){return typeof isNailsA==='function'&&isNailsA(x)}))return false;var c=category((g&&g.main)||g.anchor);return c==='skin'||c==='facial'}catch(e){return false}}
+  function ldate(){return new Date().toLocaleDateString('en-CA',{timeZone:'Europe/London'})}
+  function st(a){if(!a||!a.clientId)return 'none';var c=C[a.clientId];
+    if(c&&Date.now()-c.t<60000)return c.s;
+    if(!L[a.clientId]){L[a.clientId]=1;fetch(SB+'bsb_aftercare_desk?select=id,status&client_id=eq.'+encodeURIComponent(a.clientId)+'&created_at=gte.'+ldate()+'&order=created_at.desc&limit=1',{headers:{apikey:K}})
+      .then(function(r){return r.ok?r.json():[]}).catch(function(){return []})
+      .then(function(r){var x=r&&r[0];C[a.clientId]={t:Date.now(),s:x?(x.status==='to_send'?'to_send':'sent'):'none',id:x&&x.id};L[a.clientId]=0;try{if(typeof jrRefresh==='function')jrRefresh(a)}catch(e){}})}
+    return c?c.s:'none'}
+  if(typeof window.wizardStepsG==='function'){var _w=window.wizardStepsG;window.wizardStepsG=function(g){var out=_w.apply(this,arguments);
+    try{if(isFac(g)&&!out.some(function(s){return s.k==='aftercare'})){var i=out.findIndex(function(s){return s.k==='charge'});out.splice(i<0?out.length:i+1,0,{k:'aftercare',label:'Aftercare',phase:'Checkout',star:true})}}catch(e){}return out}}
+  if(typeof window.jrSteps==='function'){var _j=window.jrSteps;window.jrSteps=function(a){var r=_j.apply(this,arguments);
+    try{r.forEach(function(p){if(p.k==='aftercare'){p.ic='🧴';var s=st(a);if(s==='sent'){p.auto=true;p.label='Aftercare sent'}else if(s==='to_send')p.label='Send aftercare'}})}catch(e){}return r}}
+  if(typeof window.jrFrase==='function'){var _f=window.jrFrase;window.jrFrase=function(a,k){if(k==='aftercare'){try{var nm=(typeof firstName==='function'?firstName(a.client):'')||'';var th=(typeof dispName==='function')?dispName(a.therapistRaw||a.therapist||''):(a.therapist||'');
+      return '“'+(th||'Your therapist')+' chose your skin ritual for home'+(nm?', '+nm:'')+'. I am sending it to your WhatsApp now.”'}catch(e){return ''}}return _f.apply(this,arguments)}}
+  if(typeof window.jrTap==='function'){var _t=window.jrTap;window.jrTap=function(id,k){if(k!=='aftercare')return _t.apply(this,arguments);
+    var a=null;try{a=apptSeguro(id)}catch(e){}var s=st(a);
+    if(s==='none'){var th='';try{th=dispName(a.therapistRaw||a.therapist||'')}catch(e){}if(window.jToast)jToast('No aftercare from '+(th||'the therapist')+' yet. She sends it from her client card.');return}
+    if(s==='to_send'){var p=document.getElementById('pksPill');if(p)p.click();var aid=C[a.clientId]&&C[a.clientId].id;setTimeout(function(){var c=document.querySelector('[data-acid="'+aid+'"]');if(c){c.scrollIntoView({block:'center',behavior:'smooth'});c.style.boxShadow='0 0 0 3px #22B66E'}},700);return}
+    return _t.apply(this,arguments)}}
+  document.addEventListener('click',function(ev){if(ev.target.closest&&ev.target.closest('button[data-ac]'))setTimeout(function(){C={}},1200)},true);
+})();
+/*BSB-ACSTEP-FIM*/</script>
+
 <script>/*BSB-STEPS333-INICIO*/
 /* v333 (10/10/2026) Ligia, olhando a trilha do card:
    1) "ter opcao de click sim ou nao por baixo do rebook, e fazer ficar verde como os outros quando for feito"
