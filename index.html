@@ -611,7 +611,7 @@ const todayIso=()=>{const t=new Date();return new Date(Date.UTC(t.getFullYear(),
 function defNote(){const ev=(st.eventName||"").toLowerCase();return `I have built this plan around you${ev?" and your "+ev:""}, so every step is timed for your skin to be at its very best${st.eventDate?" on the day":""}. I will be with you at every session, and we will adjust as your skin responds.`}
 const dec=t=>JSON.parse(decodeURIComponent(escape(atob(t.replace(/-/g,"+").replace(/_/g,"/")))));
 function snapshot(){return{v:1,client:st.client,title:st.title,eventName:st.eventName,eventDate:st.eventDate,therapist:st.therapist,pays:st.pays,note:st.note,created:st.created||todayIso(),hold:+st.hold||5,qty:st.qty,gifts:st.gifts,dates:st.dates,kinds:st.kinds||{ac:0,prog:1},ac:st.ac||{}}}
-function linkFor(){return PKG?location.href.split("#")[0]+"#p."+PKG:"(the link appears once the package is saved)"}
+function linkFor(){return PKG?"https://bsb-treatment-plans.vercel.app/?p="+PKG:"(the link appears once the package is saved)"}
 function shortMsg(){const K=st.kinds||{prog:1};if(K.ac&&!K.prog){const n=(st.client||"").trim().split(" ")[0];return `Hello ${n}, ${(st.therapist||"Michelle").trim().split(" ")[0]} here :)\nThank you for today. Here is your aftercare and your routine for home:\n${linkFor()}\n\nAny question, just reply here.`}const n=(st.client||"").trim().split(" ")[0];const t=st.title||"skin plan";return `Hello ${n}, ${(st.therapist||"Michelle").trim().split(" ")[0]} here :)\nHere is your ${t}, built just for you:\n${linkFor()}\n\nI am holding your dates for ${+st.hold||5} days. Any question, just reply here.`}
 const PH=[["Prepare","We clear, calm and renew, so your skin is ready to respond to everything that follows."],["Transform","The deeper work. Firmness, hydration and glow, built from within over the weeks."],["Glow","The finishing touches, timed so your skin is calm, bright and at its best on the day."]];
 const RN=["i.","ii.","iii."];
@@ -867,7 +867,7 @@ $("delBtn").addEventListener("click",async()=>{
   if(!confirm("Delete the package for "+(st.client||"this client")+"?"+(st.status==="won"?" Its sessions also leave the reception list.":"")+" This cannot be undone."))return;
   try{await sb("bsb_packages?id=eq."+PKG,{method:"DELETE",prefer:"return=minimal"});PKG=null;st=JSON.parse(JSON.stringify(BLANK));render(true);loadList();syncDay();cloud("Package deleted.")}
   catch(e){cloud("Could not delete. Check the internet connection.",true)}});
-const H0=(location.hash||"").slice(1);
+const H0=Q.get("p")?"p."+Q.get("p"):(location.hash||"").slice(1);window.addEventListener("hashchange",()=>{if(/^#p\./.test(location.hash))location.reload()});
 if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
 else if(Q.get("d")){st.visit=Q.get("d");const th=Q.get("th")||"";if(th)st.therapist=th.charAt(0).toUpperCase()+th.slice(1);render(true);loadList();syncDay().then(fromCard)}
 else{render(true);loadList();syncDay()}
