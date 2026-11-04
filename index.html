@@ -23593,7 +23593,7 @@ try{ cxPerfilCarrega(); }catch(e){}
    Pronta sozinha quando o aftercare da terapeuta foi enviado (bsb_aftercare_desk). */
 (function(){
   var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',C={},L={};
-  function isFac(g){try{var ap=(g&&g.appts)||[g&&g.anchor];if(ap.some(function(x){return typeof isNailsA==='function'&&isNailsA(x)}))return false;var c=category((g&&g.main)||g.anchor);return c==='skin'||c==='facial'}catch(e){return false}}
+  function isFac(g){try{var ap=(g&&g.appts)||[g&&g.anchor];if(ap.some(function(x){return typeof isNailsA==='function'&&isNailsA(x)}))return false;var c=category((g&&g.main)||g.anchor);if(c==='skin'||c==='facial')return true;return ap.some(function(x){return /facial|face|peel|microneedl|dermaplan|profhilo|jalupro/i.test((x&&x.service)||'')})}catch(e){return false}}
   function ldate(){return new Date().toLocaleDateString('en-CA',{timeZone:'Europe/London'})}
   function st(a){if(!a||!a.clientId)return 'none';var c=C[a.clientId];
     if(c&&Date.now()-c.t<60000)return c.s;
