@@ -224,6 +224,13 @@ body.noprog .prog{display:none!important}
 .kinds{display:flex;gap:10px;margin:14px 0 6px}
 .kinds button{flex:1;padding:16px 10px;border-radius:14px;border:1.5px solid var(--hairline);background:#fff;font:500 15px var(--sans);color:var(--ink-soft);cursor:pointer}
 .kinds button.on{background:var(--bronze);border-color:var(--bronze);color:#fff}
+.ptypes{display:flex;flex-wrap:wrap;gap:6px}.ptypes button{padding:9px 13px;border-radius:999px;border:1.5px solid var(--hairline);background:#fff;font:500 14px var(--sans);color:var(--ink-soft);cursor:pointer}.ptypes button.on{background:var(--bronze);border-color:var(--bronze);color:#fff}.ptypes button b{margin-left:6px;font-weight:600;color:var(--bronze-deep)}.ptypes button.on b{color:#fff}
+.plist2{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}.pp{display:grid;grid-template-columns:1fr auto;gap:2px 8px;text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--hairline);background:#fff;cursor:pointer;font:400 14px var(--sans);color:var(--ink)}.pp.on{border-color:var(--bronze);background:#FBF6EF}.pp small{color:var(--ink-soft);font-size:12px}.pp i{grid-column:1/-1;font-style:normal;font-size:11px;font-weight:600}.pp i.in{color:#1F7A4F}.pp i.out{color:#B26A00}
+#acRout{display:grid;gap:6px;margin-top:10px}.rr{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:#FBF6EF;border:1px solid var(--hairline)}.rr .rt{font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--bronze-deep)}.rr b{font:500 14px var(--sans)}.rw{display:flex;gap:4px}.rw button{padding:6px 9px;border-radius:999px;border:1px solid var(--hairline);background:#fff;font:500 12px var(--sans);cursor:pointer}.rw button.on{background:var(--ink);color:#fff;border-color:var(--ink)}.rx{border:0;background:none;font-size:20px;color:var(--ink-soft);cursor:pointer}
+.care{display:flex;flex-wrap:wrap;gap:6px}.care button{padding:8px 12px;border-radius:10px;border:1.5px dashed var(--hairline);background:#fff;font:400 13px var(--sans);color:var(--ink-soft);cursor:pointer;text-decoration:line-through}.care button.on{border-style:solid;border-color:#9DC9B2;background:#EEF7F1;color:#1F5C3F;text-decoration:none}.care button.on::before{content:"✓ "}
+body:not(.noprog) #acOv{display:none}body.noprog #builder .steps2,body.noprog #stPill,body.noprog #stWhen{display:none}
+.ov{display:grid;gap:6px;margin-top:12px}.ovr{display:flex;gap:8px;font:400 14px var(--sans)}.ovh{display:flex;justify-content:space-between;margin-top:8px;font:600 12px var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--bronze-deep)}.ovh em{font-style:normal;color:var(--ink);text-transform:none;letter-spacing:0}.ovp{display:flex;gap:8px;align-items:center;font:400 13px var(--sans)}.ovp i{margin-left:auto;font-style:normal;font-size:11px;font-weight:600}.ovp i.in{color:#1F7A4F}.ovp i.out{color:#B26A00}.ovp.none{color:var(--ink-soft)}
+.ovsend{margin-top:14px;padding:16px;border-radius:14px;border:0;background:#1F9D6B;color:#fff;font:600 16px var(--sans);cursor:pointer}.ovsend.done{background:#E7F6EE;color:#1F7A4F;cursor:default}
 .acl{font:500 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--bronze-deep);margin:18px 0 8px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips button{padding:9px 14px;border-radius:99px;border:1px solid var(--hairline);background:#fff;font:400 13px var(--sans);color:var(--ink);cursor:pointer}
@@ -235,7 +242,7 @@ body.noprog .prog{display:none!important}
 .ac-hero h1 em{font-style:italic;color:var(--bronze-deep)}
 .ac-done{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
 .ac-done span{padding:7px 14px;border-radius:99px;background:var(--lime-deep);font-size:13px}
-.ac-steps{display:grid;gap:10px}
+.ac-steps{display:grid;gap:10px}.ac-img{width:52px;height:52px;object-fit:contain;border-radius:12px;background:#fff;flex:none}.ac-care{list-style:none;padding:0;margin:0;display:grid;gap:8px}.ac-care li{background:#fff;border:1px solid var(--hairline);border-radius:14px;padding:12px 14px 12px 40px;position:relative;font:400 15px var(--sans);color:var(--ink)}.ac-care li::before{content:"✓";position:absolute;left:15px;color:#3E8E4E;font-weight:700}.ac-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--lime-deep)}.ac-total span{font:500 13px var(--sans);color:var(--ink-soft)}.ac-total b{font:500 22px var(--serif);color:var(--ink)}
 .ac-step{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--hairline);border-radius:16px;padding:14px 16px}
 .ac-step b{width:34px;height:34px;border-radius:50%;background:var(--lime-deep);display:grid;place-items:center;font:500 13px var(--sans);color:var(--bronze-deep);flex:none}
 .ac-step div{display:flex;flex-direction:column}.ac-step small{color:var(--ink-soft);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
@@ -272,7 +279,7 @@ body.tab-list .grid{grid-template-columns:1fr!important}
 .pol[open] .polm{display:none}.pol ol{margin:12px 0 0;padding-left:20px;display:grid;gap:6px;font-size:13px;line-height:1.45}.pol ol b{color:#B3261E}
 .pol .why{margin-top:12px;padding-top:12px;border-top:1px solid #F2C9C4;font-size:13px}.pol .why>div{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin-top:8px;color:var(--ink-soft)}.pol .why span b{color:#3E8E4E}
 .why2{margin:18px 0 0;padding:14px 16px;border-radius:14px;background:#EEF7EE;border:0;font-size:13px}.why2>b{font:700 14px var(--sans);color:#1E5B37}
-.why2>div{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.why2 span{display:flex;flex-direction:column;gap:3px;background:#fff;border-radius:12px;padding:10px 12px;color:var(--ink-soft);line-height:1.4}.why2 span b{color:#3E8E4E}
+.why2>div{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.why2 span{display:flex;flex-direction:column;gap:3px;background:#fff;border-radius:12px;padding:10px 12px;color:var(--ink-soft);line-height:1.4}.why2 span b{color:#3E8E4E}.why2{cursor:pointer}.why2>b em{font:500 11px var(--sans);color:#6A9C78;margin-left:8px;font-style:normal}.why2 small{display:none;font-size:13px}.why2.open small{display:block}.why2.open>b em{display:none}
 .pol{margin-top:10px}
 #okT{position:fixed;left:50%;top:24px;transform:translate(-50%,-160%);max-width:520px;width:calc(100% - 32px);color:#fff;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 14px 34px rgba(0,0,0,.25);z-index:10000;transition:transform .3s;font:400 14px/1.45 var(--sans)}#okT.on{transform:translate(-50%,0)}#okT b{font-size:18px}
 </style>
@@ -398,17 +405,16 @@ body.tab-list .grid{grid-template-columns:1fr!important}
         <div class="kinds"><button type="button" data-kind="ac">🧴 Aftercare</button><button type="button" data-kind="prog">📋 Programme</button></div>
         <div id="acBox">
           <div class="acl">✨ What we did today</div><div class="chips" id="acDone"></div>
+          <div class="acl">🩹 After today's treatment</div><div class="care" id="acCare"></div>
           <div class="acl">🎯 Skin goals</div><div class="chips" id="acGoals"></div>
-          <div class="why why2"><b>💚 Why Eminence</b><div><span>🌱 <b>Organic results.</b> The same line you use in every BSB facial.</span><span>🏠 <b>Her result lasts.</b> Following your ritual at home, her skin keeps improving.</span><span>💜 <b>She comes back.</b> Clients who continue at home come back for the next step.</span><span>✨ <b>Your expertise.</b> One brand, one clear voice.</span></div></div>
+          <div class="why why2" onclick="this.classList.toggle('open')"><b>💚 Why Eminence <em>tap to read</em></b><div><span>🌱 <b>Organic results.</b><small>The same line you use in every BSB facial.</small></span><span>🏠 <b>Her result lasts.</b><small>Following your ritual at home, her skin keeps improving.</small></span><span>💜 <b>She comes back.</b><small>Clients who continue at home come back for the next step.</small></span><span>✨ <b>Your expertise.</b><small>One brand, one clear voice.</small></span></div></div>
           <details class="pol"><summary><span class="polt">📜 BSB policy · Retail</span><span class="pols">Eminence only. BSB has a partner contract with Eminence.</span><span class="polm">See all ›</span></summary>
             <ol><li><b>BSB recommends Eminence only.</b> BSB has a partner contract with Eminence and you represent the brand in the room.</li>
             <li><b>No other brands.</b> Do not recommend, name or sell another brand to a BSB client.</li>
             <li><b>Every facial client leaves with her Eminence aftercare</b>, sent through this app.</li>
             <li>This is part of BSB company policy and of the contract with Eminence. Not following it is handled under BSB policy.</li></ol>
             </details>
-          <div class="acl">☀️ Morning</div><div class="slots" id="acAM"></div>
-          <div class="acl">🌙 Evening</div><div class="slots" id="acPM"></div>
-          <div class="acl">🗓 Once a week</div><div class="slots" id="acWK"></div>
+          <div class="acl">🧴 Her routine</div><div class="ptypes" id="acTypes"></div><div class="plist2" id="acProds"></div><div id="acRout"></div>
           <div class="acl">🔜 Next facial focus</div><div class="chips" id="acFocus"></div>
           <div class="acl">📅 Come back in</div><div class="chips" id="acBack"></div>
           <label class="f" style="margin-top:14px">Note for her<textarea class="f2" id="acNote" style="min-height:70px"></textarea></label>
@@ -448,7 +454,7 @@ body.tab-list .grid{grid-template-columns:1fr!important}
     <aside class="side">
       <div class="card limewash">
         <div class="eyebrow" id="cEyebrow">Package</div>
-        <h2 id="cTitle">Your skin <em>journey</em></h2>
+        <h2 id="cTitle">Your skin <em>journey</em></h2><div id="acOv"></div>
         <div class="sum prog">
           <div><span>Sessions</span><span id="sSessions">0</span></div>
           <div><span>Total value</span><span id="sTotal">£0</span></div>
@@ -637,7 +643,27 @@ const GOALS=["Hydration","Brightness","Sensitivity / Redness","Skin Barrier Repa
 const FOCUS=["Deep Hydration","Skin Barrier Repair","Brightening","Calming","Clarifying","Firming","Resurfacing"];
 const ACBACK=["2 weeks","3 weeks","4 weeks","6 weeks"];
 const ACSVC=()=>SERVICES.filter(c=>["Facials","Advanced Skin","Skin Boosters & Injectables"].includes(c.cat)).flatMap(c=>c.items).concat(SERVICES.flatMap(c=>c.items).filter(i=>i[0]==="fls"));
-function acN(A){return Object.values(A.r||{}).filter(Boolean).length}
+function acN(A){acSyncP(A);return A.p.length}
+const PT=[["cl","Cleanser"],["mist","Toner"],["se","Serum"],["eye","Eye"],["mo","Moisturiser"],["nt","Night"],["spf","SPF"],["wk","Masque / Peel"]],PTL=Object.fromEntries(PT);
+const PWD={cl:"both",mist:"both",se:"both",eye:"both",mo:"both",nt:"pm",spf:"am",wk:"wk"},WH=[["am","☀️ AM"],["pm","🌙 PM"],["both","☀️🌙 Both"],["wk","🗓 Weekly"]];
+let ACT="",STK={},STKI={};const nk=n=>String(n||"").toLowerCase().replace(/[^a-z0-9]/g,""),stq=n=>STK[nk(n)],sti=n=>STKI[nk(n)];
+function acSyncP(A){if(!Array.isArray(A.p)){A.p=[];const by={};Object.entries(A.r||{}).forEach(([k,n])=>{if(!n)return;const w=k.startsWith("am_")?"am":k.startsWith("pm_")?"pm":"wk",t=k.replace(/^(am|pm)_/,"");if(by[n]){if(by[n].w!==w&&w!=="wk")by[n].w="both";return}by[n]={t:t==="wk"?"wk":t,n,w};A.p.push(by[n])})}
+  const r={};A.p.forEach((x,i)=>{(x.w==="both"?["am","pm"]:[x.w]).forEach(w=>{let k=w==="wk"?"wk":w+"_"+x.t;while(r[k])k+="_"+i;r[k]=x.n})});A.r=r}
+const CARE={base:["Drink plenty of water today","Use SPF 30+ every morning, even when it is cloudy"],
+ ext:["No make-up for 12 hours","Don't touch or pick the treated areas","No sauna, steam or hard workouts for 24 hours","No scrubs, peels or retinol for 3 days"],
+ mn:["No make-up for 24 hours","No sun, sauna, swimming or gym for 48 hours","No retinol, acids or scrubs for 5 days"],
+ peel:["Let any flaking come off by itself, don't pick","No retinol, acids or scrubs for 7 days","Keep away from heat and direct sun for 48 hours"],
+ inj:["No make-up for 12 hours","No gym, sauna or alcohol for 24 hours","Don't massage or press the treated area for 48 hours","No other facial treatment for 2 weeks"],
+ mdb:["No make-up for 12 hours","No scrubs or retinol for 3 days"],
+ mass:["Rest and drink extra water today"]};
+function careSug(A){const d=(A.done||[]).join(" | ").toLowerCase();if(!d)return [];const k=[];if(/extraction|facial|luxe|essential|signature/.test(d))k.push("ext");if(/microneedl/.test(d))k.push("mn");if(/peel/.test(d))k.push("peel");if(/profhilo|vitaran|jalupro|booster|inject|polynucl/.test(d))k.push("inj");if(/microderm|dermaplan/.test(d))k.push("mdb");if(/lymph|massage|sculpt/.test(d))k.push("mass");return [...new Set(["base"].concat(k).flatMap(x=>CARE[x]))]}
+function careFor(A){return careSug(A).filter(c=>!(A.careX||[]).includes(c))}
+function acOverview(A){const el=$("acOv");if(!el)return;const its=[...new Set(A.p.map(x=>x.n))],tot=its.reduce((a,n)=>a+(PR[n]||0),0),cr=careFor(A),out=["to_send","sent","won","lost"].includes(st.status),ic={am:"☀️",pm:"🌙",both:"☀️🌙",wk:"🗓"};
+  el.innerHTML=`<div class="ov"><div class="ovr"><span>👤</span><b>${esc(st.client||"Choose the client")}</b></div>${A.done.length?`<div class="ovr"><span>✨</span><b>${esc(A.done.join(", "))}</b></div>`:""}
+  <div class="ovh">🧴 Routine <em>${its.length} · £${tot}</em></div>${A.p.length?A.p.map(x=>`<div class="ovp"><span>${ic[x.w]}</span>${esc(x.n)}<i class="${stq(x.n)>0?"in":stq(x.n)<=0?"out":""}">${stq(x.n)>0?stq(x.n)+" in stock":stq(x.n)<=0?"Order":""}</i></div>`).join(""):'<div class="ovp none">No products yet</div>'}
+  <div class="ovh">🩹 Care <em>${cr.length} tips</em></div>${A.back?`<div class="ovh">📅 Back in <em>${esc(A.back)}</em></div>`:""}
+  <button type="button" class="ovsend${out?" done":""}" ${out?"disabled":""} data-acsend="1">${out?"✓ With reception":"📤 Send to reception"}</button></div>`}
+window.STKP=fetch(SBU+"bsb_eminence_stock?select=name,qty,img",{headers:{apikey:SBK}}).then(r=>r.json()).then(L=>{(L||[]).forEach(x=>{STK[nk(x.name)]=x.qty;STKI[nk(x.name)]=x.img});if(typeof render==="function"&&!document.getElementById("builder").hidden)render()}).catch(()=>{});
 function acTog(arr,v){const i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v)}
 const chipsH=(L,sel,attr)=>L.map(x=>`<button type="button" class="${sel.includes(x)?"on":""}" ${attr}="${esc(x)}">${esc(x)}</button>`).join("");
 function slotsH(key,A){A.o=A.o||{};return SLOTS[key].map(([k,lab,c])=>{const oth=false;return `<label class="slot${A.r[k]?" on":""}"><span>${lab}</span><select data-slot="${k}"><option value="">–</option>${EM[c].map(n=>`<option${!oth&&A.r[k]===n?" selected":""}>${esc(n)}</option>`).join("")}</select></label>`}).join("")}
@@ -649,14 +675,25 @@ function renderAc(){st.kinds=st.kinds||{ac:0,prog:1};st.ac=Object.assign({done:[
   $("acDone").innerHTML=chipsH([...new Set(ACSVC().map(i=>i[1]).concat(A.done))],A.done,"data-acd")+otherH("done");
   $("acGoals").innerHTML=chipsH([...new Set(GOALS.concat(A.goals))],A.goals,"data-acg")+otherH("goals");
   $("acFocus").innerHTML=chipsH([...new Set(FOCUS.concat(A.focus))],A.focus,"data-acf")+otherH("focus");
-  $("acAM").innerHTML=slotsH("am",A);$("acPM").innerHTML=slotsH("pm",A);$("acWK").innerHTML=slotsH("wk",A);
+  acSyncP(A);$("acTypes").innerHTML=PT.map(([t,l])=>`<button type="button" class="${ACT===t?"on":""}" data-pt="${t}">${l}<b>${A.p.filter(x=>x.t===t).length||""}</b></button>`).join("");
+  $("acProds").innerHTML=ACT?EM[ACT].map(n=>{const q=stq(n),on=A.p.some(x=>x.n===n);return `<button type="button" class="pp${on?" on":""}" data-pn="${esc(n)}"><span>${esc(n)}</span><small>£${PR[n]||"?"}</small><i class="${q==null?"":q>0?"in":"out"}">${q==null?"":q>0?q+" in stock":"0 · order"}</i></button>`}).join(""):'<p class="note">Tap a type, then tap the product.</p>';
+  $("acRout").innerHTML=A.p.length?A.p.map((x,i)=>`<div class="rr"><span class="rt">${PTL[x.t]||""}</span><b>${esc(x.n)}</b><span class="rw">${WH.map(([w,l])=>`<button type="button" class="${x.w===w?"on":""}" data-rw="${i}" data-w="${w}">${l}</button>`).join("")}</span><button type="button" class="rx" data-rx="${i}" aria-label="Remove">×</button></div>`).join(""):"";
+  const care=careSug(A);$("acCare").innerHTML=care.length?care.map(c=>`<button type="button" class="${(A.careX||[]).includes(c)?"":"on"}" data-care="${esc(c)}">${esc(c)}</button>`).join(""):'<p class="note">Tick what we did today and her care tips appear here.</p>';
+  acOverview(A);
   $("acBack").innerHTML=chipsH(ACBACK,[A.back],"data-acb");
   if(document.activeElement!==$("acNote"))$("acNote").value=A.note||"";
   {const a=document.querySelector("#s2a strong"),b=document.querySelector("#s2a span"),v=$("viewBtn2");if(a){a.textContent=st.kinds.prog?"Check the proposal":"Show her in the room";b.textContent=st.kinds.prog?"See exactly what she will receive.":"Turn the iPad to her.";v.textContent=st.kinds.prog?"Preview":"Show"}}
   if(!st.kinds.prog){$("cEyebrow").textContent=st.client?"Aftercare for "+st.client:"Aftercare";$("cTitle").innerHTML="Today's <em>aftercare</em>"}}
 document.addEventListener("click",e=>{const k=e.target.closest("[data-kind]");if(k){const K=st.kinds;K[k.dataset.kind]=K[k.dataset.kind]?0:1;if(!K.ac&&!K.prog)K[k.dataset.kind]=1;render();return}
   for(const [at,f] of [["data-acd","done"],["data-acg","goals"],["data-acf","focus"]]){const d=e.target.closest("["+at+"]");if(d){acTog(st.ac[f],d.getAttribute(at));render();return}}
-  const b=e.target.closest("[data-acb]");if(b){st.ac.back=st.ac.back===b.dataset.acb?"":b.dataset.acb;render()}});
+  const b=e.target.closest("[data-acb]");if(b){st.ac.back=st.ac.back===b.dataset.acb?"":b.dataset.acb;render();return}
+  const A=st.ac;acSyncP(A);
+  const pt=e.target.closest("[data-pt]");if(pt){ACT=ACT===pt.dataset.pt?"":pt.dataset.pt;render();return}
+  const pn=e.target.closest("[data-pn]");if(pn){const n=pn.dataset.pn,i=A.p.findIndex(x=>x.n===n);if(i>=0)A.p.splice(i,1);else A.p.push({t:ACT,n,w:PWD[ACT]||"both"});acSyncP(A);render();return}
+  const rw=e.target.closest("[data-rw]");if(rw){A.p[+rw.dataset.rw].w=rw.dataset.w;acSyncP(A);render();return}
+  const rx=e.target.closest("[data-rx]");if(rx){A.p.splice(+rx.dataset.rx,1);acSyncP(A);render();return}
+  const cr=e.target.closest("[data-care]");if(cr){A.careX=A.careX||[];acTog(A.careX,cr.dataset.care);render();return}
+  const sd=e.target.closest("[data-acsend]");if(sd){setStatus("to_send").then(()=>render());return}});
 document.addEventListener("change",e=>{const el=e.target;if(el.dataset&&el.dataset.slot){const k=el.dataset.slot;st.ac.o=st.ac.o||{};if(el.value==="__o"){st.ac.o[k]=1;st.ac.r[k]="";render();const i=document.querySelector('[data-oslot="'+k+'"]');if(i)i.focus()}else{delete st.ac.o[k];st.ac.r[k]=el.value;render()}}});
 document.addEventListener("input",e=>{const el=e.target;if(el.dataset&&el.dataset.oslot){st.ac.r[el.dataset.oslot]=el.value;queueSave()}});
 document.addEventListener("keydown",e=>{const el=e.target;if(el.dataset&&el.dataset.oth&&e.key==="Enter"){e.preventDefault();const v=el.value.trim();if(v&&!st.ac[el.dataset.oth].includes(v))st.ac[el.dataset.oth].push(v);render();const n=document.querySelector('[data-oth="'+el.dataset.oth+'"]');if(n)n.focus()}});
@@ -664,9 +701,11 @@ document.addEventListener("input",e=>{if(e.target.id==="acNote"){st.ac.note=e.ta
 function acHTML(P,alone){const A=Object.assign({done:[],goals:[],r:{},focus:[]},P.ac||{}),first=P.client?esc(P.client.trim().split(" ")[0]):"",th=esc((P.therapist||"Your therapist").trim().split(" ")[0]);
   const wa=t=>"https://wa.me/447447028566?text="+encodeURIComponent(t);
   const tags=(L,left)=>L.length?`<div class="ac-done"${left?' style="justify-content:flex-start"':""}>${L.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:"";
-  const rt=(key,h)=>{const L=SLOTS[key].filter(x=>A.r[x[0]]);return L.length?`<div class="ac-when">${h}</div><div class="ac-steps">${L.map((x,i)=>`<div class="ac-step"><b>${i+1}</b><div><small>${x[1]}</small><strong>${esc(A.r[x[0]])}</strong></div>${REC&&PR[A.r[x[0]]]?`<em class="ac-pr">£${PR[A.r[x[0]]]}</em>`:""}</div>`).join("")}</div>`:""};
-  const rout=rt("am","Morning")+rt("pm","Evening")+rt("wk","Once a week");
-  const its=[...new Set(Object.values(A.r||{}).filter(Boolean))],tot=its.reduce((a,n)=>a+(PR[n]||0),0);
+  acSyncP(A);const ORD=PT.map(x=>x[0]);const rt=(ws,h)=>{const L=A.p.filter(x=>ws.includes(x.w)).sort((a,b)=>ORD.indexOf(a.t)-ORD.indexOf(b.t));return L.length?`<div class="ac-when">${h}</div><div class="ac-steps">${L.map((x,i)=>`<div class="ac-step">${sti(x.n)?`<img class="ac-img" src="${esc(sti(x.n))}" alt="">`:`<b>${i+1}</b>`}<div><small>${PTL[x.t]||""}</small><strong>${esc(x.n)}</strong></div>${PR[x.n]?`<em class="ac-pr">£${PR[x.n]}</em>`:""}</div>`).join("")}</div>`:""};
+  const rout=rt(["am","both"],"☀️ Morning")+rt(["pm","both"],"🌙 Evening")+rt(["wk"],"🗓 Once a week");
+  const its=[...new Set(A.p.map(x=>x.n))],tot=its.reduce((a,n)=>a+(PR[n]||0),0);
+  const cr=careFor(A),careSec=cr.length?((h,b)=>`<section class="p3-sec"><div class="pwrap"><h2>${h}</h2>${b}</div></section>`)("After today's treatment",`<ul class="ac-care">${cr.map(c=>`<li>${esc(c)}</li>`).join("")}</ul>`):"";
+  const totBox=its.length?`<div class="ac-total"><span>Your ritual · ${its.length} ${its.length>1?"products":"product"}</span><b>£${tot}</b></div>`:"";
   const recBox=REC&&its.length?`<section class="p3-sec"><div class="pwrap"><div class="ac-rec"><div class="ac-rh">🧾 Reception · Eminence for her</div>${its.map(n=>`<div><span>${esc(n)}</span><b>£${PR[n]||"?"}</b></div>`).join("")}<div class="ac-tot"><span>${its.length} products</span><b>£${tot}</b></div></div></div></section>`:"";
   const sec=(h,b)=>b?`<section class="p3-sec"><div class="pwrap"><h2>${h}</h2>${b}</div></section>`:"";
   const head=alone?`<section class="ac-hero p3-hero"><div class="pwrap"><div class="p3-made">From today's facial with ${th}</div><h1>${first?first+", your":"Your"}<br><em>skin ritual</em></h1><p class="ac-sub">Chosen by ${th} for your skin, today.</p>${tags(A.done)}</div></section>`:sec("From today's visit",tags(A.done,1));
@@ -679,7 +718,7 @@ function acHTML(P,alone){const A=Object.assign({done:[],goals:[],r:{},focus:[]},
   const cta=alone&&its.length?`<section class="p3-sec"><div class="pwrap ac-cta"><p class="ac-ready">Your ritual is ready for you at reception.</p><a class="p3-yes" href="${wa(buyMsg)}" target="_blank" rel="noopener">Yes, I'd like my ritual</a>${A.back?`<a class="p3-ask" href="${wa(bookMsg)}" target="_blank" rel="noopener">Book my next facial</a>`:""}</div></section>`:"";
   const bar=alone&&its.length?`<div class="p3-bar"><div><b>Your skin ritual</b><small>${its.length} ${its.length>1?"products":"product"} chosen for you</small></div><a href="${wa(buyMsg)}" target="_blank" rel="noopener">Yes, I'd like it</a></div>`:"";
   const end=alone?`<section class="p3-sec p3-end"><div class="pwrap"><a class="p3-ask" href="${wa("Hi! It's "+(P.client?P.client.trim().split(" ")[0]:"me")+". A question about my aftercare:")}" target="_blank" rel="noopener">I have a question</a></div></section><section class="p3-terms"><div class="pwrap"><div class="addr">Brazilian Soul Beauty · Caring for London skin since 2012 · 36 Bromell's Road, Clapham, SW4 0BG</div></div></section>`:"";
-  return recBox+head+sec("Your skin goals",tags(A.goals,1))+sec("Your routine at home",rout)+trust+(REC?"":cta)+next+note+end+(REC?"":bar)}
+  return recBox+head+careSec+sec("Your skin goals",tags(A.goals,1))+sec("Your routine at home",rout+totBox)+trust+(REC?"":cta)+next+note+end+(REC?"":bar)}
 function proposalHTML(P){const K=P.kinds||{prog:1};if(K.ac&&!K.prog)return acHTML(P,true);const h=progHTML(P);if(!K.ac)return h;const a=acHTML(P,false),m='<section class="p3-sec p3-notebox">';return h.includes(m)?h.replace(m,a+m):h+a}
 function progHTML(P){
   const save=st;st=P;const c=calc();st=save;
@@ -842,7 +881,8 @@ $("dayTh").addEventListener("change",renderDay);
 function pick(x){S_CHG=false;
   st.client=String(x.client).trim();st.clientId=x.client_id||null;st.clientExt=x.ext_id;st.visit=x.date;if(!st.therapist&&x.therapist){st.therapist=x.therapist;$("therapist").value=st.therapist}
   {const sv=canon(cleanSvc(x.service||""));st.ac=st.ac||{done:[],goals:[],r:{},focus:[],back:"",note:""};ACSVC().forEach(i=>{if(sv&&sv.includes(canon(i[1]).replace(/®/g,""))&&!st.ac.done.includes(i[1]))st.ac.done.push(i[1])})}
-  $("client").value=st.client;renderDay();render()}
+  $("client").value=st.client;renderDay();render();
+  if(!PKG&&x.ext_id)sb("bsb_packages?client_ext_id=eq."+encodeURIComponent(x.ext_id)+"&select=*&order=updated_at.desc&limit=1").then(r=>{if(r&&r[0]&&!PKG){PKG=r[0].id;st=fromRow(r[0]);render(true);loadList();cloud("Opened what you already saved for "+(st.client||"her")+".")}}).catch(()=>{})}
 $("dayList").addEventListener("click",e=>{const b=e.target.closest("[data-ext]");if(!b)return;const x=DAY.find(y=>y.ext_id===b.dataset.ext);if(x)pick(x)});
 /*BSB-SRCH*/let SQ=null,SRES=[];
 const srow=x=>`<button type="button" class="dc${st.clientExt===x.ext_id?" on":""}" data-sext="${esc(x.ext_id)}"><b>${dShort(String(x.date))}</b><span>${esc(x.client)}<small>${esc((x.start_time?x.start_time+" · ":"")+cleanSvc(x.service))}</small></span><span class="th">${esc(x.therapist||"")}</span></button>`;
@@ -870,7 +910,7 @@ $("delBtn").addEventListener("click",async()=>{
   try{await sb("bsb_packages?id=eq."+PKG,{method:"DELETE",prefer:"return=minimal"});PKG=null;st=JSON.parse(JSON.stringify(BLANK));render(true);loadList();syncDay();cloud("Package deleted.")}
   catch(e){cloud("Could not delete. Check the internet connection.",true)}});
 const H0=Q.get("p")?"p."+Q.get("p"):(location.hash||"").slice(1);window.addEventListener("hashchange",()=>{if(/^#p\./.test(location.hash))location.reload()});
-if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.documentElement.classList.remove("cm");document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
+if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{await Promise.race([window.STKP,new Promise(z=>setTimeout(z,2500))]);if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.documentElement.classList.remove("cm");document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
 else if(Q.get("d")){st.visit=Q.get("d");const th=Q.get("th")||"";if(th)st.therapist=th.charAt(0).toUpperCase()+th.slice(1);render(true);loadList();syncDay().then(fromCard)}
 else{render(true);loadList();syncDay()}
 </script>
