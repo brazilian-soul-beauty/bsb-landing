@@ -274,6 +274,7 @@ body.tab-list .grid{grid-template-columns:1fr!important}
 .why2{margin:18px 0 0;padding:14px 16px;border-radius:14px;background:#EEF7EE;border:0;font-size:13px}.why2>b{font:700 14px var(--sans);color:#1E5B37}
 .why2>div{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.why2 span{display:flex;flex-direction:column;gap:3px;background:#fff;border-radius:12px;padding:10px 12px;color:var(--ink-soft);line-height:1.4}.why2 span b{color:#3E8E4E}
 .pol{margin-top:10px}
+#okT{position:fixed;left:50%;top:24px;transform:translate(-50%,-160%);max-width:520px;width:calc(100% - 32px);color:#fff;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 14px 34px rgba(0,0,0,.25);z-index:10000;transition:transform .3s;font:400 14px/1.45 var(--sans)}#okT.on{transform:translate(-50%,0)}#okT b{font-size:18px}
 </style>
 <style>/*BSB-PROP2*/
 .prop{padding-bottom:84px}
@@ -797,7 +798,8 @@ async function saveNow(){st.kinds=st.kinds||{ac:0,prog:1};if(!PKG&&!hasC())retur
   }catch(e){cloud("Not saved. Check the internet connection, it will try again on the next change.",true)}
   saving=false;if(again){again=false;saveNow()}
 }
-async function setStatus(v){if(!st.client.trim()){cloud("Choose the client first.",true);return}if(v!=="lost"&&!calc().sessions){cloud("Add the treatments first.",true);return}if(v==="won"){const L=sessionsList();if(!L.length){cloud("Add the treatments first.",true);return}const miss=L.filter(x=>!st.dates[x.key]).length;if(miss&&!confirm(miss+(miss>1?" sessions have":" session has")+" no date yet. Send to reception anyway?"))return}st.status=v;const extra=v==="to_send"?{send_requested_at:new Date().toISOString()}:v==="sent"?{sent_at:new Date().toISOString()}:v==="won"?{won_at:new Date().toISOString()}:{};renderStatus();await saveNow();if(PKG&&Object.keys(extra).length){try{await sb("bsb_packages?id=eq."+PKG,{method:"PATCH",body:extra,prefer:"return=minimal"})}catch(e){}}
+async function setStatus(v){if(!st.client.trim()){cloud("Choose the client first.",true);return}if(v!=="lost"&&!hasC()){cloud("Add a product or a treatment first.",true);okToast("Add a product or a treatment first","",true);return}if(v==="won"){const L=sessionsList();if(!L.length){cloud("Add the treatments first.",true);return}const miss=L.filter(x=>!st.dates[x.key]).length;if(miss&&!confirm(miss+(miss>1?" sessions have":" session has")+" no date yet. Send to reception anyway?"))return}st.status=v;const extra=v==="to_send"?{send_requested_at:new Date().toISOString()}:v==="sent"?{sent_at:new Date().toISOString()}:v==="won"?{won_at:new Date().toISOString()}:{};renderStatus();await saveNow();if(PKG&&Object.keys(extra).length){try{await sb("bsb_packages?id=eq."+PKG,{method:"PATCH",body:extra,prefer:"return=minimal"})}catch(e){}}
+  if(v==="to_send"&&st.status==="to_send")okToast("✓ Sent to reception","Joana has it now and will send it to "+((st.client||"").trim().split(" ")[0]||"the client")+" on WhatsApp.");
   $("stWhen").textContent=v==="won"?"Sessions are now on the reception list to book.":v==="to_send"?"Joana will send it to the client from the salon number.":"";}
 document.querySelectorAll("[data-status]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.status)));
 /*BSB-STATS*/function renderStats(L){const by={};L.forEach(p=>{const t=String(p.therapist||"Other").trim().split(" ")[0]||"Other";const b=by[t]=by[t]||{n:0,out:0,won:0,lost:0,val:0};b.n++;if(["to_send","sent","won","lost"].includes(p.status))b.out++;if(p.status==="won"){b.won++;b.val+=+p.price||0}if(p.status==="lost")b.lost++});
@@ -886,5 +888,9 @@ function brandWarn(b){let w=document.getElementById("brWarn");if(!w){w=document.
   w.innerHTML='<b>🚫 "'+esc(b.replace(/\b\w/g,c=>c.toUpperCase()))+'" is another brand</b><span>You cannot recommend other brands to BSB clients. BSB has a partner contract with Eminence, and as a BSB therapist you represent Eminence.</span>';w.className="on";clearTimeout(w._t);w._t=setTimeout(()=>w.className="",6000)}
 document.addEventListener("keydown",e=>{const el=e.target;if(el.dataset&&el.dataset.oth&&e.key==="Enter"){const b=brandHit(el.value);if(b){e.preventDefault();e.stopImmediatePropagation();el.value="";brandWarn(b)}}},true);
 document.addEventListener("input",e=>{const el=e.target;if(el.id==="acNote"||el.id==="note"){const b=brandHit(el.value);if(b){el.value=el.value.replace(new RegExp(b.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"ig"),"").replace(/\s{2,}/g," ");if(el.id==="acNote")st.ac.note=el.value;else st.note=el.value;brandWarn(b)}}},true);
+</script>
+<script>/*BSB-OKTOAST*/
+function okToast(t,sub,bad){let w=document.getElementById("okT");if(!w){w=document.createElement("div");w.id="okT";document.body.appendChild(w)}
+  w.innerHTML='<b>'+esc(t)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'');w.style.background=bad?"#B3261E":"#1F9D6B";w.className="on";clearTimeout(w._t);w._t=setTimeout(()=>w.className="",5000)}
 </script>
 </body></html>
