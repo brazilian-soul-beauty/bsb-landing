@@ -316,7 +316,7 @@ body.tab-list .grid{grid-template-columns:1fr!important}
 .prop .p3-row.event *{color:#fff!important}
 .prop .p3-date{text-align:center;border-right:1px solid var(--hairline);padding-right:8px}
 .prop .p3-date b{display:block;font:600 22px/1 var(--sans);color:var(--ink)}
-.prop .p3-date span{font:500 11px/1 var(--sans);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.prop .p3-date.tbc b{color:var(--bronze)}.prop .p3-date span{font:500 11px/1 var(--sans);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
 .prop .p3-what div{font:500 15px/1.3 var(--sans);color:var(--ink)}
 .prop .p3-what small{display:block;margin-top:3px;font:500 12px/1.2 var(--sans);color:var(--bronze-deep)}
 .prop .p3-notebox blockquote{margin:0;border-left:3px solid var(--bronze);padding:4px 0 4px 16px;font:400 italic 19px/1.55 var(--serif);color:var(--ink)}
@@ -683,18 +683,18 @@ function proposalHTML(P){const K=P.kinds||{prog:1};if(K.ac&&!K.prog)return acHTM
 function progHTML(P){
   const save=st;st=P;const c=calc();st=save;
   const ses=[];
-  SERVICES.forEach(cc=>cc.items.forEach(i=>{const q=P.qty[i[0]]||0;for(let k=0;k<q;k++){const d=P.dates[i[0]+"#"+k];if(d)ses.push({d,n:S[i[0]].n,v:S[i[0]].p,id:i[0]})}}));
-  GIFTS.forEach(g=>{if(P.gifts[g[0]]&&P.dates[g[0]])ses.push({d:P.dates[g[0]],n:g[1],gift:1,id:g[0]})});
-  ses.sort((a,b)=>a.d.localeCompare(b.d));
+  SERVICES.forEach(cc=>cc.items.forEach(i=>{const q=P.qty[i[0]]||0;for(let k=0;k<q;k++){const d=P.dates[i[0]+"#"+k]||"";ses.push({d,n:S[i[0]].n,v:S[i[0]].p,id:i[0]})}}));
+  GIFTS.forEach(g=>{if(P.gifts[g[0]])ses.push({d:P.dates[g[0]]||"",n:g[1],gift:1,id:g[0]})});
+  ses.sort((a,b)=>(a.d?0:1)-(b.d?0:1)||a.d.localeCompare(b.d));const dated=ses.filter(x=>x.d);
   const PHN=[["Prepare",IC.prep],["Transform",IC.trans],["Glow",IC.glow]];const ii=(s,c)=>`<img class="${c||"i"}" src="${s}" alt="">`;
   const ph=i=>{const t=ses.length;return i<t/3?0:i<2*t/3?1:2};
   const byMonth=[];ses.forEach((x,i)=>{x.p=ph(i);const k=x.d.slice(0,7);let m=byMonth[byMonth.length-1];if(!m||m.k!==k){m={k,items:[]};byMonth.push(m)}m.items.push(x)});
-  const mName=k=>MON[+k.slice(5,7)-1]+" "+k.slice(0,4);
+  const mName=k=>k?MON[+k.slice(5,7)-1]+" "+k.slice(0,4):"Dates we agree together";
   const wk=d=>["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(d+"T12:00:00").getDay()];
-  const tl=byMonth.map(m=>`<div class="p3-month">${mName(m.k)}</div>`+m.items.map(x=>`<div class="p3-row${x.gift?" gift":""}${INFO[x.id]?" has":""}" onclick="p3t(this)"><div class="p3-date"><b>${+x.d.slice(8,10)}</b><span>${wk(x.d)}</span></div><div class="p3-what"><div>${esc(x.n)}</div><small>${x.gift?ii(IC.gift)+"Our gift to you":ii(PHN[x.p][1])+PHN[x.p][0]}</small></div>${INFO[x.id]?`<span class="p3-i">i</span><div class="p3-info"><b>${esc(INFO[x.id][0])}</b><span>${esc(INFO[x.id][1])}</span></div>`:""}</div>`).join("")).join("")+(P.eventDate?`<div class="p3-row event"><div class="p3-date"><b>${+P.eventDate.slice(8,10)}</b><span>${MON[+P.eventDate.slice(5,7)-1].slice(0,3)}</span></div><div class="p3-what"><div>${esc(P.eventName||"Your day")}</div><small>Your big day</small></div></div>`:"");
-  const sched=paySchedule(P,c,ses);
+  const tl=byMonth.map(m=>`<div class="p3-month">${mName(m.k)}</div>`+m.items.map(x=>`<div class="p3-row${x.gift?" gift":""}${INFO[x.id]?" has":""}" onclick="p3t(this)"><div class="p3-date${x.d?"":" tbc"}">${x.d?`<b>${+x.d.slice(8,10)}</b><span>${wk(x.d)}</span>`:"<b>·</b><span>TBC</span>"}</div><div class="p3-what"><div>${esc(x.n)}</div><small>${x.gift?ii(IC.gift)+"Our gift to you":ii(PHN[x.p][1])+PHN[x.p][0]}</small></div>${INFO[x.id]?`<span class="p3-i">i</span><div class="p3-info"><b>${esc(INFO[x.id][0])}</b><span>${esc(INFO[x.id][1])}</span></div>`:""}</div>`).join("")).join("")+(P.eventDate?`<div class="p3-row event"><div class="p3-date"><b>${+P.eventDate.slice(8,10)}</b><span>${MON[+P.eventDate.slice(5,7)-1].slice(0,3)}</span></div><div class="p3-what"><div>${esc(P.eventName||"Your day")}</div><small>Your big day</small></div></div>`:"");
+  const sched=paySchedule(P,c,dated);
   const created=P.created||todayIso();
-  const fut=ses.filter(x=>x.d>=created);const start=fut.length?fut[0].d:"";const end=ses.length?ses[ses.length-1].d:"";
+  const fut=dated.filter(x=>x.d>=created);const start=fut.length?fut[0].d:"";const end=dated.length?dated[dated.length-1].d:"";
   const holdIso=isoAdd(created,P.hold||5);const holdUntil=dLong(holdIso);
   const daysLeft=Math.max(0,Math.round((new Date(holdIso+"T12:00:00")-new Date(todayIso()+"T12:00:00"))/864e5));
   const valid=P.eventDate?dLong(P.eventDate):"12 months from your first session";
@@ -730,7 +730,7 @@ function progHTML(P){
     <div class="p3-lbl">Your price</div>
     <div class="p3-big">${gbp(c.price)}</div>
     <div class="p3-save">You keep ${gbp(c.saves)} in your pocket</div>
-    ${sched.length>1?`<div class="p3-split">${sched.map((x,i)=>`${gbp(x.amt)} ${i===0?"now":"by "+dShort(x.by)}`).join(" · ")}</div>`:""}
+    ${sched.length>1?`<div class="p3-split">${dated.length?sched.map((x,i)=>`${gbp(x.amt)} ${i===0?"now":"by "+dShort(x.by)}`).join(" · "):`${gbp(sched[0].amt)} now, then ${sched.length-1} ${sched.length>2?"payments":"payment"} as your visits go`}</div>`:""}
     ${yesBtn}
     <div class="p3-hold">${ii(IC.hour)}${daysLeft>0?`Your dates are reserved for <b>${daysLeft} more ${daysLeft>1?"days":"day"}</b> (until ${holdUntil})`:`Your dates are reserved until <b>${holdUntil}</b>`}</div>
   </div></div></section>
@@ -743,7 +743,7 @@ function progHTML(P){
     </ol>
   </div></section>
   <section class="p3-sec"><div class="pwrap">
-    <h2>Your dates</h2>
+    <h2>${dated.length?"Your dates":"Your treatments"}</h2>
     <p class="p3-tap">Tap a treatment to see what it does</p>
     <div class="p3-tl">${tl||'<p class="note">Dates to be confirmed together.</p>'}</div>
   </div></section>
