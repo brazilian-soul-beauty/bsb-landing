@@ -272,6 +272,9 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .whyg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.whyg div{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;background:#EEF7EE}.whyg b{font-size:14px;color:#1E5B37}.whyg span{font-size:13px;color:var(--muted);line-height:1.4}
 @media(max-width:700px){.whyg{grid-template-columns:1fr 1fr;gap:6px}.whyg div{padding:8px 10px}.whyg b{font-size:12.5px}.whyg span{font-size:11.5px;line-height:1.3}}
 @media(max-width:700px){.clist{grid-template-columns:minmax(0,1fr)}.cl{min-width:0}.tabs{overflow-x:auto}.tabs .tab{font-size:12px;white-space:nowrap;padding-left:6px;padding-right:6px;flex:none}}.cl span+.chip{margin-left:auto}
+.polc{margin-top:14px;background:rgba(255,255,255,.16);border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left}.polc small{display:block;font:600 10.5px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;opacity:.8}.polc b{display:block;font:700 15px Inter,sans-serif;margin-top:4px}.polc span{display:block;font:400 13px/1.4 Inter,sans-serif;margin-top:3px;opacity:.95}.polc em{display:block;font:600 12px Inter,sans-serif;font-style:normal;margin-top:8px;opacity:.9}
+.polw,.calw{padding:6px 4px}.polw h3{margin:0 0 4px;font:700 20px Inter,sans-serif}.pols{color:#667085;font:400 13px Inter,sans-serif;margin:4px 0 12px}.polg{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}.polw details{border:1px solid #ECECF4;border-radius:14px;padding:10px 12px}.polw{max-height:82vh;overflow:auto}.polw summary{list-style:none;cursor:pointer;font:600 15px Inter,sans-serif;display:grid;grid-template-columns:28px 1fr;gap:0 6px}.polw summary span{grid-row:span 2;font-size:20px}.polw summary i{font:400 13.5px/1.4 Inter,sans-serif;font-style:normal;color:#475467}.polw details p{margin:8px 0 0 34px;font:400 13.5px/1.45 Inter,sans-serif;color:#344054}.polx{margin-top:14px;width:100%;padding:12px;border-radius:12px;border:0;background:#5B47E0;color:#fff;font:600 15px Inter,sans-serif;cursor:pointer}
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.calh b{font:700 18px Inter,sans-serif}.calh button{width:40px;height:40px;border-radius:12px;border:1px solid #ECECF4;background:#fff;font-size:18px;cursor:pointer}.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calg s{text-decoration:none;text-align:center;font:600 11px Inter,sans-serif;color:#98A2B3}.calg button{height:42px;border-radius:12px;border:1px solid #ECECF4;background:#fff;font:600 15px Inter,sans-serif;cursor:pointer}.calg button.td{border-color:#5B47E0;color:#5B47E0}.calg button.on{background:#5B47E0;color:#fff}.calg button:disabled{opacity:.3;cursor:default}#per{cursor:pointer}
 </style>
 </head>
 <body>
@@ -281,7 +284,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
     <div class="me"><div class="av" id="av"></div><div><b id="nm"></b><span id="lv">Soul · Level 1</span></div></div>
     <div class="sp"></div><div class="team" id="team" style="display:none"></div>
     <div class="seg" id="seg"><button data-m="day">Day</button><button data-m="week">Week</button><button data-m="month" class="on">Month</button></div>
-    <div class="nav"><button id="prev">‹</button><b id="per"></b><button id="next">›</button></div>
+    <div class="nav"><button id="prev">‹</button><b id="per" title="Pick a day">📅 <span id="perT"></span></b><button id="next">›</button></div>
   </div>
   <div class="tabs" id="tabs">
     <button class="tab on" data-t="today">☀️ Today</button>
@@ -342,7 +345,7 @@ function start(){document.getElementById('login').style.display='none';document.
   setWho(S.who);S.anchor=today();load()}
 
 /* ---------- data ---------- */
-function load(){var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):pd('2026-11-01');document.getElementById('per').textContent=label()+(range()[1]<s0?' · not counted':'');
+function load(){var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):pd('2026-11-01');document.getElementById('perT').textContent=label()+(range()[1]<s0?' · not counted':'');
   document.getElementById('next').disabled=range()[1]>=today();
   var r=range();document.getElementById('main').classList.add('load');
   var b={p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])};
@@ -399,7 +402,7 @@ function render(){
    '<div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="'+R+'" stroke="rgba(255,255,255,.18)" stroke-width="14" fill="none"/>'+
    '<circle id="arc" cx="95" cy="95" r="'+R+'" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/></svg>'+
    '<div class="c"><div><b id="cnt">0</b><span>of '+tot+(PERF?' going beyond':' standards')+'</span></div></div></div>'+
-   '<div class="verdict"><em>'+(PRE0?'🗂️':all?'💜':'🎯')+'</em><span>'+(PRE0?'Reference only. Before your Soul Path started.':PERF?(all?'Everything above the line. Beautiful.':'Every result here grows your Soul Path.'):all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div></div><div class="bands '+(PERF?'b2':'b1')+'">';
+   '<div class="verdict"><em>'+(PRE0?'🗂️':all?'💜':'🎯')+'</em><span>'+(PRE0?'Reference only. Before your Soul Path started.':PERF?(all?'Everything above the line. Beautiful.':'Every result here grows your Soul Path.'):all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div>'+(PERF?'':polCard())+'</div><div class="bands '+(PERF?'b2':'b1')+'">';
   var st0x=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,PRE=st0x&&range()[1]<st0x,Lm=(S.data&&S.data.lunch_max)||30,DD=(S.data&&S.data.days)||[];
   var DF={time:function(x){return x.worked?!(x.late_min>0):null},lunch:function(x){return x.worked&&x.lunch_min!=null?x.lunch_min<=Lm:null},abs:function(x){return x.absent&&!x.on_leave?false:(x.worked?true:null)},look:function(x){return x.worked?(x.look_marked&&x.look_ok!==false):null},tasks:function(x){return x.worked?(x.t_morning>0&&x.t_day>0&&x.t_close>0):null}};
   function strip(k){if(!DF[k]||S.mode==='day'||!DD.length)return '';return '<div class="strip">'+DD.map(function(x){var v=DF[k](x);return '<i class="'+(v===null?'':(PRE?'p':v?'g':'r'))+'" title="'+x.d+'"></i>'}).join('')+'</div>'}
@@ -612,12 +615,36 @@ function openT(k){var c=S.C.filter(function(x){return x.k===k})[0],h='<div class
 function closeT(){document.getElementById('sheet').classList.remove('on');var v=document.querySelector('#panel iframe');if(v)v.remove()}
 document.getElementById('sheet').onclick=function(e){if(e.target.id==='sheet')closeT()};
 
+/* ---------- policies ---------- */
+var POL=[['📱','Phone','Your phone stays in your locker during the shift. Use it only on your break.','Expecting an urgent call? Tell reception before your shift and they will call you.'],
+ ['⏰','Arriving','Clock in only when you are ready to work. Changing, breakfast and getting ready happen before.','Lateness is recorded and the time is unpaid.'],
+ ['🍽️','Breaks','Your break is 30 minutes. Clock out and clock back in.','Clean your station first. Maximum 2 people in the break room.'],
+ ['💄','Look','Uniform every shift, exactly as given. Hair, make-up and nails as in the Vanilla Girl magazine.','Arrive already ready. Mild perfume only.'],
+ ['💜','Clients','Calm and kind, always. Even when a client is late or does something you don\'t like.','Never raise your voice. Take any problem to your manager, in private.'],
+ ['🤝','Team','No gossip. Disagreements are handled privately, never in front of clients.','Help your colleagues. We win as a team.'],
+ ['🌴','Holidays','Up to 1 week: ask 4 weeks before. 1 to 2 weeks: 2 months before.','2 to 3 weeks: only in January, 3 months before. Never book travel before approval.'],
+ ['🤒','Sick','Tell your manager on Connecteam and reception on WhatsApp before your shift starts.','Fill the absence form within 24 hours of coming back.'],
+ ['🧴','Products','Recommend only Eminence. Never another brand or another salon.','BSB has a partner contract with Eminence. You represent the brand.'],
+ ['📸','Social media','No clients on your personal social media.','No photos or videos of clients without their consent.'],
+ ['💷','Tips','All tips go to the team box. Never ask a client for a tip.','Tips are shared by hours worked, every month.'],
+ ['🚭','Smoking','Only on your break, in the designated area, never where clients can see.','Come back with no smell: wash your hands, freshen your breath.']];
+function polCard(){var d=new Date(),i=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5)%POL.length,p=POL[i];
+  return '<div class="polc" onclick="openPol('+i+')"><small>Policy of the day</small><b>'+p[0]+' '+p[1]+'</b><span>'+esc(p[2])+'</span><em>All BSB policies ›</em></div>'}
+function openPol(i){var pn=document.getElementById('panel');pn.style.width='min(900px,94vw)';pn.style.maxWidth='94vw';pn.innerHTML='<div class="polw"><h3>📜 BSB policies</h3><p class="pols">Tap a rule to read more.</p><div class="polg">'+POL.map(function(p,k){return '<details'+(k===i?' open':'')+'><summary><span>'+p[0]+'</span>'+p[1]+'<i>'+esc(p[2])+'</i></summary><p>'+esc(p[3])+'</p></details>'}).join('')+'</div><p class="pols">Full policies in Connecteam.</p><button class="polx" onclick="closeT()">Close</button></div>';document.getElementById('sheet').classList.add('on')}
+/* ---------- day picker ---------- */
+function openCal(m){var a=m||new Date(S.anchor);a=new Date(a.getFullYear(),a.getMonth(),1);var td=today(),first=(a.getDay()+6)%7,dim=new Date(a.getFullYear(),a.getMonth()+1,0).getDate(),cur=ymd(new Date(S.anchor)),h='';
+  for(var k=0;k<first;k++)h+='<i></i>';
+  for(var d=1;d<=dim;d++){var dt=new Date(a.getFullYear(),a.getMonth(),d),fut=dt>td,k2=ymd(dt);h+='<button '+(fut?'disabled':'')+' class="'+(k2===cur&&S.mode==='day'?'on':'')+(k2===ymd(td)?' td':'')+'" onclick="pickDay(\''+k2+'\')">'+d+'</button>'}
+  var pm=new Date(a.getFullYear(),a.getMonth()-1,1),nm=new Date(a.getFullYear(),a.getMonth()+1,1);
+  document.getElementById('panel').style.width='';document.getElementById('panel').style.maxWidth='';document.getElementById('panel').innerHTML='<div class="calw"><div class="calh"><button onclick="openCal(new Date('+pm.getFullYear()+','+pm.getMonth()+',1))">‹</button><b>'+MN[a.getMonth()]+' '+a.getFullYear()+'</b><button '+(nm>td?'disabled':'')+' onclick="openCal(new Date('+nm.getFullYear()+','+nm.getMonth()+',1))">›</button></div><div class="calg">'+['M','T','W','T','F','S','S'].map(function(x){return '<s>'+x+'</s>'}).join('')+h+'</div><button class="polx" onclick="closeT()">Close</button></div>';
+  document.getElementById('sheet').classList.add('on')}
+function pickDay(k){S.mode='day';S.anchor=pd(k);S.tday=k;[].forEach.call(document.getElementById('seg').children,function(b){b.classList.toggle('on',b.getAttribute('data-m')==='day')});closeT();load()}
 /* ---------- controls ---------- */
 document.getElementById('seg').onclick=function(e){var m=e.target.getAttribute('data-m');if(!m)return;S.mode=m;
   [].forEach.call(this.children,function(b){b.classList.toggle('on',b.getAttribute('data-m')===m)});load()};
 function step(n){var a=new Date(S.anchor);if(S.mode==='day')a.setDate(a.getDate()+n);else if(S.mode==='week')a.setDate(a.getDate()+7*n);else a.setMonth(a.getMonth()+n,1);
   if(a>today())a=today();S.anchor=a;load()}
-document.getElementById('prev').onclick=function(){step(-1)};document.getElementById('next').onclick=function(){step(1)};
+document.getElementById('prev').onclick=function(){step(-1)};document.getElementById('per').onclick=function(){openCal()};document.getElementById('next').onclick=function(){step(1)};
 document.getElementById('tabs').onclick=function(e){var b=e.target.closest('.tab');if(!b)return;S.tab=b.getAttribute('data-t');
   [].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});document.getElementById('main').scrollLeft=0;render()};
 loadPeople();
