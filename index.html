@@ -253,6 +253,15 @@ body.noprog .prog{display:none!important}
 .ac-rec .ac-rh{font:600 13px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--bronze-deep);padding-bottom:10px}
 .ac-rec .ac-tot{border-top:1px solid var(--hairline);margin-top:6px;padding-top:12px;font-size:17px}
 .ac-back{text-align:center;font:300 22px var(--serif)}.ac-back b{font-weight:400;color:var(--bronze-deep)}
+
+.tabs{display:flex;gap:8px;padding:18px 0 4px}
+.tabs button{padding:12px 20px;border-radius:999px;border:1.5px solid var(--hairline);background:#fff;font:600 14px var(--sans);color:var(--ink-soft);cursor:pointer}
+.tabs button.on{background:#1F1B2E;color:#fff;border-color:#1F1B2E}
+body.tab-build #savedPanel{display:none!important}
+body.tab-list .grid>.stack>section:not(#savedPanel),body.tab-list .grid>aside{display:none!important}
+body.tab-list .grid{grid-template-columns:1fr!important}
+.nowc{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;padding:14px 18px;border-radius:16px;border:0;background:linear-gradient(135deg,#7A5CFF,#5B47E0);color:#fff;text-align:left;cursor:pointer;box-shadow:0 8px 20px rgba(91,71,224,.25)}
+.nowc em{font-style:normal;font-size:26px}.nowc span{display:flex;flex-direction:column;gap:2px}.nowc small{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.85}.nowc b{font:700 18px var(--sans)}.nowc i{font-style:normal;font-size:13px;opacity:.9}.nowc strong{margin-left:auto;background:rgba(255,255,255,.2);padding:8px 14px;border-radius:999px;font:600 13px var(--sans)}
 </style>
 <style>/*BSB-PROP2*/
 .prop{padding-bottom:84px}
@@ -344,9 +353,10 @@ body.noprog .prog{display:none!important}
   </div>
 </header>
 <main class="limewash">
+  <div class="wrap"><div class="tabs"><button type="button" data-tab="build">✍️ Build</button><button type="button" data-tab="list">📋 My programmes</button></div></div>
   <div class="wrap grid">
     <div class="stack">
-      <section class="panel">
+      <section class="panel" id="savedPanel">
         <div class="eyebrow">Saved packages</div>
         <h2 style="margin-top:8px">All <em>packages</em></h2>
         <p class="sub">Everything is saved in the BSB Hub, so the whole team sees the same list. <button class="btn" id="clearBtn" style="padding:7px 12px;font-size:9.5px">New package</button></p>
@@ -361,7 +371,7 @@ body.noprog .prog{display:none!important}
           <label class="f">Therapist<select id="dayTh"><option value="">Everyone</option></select></label>
           <label class="f">Client<span style="display:flex;gap:6px"><input type="text" id="client" readonly placeholder="Tap her name below"><button type="button" class="btn" id="clrClient" style="padding:0 13px;font-size:18px;letter-spacing:0;line-height:1" aria-label="Remove client" title="Remove client">&times;</button></span></label>
         </div>
-        <input type="search" id="cSearch" class="csearch" placeholder="Or type her name to find her" autocomplete="off"><div class="daylist" id="dayList"><p class="note">Loading the day...</p></div>
+        <div id="nowBox"></div><button type="button" class="btn" id="chgClient" hidden style="margin-top:10px">Change client</button><input type="search" id="cSearch" class="csearch" placeholder="Or type her name to find her" autocomplete="off"><div class="daylist" id="dayList"><p class="note">Loading the day...</p></div>
         <div class="fields prog" style="margin-top:14px">
           <label class="f">Occasion<select id="eventName"><option value="">No special date</option><option>Wedding</option><option>Holiday</option><option>Birthday</option><option>Anniversary</option><option>Photoshoot</option><option>Special event</option></select></label>
           <label class="f">Plan name<select id="title"><option>Bridal Skin Journey</option><option>Holiday Glow Plan</option><option>Birthday Glow Plan</option><option>Anniversary Glow Plan</option><option>Photoshoot Ready Plan</option><option>Event Ready Plan</option><option>Skin Renewal Journey</option><option>Clear Skin Plan</option><option>Age-Defying Journey</option><option>Body Sculpt &amp; Glow Plan</option></select></label>
@@ -776,11 +786,17 @@ async function loadList(){
 /*BSB-ROWDEL*/document.addEventListener("click",async e=>{const d=e.target.closest("[data-del]");if(!d)return;e.preventDefault();e.stopPropagation();const id=d.dataset.del,won=d.dataset.st==="won";if(!confirm("Remove the package for "+(d.dataset.nm||"this client")+"?"+(won?" Its sessions also leave the reception list.":"")+" This cannot be undone."))return;try{await sb("bsb_packages?id=eq."+id,{method:"DELETE",prefer:"return=minimal"});if(id===PKG){PKG=null;st=JSON.parse(JSON.stringify(BLANK));render(true);syncDay()}loadList();cloud("Package removed.")}catch(err){cloud("Could not remove. Check the internet connection.",true)}},true);
 function fromRow(r){const d=r.data||{};return{therapist:r.therapist||"",pays:String(r.pays||1),hold:String(r.hold_days||5),note:r.note||"",client:r.client_name||"",clientId:r.client_id||null,clientExt:r.client_ext_id||null,visit:d.visit||"",title:(r.title||"").replace(/ \+ Aftercare$/,"").replace(/^Aftercare$/,"Skin Renewal Journey"),eventName:r.event_name||"",eventDate:r.event_date||"",qty:d.qty||{},gifts:d.gifts||{},dates:d.dates||{},kinds:d.kinds||{ac:0,prog:1},ac:Object.assign({done:[],goals:[],r:{},focus:[],back:"",note:""},d.ac||{}),status:r.status||"draft",created:(r.sent_at||r.created_at||"").slice(0,10)}}
 document.addEventListener("click",async e=>{const b=e.target.closest("[data-open]");if(!b)return;try{const r=await sb("bsb_packages?id=eq."+b.dataset.open+"&select=*");if(r[0]){PKG=r[0].id;st=fromRow(r[0]);render(true);loadList();syncDay();cloud("Opened from the BSB Hub.");window.scrollTo({top:0,behavior:"smooth"})}}catch(err){cloud("Could not open this package.",true)}});
-let DAY=[];
+let DAY=[];let S_CHG=false;
 const canon=t=>(t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/^michele\b/,"michelle").trim();
 function cleanSvc(x){return String(x||"").split(" - ").filter((v,i,a)=>v.trim()&&a.findIndex(w=>w.trim()===v.trim())===i).join(" · ").replace(/\s+/g," ").trim()}
 function renderDay(){
   const th=$("dayTh").value;const L=DAY.filter(x=>!th||canon(x.therapist)===th);
+  /*BSB-NOW*/{const picked=!!st.client&&!S_CHG;$("cSearch").hidden=picked;$("dayList").hidden=picked;$("chgClient").hidden=!picked;
+    const nowM=(()=>{const d=new Date();return d.getHours()*60+d.getMinutes()})(),tm=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]:-1};
+    const isToday=$("visitDay").value===new Date().toISOString().slice(0,10);
+    const cand=isToday&&!picked?L.filter(x=>tm(x.start_time)>=0&&tm(x.start_time)<=nowM&&nowM-tm(x.start_time)<=180).sort((a,b)=>tm(b.start_time)-tm(a.start_time)):[];
+    const seen=new Set(),now=cand.filter(x=>{const k=canon(x.therapist);if(seen.has(k))return false;seen.add(k);return true}).slice(0,3);
+    $("nowBox").innerHTML=now.map(x=>`<button type="button" class="nowc" data-ext="${esc(x.ext_id)}"><em>⚡</em><span><small>Now with ${esc(x.therapist||"")}</small><b>${esc(x.client)}</b><i>${esc(x.start_time||"")} · ${esc(cleanSvc(x.service))}</i></span><strong>Tap</strong></button>`).join("")}
   $("dayList").innerHTML=L.length?L.map(x=>`<button type="button" class="dc${st.clientExt===x.ext_id?" on":""}" data-ext="${esc(x.ext_id)}"><b>${esc(x.start_time||"")}</b><span>${esc(x.client)}<small>${esc(cleanSvc(x.service))}</small></span><span class="th">${esc(x.therapist||"")}</span></button>`).join(""):'<p class="note">No clients on this day'+(th?" for this therapist":"")+'.</p>';
 }
 async function loadDay(){
@@ -794,7 +810,7 @@ async function loadDay(){
 }
 $("visitDay").addEventListener("change",()=>{st.visit=$("visitDay").value;loadDay()});
 $("dayTh").addEventListener("change",renderDay);
-function pick(x){
+function pick(x){S_CHG=false;
   st.client=String(x.client).trim();st.clientId=x.client_id||null;st.clientExt=x.ext_id;st.visit=x.date;if(!st.therapist&&x.therapist){st.therapist=x.therapist;$("therapist").value=st.therapist}
   {const sv=canon(cleanSvc(x.service||""));st.ac=st.ac||{done:[],goals:[],r:{},focus:[],back:"",note:""};ACSVC().forEach(i=>{if(sv&&sv.includes(canon(i[1]).replace(/®/g,""))&&!st.ac.done.includes(i[1]))st.ac.done.push(i[1])})}
   $("client").value=st.client;renderDay();render()}
@@ -828,5 +844,14 @@ const H0=(location.hash||"").slice(1);
 if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
 else if(Q.get("d")){st.visit=Q.get("d");const th=Q.get("th")||"";if(th)st.therapist=th.charAt(0).toUpperCase()+th.slice(1);render(true);loadList();syncDay().then(fromCard)}
 else{render(true);loadList();syncDay()}
+</script>
+<script>/*BSB-TABS*/
+function setTab(t){document.body.classList.toggle("tab-list",t==="list");document.body.classList.toggle("tab-build",t!=="list");document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));window.scrollTo({top:0})}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b){setTab(b.dataset.tab);return}if(e.target.closest("[data-open]")||e.target.closest("#clearBtn"))setTimeout(()=>setTab("build"),50)});
+setTab("build");
+</script>
+<script>/*BSB-NOW2*/
+document.getElementById("nowBox").addEventListener("click",e=>{const b=e.target.closest("[data-ext]");if(!b)return;const x=DAY.find(y=>y.ext_id===b.dataset.ext);if(x)pick(x)});
+document.getElementById("chgClient").addEventListener("click",()=>{S_CHG=true;renderDay()});
 </script>
 </body></html>
