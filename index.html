@@ -7703,6 +7703,7 @@ function renderModal(a) {
     '<div class="eyebrow">' + esc(CAT_LABEL[cat] || 'Treatment') + (src ? ' \u00b7 ' + esc(src) : '') + '</div>' +
     /* v37.2: o nome abre a ficha de historico completa, em qualquer fase (antes, no run, no check out, no fim) */
     '<h2 class="tapname" onclick="openClientHistory(\'' + esc(a.id) + '\')">' + esc(a.client || 'Guest') + '<span class="h2h">\u21bb history</span></h2>' +
+    (cat === 'skin' && typeof acBtnHtml === 'function' ? acBtnHtml(a) : '') +
     (clientArrived(a) ? '<div class="svc-line">\u2713 arrived ' + esc(a.checkIn) + '</div>' : '') +
     '</div>';
 
@@ -13095,5 +13096,19 @@ saveRunPoints = function(a){
 })();
 </script>
 
+<script>/*BSB-ACBTN*/
+function acBtnHtml(a){var d=a.date||(typeof currentDate!=='undefined'?currentDate:'');
+  var q='d='+encodeURIComponent(d)+'&t='+encodeURIComponent(a.time||'')+'&cid='+encodeURIComponent(a.clientId||'')+'&n='+encodeURIComponent(a.client||'')+'&th='+encodeURIComponent(a.therapist||'');
+  return '<a class="ac-big" target="_blank" rel="noopener" href="https://bsb-treatment-plans.vercel.app/?'+q+'"><span class="ac-ic">\ud83e\uddf4</span><span class="ac-tx"><b>Aftercare</b><small>Her routine for home</small></span><span class="ac-go">\u203a</span></a>'}
+</script>
+<style>/*BSB-ACBTN*/
+.modal-head .ac-big{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px 18px;border-radius:16px;background:linear-gradient(135deg,#11A99A,#0E8C80);color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(17,169,154,.28)}
+.modal-head .ac-big:active{transform:scale(.98)}
+.modal-head .ac-ic{font-size:30px;line-height:1}
+.modal-head .ac-tx{display:flex;flex-direction:column;gap:2px}
+.modal-head .ac-tx b{font:700 18px/1.1 Inter,system-ui,sans-serif}
+.modal-head .ac-tx small{font:500 13px Inter,system-ui,sans-serif;opacity:.9}
+.modal-head .ac-go{margin-left:auto;font-size:30px;line-height:1;opacity:.9}
+</style>
 </body>
 </html>
