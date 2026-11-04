@@ -26157,5 +26157,30 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
 })();
 /*BSB-STK387-FIM*/</script>
 
+<!--BSB-LASTMIN-INICIO-->
+<style>
+#lmPill{position:fixed;left:18px;bottom:182px;z-index:9000;display:none;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #E4E4EC;background:#fff;color:#1F2235;font:600 14px/1 Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 18px rgba(16,24,40,.12);text-decoration:none}
+#lmPill i{font-style:normal}
+#lmPill b{background:#5B47E0;color:#fff;border-radius:999px;padding:3px 8px;font-size:12px}
+</style>
+<a id="lmPill" href="https://bsb-lastminute.vercel.app" target="_blank" rel="noopener"><i>⚡</i> Last minute <b id="lmN">0</b></a>
+<script>
+/*BSB-LASTMIN-INICIO*/
+(function(){
+  var URL_='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/bsb_recepcao_lastmin';
+  var KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+  function hoje(){var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());function g(t){return p.find(function(x){return x.type===t}).value}return g('year')+'-'+g('month')+'-'+g('day');}
+  function tick(){
+    fetch(URL_+'?select=id&sent_at=is.null&dia=eq.'+hoje(),{headers:{apikey:KEY,Authorization:'Bearer '+KEY}})
+      .then(function(r){return r.ok?r.json():[]}).then(function(rows){
+        var n=(rows||[]).length,el=document.getElementById('lmPill');
+        if(!el)return;document.getElementById('lmN').textContent=n;el.style.display=n>0?'inline-flex':'none';
+      }).catch(function(){});
+  }
+  tick();setInterval(tick,120000);
+})();
+/*BSB-LASTMIN-FIM*/
+</script>
+<!--BSB-LASTMIN-FIM-->
 </body>
 </html>
