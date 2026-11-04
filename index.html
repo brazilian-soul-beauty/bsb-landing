@@ -259,6 +259,19 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .bdg.on{background:#fff;filter:none;opacity:1;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 .stk{margin-top:12px;font-weight:700;font-size:14px;opacity:.95}
 @media(max-width:700px){.tt .ic{font-size:56px}.cir{gap:10px}.cir .c i{width:52px;height:52px;font-size:22px}.tt .m{font-size:18px}.stars i{font-size:32px}}
+.tiers{display:flex;gap:8px;margin:auto 0 12px}
+.tier{flex:1;border-radius:14px;background:rgba(255,255,255,.14);padding:10px 6px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.tier b{font-size:22px;font-weight:800}.tier small{font-size:11px;opacity:.85}
+.tier.on{background:#fff;color:#0B6F66;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.clist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.cl{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#F7F6FB;font-size:13px}
+.cl b{font-size:14px;flex:none}.cl span:not(.chip){flex:1;min-width:0}.cl span:not(.chip){color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.cl i{font-style:normal;margin-left:auto;font-weight:700}.cl .chip{margin-left:8px;flex:none}
+.cl i+.chip{margin-left:8px}
+.pol{border:2px solid #F2C9C4;background:#FFFBFA}.poll{margin:10px 0 0;padding-left:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:14px;line-height:1.45;color:var(--ink)}.poll b{color:#B3261E}
+@media(max-width:700px){.poll{grid-template-columns:1fr;font-size:13px;gap:6px}}
+.whyg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.whyg div{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;background:#EEF7EE}.whyg b{font-size:14px;color:#1E5B37}.whyg span{font-size:13px;color:var(--muted);line-height:1.4}
+@media(max-width:700px){.whyg{grid-template-columns:1fr 1fr;gap:6px}.whyg div{padding:8px 10px}.whyg b{font-size:12.5px}.whyg span{font-size:11.5px;line-height:1.3}}
+@media(max-width:700px){.clist{grid-template-columns:minmax(0,1fr)}.cl{min-width:0}.tabs{overflow-x:auto}.tabs .tab{font-size:12px;white-space:nowrap;padding-left:6px;padding-right:6px;flex:none}}.cl span+.chip{margin-left:auto}
 </style>
 </head>
 <body>
@@ -275,6 +288,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
     <button class="tab" data-t="std">🤝 Behaviour</button>
     <button class="tab" data-t="xm">🌟 Performance</button>
     <button class="tab" data-t="path">🌱 Soul Path</button>
+    <button class="tab" data-t="care" id="tabCare" style="display:none">🌿 Skin ritual</button>
   </div>
   <main id="main"></main>
 </div>
@@ -360,9 +374,11 @@ function render(){
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null;
   if(!S.admin&&st0&&range()[1]<st0){M.innerHTML='<div class="wait"><em>✨</em><b style="font-size:22px;color:var(--ink)">Your Soul Path starts on '+st0.getDate()+' '+MN[st0.getMonth()]+'</b>Everything counts from that day.</div>';return}
   if(S.tab==='em')S.tab='path';
+  {var sk=SKIN.indexOf(S.who)>=0;document.getElementById('tabCare').style.display=sk?'':'none';if(S.tab==='care'&&!sk)S.tab='path'}
   document.getElementById('seg').style.display=document.querySelector('.nav').style.display=S.tab==='today'?'none':'';
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
+  if(S.tab==='care')return renderCare(M);
   if(S.tab==='path')return renderPath(M);
   var C=calc(S.data),x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,rp=n?Math.round(100*nr/n):null,topR=rp!=null&&rp>=lad[0];
   C=C.filter(function(c){return c.k!=='abs'&&c.k!=='comp'});
@@ -420,6 +436,25 @@ function renderXM(M){var x=S.xm||{},P=x.pers||{clients:0,pe:0},pp=P.clients?Math
   M.innerHTML=h;
   requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b,.lad b').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%'})},60)})}
 
+/* ---------- My clients (skin) ---------- */
+var SKIN=['Michelle'];
+var TIERS=[[1,10,5],[11,20,8],[21,30,12],[31,null,15]];
+function renderCare(M){var r=range(),key=S.who+'|'+ymd(r[0])+'|'+ymd(r[1]);
+  if(S.crk!==key){S.crk=key;S.cr=null;M.innerHTML='<div class="wait"><em>🧴</em>Loading…</div>';
+    rpc('soul_care',{p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])}).then(function(x){if(S.crk!==key)return;S.cr=x||{};if(S.tab==='care')renderCare(M)}).catch(function(){S.cr={};if(S.tab==='care')renderCare(M)});return}
+  var c=S.cr,p=c.prog||{},q=+c.sold_qty||0,fa=+c.facials||0,ac=+c.aftercare||0,acp=fa?Math.min(100,Math.round(100*ac/fa)):0;
+  var lad=TIERS.map(function(t){var on=q>=t[0]&&(t[1]==null||q<=t[1]);return '<div class="tier'+(on?' on':'')+'"><b>'+t[2]+'%</b><small>'+t[0]+(t[1]?'–'+t[1]:'+')+'</small></div>'}).join('');
+  var left=c.next_at?c.next_at-q:0;
+  var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#8FCB6B 0%,#3E8E4E 50%,#1E5B37 100%)"><small>BSB · Eminence expert</small><h2>Skin ritual</h2><p>'+label()+'</p>'+
+    '<div style="margin:auto 0"><div style="font-size:14px;opacity:.9">Your Eminence bonus</div><div style="font-size:56px;font-weight:800;line-height:1.05">'+gbp(c.commission||0)+'</div></div>'+
+    '<div class="tiers">'+lad+'</div>'+
+    '<div class="verdict"><em>'+(left?'🌿':'🏆')+'</em><span>'+(left?'<b>'+left+' more '+(left===1?'routine':'routines')+'</b> taken home and your bonus is <b>'+c.next_rate+'%</b>':'Top level. 15% bonus.')+'</span></div></div><div class="grid g4" style="grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr">';
+  h+='<div class="tile'+(fa&&ac>=fa?' ok':'')+'"><div class="h"><em>🧴</em>Aftercare</div><div class="big">'+ac+'<small>/'+fa+'</small></div><div class="sub">facials with their home ritual</div><div class="bar"><b data-w="'+acp+'"></b></div></div>';
+  h+='<div class="tile"><div class="h"><em>🌿</em>Recommended</div><div class="big">'+(c.recommended||0)+'</div><div class="sub">Eminence products in your aftercare</div></div>';
+  h+='<div class="tile"><div class="h"><em>🛍️</em>Taken home</div><div class="big">'+q+'</div><div class="sub">Eminence products</div></div>';
+  h+='<div class="tile"><div class="h"><em>📋</em>Programmes</div><div class="big">'+(p.won||0)+'<small>/'+(p.made||0)+'</small></div><div class="sub">said yes</div><div class="pills"><span>📤 '+((p.with_joana||0)+(p.sent||0))+'</span><span class="'+(p.won?'ok':'')+'">✅ '+(p.won||0)+'</span><span>❌ '+(p.lost||0)+'</span></div></div>';
+  h+='</div>';M.innerHTML=h;
+  requestAnimationFrame(function(){setTimeout(function(){document.querySelectorAll('.bar b').forEach(function(x){x.style.width=x.getAttribute('data-w')+'%'})},60)})}
 /* ---------- Soul Path ---------- */
 var LV=['Soul','Soul+','Senior Soul','Soul Lead','Soul Manager'];
 function gbp(v){return '£'+(Math.round(v)).toLocaleString()}
