@@ -7703,7 +7703,7 @@ function renderModal(a) {
     '<div class="eyebrow">' + esc(CAT_LABEL[cat] || 'Treatment') + (src ? ' \u00b7 ' + esc(src) : '') + '</div>' +
     /* v37.2: o nome abre a ficha de historico completa, em qualquer fase (antes, no run, no check out, no fim) */
     '<h2 class="tapname" onclick="openClientHistory(\'' + esc(a.id) + '\')">' + esc(a.client || 'Guest') + '<span class="h2h">\u21bb history</span></h2>' +
-    (cat === 'skin' && typeof acBtnHtml === 'function' ? acBtnHtml(a) : '') +
+    ((cat === 'skin' || /facial|face|peel|microneedl|dermaplan|profhilo|jalupro/i.test((a && a.service) || '')) && typeof acBtnHtml === 'function' ? acBtnHtml(a) : '') +
     (clientArrived(a) ? '<div class="svc-line">\u2713 arrived ' + esc(a.checkIn) + '</div>' : '') +
     '</div>';
 
