@@ -349,7 +349,8 @@ body.tab-list .grid{grid-template-columns:1fr!important}
 .prop .p3-info span{display:block;margin-top:4px;font:400 14px/1.5 var(--sans);color:var(--ink)}
 .prop .p3-tap{font:400 13.5px/1.4 var(--sans);color:var(--ink-soft);margin:-8px 0 14px}
 </style>
-</head><body>
+<style>html.cm body>*:not(#proposal){display:none!important}html.cm body{background:#F7F1EA!important;min-height:100vh}html.cm body::before{content:"Brazilian Soul Beauty";position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:400 13px/1 Inter,system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#8A6E4B;animation:cmP 1.4s ease-in-out infinite}html.cm body:has(#proposal:not([hidden]))::before,html.cmok body::before{display:none!important}@keyframes cmP{50%{opacity:.35}}</style>
+</head><body><script>(function(){var q=new URLSearchParams(location.search);if(q.get("p")||/^#p\./.test(location.hash))document.documentElement.classList.add("cm")})()</script>
 <div id="builder" class="noprint"><header class="hero limewash">
   <div class="wrap">
     <a class="backhub" id="backHub" href="https://bsb-therapists.vercel.app/">&#8592; Back to my day</a><div class="eyebrow">Brazilian Soul Beauty · Treatment Plans</div>
@@ -763,6 +764,7 @@ function progHTML(P){
 
 function saveFile(name,data){const a=document.createElement("a");a.href=URL.createObjectURL(data instanceof Blob?data:new Blob([data],{type:"text/html"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}
 function showProposal(P,client){
+  document.documentElement.classList.add("cmok");
   if(client)document.title=(P.client?P.client.trim().split(" ")[0]+"'s ":"Your ")+(P.title||"Treatment Plan")+" · Brazilian Soul Beauty";
   $("builder").hidden=true;const el=$("proposal");el.hidden=false;
   el.innerHTML=`<div class="ptools noprint"><div class="pwrap">${client?'<span class="eyebrow">Brazilian Soul Beauty</span>':'<button class="btn" id="backBtn">Back to builder</button><button class="btn" id="sendRecBtn">Send to reception</button>'}<button class="btn" id="pdfBtn">Save as PDF</button></div></div>`+proposalHTML(P);
@@ -868,7 +870,7 @@ $("delBtn").addEventListener("click",async()=>{
   try{await sb("bsb_packages?id=eq."+PKG,{method:"DELETE",prefer:"return=minimal"});PKG=null;st=JSON.parse(JSON.stringify(BLANK));render(true);loadList();syncDay();cloud("Package deleted.")}
   catch(e){cloud("Could not delete. Check the internet connection.",true)}});
 const H0=Q.get("p")?"p."+Q.get("p"):(location.hash||"").slice(1);window.addEventListener("hashchange",()=>{if(/^#p\./.test(location.hash))location.reload()});
-if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
+if(H0.startsWith("p.")){REC=/\.r$/.test(H0);const id=H0.slice(2).replace(/\.r$/,"");(async()=>{try{if(/^[0-9a-f-]{36}$/.test(id)){const r=await sb("bsb_packages?id=eq."+id+"&select=*");if(!r[0])throw 0;const save=st;st=fromRow(r[0]);const P=snapshot();st=save;showProposal(P,true)}else showProposal(dec(id),true)}catch(e){document.documentElement.classList.remove("cm");document.body.innerHTML='<p style="padding:40px;font-family:Georgia,serif;color:#4A443C">This plan link is not available. Please contact Brazilian Soul Beauty.</p>'}})()}
 else if(Q.get("d")){st.visit=Q.get("d");const th=Q.get("th")||"";if(th)st.therapist=th.charAt(0).toUpperCase()+th.slice(1);render(true);loadList();syncDay().then(fromCard)}
 else{render(true);loadList();syncDay()}
 </script>
