@@ -383,7 +383,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .dcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;cursor:pointer}.dcs>div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;column-gap:10px;align-items:center}
 .dcs em{font-style:normal;font-size:24px;grid-row:1/4}.dcs b{font-size:22px;font-weight:800;line-height:1}.dcs span{font-size:12px;font-weight:700}.dcs small{font-size:11px;color:var(--muted)}
 @media(max-width:700px){.tdm{order:-1;flex:0 0 calc(100% - 28px);margin:0 14px;padding:16px 14px;gap:12px}.tds{align-items:start;gap:6px}.nd2 .seal{width:96px;height:96px;border-width:3px}.nd2 .ic{font-size:40px}.nd2 .ck{width:28px;height:28px;right:0;top:0;font-size:12px}.exn em{font-size:24px}.exn b{font-size:22px}.exn b small{font-size:12px}.nd2 b{font-size:14px;margin-top:6px}.nd2 span{font-size:11.5px}.dcs{grid-template-columns:1fr 1fr}.dcs b{font-size:20px}.tdf .nxt{font-size:12.5px}}
-.dl{font-style:normal;font-size:11.5px;font-weight:700;margin-top:4px;color:var(--muted)}.dl.u{color:#1F9D6B}.dl.d{color:#B3261E}
+.bzr .dl{display:block;margin:4px 0 6px;font-size:13px}.bzr .dl.u{color:#5FD39A}.bzr .dl.d{color:#FF8F8F}.dl{font-style:normal;font-size:11.5px;font-weight:700;margin-top:4px;color:var(--muted)}.dl.u{color:#1F9D6B}.dl.d{color:#B3261E}
 </style>
 </head>
 <body>
@@ -392,7 +392,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
   <div class="top">
     <div class="me"><div class="av" id="av"></div><div><b id="nm"></b><span id="lv">Soul · Level 1</span></div></div>
     <div class="sp"></div><div class="team" id="team" style="display:none"></div>
-    <div class="seg" id="seg"><button data-m="day">Day</button><button data-m="week">Week</button><button data-m="month" class="on">Month</button></div>
+    <div class="seg" id="seg"><button data-m="day">Day</button><button data-m="week">Week</button><button data-m="month" class="on">Month</button><button data-m="year" id="segY" style="display:none">Year</button></div>
     <div class="nav"><button id="prev">‹</button><b id="per" title="Pick a day">📅 <span id="perT"></span></b><button id="next">›</button></div>
   </div>
   <div class="tabs" id="tabs">
@@ -422,10 +422,12 @@ function fd(s){var d=pd(s);return d.getDate()+' '+MN[d.getMonth()]}
 function range(){var a=new Date(S.anchor),f,t;
   if(S.mode==='day'){f=new Date(a);t=new Date(a)}
   else if(S.mode==='week'){var w=(a.getDay()+6)%7;f=new Date(a);f.setDate(a.getDate()-w);t=new Date(f);t.setDate(f.getDate()+6)}
+  else if(S.mode==='year'){f=new Date(a.getFullYear(),0,1);t=new Date(a.getFullYear(),11,31)}
   else{f=new Date(a.getFullYear(),a.getMonth(),1);t=new Date(a.getFullYear(),a.getMonth()+1,0)}
   return [f,t]}
 function label(){var r=range();if(S.mode==='day')return DW[(r[0].getDay()+6)%7]+' '+r[0].getDate()+' '+MN[r[0].getMonth()];
   if(S.mode==='week')return r[0].getDate()+' '+MN[r[0].getMonth()]+' to '+r[1].getDate()+' '+MN[r[1].getMonth()];
+  if(S.mode==='year')return 'Jan to Dec '+r[0].getFullYear();
   return ['January','February','March','April','May','June','July','August','September','October','November','December'][r[0].getMonth()]+' '+r[0].getFullYear()}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
@@ -464,6 +466,7 @@ function load(){var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):
   document.getElementById('next').disabled=range()[1]>=today();
   var r=range();document.getElementById('main').classList.add('load');
   var b={p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])};
+  if(S.mode==='year'){render();return}
   Promise.all([rpc('soul_standard',b).catch(function(){return null}),rpc('soul_extra',b).catch(function(){return null}),rpc('soul_path',{p_code:S.code,p_person:S.who,p_month:ymd(r[0])}).catch(function(){return null})]).then(function(x){S.data=x[0];S.xm=x[1];S.sp=x[2];render()})}
 
 /* ---------- the 7 standards ---------- */
@@ -494,6 +497,7 @@ function render(){
   if(S.tab==='em')S.tab='path';
   {var sk=SKIN.indexOf(S.who)>=0;document.getElementById('tabCare').style.display=sk?'':'none';if(S.tab==='care'&&!sk)S.tab='path'}
   document.getElementById('seg').style.display=document.querySelector('.nav').style.display=S.tab==='today'?'none':'';
+  document.getElementById('segY').style.display=S.tab==='biz'?'':'none';
   [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.textContent=MONEY()?'💷 My money':'🛍️ My sales';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none'});
   if(APP&&!S.admin&&['std','path','care','biz'].indexOf(S.tab)>=0){S.tab='today'}
   if(S.tab==='today')return renderToday(M);
@@ -702,21 +706,22 @@ function renderBiz(M){var key=S.who;
   if(S.bpk!==pk){S.bpk=pk;S.bp=null;rpc('soul_business_period',{p_code:S.code,p_person:S.who,p_from:ymd(rg[0]),p_to:ymd(rg[1])}).then(function(z){if(S.bpk!==pk)return;S.bp=z;if(S.tab==='biz')renderBiz(M)}).catch(function(){})}
   var b=S.bz||{},ms=b.months||[],pg=S.bzp||1,n=function(v){return +v||0};
   var paid=ms.filter(function(m){return m.gross!=null}),rv=0,gr=0,hrs=0;paid.forEach(function(m){rv+=n(m.rev);gr+=n(m.gross);hrs+=n(m.hours)});
-  var R=gr?rv/gr:null,rc=R==null?'':R>=3?'g':R>=2.5?'a':'r';
+  var P0=S.bp&&S.bp.cur,Q0=S.bp&&S.bp.prev;if(P0&&n(P0.cost)){rv=n(P0.rev);gr=n(P0.cost)}
+  var R=gr?Math.round(10*rv/gr)/10:null,rc=R==null?'':R>=3?'g':R>=2.5?'a':'r',Rp=Q0&&n(Q0.cost)&&n(Q0.rev)?n(Q0.rev)/n(Q0.cost):null;
   var plat12=0;ms.forEach(function(m){plat12+=n(m.plat)});var rev12=0,prod12=0,vis=0,bmin=0,newc=0,tips=0,revs=0,r5=0;ms.forEach(function(m){rev12+=n(m.rev);prod12+=n(m.prod);vis+=n(m.visits);bmin+=n(m.bmin);newc+=n(m.newc);tips+=n(m.tips);revs+=n(m.revs);r5+=n(m.r5)});
   var ch=b.channels||{},cht=n(ch.treatwell)+n(ch.online)+n(ch.salon),pc=function(v,t){return t?Math.round(100*v/t):0};
   var occ=hrs?Math.round(100*(paid.reduce(function(a,m){return a+n(m.bmin)},0)/60)/hrs):null,cph=hrs?gr/hrs:n(b.base_rate);
   var tabs='<div class="bzt"><button class="'+(pg===1?'on':'')+'" onclick="S.bzp=1;renderBiz(document.getElementById(\'main\'))">Overview</button><button class="'+(pg===2?'on':'')+'" onclick="S.bzp=2;renderBiz(document.getElementById(\'main\'))">Treatments</button></div>';
-  var h='<div class="hero bzh '+rc+'"><small>🔒 Only you · last 12 months</small><h2>'+esc(S.who)+'</h2><p>Is she worth it?</p>'+
-   '<div class="bzr"><b>'+(R==null?'–':R.toFixed(1)+'x')+'</b><span>what she brings for every £1 she costs · BSB minimum 3.0x</span></div>'+
-   '<div class="bzs"><div><b>'+gb0(rv)+'</b><span>she brought</span></div><div><b>'+gb0(gr)+'</b><span>she cost</span></div></div>'+
+  var h='<div class="hero bzh '+rc+'"><small>🔒 Only you · '+(P0?label():'last 12 months')+'</small><h2>'+esc(S.who)+'</h2><p>Is she worth it?</p>'+
+   '<div class="bzr"><b>'+(R==null?'–':R.toFixed(1)+'x')+'</b>'+(R!=null&&Rp!=null&&P0?(function(){var d=Math.round(100*(R-Rp)/Rp);return Math.abs(d)>300?'':'<i class="dl '+(d>=0?'u':'d')+'">'+(d>0?'↗ +':d<0?'↘ ':'= ')+(d||'')+(d?'%':'')+' vs '+(S.mode==='day'?'yesterday':S.mode==='week'?'last week':S.mode==='year'?'last year':'last month')+'</i>'})():'')+'<span>what she brings for every £1 she costs · BSB minimum 3.0x</span></div>'+
+   '<div class="bzs"><div><b>'+gb0(rv)+'</b><span>she brought</span></div><div><b>'+gb0(gr)+'</b><span>she cost'+(P0&&P0.est?' · estimate':'')+'</span></div></div>'+
    '<div class="verdict"><em>'+(rc==='g'?'💚':rc==='a'?'🟠':rc==='r'?'🔴':'🗂️')+'</em><span>'+(R==null?'No payslips yet.':rc==='g'?'Above the 3.0x minimum. Healthy.':rc==='a'?'Below the 3.0x minimum. Watch occupancy, ticket and upgrades.':'Well below 3.0x. Time for a talk.')+'</span></div>'+tabs+'</div>';
   if(pg===1){var mx=Math.max.apply(null,ms.map(function(m){return Math.max(n(m.rev),n(m.gross))}).concat([1]));
     var bars='<div class="bzb">'+ms.map(function(m){return '<div><i style="height:'+Math.round(100*n(m.rev)/mx)+'%" class="rv" title="'+gb0(m.rev)+'"></i><i style="height:'+Math.round(100*n(m.gross)/mx)+'%" class="gr" title="'+gb0(m.gross)+'"></i><small>'+MN[+m.ym.slice(5)-1].slice(0,1)+'</small></div>'}).join('')+'</div>';
     function T(ic,t,big,sub,extra){return '<div class="tile bzc"><div class="h"><em>'+ic+'</em>'+t+'</div><div class="big">'+big+'</div><div class="sub">'+sub+'</div>'+(extra||'')+'</div>'}
     var chb='<div class="bzch">'+[['Treatwell',ch.treatwell,'#E2557A'],['Online',ch.online,'#6D4AFF'],['Salon',ch.salon,'#1F9D8B']].map(function(c){return '<div><span>'+c[0]+'</span><u><i style="width:'+pc(n(c[1]),cht)+'%;background:'+c[2]+'"></i></u><b>'+pc(n(c[1]),cht)+'%</b></div>'}).join('')+'</div>';
-    var P=S.bp&&S.bp.cur,Q=S.bp&&S.bp.prev,pl=S.mode==='day'?'yesterday':S.mode==='week'?'last week':'last month';
-    function dl(c,p,inv){if(c==null||p==null||!+p)return '';var d=Math.round(100*(c-p)/p);if(!d)return '<i class="dl">= vs '+pl+'</i>';var up=d>0;if(inv)up=!up;return '<i class="dl '+(up?'u':'d')+'">'+(d>0?'↗ +':'↘ ')+d+'% vs '+pl+'</i>'}
+    var P=S.bp&&S.bp.cur,Q=S.bp&&S.bp.prev,pl=S.mode==='day'?'yesterday':S.mode==='week'?'last week':S.mode==='year'?'last year':'last month';
+    function dl(c,p,inv){if(c==null||p==null||!+p)return '';var d=Math.round(100*(c-p)/p);if(Math.abs(d)>300)return '';if(!d)return '<i class="dl">= vs '+pl+'</i>';var up=d>0;if(inv)up=!up;return '<i class="dl '+(up?'u':'d')+'">'+(d>0?'↗ +':'↘ ')+d+'% vs '+pl+'</i>'}
     var tk=P&&n(P.visits)?n(P.rev)/n(P.visits):null,tkp=Q&&n(Q.visits)?n(Q.rev)/n(Q.visits):null,cr=P&&n(P.booked)?Math.round(100*(n(P.cancel)+n(P.noshow))/n(P.booked)):null,crp=Q&&n(Q.booked)?Math.round(100*(n(Q.cancel)+n(Q.noshow))/n(Q.booked)):null;
     var pch=P?P.ch:{},pct=n(pch.treatwell)+n(pch.online)+n(pch.salon);
     var chb2='<div class="bzch">'+[['Treatwell',pch.treatwell,'#E2557A'],['Online',pch.online,'#6D4AFF'],['Salon',pch.salon,'#1F9D8B']].map(function(c){return '<div><span>'+c[0]+'</span><u><i style="width:'+pc(n(c[1]),pct)+'%;background:'+c[2]+'"></i></u><b>'+pc(n(c[1]),pct)+'%</b></div>'}).join('')+'</div>';
@@ -962,11 +967,13 @@ function pickDay(k){S.mode='day';S.anchor=pd(k);S.tday=k;[].forEach.call(documen
 /* ---------- controls ---------- */
 document.getElementById('seg').onclick=function(e){var m=e.target.getAttribute('data-m');if(!m)return;S.mode=m;
   [].forEach.call(this.children,function(b){b.classList.toggle('on',b.getAttribute('data-m')===m)});load()};
-function step(n){var a=new Date(S.anchor);if(S.mode==='day')a.setDate(a.getDate()+n);else if(S.mode==='week')a.setDate(a.getDate()+7*n);else a.setMonth(a.getMonth()+n,1);
+function step(n){var a=new Date(S.anchor);if(S.mode==='day')a.setDate(a.getDate()+n);else if(S.mode==='week')a.setDate(a.getDate()+7*n);else if(S.mode==='year')a.setFullYear(a.getFullYear()+n,0,1);else a.setMonth(a.getMonth()+n,1);
   if(a>today())a=today();S.anchor=a;load()}
 document.getElementById('prev').onclick=function(){step(-1)};document.getElementById('per').onclick=function(){openCal()};document.getElementById('next').onclick=function(){step(1)};
 document.getElementById('tabs').onclick=function(e){var b=e.target.closest('.tab');if(!b)return;S.tab=b.getAttribute('data-t');
-  [].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});document.getElementById('main').scrollLeft=0;render()};
+  [].forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});document.getElementById('main').scrollLeft=0;
+  if(S.mode==='year'&&S.tab!=='biz'){S.mode='month';[].forEach.call(document.getElementById('seg').children,function(x){x.classList.toggle('on',x.getAttribute('data-m')==='month')});load();return}
+  render()};
 loadPeople();
 </script>
 </body>
