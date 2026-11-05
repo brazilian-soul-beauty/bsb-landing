@@ -26299,7 +26299,7 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
         h += '<div class="xp-end">✓ Checked out · ' + LAB[d] + ' given</div>';
       } else {
         h += '<div class="xp-sec">Arrival</div><div class="xp-row">' +
-          '<button type="button" class="xp-b' + (st.drink || m.drink === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (st.drink || m.drink === true ? (m.drink_paid === true ? ' · Paid ✓' : (m.drink_free === true ? ' · Free ✓' : ' ✓')) : '') + '</button></div>';
+          '<button type="button" class="xp-b' + (st.drink || m.drink === true || m.drink_none === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (m.drink_none === true ? ' · No drink ✓' : (st.drink || m.drink === true ? (m.drink_paid === true ? ' · Paid ✓' : (m.drink_free === true ? ' · Free ✓' : ' ✓')) : '')) + '</button></div>';
         if (m.xp_out === true) {
           var compK = (st.colours !== undefined || m.colours !== undefined) ? 'compliment,colours' : 'compliment';
           h += '<div class="xp-sec">Before she leaves</div><div class="xp-row">' +
@@ -26317,7 +26317,7 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
     var say = '';
     try {
       if (dentro && p && !d) {
-        var nk = !(st.drink || m.drink === true) ? 'drink' : (m.xp_out === true ? (['compliment', 'rebook'].concat(Object.keys(st).filter(function(k){ return NEWS[k]; })).filter(function(k){ return (k in st) && !st[k]; })[0] || '') : '');
+        var nk = !(st.drink || m.drink === true || m.drink_none === true) ? 'drink' : (m.xp_out === true ? (['compliment', 'rebook'].concat(Object.keys(st).filter(function(k){ return NEWS[k]; })).filter(function(k){ return (k in st) && !st[k]; })[0] || '') : '');
         if (nk) say = jrFrase(a, nk) || '';
       } else if (!dentro) { say = jrFrase(a, 'welcome') || ''; }
     } catch (x) {}
@@ -26340,6 +26340,7 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
   window.bsbXpOut = function(id){ try { markStep(id, 'xp_out', true); } catch (x) {} redraw(id); };
   window.bsbXpTap = function(id, k){
     var a = aOf(id), m = a ? marks(a) : {};
+    if (k === 'drink' && m.drink_none === true) { try { markStep(id, 'drink_none', false); } catch (x) {} soon(id); return; }
     if (k === 'drink' && m.drink === true) { try { bsbRnUndo(id, 'drink'); markStep(id, 'drink_free', false); markStep(id, 'drink_paid', false); } catch (x) {} soon(id); return; }
     if (k === 'drink') { bsbXpAsk(id, 'drink'); return; }
     try { bsbRnTap(id, k); } catch (x) {}
@@ -26353,7 +26354,7 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
       (kind === 'drink' ? '🍹 Her drink' : (kind === 'plan' ? 'What experience will you give her?' : 'What experience did you give her?')) + '</h3>' +
       '<div class="hs">' + (kind === 'done' ? 'Be honest, it helps the team' : e(n)) + '</div>' +
       (kind === 'drink'
-        ? '<button type="button" class="o" data-v="free">🎁 Free</button><button type="button" class="o k" data-v="paid">💷 Paid</button>'
+        ? '<button type="button" class="o" data-v="free">🎁 Free</button><button type="button" class="o k" data-v="paid">💷 Paid</button><button type="button" class="o" data-v="none">🚫 No drink</button>'
         : '<button type="button" class="o" data-v="standard">' + LAB.standard + '</button>' +
           '<button type="button" class="o k" data-v="exceptional">' + LAB.exceptional + '</button>') +
       '<button type="button" class="bk" data-v="x">‹ Back</button></div>';
@@ -26363,6 +26364,7 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
       var v = b.getAttribute('data-v'); o.remove();
       if (v === 'x') return;
       if (kind === 'drink') {
+        if (v === 'none') { try { markStep(id, 'drink_none', true); } catch (x) {} soon(id); return; }
         try { markStep(id, 'drink_free', v === 'free'); markStep(id, 'drink_paid', v === 'paid'); bsbRnTap(id, 'drink'); } catch (x) {}
         if (v === 'paid') { try { jToast('💷 Add the drink to her Salonized invoice'); } catch (x) {} }
         soon(id); return;
