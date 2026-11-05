@@ -449,7 +449,7 @@ function loadPeople(){fetch(B+'bsb_sp_people_pub?select=person,role,level,sp_fro
 function renderLogin(msg){var L=document.getElementById('login');
   if(!PICK&&APP){L.innerHTML='<div class="lk"><h1 style="margin-bottom:4px">BSB Soul</h1><p>Your Connecteam code</p><div class="dots">'+[0,1,2,3].map(function(i){return '<i class="'+(i<PIN.length?'f':'')+'"></i>'}).join('')+'</div><div class="keys">'+
     [1,2,3,4,5,6,7,8,9,'✓',0,'⌫'].map(function(k){return '<button onclick="key(\''+k+'\')">'+k+'</button>'}).join('')+'</div><div class="err">'+(msg||'')+'</div></div>';return}
-  if(!PICK){var list=PEOPLE.filter(function(p){return p.role==='therapist'||p.role==='admin'});
+  if(!PICK){var list=PEOPLE.filter(function(p){return p.role==='therapist'||p.role==='admin'||p.role==='desk'});
     L.innerHTML='<div class="lk wide"><h1>Soul Path</h1><p>Tap your face</p><div class="faces">'+list.map(function(p){return '<button class="face" onclick="pick(\''+p.person+'\')">'+avHtml(p.person)+p.person+'</button>'}).join('')+'</div><div class="err">'+(msg||'')+'</div></div>';return}
   L.innerHTML='<div class="lk"><div class="face" style="margin-bottom:6px">'+avHtml(PICK)+PICK+'</div><p>Your Connecteam code</p><div class="dots">'+[0,1,2,3].map(function(i){return '<i class="'+(i<PIN.length?'f':'')+'"></i>'}).join('')+'</div><div class="keys">'+
   [1,2,3,4,5,6,7,8,9,'✓',0,'⌫'].map(function(k){return '<button onclick="key(\''+k+'\')">'+k+'</button>'}).join('')+'</div><div class="err">'+(msg||'')+'</div><button class="back" onclick="pick(null)">‹ Not me</button></div>'}
@@ -470,7 +470,7 @@ function firstGirl(){var g=PEOPLE.filter(function(p){return p.role==='therapist'
 function lvl(n){var p=PEOPLE.filter(function(x){return x.person===n})[0],L=['Soul','Soul+','Senior Soul','Soul Lead','Soul Manager'],v=(p&&p.level)||1;return L[v-1]+' · Level '+v}
 function setWho(n){S.who=n;document.getElementById('nm').textContent=n;document.getElementById('lv').textContent=lvl(n);
   var av=document.getElementById('av');av.innerHTML=avHtml(n).replace(/^<div class="av">|<\/div>$/g,'');
-  if(S.admin)document.getElementById('team').innerHTML=PEOPLE.filter(function(p){return p.role==='therapist'||p.role==='admin'}).map(function(p){return '<button class="'+(p.person===n?'on':'')+'" onclick="setWho(\''+p.person+'\');load()" title="'+p.person+'">'+avHtml(p.person)+'</button>'}).join('')}
+  if(S.admin)document.getElementById('team').innerHTML=PEOPLE.filter(function(p){return p.role==='therapist'||p.role==='admin'||p.role==='desk'}).map(function(p){return '<button class="'+(p.person===n?'on':'')+'" onclick="setWho(\''+p.person+'\');load()" title="'+p.person+'">'+avHtml(p.person)+'</button>'}).join('')}
 function start(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='flex';
   if(S.admin)document.getElementById('team').style.display='flex';
   setWho(S.who);S.anchor=today();load()}
@@ -512,7 +512,7 @@ function render(){
   {var sk=SKIN.indexOf(S.who)>=0;document.getElementById('tabCare').style.display=sk?'':'none';if(S.tab==='care'&&!sk)S.tab='path'}
   document.getElementById('seg').style.display=document.querySelector('.nav').style.display=S.tab==='today'?'none':'';
   document.getElementById('segY').style.display=S.tab==='biz'?'':'none';
-  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.innerHTML=MONEY()?'<i>💷</i><span>My money</span>':'<i>🛍️</i><span>My sales</span>';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none'});
+  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.innerHTML=MONEY()?'<i>💷</i><span>My money</span>':'<i>🛍️</i><span>My sales</span>';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none';if(t==='xm')b.style.display=((PEOPLE.filter(function(p){return p.person===S.who})[0]||{}).role==='desk')?'none':''});
   if(APP&&!S.admin&&['std','path','care','biz'].indexOf(S.tab)>=0){S.tab='today'}
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
@@ -858,7 +858,26 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
 /* ---------- Today ---------- */
 function dayGreen(x,L){return x&&x.worked&&!(x.late_min>0)&&!(x.lunch_min!=null&&x.lunch_min>L)&&x.look_marked&&x.look_ok!==false&&x.t_morning>0&&x.t_day>0&&x.t_close>0}
 function boom(){var b=document.createElement('div');b.className='boom';var E=['✨','💜','⭐','🎉','🔥'];for(var i=0;i<26;i++){var e=document.createElement('i');e.textContent=E[i%5];e.style.left=(Math.random()*100)+'%';e.style.animationDelay=(Math.random()*.6)+'s';b.appendChild(e)}document.body.appendChild(b);setTimeout(function(){b.remove()},3200)}
+function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+day;
+  if(S.dkk!==key){S.dkk=key;S.dk=null;M.innerHTML='<div class="wait"><em>🛎️</em>Loading…</div>';rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null}).then(function(x){if(S.dkk!==key)return;S.dk=x||{};if(S.tab==='today')renderDesk(M)});return}
+  var d=S.dk||{},n=function(v){return +v||0},dd=pd(day),isT=day===ymd(td),fn=(S.who||'').split(' ')[0],hr=new Date().getHours(),hi=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  var cl=n(d.clients),rb=n(d.rebook),rp=cl?Math.round(100*rb/cl):null;
+  var SE=[{ic:'🔁',t:'Rebook',ok:rb>0?true:null,m:cl?(rb+' of '+cl+' clients'):'No clients today'},
+   {ic:'📲',t:'Last minute',ok:n(d.lm_sent)>0?true:null,m:n(d.lm_sent)?(n(d.lm_sent)+' sent · '+n(d.lm_booked)+' booked'):'None sent yet'},
+   {ic:'📧',t:'Newsletter',ok:n(d.news)>0?true:null,m:n(d.news)?(n(d.news)+' joined'):'No one yet'}];
+  var won=SE.filter(function(q){return q.ok}).length;
+  var wk=[];for(var j=6;j>=0;j--){var d2=new Date(td);d2.setDate(d2.getDate()-j);var k=ymd(d2);wk.push('<button class="'+(k===day?'on':'')+'" onclick="S.tday=\''+k+'\';renderToday(document.getElementById(\'main\'))"><i class="'+(k===ymd(td)?'t':'')+'">'+(k===ymd(td)?'•':'')+'</i>'+DW[(d2.getDay()+6)%7].slice(0,1)+'<span style="opacity:.7">'+d2.getDate()+'</span></button>')}
+  var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]+'</p>'+
+    '<div class="alive"><em>📅</em><div><b>Fill the quiet days</b><span>Every booking you bring counts</span></div></div><div class="wk">'+wk.join('')+'</div>'+
+    '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
+  var C=[['📅','Filled by us',n(d.fill_n),'services added today'],['✨','Extras offer',n(d.mk_booked),'booked of '+n(d.mk_sent)+' sent'],['🥂','Drinks',n(d.drinks_free)+n(d.drinks_paid),n(d.drinks_free)+' free · '+n(d.drinks_paid)+' paid'],
+   ['🎁','Gift cards',n(d.gift_n),'sold today'],['💜','Tips',d.tips_pct==null?'–':d.tips_pct+'%','of sales'],['🔁','Rebook',rp==null?'–':rp+'%','of clients']];
+  h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':'na';
+    return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+q.ic+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span></div>'}).join('')+'</div>'+
+    '<div class="dcs">'+C.map(function(c){return '<div><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div></div>';
+  M.innerHTML=h}
 function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
+  if(((PEOPLE.filter(function(p){return p.person===S.who})[0]||{}).role)==='desk'){renderDesk(M);return}
   if(S.tdk!==key){S.tdk=key;S.td=null;M.innerHTML='<div class="wait"><em>☀️</em>Loading…</div>';
     var f=new Date(td);f.setDate(f.getDate()-39);
     Promise.all([rpc('soul_standard',{p_code:S.code,p_person:S.who,p_from:ymd(f),p_to:ymd(td)}).catch(function(){return null}),
