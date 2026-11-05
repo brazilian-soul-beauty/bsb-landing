@@ -453,12 +453,14 @@ function pick(n){PICK=n;PIN='';renderLogin()}
 function key(k){if(k==='⌫'){PIN=PIN.slice(0,-1);return renderLogin()}
   if(k!=='✓'){if(PIN.length>=6)return;PIN+=k;renderLogin()}
   var force=k==='✓'||PIN.length===6;
-  if(PIN.length===4||force){var tried=PIN;rpc('bsb_sp_login',{p_code:PIN}).then(function(r){
+  if(PIN.length===4||force){var tried=PIN;PIN='';rpc1('soul_login',{p_code:tried}).then(function(j){j=j||{};
+    if(j.locked)return renderLogin('Too many tries. Wait 15 minutes');
+    var r=j.ok?[{person:j.person,role:j.role}]:[];
     if(APP&&!PICK&&r.length)PICK=r[0].person;
     var ok=r.length&&(r[0].person===PICK||r[0].role==='admin');
-    if(!ok){if(!force&&!r.length&&tried===PIN&&PIN.length<6)return;PIN='';return renderLogin('Wrong code')}
-    S.admin=r[0].role==='admin';S.code=tried;PIN='';
-    S.who=S.admin?(PICK===r[0].person?firstGirl():PICK):PICK;start()}).catch(function(){PIN='';renderLogin('No internet')})}}
+    if(!ok)return renderLogin(j.left===0?'Too many tries. Wait 15 minutes':'Wrong code');
+    S.admin=r[0].role==='admin';S.code=j.token;
+    S.who=S.admin?(PICK===r[0].person?firstGirl():PICK):PICK;start()}).catch(function(){renderLogin('No internet')})}}
 function firstGirl(){var g=PEOPLE.filter(function(p){return p.role==='therapist'})[0];return g?g.person:'Dania'}
 function lvl(n){var p=PEOPLE.filter(function(x){return x.person===n})[0],L=['Soul','Soul+','Senior Soul','Soul Lead','Soul Manager'],v=(p&&p.level)||1;return L[v-1]+' · Level '+v}
 function setWho(n){S.who=n;document.getElementById('nm').textContent=n;document.getElementById('lv').textContent=lvl(n);
