@@ -316,7 +316,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .nd .ic{position:absolute;inset:0;display:grid;place-items:center;font-size:54px}.nd:not(.ok) .ic{filter:saturate(.6);opacity:.85}
 .nd b{font-size:15px;margin-top:8px;color:var(--ink)}.nd .v{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.5px}
 .nd .todo{font-size:12.5px;font-weight:700;color:#8A5A12;background:#FFF1D6;border-radius:999px;padding:4px 11px}.nd .todo.g{background:#141117;color:#E9C77B}
-.nd.ok .seal{background:radial-gradient(circle at 35% 30%,#FFE9B0 0%,#E9C77B 45%,#B9832A 100%);box-shadow:0 0 0 6px #fff,0 14px 34px rgba(201,150,46,.45)}.nd.ok .seal svg{display:none}
+.nd.ok .seal{background:radial-gradient(circle at 35% 30%,#FFE9B0 0%,#E9C77B 45%,#B9832A 100%);box-shadow:0 0 0 6px #fff,0 14px 34px rgba(201,150,46,.45)}.nd.ok .seal .dt.g{fill:#fff}.nd.ok .seal .dt.w,.nd.ok .seal .dt.f{fill:rgba(255,255,255,.35)}
 .nd .ck{position:absolute;right:4px;top:4px;width:34px;height:34px;border-radius:50%;background:#141117;color:#E9C77B;display:grid;place-items:center;font-style:normal;font-weight:800;border:3px solid #fff}
 .nd.crown .seal{width:190px;height:190px;background:radial-gradient(circle at 35% 30%,#3A3242 0%,#141117 70%);box-shadow:0 0 0 6px #fff,0 16px 40px rgba(20,17,23,.35)}
 .nd.crown .ic{font-size:86px}.nd.crown .lock{filter:grayscale(1) brightness(.5)}.nd.crown .ic i{position:absolute;right:34px;bottom:34px;font-size:32px;font-style:normal}
@@ -330,6 +330,21 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .ym.won i{border:0;background:radial-gradient(circle at 35% 30%,#3A3242,#141117);box-shadow:0 0 0 2px #E9C77B}.ym.won small{color:#8A5A12}
 .ym.live i{border:2px solid #E9C77B;background:#FFF6E3;filter:grayscale(.7)}.ym.live small{color:var(--ink)}.ym.live.on i{filter:none;box-shadow:0 0 14px rgba(233,199,123,.8)}
 .ym.miss i{border:2px solid #EEEAF6;color:var(--faint)}.ym.trophy i{width:48px;height:48px;font-size:26px;border:0;background:radial-gradient(circle at 35% 30%,#FFE9B0,#C9962E);filter:grayscale(.8);opacity:.7}
+.alive{display:flex;gap:12px;align-items:center;background:rgba(20,17,23,.35);border:1px solid rgba(233,199,123,.6);border-radius:16px;padding:12px 14px;margin:auto 0 12px;z-index:1}.alive em{font-style:normal;font-size:30px;filter:drop-shadow(0 0 10px rgba(233,199,123,.8))}.alive b{display:block;font-size:15px;color:#FFE9B0}.alive span{font-size:12px;opacity:.85}
+.alive.off{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.12)}.alive.off em{filter:grayscale(.6)}.alive.off b{color:#fff}
+.tst{background:rgba(255,255,255,.14);border-radius:16px;padding:10px 12px;margin-top:12px;z-index:1}.tsh{font-size:12px;font-weight:700;opacity:.9;margin-bottom:8px}.tsr{display:flex;justify-content:space-around}
+.tsr>div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px}.tsr i{width:38px;height:38px;border-radius:50%;border:2px dashed rgba(255,255,255,.45);display:grid;place-items:center;font-style:normal;font-size:18px}.tsr .on i{border:0;background:rgba(255,255,255,.95)}.tsr .no i{border-color:rgba(255,255,255,.25)}
+.tdm{display:flex;flex-direction:column;gap:10px;min-height:0;border-radius:24px;background:radial-gradient(90% 120% at 50% 100%,#FFF6E3 0%,#FBF8FF 55%,#F6F2FF 100%);border:1px solid var(--line);padding:22px 26px}
+.tds{flex:1;display:grid;grid-template-columns:repeat(3,1fr);align-items:center}
+.nd2{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;opacity:0;animation:pop2 .6s cubic-bezier(.2,1.4,.4,1) forwards}@keyframes pop2{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.nd2 .seal{width:190px;height:190px;border-radius:50%;position:relative;background:#fff;border:4px dashed #E4DCF5}.nd2 .ic{position:absolute;inset:0;display:grid;place-items:center;font-size:70px}.nd2.na .ic,.nd2.no .ic{filter:grayscale(.5);opacity:.6}
+.nd2.ok .seal{border:0;background:radial-gradient(circle at 35% 30%,#FFE9B0 0%,#E9C77B 45%,#B9832A 100%);box-shadow:0 0 0 7px #fff,0 16px 40px rgba(201,150,46,.45)}
+.nd2 .ck{position:absolute;right:8px;top:8px;width:40px;height:40px;border-radius:50%;background:#141117;color:#E9C77B;display:grid;place-items:center;font-style:normal;font-weight:800;border:3px solid #fff}
+.nd2 b{font-size:18px;margin-top:10px}.nd2 span{font-size:13.5px;color:var(--muted);font-weight:600}.nd2.ok span{color:#8A5A12}
+.nxt{align-self:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;font-weight:600}
+.dt.g{fill:#D4A23E}.dt.w{fill:#fff;stroke:#D9D2E8;stroke-width:1.5}.dt.m{fill:#E9E5F0}.dt.f{fill:#EFEBF6}.dt.o{fill:#D9D2E8}
+.exn{display:flex;flex-direction:column;align-items:center;line-height:1}.exn em{font-style:normal;font-size:44px}.exn b{font-size:40px;font-weight:800;color:var(--ink);margin-top:4px}.exn b small{font-size:18px;color:var(--faint)}
+.nd2 .ic:has(.exn){filter:none!important;opacity:1!important}
 </style>
 </head>
 <body>
@@ -536,10 +551,14 @@ function renderSM(M){var r=range(),K=smCrit(S.data||{},S.xm||{},r),C=K.C,G=K.G,P
   var pth='M'+X[0]+' '+Y[0];for(var q=1;q<5;q++){var mx=(X[q-1]+X[q])/2;pth+=' C'+mx+' '+Y[q-1]+' '+mx+' '+Y[q]+' '+X[q]+' '+Y[q]}
   var h='<div class="map'+(win?' win':'')+'"><div class="mh"><div><small>Performance · '+label()+'</small><h2>👑 Soul Master</h2><div class="mv">'+(PRE?'🗂️ Reference only.':win?'✨ Master level. Keep it to the last day.':done?'🌱 New month, new chance.':'📍 Next: '+(todo.slice(0,2).join(' · ')||'keep going'))+'</div></div><div class="mc"><b>'+sc+'</b>/4 seals<span>98% in everything</span></div></div>'+
    '<svg class="mp" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="'+pth+'" fill="none" stroke="#E4DCF5" stroke-width="1.6" stroke-dasharray="1.2 1.6" stroke-linecap="round" vector-effect="non-scaling-stroke" style="stroke-width:6px"/></svg>';
+  var DDm=(S.data&&S.data.days)||[],byd={};DDm.forEach(function(z){byd[z.d]=z});var dim=new Date(r[0].getFullYear(),r[0].getMonth()+1,0).getDate(),tds=ymd(today());
+  var wd=[];for(var q=1;q<=dim;q++){var dk=ymd(new Date(r[0].getFullYear(),r[0].getMonth(),q));wd.push(dk)}
+  var wkd=wd.filter(function(k){var z=byd[k];return z&&z.worked&&k<=tds});
+  function dots(k,pr){var lit=Math.round(pr*wkd.length),seen=0,o='';wd.forEach(function(dk,q){var a=-Math.PI/2+2*Math.PI*q/dim,cx=75+66*Math.cos(a),cy=75+66*Math.sin(a),z=byd[dk],c;
+     if(dk>tds)c='f';else if(!z||!z.worked)c='o';else{seen++;if(k===1)c=(z.look_marked&&z.look_ok!==false)?'g':(z.look_marked?'m':'w');else c=seen<=lit?'g':'w'}
+     o+='<circle class="dt '+c+'" cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(c==='o'?2:4.2)+'"/>'});return o}
   C.forEach(function(c,k){var pr=c.tips?(c.ok?1:c.v==null?0:.5):Math.min(1,(c.v||0)/G),st=c.ok?'ok':c.v==null?'na':'';
-    h+='<div class="nd '+st+'" style="left:'+X[k]+'%;top:'+Y[k]+'%;animation-delay:'+(k*120)+'ms"><div class="seal"><svg width="150" height="150"><circle cx="75" cy="75" r="'+RR+'" stroke="#EEEAF6" stroke-width="12" fill="none"/>'+
-     (c.ok?'':'<circle class="pa" cx="75" cy="75" r="'+RR+'" stroke="url(#gg)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="'+CR+'" stroke-dashoffset="'+CR+'" data-o="'+(CR*(1-pr))+'" transform="rotate(-90 75 75)"/>')+
-     '</svg><div class="ic">'+c.ic+'</div>'+(c.ok?'<i class="ck">✓</i>':'')+'</div><b>'+c.t+'</b><span class="v">'+(c.v==null?'–':(c.tips&&c.v>0?'+':'')+c.v+'%')+'</span>'+
+    h+='<div class="nd '+st+'" style="left:'+X[k]+'%;top:'+Y[k]+'%;animation-delay:'+(k*120)+'ms"><div class="seal"><svg width="150" height="150">'+dots(k,pr)+'</svg><div class="ic">'+c.ic+'</div>'+(c.ok?'<i class="ck">✓</i>':'')+'</div><b>'+c.t+'</b><span class="v">'+(c.v==null?'–':(c.tips&&c.v>0?'+':'')+c.v+'%')+'</span>'+
      (c.todo&&!PRE?'<span class="todo">'+esc(c.todo)+'</span>':c.ok?'<span class="todo g">Seal won</span>':'')+'</div>'});
   h+='<div class="nd crown'+(win?' ok':'')+'" style="left:'+X[4]+'%;top:'+Y[4]+'%;animation-delay:480ms"><div class="seal"><div class="ic">'+(win?'👑':'<span class="lock">👑</span><i>🔒</i>')+'</div></div><b>Soul Master</b><span class="v">'+(win?(done?'You did it':'On track'):sc+' of 4')+'</span></div>';
   var wonN=0,yr=mons.map(function(m){var k=ymd(m),st=m<cm?(S.smy[S.who+'|'+k]?'won':S.smy[S.who+'|'+k]===false?'miss':'wait'):m.getTime()===cm.getTime()?(win?'live on':'live'):'lock';if(st==='won')wonN++;
@@ -644,23 +663,24 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   var AC=S.td.ac,fc=AC?+AC.facials||0:0,acn=AC?Math.min(+AC.aftercare||0,fc):0,acOk=fc>0&&acn>=fc;if(fc>0)ITM.push(['🧴',acOk]);
   var TOT=ITM.length,sc=ITM.filter(function(q){return q[1]}).length;
   var bd=ITM.map(function(q){return '<span class="bdg'+(q[1]?' on':'')+'">'+q[0]+'</span>'}).join('');
-  var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+(isT?DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]:'Your day')+'</p>'+
-    '<div style="margin:auto 0;text-align:center"><div class="score"><b>'+sc+'</b><span>/'+TOT+'</span></div><div class="bdgs">'+bd+'</div>'+
-    (streak?'<div class="stk">🔥 '+streak+' '+(streak===1?'day':'days')+' all green</div>':'')+'</div>'+
+  var rvA=t.reviews||[],rvT=rvA.filter(function(q){return String(q.date).slice(0,10)===day}),r5=rvT.filter(function(q){return +q.rating===5}).length,mon=day.slice(0,7);
+  var lkMiss=days.filter(function(z){return z.d.slice(0,7)===mon&&z.d<=day&&z.worked&&z.look_marked&&z.look_ok===false}).length,rvBad=rvA.filter(function(q){return String(q.date).slice(0,7)===mon&&+q.rating<5}).length,alive=!lkMiss&&!rvBad;
+  var SE=[{ic:'💄',t:'Look wow',ok:x.look_marked?lkOk:null,m:!x.look_marked?'Waiting for the check':lkOk?'Wow today':'Not today'},
+   {ic:'🎬',t:'Content',ok:exp>0?ctOk:(vd>0?true:null),m:exp>0?(vd+' of '+exp+(exp===1?' video':' videos')):(vd?'Thank you for creating':'No free time today')},
+   {ic:'👑',t:'Exceptional',ok:nc&&pe>=nc?true:null,ex:1,m:nc?(pe+' of '+nc+(nc===1?' client':' clients')):'No clients today'}];
+  var won=SE.filter(function(q){return q.ok}).length;
+  var STP=[];if(x.worked||isT){STP.push(['⏰','On time',x.worked?!(x.late_min>0):null]);STP.push(['🍽️','Lunch',x.worked&&x.lunch_min!=null?x.lunch_min<=L:null]);STP.push(['☑️','Tasks',x.worked||nc?tkOk:null]);if(fc>0)STP.push(['🧴','Ritual',acOk])}
+  var allSt=STP.length&&STP.every(function(q){return q[2]});
+  var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]+'</p>'+
+    '<div class="alive'+(alive?'':' off')+'"><em>👑</em><div><b>'+(alive?'Your crown is alive':'Next crown: new month')+'</b><span>'+(alive?'Keep every seal this month':'Your seals still count')+'</span></div></div>'+
     '<div class="wk">'+wk.join('')+'</div>'+
-    '<div class="verdict" style="margin-top:14px"><em>'+(sc===TOT?'💜':'🎯')+'</em><span>'+(sc===TOT?(isT?'Perfect day. Keep the flame alive.':'Perfect day.'):(!x.worked&&!nc)?'Day off. Rest well.':(isT?'You are '+(TOT-sc)+' away from a perfect day':(TOT-sc)+' missing this day'))+'</span></div></div><div class="grid g4 td">';
-  var TK=[['☀️','AM',x.t_morning>0],['☑️','Day',x.t_day>0],['🌙','Close',x.t_close>0]],NT=2+(fc>0?1:0)+(exp>0?1:0),T=[];
-  T.push('<div class="tt tasks'+(NT===2?' span2':'')+' '+(tkOk?'ok':'')+'"><div class="h">Tasks</div><div class="cir">'+TK.map(function(q){return '<div class="c'+(q[2]?' on':'')+'"><i>'+(q[2]?'✓':q[0])+'</i><span>'+q[1]+'</span></div>'}).join('')+'</div><div class="m">'+(tkOk?'All done':TK.filter(function(q){return q[2]}).length+' of 3 done')+'</div></div>');
-  if(fc>0){var bs='';for(var q=0;q<Math.min(fc,8);q++)bs+='<i class="'+(q<acn?'on':'')+'">'+(q<acn?'🧴':'○')+'</i>';
-    T.push('<div class="tt ac '+(acOk?'ok':'')+'"><div class="h">Eminence ritual</div><div class="stars">'+bs+'</div><div class="m">'+(acOk?'Every facial client has her ritual':acn?acn+' of '+fc+' facial clients':'Send her Eminence ritual')+'</div><div class="s">'+(acOk?'Aftercare sent to reception':'Aftercare for every facial')+'</div></div>');}
-  if(exp>0){var vs='';for(var q=0;q<Math.min(exp,8);q++)vs+='<i class="'+(q<vd?'on':'')+'">'+(q<vd?'🎬':'○')+'</i>';
-    T.push('<div class="tt ct '+(ctOk?'ok':'')+'"><div class="h">Content</div><div class="stars">'+vs+'</div><div class="m">'+(ctOk?'Content done':vd?vd+' of '+exp+' videos':'You have free time for '+exp+(exp===1?' video':' videos'))+'</div><div class="s">'+(ctOk?'Thank you for creating':'One video per free hour')+'</div></div>');}
-  var stars='';for(var q=0;q<Math.min(nc,10);q++)stars+='<i class="'+(q<pe?'on':'')+'">'+(q<pe?'⭐':'☆')+'</i>';
-  var CL='<div class="tt cl'+(NT!==4?' span2':'')+' '+(clOk&&nc?'ok':'')+'"><div class="h">Amazing clients</div><div class="stars">'+(stars||'<i>🌙</i>')+'</div><div class="m">'+(nc?(pe?pe+(pe===1?' client':' clients')+' felt amazing today':'Make your first client feel amazing'):'No clients today')+'</div>'+(nc?'<div class="s">'+pe+' of '+nc+'</div>':'')+'</div>';
-  if(NT===4)T.splice(2,0,CL);else T.push(CL);
-  h+=T.join('');
-  h+='</div>';M.innerHTML=h;
-  if(sc===TOT&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
+    (STP.length?'<div class="tst"><div class="tsh">🤝 Standard today'+(allSt?' 🏅':'')+'</div><div class="tsr">'+STP.map(function(q){return '<div class="'+(q[2]?'on':q[2]===false?'no':'')+'"><i>'+(q[2]?q[0]:'')+'</i><span>'+q[1]+'</span></div>'}).join('')+'</div></div>':'')+
+    '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(!x.worked&&!nc?'Day off. Rest well.':won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
+  h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':q.ok===false?'no':'na';
+    return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+(q.ex&&nc?'<span class="exn"><em>'+q.ic+'</em><b>'+pe+'<small>/'+nc+'</small></b></span>':q.ic)+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span></div>'}).join('')+'</div>'+
+    (nx&&isT?'<div class="nxt">⏭️ Next client at <b>'+nx.s+'</b> · '+esc(nx.service||'')+'</div>':'')+'</div>';
+  M.innerHTML=h;
+  if(won===3&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
 /* ---------- Eminence ---------- */
 var EMS=[['story','🌿','We are Eminence'],['why','💚','Why only Eminence'],['product','🧴','Know every product'],['study','🎬','Study to grow'],['mine','🛍️','My Eminence']];
 var EMI={story:['🇭🇺','🌾','🍃','🏆','🌳','💧'],why:['🏠','🤝','🚫','💬','🌱','🗣️']};
