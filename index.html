@@ -9802,20 +9802,21 @@ function buildRunControls(a) {
   var phrase = '';
   if (rs.phase === 'running' && rs.startedLate >= 5) {
     var first0 = firstName(a.client) || 'her';
+    first0 = first0.charAt(0).toUpperCase() + first0.slice(1);   /* LATE2: 'vera' -> 'Vera' */
     /* A MICHELLE entrega o tempo cheio: facial e massagem nao se cortam. As outras
        RECUPERAM dentro do tempo de arrumacao da sala, que e o que a casa reserva. */
     /* so da para recuperar dentro do tempo de arrumacao da sala. Passou disso, nao e
        recuperavel: a cliente recebe o tempo dela e a recepcao e avisada. */
     var canRecover = (a.therapist !== 'michelle') && rs.clean > 0 && rs.startedLate <= rs.clean;
     if (!canRecover) {
-      phrase = '<div class="late-phrase">You started ' + rs.startedLate + ' min late. ' + esc(first0) +
+      phrase = '<div class="late-phrase">' + esc(first0) +
         ' still gets the full <b>' + rs.treat + ' min</b>, to <b>' + fmtClock(rs.owed) + '</b>.' +
         (rs.behind > 0
           ? ' That puts you about <b>' + rs.behind + ' min</b> behind, so tell the desk now and Joana looks after the next one: <i>\u201cAlmost done, she\u2019ll be worth the wait, I\u2019ll be right with her.\u201d</i>'
-          : ' There is room after ' + esc(first0) + ', so no rush.') +
+          : ' There is room after her, so no rush.') +
         '</div>';
     } else {
-      phrase = '<div class="late-phrase">You started <b>' + rs.startedLate + ' min</b> late, so pull it back' +
+      phrase = '<div class="late-phrase">Pull it back' +
         (rs.clean ? ', you have <b>' + rs.clean + ' min</b> of tidy-up time to use' : '') +
         '. Aim to finish by <b>' + fmtClock(toMin(a.time) + rs.treat) + '</b>, the same as always, so the next client is not paying for it.' +
         '</div>';
@@ -9824,7 +9825,7 @@ function buildRunControls(a) {
     phrase = '<div class="late-phrase">Her treatment time is up and the next client is at ' + fmtClock(rs.nextStart) +
       '. A warm line for the desk: <i>\u201cAlmost done, she\u2019ll be worth the wait, I\u2019ll be right with her.\u201d</i></div>';
   }
-  return '<div class="run-controls">' + btn + '</div>' + phrase;
+  return phrase + '<div class="run-controls">' + btn + '</div>';   /* LATE2 */
 }
 /* v32.119: era a ultima cliente do dia dela? So conta as que ainda nao terminaram. */
 function dayDoneHtml(a) {
