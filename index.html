@@ -476,7 +476,7 @@ function start(){document.getElementById('login').style.display='none';document.
   setWho(S.who);S.anchor=today();load()}
 
 /* ---------- data ---------- */
-function load(){var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):pd('2026-11-01');document.getElementById('perT').textContent=label()+(range()[1]<s0?' · not counted':'');
+function load(){var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):pd('2026-11-01');document.getElementById('perT').textContent=label();
   document.getElementById('next').disabled=range()[1]>=today();
   var r=range();document.getElementById('main').classList.add('load');
   var b={p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])};
@@ -640,7 +640,7 @@ function renderSM(M){var r=range(),K=smCrit(S.data||{},S.xm||{},r,S.smx&&S.smx.u
   var NC=C.length,sc=C.filter(function(c){return c.ok}).length,win=sc===NC,todo=C.filter(function(c){return c.todo&&c.todo.indexOf('next month')<0}).map(function(c){return c.ic+' '+c.todo});
   var X=NC===5?[8,24,40,56,72,90]:NC===3?[14,37,60,86]:[11,30,49,68,88],Y=NC===5?[58,35,58,35,58,46]:NC===3?[56,34,56,46]:[58,35,58,35,46],RR=58,CR=2*Math.PI*RR;
   var pth='M'+X[0]+' '+Y[0];for(var q=1;q<X.length;q++){var mx=(X[q-1]+X[q])/2;pth+=' C'+mx+' '+Y[q-1]+' '+mx+' '+Y[q]+' '+X[q]+' '+Y[q]}
-  var h='<div class="map'+(win?' win':'')+'"><div class="mh"><div><small>Performance · '+label()+'</small><h2>👑 Soul Master</h2><div class="mv">'+(PRE?'🗂️ Reference only.':win?'✨ Master level. Keep it to the last day.':done?'🌱 New month, new chance.':'📍 Next: '+(todo.slice(0,2).join(' · ')||'keep going'))+'</div>'+(function(){var q=K.RS||{},rv=q.rv||{};return '<div class="mv rsl" onclick="showRv()" style="cursor:pointer">Results · ⭐ '+(+rv.n||0)+' reviews'+(q.p5!=null?' ('+q.p5+'% 5★)':'')+' · 💜 Tips '+(q.tch==null?'–':(q.tch>=0?'↗ +':'↘ ')+q.tch+'%')+'</div>'})()+'</div><div class="mc"><b>'+sc+'</b>/'+NC+' seals<span>The top of the top</span></div></div>'+
+  var h='<div class="map'+(win?' win':'')+'"><div class="mh"><div><small>Performance · '+label()+'</small><h2>👑 Soul Master</h2><div class="mv">'+(win?'✨ Master level. Keep it to the last day.':done?'🌱 New month, new chance.':'📍 Next: '+(todo.slice(0,2).join(' · ')||'keep going'))+'</div>'+(function(){var q=K.RS||{},rv=q.rv||{};return '<div class="mv rsl" onclick="showRv()" style="cursor:pointer">Results · ⭐ '+(+rv.n||0)+' reviews'+(q.p5!=null?' ('+q.p5+'% 5★)':'')+' · 💜 Tips '+(q.tch==null?'–':(q.tch>=0?'↗ +':'↘ ')+q.tch+'%')+'</div>'})()+'</div><div class="mc"><b>'+sc+'</b>/'+NC+' seals<span>The top of the top</span></div></div>'+
    '<svg class="mp" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="'+pth+'" fill="none" stroke="#E4DCF5" stroke-width="1.6" stroke-dasharray="1.2 1.6" stroke-linecap="round" vector-effect="non-scaling-stroke" style="stroke-width:6px"/></svg>';
   var DDm=(S.data&&S.data.days)||[],byd={};DDm.forEach(function(z){byd[z.d]=z});var dim=new Date(r[0].getFullYear(),r[0].getMonth()+1,0).getDate(),tds=ymd(today());
   var wd=[];for(var q=1;q<=dim;q++){var dk=ymd(new Date(r[0].getFullYear(),r[0].getMonth(),q));wd.push(dk)}
