@@ -26267,10 +26267,15 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
   function estado(a){
     var st = {};
     try {
-      var t = document.createElement('div'); t.innerHTML = _prev(a) || '';
-      [].forEach.call(t.querySelectorAll('.rn-b[data-rnk]'), function(b){ st[b.getAttribute('data-rnk')] = b.classList.contains('done'); });
-      var vs = t.querySelector('.rn-box'); if (vs) vs.remove();
-      st.__strip = t.innerHTML;
+      /* o RUN385 so desenha a aba aberta: le as 3 abas */
+      var t = null;
+      ['arr', 'dur', 'out'].forEach(function(ph){
+        try { if (typeof bsbRnPhase === 'function') bsbRnPhase(a.id, ph); } catch (x) {}
+        t = document.createElement('div'); t.innerHTML = _prev(a) || '';
+        [].forEach.call(t.querySelectorAll('.rn-b[data-rnk]'), function(b){ st[b.getAttribute('data-rnk')] = b.classList.contains('done'); });
+      });
+      var vs = t && t.querySelector('.rn-box'); if (vs) vs.remove();
+      st.__strip = t ? t.innerHTML : '';
     } catch (x) { st.__strip = ''; }
     return st;
   }
@@ -26296,7 +26301,9 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
         h += '<div class="xp-sec">Arrival</div><div class="xp-row">' +
           '<button type="button" class="xp-b' + (st.drink || m.drink === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (st.drink || m.drink === true ? ' ✓' : '') + '</button></div>';
         if (m.xp_out === true) {
+          var compK = (st.colours !== undefined || m.colours !== undefined) ? 'compliment,colours' : 'compliment';
           h += '<div class="xp-sec">Before she leaves</div><div class="xp-row">' +
+            ('compliment' in st ? '<button type="button" class="xp-b' + (st.compliment ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'' + compK + '\')">\u2B50 Compliment' + (st.compliment ? ' \u2713' : '') + '</button>' : '') +
             '<button type="button" class="xp-b' + (st.rebook ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'rebook\')">📅 Rebook' + (st.rebook ? ' ✓' : '') + '</button>' +
             (st.charge ? '<button type="button" class="xp-b done">💷 Charge ✓</button>'
                        : '<button type="button" class="xp-b" data-till="' + id + '">💷 Charge</button>') +
@@ -26307,6 +26314,14 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
         }
       }
     }
+    var say = '';
+    try {
+      if (dentro && p && !d) {
+        var nk = !(st.drink || m.drink === true) ? 'drink' : (m.xp_out === true ? (['compliment', 'rebook'].concat(Object.keys(st).filter(function(k){ return NEWS[k]; })).filter(function(k){ return (k in st) && !st[k]; })[0] || '') : '');
+        if (nk) say = jrFrase(a, nk) || '';
+      } else if (!dentro) { say = jrFrase(a, 'welcome') || ''; }
+    } catch (x) {}
+    if (say) h += '<button type="button" class="rn-sayb" onclick="event.stopPropagation();var t=this.nextElementSibling;t.hidden=!t.hidden;">\uD83D\uDCAC What to say</button><div class="rn-sayt" hidden>' + e(say) + '</div>';
     return (st.__strip || '') + '<div class="jr-box xp-box" data-xp="' + id + '" onclick="event.stopPropagation()">' + h + '</div>';
   }
 
