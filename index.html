@@ -375,6 +375,10 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .bzg2{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;gap:10px;min-height:0}.bzgr{display:flex;flex-direction:column;gap:10px;margin-top:10px}.bzgr>div{display:grid;grid-template-columns:110px 1fr 40px;gap:4px 8px;align-items:center;font-size:13px;font-weight:600}.bzgr small{grid-column:2/4;font-size:11px;color:var(--muted);font-weight:500}.bzgr u{height:10px;background:#F1EEF7;border-radius:5px;overflow:hidden;text-decoration:none}.bzgr u i{display:block;height:100%;background:#6D4AFF}
 .bzr2{display:grid;grid-template-columns:1fr auto;gap:0 8px;padding:9px 0;border-bottom:1px solid var(--line)}.bzr2 span{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bzr2 small{grid-column:1;font-size:11px;color:var(--muted)}.bzr2 b{grid-row:1/3;grid-column:2;align-self:center;font-size:15px}.bzr2 b.g{color:#1F9D6B}.bzr2 b.a{color:#C2410C}.bzr2 b.r{color:#B3261E}
 .exb.ex5{display:grid;grid-template-columns:repeat(4,1fr)}.exb.ex5 b{font-size:15px}
+.ext b small{font-size:24px;font-weight:700}.exl{display:flex;flex-direction:column;gap:6px;margin:12px 0 auto;z-index:1}.exl>div{display:grid;grid-template-columns:26px 1fr auto;gap:8px;align-items:center;background:rgba(255,255,255,.14);border-radius:12px;padding:7px 10px}
+.exl em{font-style:normal;font-size:17px}.exl span{display:flex;flex-direction:column;line-height:1.15}.exl span b{font-size:13px}.exl span small{font-size:10.5px;opacity:.8}.exl i{font-style:normal;font-weight:800;font-size:14px;text-align:right;display:flex;flex-direction:column;line-height:1.1}.exl i small{font-size:10px;font-weight:600;opacity:.8}
+.hero.exh .ext{margin-top:auto}
+.hero .exl small,.hero .ext small{text-transform:none;letter-spacing:0}
 </style>
 </head>
 <body>
@@ -644,8 +648,8 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
   var disc=pk.filter(function(p){return p.kind==='discount'}).reduce(function(a,p){return a+(+p.value)},0),gift=pk.filter(function(p){return p.kind==='gift'}).reduce(function(a,p){return a+(+p.value)},0);
   var lcom=(+el.commission||0)+(el.up?+el.up.commission||0:0),ltot=pay+tips+disc+gift+lcom,lh=hrs?ltot/hrs:0,lmn=S.exlm?MN[S.exlm.getMonth()]:'Last month';
   var h='<div class="hero exh"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+
-   '<div class="ext"><b>'+gb0(ltot)+'</b><span>'+(lh?'£'+lh.toFixed(2)+' your real hour':'all in')+'</span></div>'+
-   '<div class="exb ex5"><div><em>💷</em><b>'+gb0(pay)+'</b><span>Pay</span></div><div><em>💜</em><b>'+gb0(tips)+'</b><span>Tips</span></div><div><em>🎁</em><b>'+gb0(disc+gift)+'</b><span>Perks</span></div><div><em>🧴</em><b>'+gb0(lcom)+'</b><span>Commission</span></div></div>'+
+   '<div class="ext"><b>'+(lh?'£'+lh.toFixed(2)+'<small>/h</small>':gb0(ltot))+'</b><span>'+(lh?'Your real hour, all in · '+gb0(ltot)+' in '+Math.round(hrs)+'h':'all in')+'</span></div>'+
+   '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients'],['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products and upgrades']].map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
    '<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · 🎨 '+tu.u+'/'+tu.v:'')+'</span></div></div>';
   function steps(list,cur){return '<div class="lad2">'+list.map(function(s0,i){var on=i<=cur,now=i===cur;return '<div class="st'+(on?' on':'')+(now?' now':'')+'"><i>'+s0[0]+'</i><small>'+s0[1]+'</small></div>'}).join('<u></u>')+'</div>'}
   var c1;
