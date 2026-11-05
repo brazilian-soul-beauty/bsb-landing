@@ -380,6 +380,9 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .hero.exh .ext{margin-top:auto}
 .hero .exl small,.hero .ext small{text-transform:none;letter-spacing:0}
 .map .mh>div:first-child{display:flex;flex-wrap:wrap;align-items:center;column-gap:16px}.map .mh>div:first-child>small{width:100%}.map .mh .mv{margin-top:4px}
+.dcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;cursor:pointer}.dcs>div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;column-gap:10px;align-items:center}
+.dcs em{font-style:normal;font-size:24px;grid-row:1/4}.dcs b{font-size:22px;font-weight:800;line-height:1}.dcs span{font-size:12px;font-weight:700}.dcs small{font-size:11px;color:var(--muted)}
+@media(max-width:700px){.tdm{order:-1;flex:0 0 calc(100% - 28px);margin:0 14px;padding:16px 14px;gap:12px}.tds{align-items:start;gap:6px}.nd2 .seal{width:96px;height:96px;border-width:3px}.nd2 .ic{font-size:40px}.nd2 .ck{width:28px;height:28px;right:0;top:0;font-size:12px}.exn em{font-size:24px}.exn b{font-size:22px}.exn b small{font-size:12px}.nd2 b{font-size:14px;margin-top:6px}.nd2 span{font-size:11.5px}.dcs{grid-template-columns:1fr 1fr}.dcs b{font-size:20px}.tdf .nxt{font-size:12.5px}}
 </style>
 </head>
 <body>
@@ -430,6 +433,8 @@ var PEOPLE=[],PICK=null;
 function avHtml(n){return '<div class="av">'+(AV[n]?'<img src="'+AV[n]+'" onerror="this.remove()">':'')+'<span>'+n[0]+'</span></div>'}
 function loadPeople(){fetch(B+'bsb_sp_people_pub?select=person,role,level&active=eq.true&order=sort',{headers:{apikey:K,Authorization:'Bearer '+K}}).then(function(r){return r.json()}).then(function(r){PEOPLE=r||[];renderLogin()}).catch(function(){renderLogin('No internet')})}
 function renderLogin(msg){var L=document.getElementById('login');
+  if(!PICK&&APP){L.innerHTML='<div class="lk"><h1 style="margin-bottom:4px">BSB Soul</h1><p>Your Connecteam code</p><div class="dots">'+[0,1,2,3].map(function(i){return '<i class="'+(i<PIN.length?'f':'')+'"></i>'}).join('')+'</div><div class="keys">'+
+    [1,2,3,4,5,6,7,8,9,'✓',0,'⌫'].map(function(k){return '<button onclick="key(\''+k+'\')">'+k+'</button>'}).join('')+'</div><div class="err">'+(msg||'')+'</div></div>';return}
   if(!PICK){var list=PEOPLE.filter(function(p){return p.role==='therapist'||p.role==='admin'});
     L.innerHTML='<div class="lk wide"><h1>Soul Path</h1><p>Tap your face</p><div class="faces">'+list.map(function(p){return '<button class="face" onclick="pick(\''+p.person+'\')">'+avHtml(p.person)+p.person+'</button>'}).join('')+'</div><div class="err">'+(msg||'')+'</div></div>';return}
   L.innerHTML='<div class="lk"><div class="face" style="margin-bottom:6px">'+avHtml(PICK)+PICK+'</div><p>Your Connecteam code</p><div class="dots">'+[0,1,2,3].map(function(i){return '<i class="'+(i<PIN.length?'f':'')+'"></i>'}).join('')+'</div><div class="keys">'+
@@ -439,6 +444,7 @@ function key(k){if(k==='⌫'){PIN=PIN.slice(0,-1);return renderLogin()}
   if(k!=='✓'){if(PIN.length>=6)return;PIN+=k;renderLogin()}
   var force=k==='✓'||PIN.length===6;
   if(PIN.length===4||force){var tried=PIN;rpc('bsb_sp_login',{p_code:PIN}).then(function(r){
+    if(APP&&!PICK&&r.length)PICK=r[0].person;
     var ok=r.length&&(r[0].person===PICK||r[0].role==='admin');
     if(!ok){if(!force&&!r.length&&tried===PIN&&PIN.length<6)return;PIN='';return renderLogin('Wrong code')}
     S.admin=r[0].role==='admin';S.code=tried;PIN='';
@@ -634,6 +640,10 @@ function renderSM(M){var r=range(),K=smCrit(S.data||{},S.xm||{},r),C=K.C,G=K.G,P
 
 
 /* ---------- Extras (commission) ---------- */
+function dayCounters(td,day,vd){var e=td.ex||{},pd0=(e.days||[]).filter(function(q){return q.d===day})[0],qn=pd0?+pd0.q:0,u=e.up?(e.up.days||[]).filter(function(q){return q.d===day})[0]:null,tp=td.tp||{};
+  var C=[];if(e.up)C.push(['🎨','Upgrades',u?u.u:0,u&&u.v?'of '+u.v+' chances':'today']);
+  C.push(['🧴','Products',qn,'sold today']);C.push(['💜','Tips',tp.pct==null?'–':tp.pct+'%',tp.pct==null?'no sales yet':'of your sales']);C.push(['🎬','Content',vd||0,vd?'Thank you':'not yet']);
+  return '<div class="dcs" onclick="goTab(\'ex\')">'+C.map(function(c){return '<div><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div>'}
 function exToday(e,day){if(!e)return '';var pd0=(e.days||[]).filter(function(q){return q.d===day})[0],qn=pd0?+pd0.q:0,o=[];
   if(e.up){var u=(e.up.days||[]).filter(function(q){return q.d===day})[0];if(u&&u.v)o.push('🎨 '+u.u+' of '+u.v+' chances')}
   o.push((e.kind==='skin'?'🧴 '+qn+' Eminence':'🧴 '+qn+' products'));
@@ -802,7 +812,8 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
     Promise.all([rpc('soul_standard',{p_code:S.code,p_person:S.who,p_from:ymd(f),p_to:ymd(td)}).catch(function(){return null}),
       rpc('soul_today',{p_code:S.code,p_person:S.who,p_date:day}).catch(function(){return null}),
       SKIN.indexOf(S.who)>=0?rpc('soul_care',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null}):Promise.resolve(null),
-      rpc('soul_extras',{p_code:S.code,p_person:S.who,p_day:day}).catch(function(){return null})]).then(function(x){if(S.tdk!==key)return;S.td={std:x[0]||{},t:x[1]||{},ac:x[2],ex:x[3]};if(S.tab==='today')renderToday(M)});return}
+      rpc('soul_extras',{p_code:S.code,p_person:S.who,p_day:day}).catch(function(){return null}),
+      rpc('soul_tips_day',{p_code:S.code,p_person:S.who,p_date:day}).catch(function(){return null})]).then(function(x){if(S.tdk!==key)return;S.td={std:x[0]||{},t:x[1]||{},ac:x[2],ex:x[3],tp:x[4]};if(S.tab==='today')renderToday(M)});return}
   var st=S.td.std,t=S.td.t,L=st.lunch_max||30,days=st.days||[],by={};days.forEach(function(x){by[x.d]=x});
   var st0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,tds=ymd(td);
   var streak=0;for(var i=0;i<40;i++){var d=new Date(td);d.setDate(d.getDate()-i);if((st0&&d<st0)||d.getMonth()!==td.getMonth())break;var x=by[ymd(d)];
@@ -834,7 +845,7 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
     '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(!x.worked&&!nc?'Day off. Rest well.':won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
   h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':q.ok===false?'no':'na';
     return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+(q.ex&&nc?'<span class="exn"><em>'+q.ic+'</em><b>'+pe+'<small>/'+nc+'</small></b></span>':q.ic)+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span></div>'}).join('')+'</div>'+
-    '<div class="tdf">'+(nx&&isT?'<div class="nxt">⏭️ Next client at <b>'+nx.s+'</b> · '+esc(nx.service||'')+'</div>':'')+exToday(S.td.ex,day)+'</div></div>';
+    dayCounters(S.td,day,vd)+'<div class="tdf">'+(nx&&isT?'<div class="nxt">⏭️ Next client at <b>'+nx.s+'</b> · '+esc(nx.service||'')+'</div>':'')+'</div></div>';
   M.innerHTML=h;
   if(won===3&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
 /* ---------- Eminence ---------- */
