@@ -405,6 +405,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 <div class="sheet" id="sheet"><div class="panel" id="panel"></div></div>
 <script>
 var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+var APP=/app/.test(location.pathname)||/[?&]app=1/.test(location.search);function MONEY(){return APP||S.admin}
 function rpc1(f,b){return fetch(B+'rpc/'+f,{method:'POST',headers:{apikey:K,Authorization:'Bearer '+K,'Content-Type':'application/json'},body:JSON.stringify(b||{})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 function rpc(f,b){return rpc1(f,b).catch(function(e){if(f==='bsb_sp_login')throw e;return new Promise(function(ok){setTimeout(ok,600)}).then(function(){return rpc1(f,b)})})}
 var AV={Michelle:'avatars/michelle.webp',Dania:'avatars/dania.webp',Anukis:'avatars/anukis.webp',Sana:'avatars/sana.webp',Riya:'avatars/riya.webp',Joana:'avatars/joana.webp',Aluana:'avatars/aluana.webp',Ligia:'avatars/ligia.webp'};
@@ -486,6 +487,8 @@ function render(){
   if(S.tab==='em')S.tab='path';
   {var sk=SKIN.indexOf(S.who)>=0;document.getElementById('tabCare').style.display=sk?'':'none';if(S.tab==='care'&&!sk)S.tab='path'}
   document.getElementById('seg').style.display=document.querySelector('.nav').style.display=S.tab==='today'?'none':'';
+  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.textContent=MONEY()?'💷 My money':'🛍️ My sales';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none'});
+  if(APP&&!S.admin&&['std','path','care','biz'].indexOf(S.tab)>=0){S.tab='today'}
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
   if(S.tab==='care')return renderCare(M);
@@ -650,15 +653,23 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
   var sp=S.exp||{},el=S.exl||{},tc=sp.tips,py=sp.pay||{},hrs=py.hours!=null?+py.hours:(tc?+tc.hours:0),pay=py.gross!=null?+py.gross:hrs*(+sp.base_rate||0),tips=tc?+tc.tips:0,pk=sp.perks||[];
   var disc=pk.filter(function(p){return p.kind==='discount'}).reduce(function(a,p){return a+(+p.value)},0),gift=pk.filter(function(p){return p.kind==='gift'}).reduce(function(a,p){return a+(+p.value)},0);
   var lcom=(+el.commission||0),ltot=pay+tips+disc+gift+lcom,lh=hrs?ltot/hrs:0,lmn=S.exlm?MN[S.exlm.getMonth()]:'Last month';
+  if(!MONEY()){var uu=up?(+up.ups||0):0;
+    var h='<div class="hero exh"><small>🛍️ My sales</small><h2>'+MN[r[0].getMonth()]+'</h2><p>What you sold and upgraded</p>'+
+     '<div class="ext"><b>'+q+'</b><span>products this month</span></div>'+
+     '<div class="exb"><div><em>🧴</em><b>'+q+'</b><span>Products</span></div>'+(up?'<div><em>🎨</em><b>'+uu+'</b><span>Upgrades</span></div>':'')+'</div>'+
+     '<div class="verdict"><em>☀️</em><span>Today: 🧴 '+(tdy?tdy.q:0)+(tu?' · 🎨 '+tu.u+' of '+tu.v+' chances':'')+'</span></div></div>';}
+  else{
   var h='<div class="hero exh"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+
    '<div class="ext"><b>'+(lh?'£'+lh.toFixed(2)+'<small>/h</small>':gb0(ltot))+'</b><span>'+(lh?'Your real hour, all in · '+gb0(ltot)+' in '+Math.round(hrs)+'h':'all in')+'</span></div>'+
    '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients'],['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products you sold']].map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
-   '<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · 🎨 '+tu.u+'/'+tu.v:'')+'</span></div></div>';
+   '<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · 🎨 '+tu.u+'/'+tu.v:'')+'</span></div></div>';}
   function steps(list,cur){return '<div class="lad2">'+list.map(function(s0,i){var on=i<=cur,now=i===cur;return '<div class="st'+(on?' on':'')+(now?' now':'')+'"><i>'+s0[0]+'</i><small>'+s0[1]+'</small></div>'}).join('<u></u>')+'</div>'}
   var c1;
-  if(sk){var L=[['5%','1+'],['8%','11+'],['12%','21+'],['15%','31+']],ci=q>=31?3:q>=21?2:q>=11?1:q>=1?0:-1;
+  if(sk&&!MONEY()){c1='<div class="tile exc"><div class="h"><em>🧴</em>Eminence</div><div class="exn2"><b>'+q+'</b><span>products this month</span></div><div class="todo">🛍️ This month</div></div>'}
+  else if(sk){var L=[['5%','1+'],['8%','11+'],['12%','21+'],['15%','31+']],ci=q>=31?3:q>=21?2:q>=11?1:q>=1?0:-1;
     c1='<div class="tile exc"><div class="h"><em>🧴</em>Eminence<span class="chip">'+(e.rate||0)+'%</span></div><div class="exn2"><b>'+q+'</b><span>products this month</span></div>'+steps(L,ci)+
      '<div class="todo">'+(e.next_at?'🎯 '+(e.next_at-q)+' more to '+L[ci+1][0]:'👑 Top step')+'</div></div>'}
+  else if(!MONEY()){c1='<div class="tile exc"><div class="h"><em>🧴</em>Products</div><div class="exn2"><b>'+q+'</b><span>cuticle oil, creams, Eminence</span></div><div class="todo">🛍️ This month</div></div>'}
   else{var L2=[['£0.50','1-10'],['£1','11+']],ci2=q>=11?1:q>=1?0:-1;
     c1='<div class="tile exc"><div class="h"><em>🧴</em>Products<span class="chip">'+(q>=11?'£1':'£0.50')+' each</span></div><div class="exn2"><b>'+q+'</b><span>cuticle oil, creams, Eminence</span></div>'+steps(L2,ci2)+
      '<div class="todo">'+(q<11?'🎯 '+(11-q)+' more to £1 each':'👑 £1 each')+'</div></div>'}
@@ -755,6 +766,7 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#5FD3A0 0%,#1F9D6B 50%,#0F6B47 100%)"><small>This is your path</small><h2>Soul Path</h2><p>'+LV[lv-1]+' · Level '+lv+'</p>'+
    '<div style="margin:auto 0 0;display:flex;flex-direction:column;gap:7px">'+LV.map(function(n,i){var on=i+1===lv,done=i+1<lv;return '<div style="display:flex;align-items:center;gap:10px;opacity:'+(on||done?1:.5)+'"><span style="width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:'+(on?'#fff':'rgba(255,255,255,.18)')+';color:'+(on?'#1F9D6B':'#fff')+';font-weight:800;font-size:13px">'+(done?'✓':i+1)+'</span><b style="font-size:'+(on?17:14)+'px">'+n+'</b>'+(on?'<span style="margin-left:auto;font-size:11px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:99px">You are here</span>':'')+'</div>'}).join('')+'</div>'+
    (function(){var hr=(+s.base_rate||0)+(+s.bonus_rate||0),sal=s.pay&&s.pay.salaried,NX={1:['🎓 BSB training, A to Z','✍️ BSB test passed','🤝 1 month all green','📚 BSB Standard guide read'],2:['🌟 6 months with 4 of 5','🤝 6 months all green','🎓 BSB test 100% + your speciality','📚 Book 1 + reflection'],3:['🌟 6 more months with 4 of 5','🤝 6 months all green','🎓 Train a new Soul + Academy module','📚 Book 2 + reflection'],4:['🤝 Always all green','🎓 Leadership learning','📚 Book 3 + reflection','👑 Chosen by Ligia']}[lv]||[];
+   if(!MONEY())return (lv<5?'<div class="nx"><div class="nh">Next · <b>'+LV[lv]+'</b></div>'+NX.map(function(t){return '<div class="ni"><i></i>'+t+'</div>'}).join('')+'</div>':'');
    return '<div class="hr"><div><b>'+(sal?'Salary':'£'+hr.toFixed(2))+'</b><span>'+(sal?'Fixed':'Your hour now')+'</span></div><div><b>👑 '+(sal?'+£2/h':'£'+(hr+2).toFixed(2))+'</b><span>Your hour in a month you win the Soul Master crown</span></div></div>'+
    (lv<5?'<div class="nx"><div class="nh">Next · <b>'+LV[lv]+'</b><span>+£1/h</span></div>'+NX.map(function(t,i){return '<div class="ni"><i></i>'+t+(/6 (more )?months/.test(t)?' <em>0/6</em>':'')+'</div>'}).join('')+'</div>':'')})()+
    '</div><div class="grid">';
@@ -774,7 +786,7 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
   if(hasEm){var b=S.br||{},cs=b.cards||[],kn=b.known||[],pr=cs.filter(function(c){return c.section==='product'||c.section==='study'}),kc=pr.filter(function(c){return kn.indexOf(c.id)>=0}).length,pc=pr.length?Math.round(100*kc/pr.length):0,nf=b.new_facial||0,nb=b.new_buyers||0,rp=nf?Math.round(100*nb/nf):0;
     h+='<div class="tile" style="background:#F1FAF5;border-color:#CDEBDB"><div class="h"><em>🌿</em>Eminence<span class="chip '+(rp>=20?'ok':'na')+'">'+(rp>=33?'🥇':rp>=20?'🥉':'🎯 20%')+'</span></div><div class="big" style="color:#0F6B47">'+rp+'<small>%</small></div><div class="sub">new facial clients took it home'+(S.admin&&nf?' · '+nb+' of '+nf:'')+'</div><div class="sub" style="min-height:0;margin-top:4px">📚 Learned '+pc+'%</div><div class="bar"><b data-w="'+pc+'" style="background:#1F9D6B"></b></div></div>';}
   if(nG===1)h+='<div class="tile span2"></div>';
-  h+='<div class="tile" style="grid-column:span 4;animation-delay:150ms"><div class="h"><em>💷</em>My month, all in · '+label()+(S.admin?'<button class="chip ok" style="cursor:pointer" onclick="perkForm()">+ Add discount or gift</button>':'')+'</div>'+
+  if(MONEY())h+='<div class="tile" style="grid-column:span 4;animation-delay:150ms"><div class="h"><em>💷</em>My month, all in · '+label()+(S.admin?'<button class="chip ok" style="cursor:pointer" onclick="perkForm()">+ Add discount or gift</button>':'')+'</div>'+
      '<div class="earn allin" style="border:0;padding:8px 0 0;grid-template-columns:2.6fr repeat(5,1fr);align-items:stretch">'+'<div style="background:var(--ok);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:22px">'+'<div><b style="color:#fff;font-size:38px;line-height:1">'+gbp(tot)+'</b><span style="color:#fff;opacity:.9">All in this month</span></div>'+'<i style="width:1px;align-self:stretch;background:rgba(255,255,255,.4)"></i>'+'<div><b style="color:#fff;font-size:38px;line-height:1">£'+allh.toFixed(2)+'<small style="font-size:15px;font-weight:600">/h</small></b><span style="color:#fff;opacity:.9">Your real hour</span></div></div>'+'<div><b>£'+rate.toFixed(2)+'</b><span>Per hour'+(bon&&hrs?' · +£'+(bon/hrs).toFixed(2)+' bonus':'')+'</span></div><div><b>'+gbp(pay)+'</b><span>Pay · '+Math.round(hrs)+'h'+(bon?' · incl. '+gbp(bon)+' bonus':'')+'</span></div><div><b>'+gbp(tips)+'</b><span>Tips</span></div>'+'<div><b>'+gbp(disc)+'</b><span>💅 Discounts</span></div><div><b>'+gbp(gift)+'</b><span>🎁 Gifts</span></div></div>'+
      (perks.length?'<div class="sub" style="margin-top:8px;min-height:0">'+perks.map(function(p){return (p.kind==='gift'?'🎁 ':p.auto?'🧾 ':'💅 ')+esc(p.what)+' · £'+(+p.value).toFixed(0)+(p.kind==='gift'?'':' off')+(S.admin&&p.id?' <a style="color:var(--no);cursor:pointer" onclick="perkDel(\''+p.id+'\')">✕</a>':'')}).join(' · ')+'</div>':'')+'</div></div>';
   M.innerHTML=h;
