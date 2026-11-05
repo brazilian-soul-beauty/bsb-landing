@@ -356,6 +356,13 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .exc .todo{font-size:13px;font-weight:700;color:#8A5A12;background:#FFF4DC;border-radius:999px;padding:6px 14px;margin-bottom:auto}
 .exr{position:relative;width:130px;height:130px;margin-top:auto}.exr svg{position:absolute;inset:0}.exr>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.exr b{font-size:28px;font-weight:800}.exr span{font-size:10.5px;color:var(--muted);font-weight:600;max-width:90px}
 .tdf{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.nxt.ex{cursor:pointer;background:#EAF8F1;border-color:#BFE8D3;color:#13704C}
+.pmb{z-index:1;margin:8px 0 0;background:rgba(20,17,23,.35);color:#fff;border:1px dashed rgba(255,255,255,.5);border-radius:12px;padding:8px;font:600 12.5px Inter,sans-serif;cursor:pointer}
+.pmk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.pmk button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font:600 12.5px Inter,sans-serif;cursor:pointer}.pmk em{font-style:normal;font-size:24px}.pmk .on{border-color:#141117;background:#F4F2F8}
+.pml{display:flex;flex-direction:column;gap:4px;font:600 12px Inter,sans-serif;color:var(--muted);margin-bottom:10px}.pml input{font:15px Inter,sans-serif;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.pms{width:100%;background:#141117;color:#fff;border:0;border-radius:12px;padding:13px;font:700 15px Inter,sans-serif;cursor:pointer}
+.lvbtn{position:fixed;right:24px;bottom:22px;z-index:20;background:#141117;color:#E9C77B;border:0;border-radius:999px;padding:11px 18px;font:700 13px Inter,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.2);cursor:pointer}
+.lvt{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:13.5px}.lvt th{font-size:12px;color:var(--muted);text-align:left;padding:6px 10px}.lvt td{background:#F7F6FB;padding:10px;vertical-align:top}.lvt td:first-child{font-weight:700;border-radius:12px 0 0 12px;white-space:nowrap}.lvt td:last-child{border-radius:0 12px 12px 0}.lvt td em{font-style:normal;margin-right:6px}
+.lvt .nx{background:#FFF4DC}.lvt th.nx{color:#8A5A12;background:transparent}
 </style>
 </head>
 <body>
@@ -464,7 +471,7 @@ function render(){
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
   if(S.tab==='care')return renderCare(M);
-  if(S.tab==='path')return renderPath(M);
+  if(S.tab==='path'){renderPath(M);if(S.admin){var lb=document.createElement('button');lb.className='lvbtn';lb.textContent='🔒 Levels · draft';lb.onclick=openLv;M.appendChild(lb)}return}
   if(S.tab==='std')return renderStd(M);
   if(S.tab==='ex')return renderEx(M);
   if(S.tab==='xm')return renderSM(M);
@@ -512,20 +519,37 @@ function render(){
 
 /* ---------- Standard: daily stamps ---------- */
 function stOf(x,L){var a=[['time','⏰',!(x.late_min>0)],['lunch','🍽️',!(x.lunch_min!=null&&x.lunch_min>L)],['tasks','☑️',x.t_morning>0&&x.t_day>0&&x.t_close>0]];
-  if(SKIN.indexOf(S.who)>=0){var q=(S.rit||{})[x.d];a.push(['ritual','🧴',!q||q.a>=q.f])}return a}
+  if(SKIN.indexOf(S.who)>=0){var q=(S.rit||{})[x.d];a.push(['ritual','🧴',!q||q.a>=q.f])}
+  if(S.admin){var pm=(S.pm||{})[x.d]||[];a.push(['phone','📵',pm.indexOf('phone')<0])}return a}
+var PMK=[['phone','📵','Phone or headphones'],['posture','🪑','Posture'],['look','💄','Look'],['other','🗣️','Other']];
+function polForm(){var t=ymd(today());document.getElementById('panel').innerHTML='<div class="ph"><em>📵</em>Policy moment · '+esc(S.who)+'<button onclick="closeT()">✕</button></div>'+
+  '<div class="pmk" id="pmk">'+PMK.map(function(k,i){return '<button class="'+(i?'':'on')+'" data-k="'+k[0]+'" onclick="[].forEach.call(this.parentNode.children,function(b){b.classList.remove(\'on\')});this.classList.add(\'on\')"><em>'+k[1]+'</em>'+k[2]+'</button>'}).join('')+'</div>'+
+  '<label class="pml">Day<input id="pmd" type="date" value="'+t+'" max="'+t+'"></label><label class="pml">Note<input id="pmn" maxlength="200" placeholder="What happened"></label>'+
+  '<button class="pms" onclick="polSave()">Save</button><p class="pols">Only you and management see this.</p>';document.getElementById('sheet').classList.add('on')}
+function polSave(){var k=document.querySelector('#pmk .on').getAttribute('data-k');rpc('soul_policy_add',{p_code:S.code,p_person:S.who,p_kind:k,p_note:document.getElementById('pmn').value.trim(),p_date:document.getElementById('pmd').value}).then(function(r){if(!r)throw 0;toast('Saved');closeT();S.pmk=null;render()}).catch(function(){toast('Not saved. Try again.')})}
+var LVT=[['⏳','Time at BSB',['6 months','1 year','2 years','3 years']],['🤝','Standard',['90% 🏅 days','95% 🏅 days','100% for 3 months','100% always']],['👑','Crowns',['2 in 6 months','4 in 6 months','6 in the year','8 in the year']],
+ ['🔁','Clients return','N'],['📚','Knowledge',['All policies read','Policy quiz 100% + 1 book','Talk with Ligia + 2 books','Diary, team and numbers']],['🌟','Representation',['Look and posture','Max 1 📵 in 6 months','Zero 📵, the face of BSB','Leads the team']]];
+function openLv(){var sk=SKIN.indexOf(S.who)>=0,cur=((PEOPLE.filter(function(x){return x.person===S.who})[0]||{}).level)||1,L=['Soul+','Senior Soul','Soul Lead','Soul Manager'];
+  var ret=sk?['30%','35%','45%','50%']:['40%','45%','55%','60%'];
+  var h='<div class="polw"><h3>🔒 Levels · draft</h3><p class="pols">Only you see this. '+esc(S.who)+' is level '+cur+'.</p><table class="lvt"><tr><th></th>'+L.map(function(l,i){return '<th class="'+(i+2===cur+1?'nx':'')+'">'+(i+2)+' · '+l+'</th>'}).join('')+'</tr>'+
+   LVT.map(function(r){var v=r[2]==='N'?ret:r[2];return '<tr><td><em>'+r[0]+'</em>'+r[1]+(r[2]==='N'?(sk?' 💆':' 💅'):'')+'</td>'+v.map(function(c,i){return '<td class="'+(i+2===cur+1?'nx':'')+'">'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</table><button class="polx" onclick="closeT()">Close</button></div>';
+  var pn=document.getElementById('panel');pn.style.width='min(980px,96vw)';pn.style.maxWidth='96vw';pn.innerHTML=h;document.getElementById('sheet').classList.add('on')}
 function renderStd(M){var d=S.data||{},L=d.lunch_max||30,DD=d.days||[],by={},r=range(),td=ymd(today());
   if(SKIN.indexOf(S.who)>=0){var rk=S.who+'|'+ymd(r[0])+'|'+ymd(r[1]);if(S.ritk!==rk){S.ritk=rk;S.rit={};rpc('soul_ritual_days',{p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])}).then(function(z){if(S.ritk!==rk)return;S.rit={};(z||[]).forEach(function(q){S.rit[q.d]=q});if(S.tab==='std')renderStd(M)}).catch(function(){})}}
-  var SK4=SKIN.indexOf(S.who)>=0;DD.forEach(function(x){by[x.d]=x});S.C=calc(S.data);
+  var SK4=SKIN.indexOf(S.who)>=0;
+  if(S.admin){var pk2=S.who+'|'+ymd(r[0])+'|'+ymd(r[1]);if(S.pmk!==pk2){S.pmk=pk2;S.pm={};rpc('soul_policy_list',{p_code:S.code,p_person:S.who,p_from:ymd(r[0]),p_to:ymd(r[1])}).then(function(z){if(S.pmk!==pk2)return;S.pm={};(z||[]).forEach(function(q){(S.pm[q.d]=S.pm[q.d]||[]).push(q.kind)});if(S.tab==='std')renderStd(M)}).catch(function(){})}}
+  var STL=[['time','⏰'],['lunch','🍽️'],['tasks','☑️']].concat(SK4?[['ritual','🧴']]:[]).concat(S.admin?[['phone','📵']]:[]);DD.forEach(function(x){by[x.d]=x});S.C=calc(S.data);
   var s0=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,PRE=s0&&r[1]<s0;
   var W=DD.filter(function(x){return x.worked&&x.d<=td}),full=W.filter(function(x){return stOf(x,L).every(function(q){return q[2]})}).length;
-  var cnt=SK4?[0,0,0,0]:[0,0,0];W.forEach(function(x){stOf(x,L).forEach(function(q,i){if(q[2])cnt[i]++})});
+  var cnt=STL.map(function(){return 0});W.forEach(function(x){stOf(x,L).forEach(function(q,i){if(q[2])cnt[i]++})});
   var stk=0;for(var i=W.length-1;i>=0;i--){if(stOf(W[i],L).every(function(q){return q[2]}))stk++;else break}
   var R0=82,CF=2*Math.PI*R0,n=W.length;
   var h='<div class="hero"><small>The BSB Standard</small><h2>Standard</h2><p>'+label()+'</p>'+
    '<div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="'+R0+'" stroke="rgba(255,255,255,.18)" stroke-width="14" fill="none"/><circle id="arc" cx="95" cy="95" r="'+R0+'" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/></svg>'+
    '<div class="c"><div><b>'+full+'</b><span>of '+n+' days 🏅</span></div></div></div>'+
-   '<div class="stc"'+(SK4?' style="grid-template-columns:repeat(4,1fr)"':'')+'>'+[['time','⏰'],['lunch','🍽️'],['tasks','☑️']].concat(SK4?[['ritual','🧴']]:[]).map(function(q,i){return '<button'+(q[0]==='ritual'?'':' onclick="openT(\''+q[0]+'\')"')+'><em>'+q[1]+'</em><b>'+cnt[i]+'<small>/'+n+'</small></b></button>'}).join('')+'</div>'+
+   '<div class="stc" style="grid-template-columns:repeat('+STL.length+',1fr)">'+STL.map(function(q,i){return '<button'+(q[0]==='ritual'||q[0]==='phone'?'':' onclick="openT(\''+q[0]+'\')"')+'><em>'+q[1]+'</em><b>'+cnt[i]+'<small>/'+n+'</small></b></button>'}).join('')+'</div>'+
    (stk>=2&&!PRE?'<div class="stk" style="text-align:center">🔥 '+stk+' days in a row</div>':'')+
+   (S.admin?'<button class="pmb" onclick="polForm()">🔒 📵 Log policy moment</button>':'')+
    '<div class="verdict"><em>'+(PRE?'🗂️':n&&full===n?'💜':'🌱')+'</em><span>'+(PRE?'Reference only.':!n?'No work days yet.':full===n?'Every day with all stamps. This is BSB.':'Tomorrow starts fresh.')+'</span></div>'+polCard()+'</div>';
   var a=new Date(r[0]),cells=[];
   if(S.mode==='month'){var lead=(a.getDay()+6)%7;for(var q=0;q<lead;q++)cells.push('<div class="sd x"></div>')}
@@ -534,7 +558,7 @@ function renderStd(M){var d=S.data||{},L=d.lunch_max||30,DD=d.days||[],by={},r=r
     var st=stOf(x,L),all=st.every(function(z){return z[2]});
     cells.push('<div class="sd'+(all?' full':'')+'"><span class="dn">'+dt.getDate()+'</span>'+(all?'<span class="md">🏅</span>':'')+'<div class="ss">'+st.map(function(z){return '<i class="'+(z[2]?'on':'')+'">'+(z[2]?z[1]:'')+'</i>'}).join('')+'</div></div>')}
   var rows=Math.ceil(cells.length/7);
-  h+='<div class="bands b3 b3s"><div class="bh">🏅 Your stamps <span class="lg"><i class="on">⏰</i>On time <i class="on">🍽️</i>Lunch '+L+' min <i class="on">☑️</i>Tasks'+(SK4?' <i class="on">🧴</i>Ritual':'')+'</span></div>'+
+  h+='<div class="bands b3 b3s"><div class="bh">🏅 Your stamps <span class="lg"><i class="on">⏰</i>On time <i class="on">🍽️</i>Lunch '+L+' min <i class="on">☑️</i>Tasks'+(SK4?' <i class="on">🧴</i>Ritual':'')+(S.admin?' <i class="on">📵</i>Phone free 🔒':'')+'</span></div>'+
    '<div class="scal">'+(S.mode==='day'?'':DW.map(function(w){return '<b>'+w.slice(0,3)+'</b>'}).join(''))+'</div>'+
    '<div class="scal g'+(S.mode==='day'?' one':'')+'" style="grid-template-rows:repeat('+rows+',1fr)">'+cells.join('')+'</div></div>';
   M.innerHTML=h;setTimeout(function(){var e=document.getElementById('arc');if(e)e.style.strokeDashoffset=CF*(1-(n?full/n:0))},80)}
