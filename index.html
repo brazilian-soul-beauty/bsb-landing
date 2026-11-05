@@ -662,7 +662,7 @@ function renderBiz(M){var key=S.who;
   var b=S.bz||{},ms=b.months||[],pg=S.bzp||1,n=function(v){return +v||0};
   var paid=ms.filter(function(m){return m.gross!=null}),rv=0,gr=0,hrs=0;paid.forEach(function(m){rv+=n(m.rev);gr+=n(m.gross);hrs+=n(m.hours)});
   var R=gr?rv/gr:null,rc=R==null?'':R>=3?'g':R>=2?'a':'r';
-  var rev12=0,prod12=0,vis=0,bmin=0,newc=0,tips=0,revs=0,r5=0;ms.forEach(function(m){rev12+=n(m.rev);prod12+=n(m.prod);vis+=n(m.visits);bmin+=n(m.bmin);newc+=n(m.newc);tips+=n(m.tips);revs+=n(m.revs);r5+=n(m.r5)});
+  var plat12=0;ms.forEach(function(m){plat12+=n(m.plat)});var rev12=0,prod12=0,vis=0,bmin=0,newc=0,tips=0,revs=0,r5=0;ms.forEach(function(m){rev12+=n(m.rev);prod12+=n(m.prod);vis+=n(m.visits);bmin+=n(m.bmin);newc+=n(m.newc);tips+=n(m.tips);revs+=n(m.revs);r5+=n(m.r5)});
   var ch=b.channels||{},cht=n(ch.treatwell)+n(ch.online)+n(ch.salon),pc=function(v,t){return t?Math.round(100*v/t):0};
   var occ=hrs?Math.round(100*(paid.reduce(function(a,m){return a+n(m.bmin)},0)/60)/hrs):null,cph=hrs?gr/hrs:n(b.base_rate);
   var tabs='<div class="bzt"><button class="'+(pg===1?'on':'')+'" onclick="S.bzp=1;renderBiz(document.getElementById(\'main\'))">Overview</button><button class="'+(pg===2?'on':'')+'" onclick="S.bzp=2;renderBiz(document.getElementById(\'main\'))">Treatments</button></div>';
@@ -676,7 +676,7 @@ function renderBiz(M){var key=S.who;
     var chb='<div class="bzch">'+[['Treatwell',ch.treatwell,'#E2557A'],['Online',ch.online,'#6D4AFF'],['Salon',ch.salon,'#1F9D8B']].map(function(c){return '<div><span>'+c[0]+'</span><u><i style="width:'+pc(n(c[1]),cht)+'%;background:'+c[2]+'"></i></u><b>'+pc(n(c[1]),cht)+'%</b></div>'}).join('')+'</div>';
     h+='<div class="bzg">'+
      '<div class="tile bzc w2"><div class="h"><em>📅</em>Month by month<span class="lg2"><i class="rv"></i>Brought <i class="gr"></i>Cost</span></div>'+bars+'</div>'+
-     T('💷','Sales',gb0(rev12),'Services '+gb0(rev12-prod12)+' · Products '+gb0(prod12))+
+     T('💷','Sales',gb0(rev12),'Salon '+gb0(rev12-prod12-plat12)+' · Treatwell/Fresha '+gb0(plat12)+' · Products '+gb0(prod12))+
      T('🎟️','Average ticket',vis?gb0(rev12/vis):'–',vis+' visits')+
      T('🔁','Clients back in 90 days',(b.ret90==null?'–':b.ret90+'%'),n(b.clients)+' clients · '+Math.round(newc/Math.max(1,ms.length))+' new a month')+
      T('📲','Bookings from','', cht+' visits',chb)+
