@@ -374,6 +374,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .bzch{display:flex;flex-direction:column;gap:5px;margin-top:6px}.bzch>div{display:grid;grid-template-columns:62px 1fr 34px;gap:6px;align-items:center;font-size:11.5px;font-weight:600}.bzch u{height:8px;background:#F1EEF7;border-radius:4px;overflow:hidden;text-decoration:none}.bzch u i{display:block;height:100%}
 .bzg2{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;gap:10px;min-height:0}.bzgr{display:flex;flex-direction:column;gap:10px;margin-top:10px}.bzgr>div{display:grid;grid-template-columns:110px 1fr 40px;gap:4px 8px;align-items:center;font-size:13px;font-weight:600}.bzgr small{grid-column:2/4;font-size:11px;color:var(--muted);font-weight:500}.bzgr u{height:10px;background:#F1EEF7;border-radius:5px;overflow:hidden;text-decoration:none}.bzgr u i{display:block;height:100%;background:#6D4AFF}
 .bzr2{display:grid;grid-template-columns:1fr auto;gap:0 8px;padding:9px 0;border-bottom:1px solid var(--line)}.bzr2 span{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bzr2 small{grid-column:1;font-size:11px;color:var(--muted)}.bzr2 b{grid-row:1/3;grid-column:2;align-self:center;font-size:15px}.bzr2 b.g{color:#1F9D6B}.bzr2 b.a{color:#C2410C}.bzr2 b.r{color:#B3261E}
+.exb.ex5{display:grid;grid-template-columns:repeat(4,1fr)}.exb.ex5 b{font-size:15px}
 </style>
 </head>
 <body>
@@ -389,7 +390,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
     <button class="tab on" data-t="today">☀️ Today</button>
     <button class="tab" data-t="std">🤝 Standard</button>
     <button class="tab" data-t="xm">👑 Performance</button>
-    <button class="tab" data-t="ex">💷 Extras</button>
+    <button class="tab" data-t="ex">💷 My money</button>
     <button class="tab" data-t="path">🌱 Soul Path</button>
     <button class="tab" data-t="biz" id="tabBiz" style="display:none">🔒 Business</button>
     <button class="tab" data-t="care" id="tabCare" style="display:none">🌿 Skin ritual</button>
@@ -630,13 +631,22 @@ function exToday(e,day){if(!e)return '';var pd0=(e.days||[]).filter(function(q){
 function goTab(t){S.tab=t;document.querySelectorAll('#tabs .tab').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-t')===t)});render()}
 function gb2(v){v=+v||0;return '£'+v.toFixed(2)}
 function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMonth(),1)),key=S.who+'|'+m;
-  if(S.exk!==key){S.exk=key;S.ex=null;M.innerHTML='<div class="wait"><em>💷</em>Loading…</div>';rpc('soul_extras',{p_code:S.code,p_person:S.who,p_day:m}).catch(function(){return null}).then(function(x){if(S.exk!==key)return;S.ex=x||{};if(S.tab==='ex')renderEx(M)});return}
+  if(S.exk!==key){S.exk=key;S.ex=null;M.innerHTML='<div class="wait"><em>💷</em>Loading…</div>';var lm0=new Date(r[0].getFullYear(),r[0].getMonth()-1,1),lm=ymd(lm0);
+    Promise.all([rpc('soul_extras',{p_code:S.code,p_person:S.who,p_day:m}).catch(function(){return null}),rpc('soul_extras',{p_code:S.code,p_person:S.who,p_day:lm}).catch(function(){return null}),rpc('soul_path',{p_code:S.code,p_person:S.who,p_month:lm}).catch(function(){return null})]).then(function(x){if(S.exk!==key)return;S.ex=x[0]||{};
+      var noPay=function(z){return !z||!z.pay||z.pay.gross==null};
+      if(!noPay(x[2])){S.exl=x[1]||{};S.exp=x[2];S.exlm=lm0;if(S.tab==='ex')renderEx(M);return}
+      var pm0=new Date(lm0.getFullYear(),lm0.getMonth()-1,1),pm=ymd(pm0);
+      Promise.all([rpc('soul_extras',{p_code:S.code,p_person:S.who,p_day:pm}).catch(function(){return null}),rpc('soul_path',{p_code:S.code,p_person:S.who,p_month:pm}).catch(function(){return null})]).then(function(y){if(S.exk!==key)return;
+        if(noPay(y[1])){S.exl=x[1]||{};S.exp=x[2]||{};S.exlm=lm0}else{S.exl=y[0]||{};S.exp=y[1];S.exlm=pm0}if(S.tab==='ex')renderEx(M)})});return}
   var e=S.ex||{},sk=e.kind==='skin',up=e.up,pc=+e.commission||0,uc=up?+up.commission||0:0,tot=pc+uc,q=+e.qty||0,td=ymd(today());
   var tdy=(e.days||[]).filter(function(z){return z.d===td})[0],tu=up?(up.days||[]).filter(function(z){return z.d===td})[0]:null;
-  var h='<div class="hero exh"><small>Extras · '+MN[r[0].getMonth()]+' '+r[0].getFullYear()+'</small><h2>💷 Extras</h2><p>Your commission</p>'+
-   '<div class="ext"><b>'+gb2(tot)+'</b><span>this month</span></div>'+
-   '<div class="exb"><div><em>🧴</em><b>'+gb2(pc)+'</b><span>'+(sk?'Eminence':'Products')+'</span></div>'+(up?'<div><em>🎨</em><b>'+gb2(uc)+'</b><span>Upgrades</span></div>':'')+'</div>'+
-   '<div class="verdict"><em>☀️</em><span>Today: 🧴 '+(tdy?tdy.q:0)+(tu?' · 🎨 '+tu.u+' of '+tu.v+' chances':'')+'</span></div></div>';
+  var sp=S.exp||{},el=S.exl||{},tc=sp.tips,py=sp.pay||{},hrs=py.hours!=null?+py.hours:(tc?+tc.hours:0),pay=py.gross!=null?+py.gross:hrs*(+sp.base_rate||0),tips=tc?+tc.tips:0,pk=sp.perks||[];
+  var disc=pk.filter(function(p){return p.kind==='discount'}).reduce(function(a,p){return a+(+p.value)},0),gift=pk.filter(function(p){return p.kind==='gift'}).reduce(function(a,p){return a+(+p.value)},0);
+  var lcom=(+el.commission||0)+(el.up?+el.up.commission||0:0),ltot=pay+tips+disc+gift+lcom,lh=hrs?ltot/hrs:0,lmn=S.exlm?MN[S.exlm.getMonth()]:'Last month';
+  var h='<div class="hero exh"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+
+   '<div class="ext"><b>'+gb0(ltot)+'</b><span>'+(lh?'£'+lh.toFixed(2)+' your real hour':'all in')+'</span></div>'+
+   '<div class="exb ex5"><div><em>💷</em><b>'+gb0(pay)+'</b><span>Pay</span></div><div><em>💜</em><b>'+gb0(tips)+'</b><span>Tips</span></div><div><em>🎁</em><b>'+gb0(disc+gift)+'</b><span>Perks</span></div><div><em>🧴</em><b>'+gb0(lcom)+'</b><span>Commission</span></div></div>'+
+   '<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · 🎨 '+tu.u+'/'+tu.v:'')+'</span></div></div>';
   function steps(list,cur){return '<div class="lad2">'+list.map(function(s0,i){var on=i<=cur,now=i===cur;return '<div class="st'+(on?' on':'')+(now?' now':'')+'"><i>'+s0[0]+'</i><small>'+s0[1]+'</small></div>'}).join('<u></u>')+'</div>'}
   var c1;
   if(sk){var L=[['5%','1+'],['8%','11+'],['12%','21+'],['15%','31+']],ci=q>=31?3:q>=21?2:q>=11?1:q>=1?0:-1;
@@ -651,7 +661,7 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
      '<div class="exr"><svg width="130" height="130"><circle cx="65" cy="65" r="'+RR+'" stroke="#EEEAF6" stroke-width="12" fill="none"/><circle class="pa" cx="65" cy="65" r="'+RR+'" stroke="url(#gx)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" data-o="'+(CF*(1-Math.min(1,rt/15)))+'" transform="rotate(-90 65 65)"/></svg><div><b>'+rt+'%</b><span>'+up.ups+' of '+up.visits+' chances</span></div></div>'+
      steps([['£0.50','<15%'],['£1','15%+']],rt>=15?1:0)+'<div class="todo">'+(rt>=15?'👑 £1 each':'🎯 Reach 15% for £1 each')+'</div>'+
      '<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gx" x1="0" x2="1"><stop offset="0" stop-color="#F2D28A"/><stop offset="1" stop-color="#C9962E"/></linearGradient></defs></svg></div>'}
-  h+='<div class="bands b3"><div class="bh">💷 How you earn more</div><div class="row exg" style="grid-template-columns:repeat('+(up?2:1)+',1fr)">'+c1+c2+'</div></div>';
+  h+='<div class="bands b3"><div class="bh">💷 How you earn more this month</div><div class="row exg" style="grid-template-columns:repeat('+(up?2:1)+',1fr)">'+c1+c2+'</div></div>';
   M.innerHTML=h;setTimeout(function(){document.querySelectorAll('.pa').forEach(function(a){a.style.strokeDashoffset=a.getAttribute('data-o')})},120)}
 
 
