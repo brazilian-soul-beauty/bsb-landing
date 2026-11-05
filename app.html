@@ -625,7 +625,7 @@ function smCrit(d,x,r,up){var DD=d.days||[],td=ymd(today());
   var P=x.pers||{clients:0,pe:0},pp=+P.clients?Math.min(100,Math.round(100*P.pe/P.clients)):null,ur=up&&+up.visits>0?(+up.rate||0):null;
   var C=[
    {ic:'✨',t:'Extras',v:ur,ok:ur==null?null:ur>=15,goal:'15%',sub:ur==null?'No chances yet':(up.ups+' of '+up.visits+' chances'),todo:ur!=null&&ur<15?Math.max(1,Math.ceil(0.15*up.visits-up.ups))+' more extras':''},
-   {ic:'👑',t:'Exceptional',v:pp,ok:pp==null?null:pp>=G,goal:G+'%',sub:pp==null?'No clients yet':(P.pe+' of '+P.clients+' clients'),todo:pp!=null&&pp<G?(need(+P.pe,+P.clients)>left*4?'👑 next month':need(+P.pe,+P.clients)+' more exceptional'):''},
+   {ic:'👑',t:'Exceptional',v:pp,ok:pp==null?null:pp>=100,goal:'100%',sub:pp==null?'No clients yet':(P.pe+' of '+P.clients+' clients'),todo:pp!=null&&pp<100?'Every client exceptional':''},
    {ic:'🎬',t:'Content',v:exp?cp:(W.length?100:null),ok:exp?cp>=G:(W.length?true:null),goal:G+'%',sub:exp?(vids+' of '+exp+' videos'):(W.length?'Full diary ✓':'No work days yet'),todo:cp!=null&&cp<G?(exp-vids)+' more videos':''}];
   var RS={rv:rv,p5:p5,tch:tch,th:th};
   return {C:C,G:G,PRE:PRE,done:done,RS:RS}}
