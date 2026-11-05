@@ -870,8 +870,8 @@ function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]+'</p>'+
     '<div class="alive"><em>📅</em><div><b>Fill the quiet days</b><span>Every booking you bring counts</span></div></div><div class="wk">'+wk.join('')+'</div>'+
     '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
-  var C=[['📅','Filled by us',n(d.fill_n),'services added today'],['✨','Extras offer',n(d.mk_booked),'booked of '+n(d.mk_sent)+' sent'],['🥂','Drinks',n(d.drinks_free)+n(d.drinks_paid),n(d.drinks_free)+' free · '+n(d.drinks_paid)+' paid'],
-   ['🎁','Gift cards',n(d.gift_n),'sold today'],['💜','Tips',d.tips_pct==null?'–':d.tips_pct+'%','of sales'],['🔁','Rebook',rp==null?'–':rp+'%','of clients']];
+  var C=[['👥','Clients',cl,'today'],['🥂','Drinks sold',n(d.drinks_paid),'of '+cl+' clients · '+n(d.drinks_free)+' free'],['📅','Filled by us',n(d.fill_n),'services added'],
+   ['✨','Extras offer',n(d.mk_booked),'booked of '+n(d.mk_sent)+' sent'],['🎁','Gift cards',n(d.gift_n),'sold today'],['💜','Tips',d.tips_pct==null?'–':d.tips_pct+'%','of sales']];
   h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':'na';
     return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+q.ic+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span></div>'}).join('')+'</div>'+
     '<div class="dcs">'+C.map(function(c){return '<div><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div></div>';
