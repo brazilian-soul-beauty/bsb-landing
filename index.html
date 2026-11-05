@@ -15,7 +15,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 #app{height:100vh;display:flex;flex-direction:column;padding:18px 22px 16px;gap:14px}
 /* top */
 .top{display:flex;align-items:center;gap:14px}
-.me{display:flex;align-items:center;gap:12px;min-width:0}
+.me{display:flex;align-items:center;gap:12px;min-width:0}.me .out{margin-left:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:600 12px Inter,sans-serif;color:var(--muted);cursor:pointer;white-space:nowrap}
 .av{width:46px;height:46px;border-radius:50%;background:var(--ps);color:var(--p);display:grid;place-items:center;font-weight:700;font-size:18px;overflow:hidden;flex:none;box-shadow:0 0 0 3px #fff,0 0 0 5px var(--ps)}
 .av{position:relative}.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .me b{font-size:19px;font-weight:700;display:block}
@@ -395,7 +395,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 <div class="login" id="login"></div>
 <div id="app" style="display:none">
   <div class="top">
-    <div class="me"><div class="av" id="av"></div><div><b id="nm"></b><span id="lv">Soul · Level 1</span></div></div>
+    <div class="me"><div class="av" id="av"></div><div><b id="nm"></b><span id="lv">Soul · Level 1</span></div><button class="out" onclick="logout()">Log out</button></div>
     <div class="sp"></div><div class="team" id="team" style="display:none"></div>
     <div class="seg" id="seg"><button data-m="day">Day</button><button data-m="week">Week</button><button data-m="month" class="on">Month</button><button data-m="year" id="segY" style="display:none">Year</button></div>
     <div class="nav"><button id="prev">‹</button><b id="per" title="Pick a day">📅 <span id="perT"></span></b><button id="next">›</button></div>
@@ -463,6 +463,7 @@ function key(k){if(k==='⌫'){PIN=PIN.slice(0,-1);return renderLogin()}
     if(!ok)return renderLogin(j.left===0?'Too many tries. Wait 15 minutes':'Wrong code');
     S.admin=r[0].role==='admin';S.code=j.token;
     S.who=S.admin?(PICK===r[0].person?firstGirl():PICK):PICK;start()}).catch(function(){renderLogin('No internet')})}}
+function logout(){var c=S.code;S.code=null;Promise.resolve(c?rpc1('soul_logout',{p_code:c}).catch(function(){}):0).then(function(){location.reload()})}
 function firstGirl(){var g=PEOPLE.filter(function(p){return p.role==='therapist'})[0];return g?g.person:'Dania'}
 function lvl(n){var p=PEOPLE.filter(function(x){return x.person===n})[0],L=['Soul','Soul+','Senior Soul','Soul Lead','Soul Manager'],v=(p&&p.level)||1;return L[v-1]+' · Level '+v}
 function setWho(n){S.who=n;document.getElementById('nm').textContent=n;document.getElementById('lv').textContent=lvl(n);
