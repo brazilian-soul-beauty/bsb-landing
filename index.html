@@ -1888,8 +1888,9 @@ var THERAPISTS = [
   { key: 'ligia',    name: 'Ligia',    role: 'Founder',          color: '#5B47E0' },
   { key: 'dania',    name: 'Dania',    role: 'Beauty Therapist', color: '#C77DA6' },
   { key: 'anukis',   name: 'Anukis',   role: 'Nail Therapist',   color: '#3E9E8F' },
-  { key: 'sana',     name: 'Sana',     role: 'Nail Therapist',   color: '#5E86C7' },
-  { key: 'michelle', name: 'Michelle', role: 'Skin Therapist',   color: '#D08A3E' }
+  { key: 'riya',     name: 'Riya',     role: 'Nail Therapist',   color: '#8E6BC9' },
+  { key: 'michelle', name: 'Michelle', role: 'Skin Therapist',   color: '#D08A3E' },
+  { key: 'sana',     name: 'Sana',     role: 'Nail Therapist',   color: '#5E86C7' }
 ];
 
 /* ================= STATE ================= */
@@ -7143,7 +7144,7 @@ function renderGrid() {
     return appts.some(function(a){ return a.therapist === t.key && a.client; });
   });
   var known = {}; THERAPISTS.forEach(function(t){ known[t.key] = 1; });
-  var ROSTER_OK = { ligia:1, dania:1, anukis:1, sana:1, michelle:1, joana:1, aluana:1 };
+  var ROSTER_OK = { ligia:1, dania:1, anukis:1, riya:1, sana:1, michelle:1, joana:1, aluana:1 };
   appts.forEach(function(a){
     if (a.therapist && !known[a.therapist]) {
       /* fora do time atual: coluna SO se houver cliente de verdade (agenda antiga do Salonized
