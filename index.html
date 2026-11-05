@@ -8096,13 +8096,39 @@ function setEnchant(id, v, royal) {
 }
 /* XP3 (05/11/2026) Ligia: a princesa vira 3 niveis de entrega. experience = standard / elevated / exceptional.
    enchanted continua gravado (true so no exceptional) para os reports antigos. */
-var XP_LEVELS = [['standard','\uD83E\uDD0D Standard'],['elevated','\uD83D\uDC9C Elevated'],['exceptional','\uD83D\uDC51 Exceptional']];
+var XP_LEVELS = [['standard','\uD83E\uDD0D Standard'],['exceptional','\uD83D\uDC51 Exceptional']];
 function setExperience(id, v) {
   setWizVal(id, 'experience', v);
   setWizVal(id, 'enchanted', v === 'exceptional');
   setWizVal(id, 'royal', undefined);
   rerenderIfGroupOpen(id);
   if (v === 'exceptional') { var a0 = findAppt(id); crownToast('\uD83D\uDC51 Exceptional \u00b7 ' + enchantedTodayFor(a0 ? a0.therapist : '') + ' today'); }
+}
+/* XP3: no Start ela escolhe o que vai entregar; depois comeca de verdade */
+function askPlan(id) {
+  var o = document.getElementById('xpOv'); if (o) o.remove();
+  if (!document.getElementById('xpCss')) {
+    var st = document.createElement('style'); st.id = 'xpCss';
+    st.textContent = '#xpOv{position:fixed;inset:0;z-index:9400;background:rgba(31,34,53,.42);display:flex;align-items:center;justify-content:center;padding:16px}' +
+      '#xpOv .hc{background:#fff;border-radius:20px;width:min(480px,100%);padding:24px 22px 16px;box-shadow:0 20px 50px rgba(16,24,40,.3);font-family:Inter,sans-serif;color:#1F2235;text-align:center}' +
+      '#xpOv h3{margin:0 0 18px;font-size:21px;line-height:1.25}#xpOv .big{display:flex;flex-direction:column;gap:10px}' +
+      '#xpOv .big button{border:1.5px solid #ECECF4;background:#fff;border-radius:16px;padding:16px;font:700 17px Inter,sans-serif;color:#1F2235;cursor:pointer}' +
+      '#xpOv .big button.k{background:#FFF7E0;border-color:#F2DE9E}' +
+      '#xpOv .bk{width:100%;margin-top:8px;border:0;background:none;color:#9A9BB4;font-weight:600;padding:8px;cursor:pointer}';
+    document.head.appendChild(st);
+  }
+  o = document.createElement('div'); o.id = 'xpOv';
+  o.innerHTML = '<div class="hc" role="dialog" aria-modal="true"><h3>What experience will you give her?</h3><div class="big">' +
+    XP_LEVELS.map(function(L){ return '<button' + (L[0] === 'exceptional' ? ' class="k"' : '') + ' data-xp="' + L[0] + '">' + L[1] + '</button>'; }).join('') +
+    '</div><button class="bk" data-xp="x">\u2039 Back</button></div>';
+  o.addEventListener('click', function(ev){
+    var b = ev.target.closest && ev.target.closest('button[data-xp]'); if (!b) return;
+    ev.stopPropagation(); var v = b.getAttribute('data-xp'); o.remove();
+    if (v === 'x') return;
+    setWizVal(id, 'experience_plan', v);
+    startRun(id);
+  });
+  document.body.appendChild(o);
 }
 var wrapFu = {};
 function setWrapFu(id, k, v) {
@@ -8341,7 +8367,7 @@ function buildWrapUp(a) {
       '</div>';
   }
   var xp = wizVal(a.id, 'experience');
-  var enchHtml = '<div class="wrap-ask">How was her experience?' +
+  var enchHtml = '<div class="wrap-ask">What experience did you give her?' +
     '<button class="mood-flag' + ((moodOpen[a.id] || wrapMood[a.id]) ? ' on' : '') +
       '" title="Report something about this treatment" onclick="toggleMoodBox(\'' + esc(a.id) + '\')">⚠</button>' +
     '<div class="wrap-ench">' + XP_LEVELS.map(function(L){
@@ -8476,7 +8502,14 @@ function saveRunPoints(a) {
     mood_note: String(wrapMoodNote[a.id] || '').trim().slice(0, 600) || null,
     points: sc.got, max_points: sc.max, updated_at: new Date().toISOString() };
   MY_POINTS.loadedFor = '';
-  return sbUpsert('bsb_run_points', row, 'appt_id').catch(function(){});
+  /* XP3: o que ela planejou no Start. Se a coluna ainda nao existir no Hub, grava o resto sem ela. */
+  var plan = wizVal(a.id, 'experience_plan');
+  if (!plan) return sbUpsert('bsb_run_points', row, 'appt_id').catch(function(){});
+  var row2 = Object.assign({}, row, { experience_plan: plan });
+  return sbUpsert('bsb_run_points', row2, 'appt_id').then(function(r){
+    if (r && r.ok === false && r.status === 400) { try { setSync('ok', 'saved'); } catch (e) {} return sbUpsert('bsb_run_points', row, 'appt_id'); }
+    return r;
+  }).catch(function(){});
 }
 /* a personalizacao so vale ponto quando ela REALMENTE escreve algo na ficha */
 function markPersonalised(clientId) {
@@ -9719,7 +9752,7 @@ function buildRunWizard(a) {
     '<div class="startbox">' + lateLine +
       '<div class="st-note">Tap when you go to get ' + esc(who) + '.</div></div>' +
     /* v36.6: sem promessa no botao ("no botao inicial ainda aparece treat like princess"): so Start */
-    '<button class="run-btn big start" onclick="startRun(\'' + esc(a.id) + '\')">\u25B6 Start with ' + esc(who) + '</button>', null);
+    '<button class="run-btn big start" onclick="askPlan(\'' + esc(a.id) + '\')">\u25B6 Start with ' + esc(who) + '</button>', null);
 }
 function copyRow(el, txt){
   try { navigator.clipboard.writeText(txt); } catch(e){}
@@ -9732,7 +9765,7 @@ function buildRunControls(a) {
   var btn = '';
   if (rs.phase === 'idle') {
     /* v31.4: um so botao, do tamanho de um botao de verdade */
-    btn = '<button class="run-btn big start" onclick="startRun(\'' + esc(a.id) + '\')">\u25B6 Start</button>';
+    btn = '<button class="run-btn big start" onclick="askPlan(\'' + esc(a.id) + '\')">\u25B6 Start</button>';
     if (rs.due) btn += '<div class="run-sub"><button class="run-more" onclick="openWrapUp(\'' + esc(a.id) + '\')">already done? go straight to check out</button></div>';
   }
   else if (rs.phase === 'running') {
@@ -12570,8 +12603,8 @@ setTimeout(flushReports, 4000);
     var o = document.getElementById('coOv'); if (!o) { o = document.createElement('div'); o.id = 'coOv'; document.body.appendChild(o); }
     var n = e(nome()), h = '<div class="hc" role="dialog" aria-modal="true">';
     if (PASSO === 'royal') {
-      h += '<h3>How was her experience?</h3><div class="hs">Be honest, it helps the team</div><div class="big">' +
-        '<button data-co="xp:standard">🤍 Standard</button><button class="p" data-co="xp:elevated">💜 Elevated</button><button class="k" data-co="xp:exceptional">👑 Exceptional</button></div>' +
+      h += '<h3>What experience did you give her?</h3><div class="hs">Be honest, it helps the team</div><div class="big">' +
+        '<button data-co="xp:standard">🤍 Standard</button><button class="k" data-co="xp:exceptional">👑 Exceptional</button></div>' +
         '<button class="bk" data-co="x">‹ Back</button>';
     } else if (PASSO === 'why') {
       h += '<h3>What wasn’t right?</h3><div class="hs">A few words for Ligia</div><textarea id="coWhy" placeholder="What happened">' + e(wrapMoodNote[ID] || '') + '</textarea>' +
