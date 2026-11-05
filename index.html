@@ -4691,7 +4691,9 @@ function startRun(id) {
      a agenda mostra a cliente NA CADEIRA (cor viva + NOW) e um aviso confirma. Tocar no card
      de novo abre direto no run (personalise / check out). */
   try { if (typeof closeModal === 'function') closeModal(); } catch (e) {}
-  crownToast('\u25B6 Started with ' + (firstName(a.client) || 'her') + ' \u00b7 ' + fmtClock(nowMin()) + ' \u00b7 tap her card to check out');
+  /* XP3: lembrete de 2 s */
+  var xpNew = false; try { xpNew = isNewClient(a); } catch (e) {}
+  crownToast(xpNew ? '\u2728 New client. Make it exceptional.' : '\u2728 Make it exceptional', 2000);
 }
 function finishRun(id) {
   var a = findAppt(id); if (!a) return;
@@ -8054,13 +8056,13 @@ function enchantedTodayFor(therapistKey) {
   });
   return n;
 }
-function crownToast(text) {
+function crownToast(text, ms) {
   try {
     var old = document.getElementById('crownToast'); if (old) old.remove();
     var el = document.createElement('div'); el.id = 'crownToast'; el.className = 'crown-toast'; el.textContent = text;
     document.body.appendChild(el);
     setTimeout(function(){ el.classList.add('show'); }, 10);
-    setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 300); }, 2400);
+    setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ el.remove(); }, 300); }, ms || 2400);
   } catch (e) {}
 }
 /* v36.5: "e para homens?" Dois sim e um nao: Like a princess / Like a king / Not today.
@@ -8091,6 +8093,16 @@ function setEnchant(id, v, royal) {
   var now = wizVal(id, 'enchanted');
   if (now === true) { var a0 = findAppt(id); crownToast('\uD83D\uDC51 That\u2019s a ' + (wizVal(id, 'royal') === 'king' ? 'king' : 'princess') + '. ' + enchantedTodayFor(a0 ? a0.therapist : '') + ' today.'); }
   else if (now === false) crownToast('Fair. Next one gets the crown.');
+}
+/* XP3 (05/11/2026) Ligia: a princesa vira 3 niveis de entrega. experience = standard / elevated / exceptional.
+   enchanted continua gravado (true so no exceptional) para os reports antigos. */
+var XP_LEVELS = [['standard','\uD83E\uDD0D Standard'],['elevated','\uD83D\uDC9C Elevated'],['exceptional','\uD83D\uDC51 Exceptional']];
+function setExperience(id, v) {
+  setWizVal(id, 'experience', v);
+  setWizVal(id, 'enchanted', v === 'exceptional');
+  setWizVal(id, 'royal', undefined);
+  rerenderIfGroupOpen(id);
+  if (v === 'exceptional') { var a0 = findAppt(id); crownToast('\uD83D\uDC51 Exceptional \u00b7 ' + enchantedTodayFor(a0 ? a0.therapist : '') + ' today'); }
 }
 var wrapFu = {};
 function setWrapFu(id, k, v) {
@@ -8165,7 +8177,8 @@ function saveVisitJourney(id) {
     addonK: wizPick(id, 'addon') || (up ? (up.k || up.name || '') : ''),   /* v32.119: o k escolhido no check out */
     addon: wizVal(id, 'addon') === true ? true : (wizVal(id, 'addon') === false ? false : null),   /* generico tambem conta (addonK vazio) */
     enchanted: wizVal(id, 'enchanted') === true ? true : (wizVal(id, 'enchanted') === false ? false : null),
-    royal: wizVal(id, 'enchanted') === true ? (wizVal(id, 'royal') === 'king' ? 'king' : 'princess') : null,   /* v36.5 */
+    experience: wizVal(id, 'experience') || null,   /* XP3 */
+    royal: (!wizVal(id, 'experience') && wizVal(id, 'enchanted') === true) ? (wizVal(id, 'royal') === 'king' ? 'king' : 'princess') : null,   /* v36.5 */
     retail: wizVal(id, 'retail') === true ? true : (wizVal(id, 'retail') === false ? false : null),
     retailItems: retailSoldNames(id)   /* v35.15: O QUE levou, por nome */
   };
@@ -8327,18 +8340,14 @@ function buildWrapUp(a) {
         'oninput="setMoodNote(\'' + esc(a.id) + '\', this.value)">' + esc(wrapMoodNote[a.id] || '') + '</textarea>' +
       '</div>';
   }
-  var nToday = enchantedTodayFor(a.therapist);
-  var royal = royalFor(a), rw = wizVal(a.id, 'royal');
-  var reward = ev === true ? '<span class="wrap-reward">👑 That’s a ' + (rw === 'king' ? 'king' : 'princess') + ' · ' + nToday + ' today</span>'
-             : (ev === false ? '<span class="wrap-reward">Fair. Next one gets the crown.</span>' : '');
-  var enchHtml = '<div class="wrap-ask">Did ' + nmE + ' leave feeling like a ' + royal + '?' +
+  var xp = wizVal(a.id, 'experience');
+  var enchHtml = '<div class="wrap-ask">How was her experience?' +
     '<button class="mood-flag' + ((moodOpen[a.id] || wrapMood[a.id]) ? ' on' : '') +
       '" title="Report something about this treatment" onclick="toggleMoodBox(\'' + esc(a.id) + '\')">⚠</button>' +
-    '<div class="wrap-ench">' +
-    '<button class="ench yes' + (ev === true && rw !== 'king' ? ' on' : '') + '" onclick="setEnchant(\'' + esc(a.id) + '\', true, \'princess\')">❤ Like a princess</button>' +
-    '<button class="ench yes king' + (ev === true && rw === 'king' ? ' on' : '') + '" onclick="setEnchant(\'' + esc(a.id) + '\', true, \'king\')">👑 Like a king</button>' +
-    '<button class="ench no' + (ev === false ? ' on' : '') + '" onclick="setEnchant(\'' + esc(a.id) + '\', false)">Not today</button>' +
-    '</div>' + reward + moodPanel + '</div>';
+    '<div class="wrap-ench">' + XP_LEVELS.map(function(L){
+      return '<button class="ench yes' + (L[0] === 'exceptional' ? ' king' : '') + (xp === L[0] ? ' on' : '') + '" onclick="setExperience(\'' + esc(a.id) + '\', \'' + L[0] + '\')">' + L[1] + '</button>';
+    }).join('') +
+    '</div>' + moodPanel + '</div>';
   /* v37.6: Ligia: "elas nao estao batendo o start". Sem Start, o check out pergunta quando comecou: 3 botoes, um toque. */
   var whenRow = '';
   (function(){ var r = runFor(a); if (!r || !r.assumed) return;
@@ -8461,7 +8470,8 @@ function saveRunPoints(a) {
     addon: wizVal(a.id,'addon') === true,
     retail: wizVal(a.id,'retail') === true, personalised: wizVal(a.id,'personalised') === true,
     enchanted: wizVal(a.id,'enchanted') === true ? true : (wizVal(a.id,'enchanted') === false ? false : null),
-    royal: wizVal(a.id,'enchanted') === true ? (wizVal(a.id,'royal') === 'king' ? 'king' : 'princess') : null,   /* v36.5 */
+    experience: wizVal(a.id,'experience') || null,   /* XP3 */
+    royal: (!wizVal(a.id,'experience') && wizVal(a.id,'enchanted') === true) ? (wizVal(a.id,'royal') === 'king' ? 'king' : 'princess') : null,   /* v36.5 */
     mood: wrapMood[a.id] || null,
     mood_note: String(wrapMoodNote[a.id] || '').trim().slice(0, 600) || null,
     points: sc.got, max_points: sc.max, updated_at: new Date().toISOString() };
@@ -12560,8 +12570,8 @@ setTimeout(flushReports, 4000);
     var o = document.getElementById('coOv'); if (!o) { o = document.createElement('div'); o.id = 'coOv'; document.body.appendChild(o); }
     var n = e(nome()), h = '<div class="hc" role="dialog" aria-modal="true">';
     if (PASSO === 'royal') {
-      h += '<h3>How did ' + n + ' leave today?</h3><div class="hs">Be honest, it helps the team</div><div class="big">' +
-        '<button class="p" data-co="princess">👸 Like a princess</button><button class="k" data-co="king">🤴 Like a king</button><button data-co="no">😕 Something wasn’t right</button></div>' +
+      h += '<h3>How was her experience?</h3><div class="hs">Be honest, it helps the team</div><div class="big">' +
+        '<button data-co="xp:standard">🤍 Standard</button><button class="p" data-co="xp:elevated">💜 Elevated</button><button class="k" data-co="xp:exceptional">👑 Exceptional</button></div>' +
         '<button class="bk" data-co="x">‹ Back</button>';
     } else if (PASSO === 'why') {
       h += '<h3>What wasn’t right?</h3><div class="hs">A few words for Ligia</div><textarea id="coWhy" placeholder="What happened">' + e(wrapMoodNote[ID] || '') + '</textarea>' +
@@ -12576,23 +12586,33 @@ setTimeout(flushReports, 4000);
   var _ow = openWrapUp;
   window.openWrapUp = function(id){
     var r = _ow.apply(this, arguments);
-    try { if (findAppt(id)) { ID = id; PASSO = wizVal(id, 'enchanted') === undefined ? 'royal' : 'time'; desenha(); } } catch (x) {}
+    try { if (findAppt(id)) { ID = id; PASSO = wizVal(id, 'experience') ? 'time' : 'royal'; desenha(); } } catch (x) {}
     return r;
   };
   try { openWrapUp = window.openWrapUp; } catch (x) {}
+  /* XP3: a resposta e obrigatoria para fechar o check out */
+  var _crf = confirmRunFinish;
+  window.confirmRunFinish = function(id){
+    if (findAppt(id) && !wizVal(id, 'experience')) { ID = id; PASSO = 'royal'; desenha(); try { crownToast('Choose her experience first'); } catch (x) {} return; }
+    return _crf.apply(this, arguments);
+  };
+  try { confirmRunFinish = window.confirmRunFinish; } catch (x) {}
   document.addEventListener('input', function(ev){ if (ev.target && ev.target.id === 'coWhy' && ID) { try { setMoodNote(ID, ev.target.value); } catch (x) { wrapMoodNote[ID] = ev.target.value; } } }, true);
   document.addEventListener('click', function(ev){
     var b = ev.target.closest && ev.target.closest('#coOv button'); if (!b || !ID) return;
     ev.stopPropagation();
     var v = b.getAttribute('data-co'), a = findAppt(ID);
     if (v === 'x') { fecha(); return; }
-    if (v === 'princess' || v === 'king') {
+    if (v && v.indexOf('xp:') === 0) {
+      try { setExperience(ID, v.slice(3)); } catch (x) {}
+      PASSO = 'time';
+    } else if (v === 'princess' || v === 'king') {
       setWizVal(ID, 'enchanted', true); setWizVal(ID, 'royal', v);
       try { crownToast('👑 That’s a ' + v + '. ' + enchantedTodayFor(a ? a.therapist : '') + ' today.'); } catch (x) {}
       PASSO = 'time';
     } else if (v === 'no') { setWizVal(ID, 'enchanted', false); setWizVal(ID, 'royal', undefined); try { moodOpen[ID] = true; } catch (x) {} PASSO = 'why'; }
     else if (v === 'next') PASSO = 'time';
-    else if (v === 'back') PASSO = PASSO === 'time' && wizVal(ID, 'enchanted') === false ? 'why' : 'royal';
+    else if (v === 'back') PASSO = 'royal';
     else if (v === 'pers' || v === 'extras') { fecha(); PZ = 0; try { wrapSec[ID] = null; toggleWrapSec(ID, v); } catch (x) {} return; }
     else if (v === 'done') { fecha(); confirmRunFinish(ID); return; }
     try { rerenderIfGroupOpen(ID); } catch (x) {}
