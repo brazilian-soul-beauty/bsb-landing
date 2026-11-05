@@ -26226,5 +26226,139 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
 /*BSB-LASTMIN-FIM*/
 </script>
 <!--BSB-LASTMIN-FIM-->
+<style>/*BSB-XP389-CSS-INICIO*/
+.xp-box{margin:8px 0 4px;border:1px solid #ECECF4;border-radius:16px;background:#FCFCFE;padding:14px}
+.xp-tag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;border-radius:12px;padding:8px 12px;margin-bottom:12px}
+.xp-tag.exc{background:#FFF7E0;border:1px solid #F2DE9E;color:#8A6A12}
+.xp-tag.std{background:#F5F4FA;border:1px solid #ECECF4;color:#585A75}
+.xp-tag .xp-ch{border:0;background:none;color:#9A9BB4;font:600 11px Inter,system-ui,sans-serif;cursor:pointer;padding:0 0 0 6px;text-decoration:underline}
+.xp-sec{font-size:10.5px;font-weight:800;letter-spacing:.7px;color:#9A9BB4;text-transform:uppercase;margin:4px 0 8px}
+.xp-row{display:flex;gap:8px;margin-bottom:12px}
+.xp-b{flex:1;border:1.5px solid #ECECF4;background:#fff;border-radius:14px;padding:13px 6px;font:700 14px Inter,system-ui,sans-serif;color:#1F2235;cursor:pointer;text-align:center}
+.xp-b.done{background:#E9F7F0;border-color:#BFE5D8;color:#1E7A55}
+.xp-big{width:100%;border:0;border-radius:14px;padding:15px;font:800 17px Inter,system-ui,sans-serif;color:#fff;background:#5B47E0;cursor:pointer}
+.xp-big.g{background:#22B66E}
+.xp-end{font-size:13.5px;font-weight:700;color:#1E7A55;background:#E9F7F0;border:1px solid #BFE5D8;border-radius:12px;padding:10px 12px}
+#xpROv{position:fixed;inset:0;z-index:9600;background:rgba(31,34,53,.42);display:flex;align-items:center;justify-content:center;padding:16px}
+#xpROv .hc{background:#fff;border-radius:20px;width:min(440px,100%);padding:24px 22px 16px;box-shadow:0 20px 50px rgba(16,24,40,.3);font-family:Inter,system-ui,sans-serif;color:#1F2235;text-align:center}
+#xpROv h3{margin:0 0 6px;font-size:21px;line-height:1.25}
+#xpROv .hs{font-size:13.5px;color:#585A75;margin-bottom:18px}
+#xpROv .o{display:block;width:100%;border:1.5px solid #ECECF4;background:#fff;border-radius:16px;padding:16px;font:700 17px Inter,system-ui,sans-serif;color:#1F2235;cursor:pointer;margin-bottom:10px}
+#xpROv .o.k{background:#FFF7E0;border-color:#F2DE9E}
+#xpROv .bk{border:0;background:none;color:#9A9BB4;font-weight:600;padding:8px;cursor:pointer}
+/*BSB-XP389-CSS-FIM*/</style>
+<script>/*BSB-XP389-INICIO*/
+/* XP389 (05/11/2026) Ligia: o card da Joana igual ao iPad das terapeutas.
+   Check in (= welcome + seat) -> "What experience will you give her?" Standard / Exceptional.
+   Depois: Drink na chegada; na saida Rebook, Charge, Circle e "What experience did you give her?" (obrigatoria).
+   So a trilha de bolinhas muda: o resto do card fica igual. Os botoes usam as MESMAS acoes do RUN385
+   (bsbRnTap / till), e o estado (feito ou nao) e lido do proprio RUN385, entao nada se perde.
+   Marcas no Hub (bsb_fd_marks, so true/false): xp_plan_std / xp_plan_exc / xp_done_std / xp_done_exc / xp_out. */
+(function(){
+  if (window.__XP389) return; window.__XP389 = true;
+  if (typeof journeyHtml !== 'function' || typeof markStep !== 'function') return;
+  var _prev = journeyHtml;
+  var NEWS = { qr: 1, news: 1, journal: 1 };
+  function e(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function marks(a){ try { return fdMarksFor(a) || {}; } catch (x) { return {}; } }
+  function nome(a){ var n = ''; try { n = firstName(a.client) || ''; } catch (x) { n = a.client || ''; } return n; }
+  function aOf(id){ var a = null; try { a = apptSeguro(id); } catch (x) {} if (!a) try { a = findApptLoose(id) || findApptLoose(modalApptId); } catch (x) {} return a; }
+  /* o que o RUN385 sabe de cada passo (feito, ou o sistema ja sabe) */
+  function estado(a){
+    var st = {};
+    try {
+      var t = document.createElement('div'); t.innerHTML = _prev(a) || '';
+      [].forEach.call(t.querySelectorAll('.rn-b[data-rnk]'), function(b){ st[b.getAttribute('data-rnk')] = b.classList.contains('done'); });
+      var vs = t.querySelector('.rn-box'); if (vs) vs.remove();
+      st.__strip = t.innerHTML;
+    } catch (x) { st.__strip = ''; }
+    return st;
+  }
+  function plan(m){ return m.xp_plan_exc === true ? 'exceptional' : (m.xp_plan_std === true ? 'standard' : ''); }
+  function deu(m){ return m.xp_done_exc === true ? 'exceptional' : (m.xp_done_std === true ? 'standard' : ''); }
+  var LAB = { standard: '🤍 Standard', exceptional: '👑 Exceptional' };
+
+  function box(a){
+    var m = marks(a), st = estado(a), id = e(a.id);
+    var dentro = m.welcome === true, p = plan(m), d = deu(m);
+    var h = '';
+    if (!dentro) {
+      h = '<button type="button" class="xp-big" onclick="event.stopPropagation();bsbXpIn(\'' + id + '\')">✅ Check in</button>';
+    } else if (!p) {
+      h = '<button type="button" class="xp-big" onclick="event.stopPropagation();bsbXpAsk(\'' + id + '\',\'plan\')">🤍👑 Choose her experience</button>';
+    } else {
+      h = '<div class="xp-tag ' + (p === 'exceptional' ? 'exc' : 'std') + '">' + LAB[p] + ' planned' +
+          (d ? '' : '<button type="button" class="xp-ch" onclick="event.stopPropagation();bsbXpAsk(\'' + id + '\',\'plan\')">change</button>') + '</div>';
+      var newsK = Object.keys(st).filter(function(k){ return NEWS[k]; })[0];
+      if (d) {
+        h += '<div class="xp-end">✓ Checked out · ' + LAB[d] + ' given</div>';
+      } else {
+        h += '<div class="xp-sec">Arrival</div><div class="xp-row">' +
+          '<button type="button" class="xp-b' + (st.drink || m.drink === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (st.drink || m.drink === true ? ' ✓' : '') + '</button></div>';
+        if (m.xp_out === true) {
+          h += '<div class="xp-sec">Before she leaves</div><div class="xp-row">' +
+            '<button type="button" class="xp-b' + (st.rebook ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'rebook\')">📅 Rebook' + (st.rebook ? ' ✓' : '') + '</button>' +
+            (st.charge ? '<button type="button" class="xp-b done">💷 Charge ✓</button>'
+                       : '<button type="button" class="xp-b" data-till="' + id + '">💷 Charge</button>') +
+            (newsK ? '<button type="button" class="xp-b' + (st[newsK] ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'' + newsK + '\')">💬 Circle' + (st[newsK] ? ' ✓' : '') + '</button>' : '') +
+            '</div><button type="button" class="xp-big g" onclick="event.stopPropagation();bsbXpAsk(\'' + id + '\',\'done\')">✓ Done</button>';
+        } else {
+          h += '<button type="button" class="xp-big g" onclick="event.stopPropagation();bsbXpOut(\'' + id + '\')">👋 Check out</button>';
+        }
+      }
+    }
+    return (st.__strip || '') + '<div class="jr-box xp-box" data-xp="' + id + '" onclick="event.stopPropagation()">' + h + '</div>';
+  }
+
+  window.journeyHtml = function(a){
+    try { if (!a) return ''; return box(a); } catch (x) { return _prev.apply(this, arguments); }
+  };
+  try { journeyHtml = window.journeyHtml; } catch (x) {}
+
+  function redraw(id){ var a = aOf(id); if (!a) return; try { if (typeof jrRefresh === 'function') jrRefresh(a); } catch (x) {} }
+  function soon(id){ [80, 600, 1800].forEach(function(t){ setTimeout(function(){ redraw(id); }, t); }); }
+
+  window.bsbXpIn = function(id){
+    try { markStep(id, 'welcome', true); markStep(id, 'seat', true); } catch (x) {}
+    redraw(id); bsbXpAsk(id, 'plan');
+  };
+  window.bsbXpOut = function(id){ try { markStep(id, 'xp_out', true); } catch (x) {} redraw(id); };
+  window.bsbXpTap = function(id, k){
+    var a = aOf(id), m = a ? marks(a) : {};
+    if (k === 'drink' && m.drink === true) { try { bsbRnUndo(id, 'drink'); } catch (x) {} soon(id); return; }
+    try { bsbRnTap(id, k); } catch (x) {}
+    soon(id);
+  };
+  window.bsbXpAsk = function(id, kind){
+    var o = document.getElementById('xpROv'); if (o) o.remove();
+    var a = aOf(id), n = a ? nome(a) : '';
+    o = document.createElement('div'); o.id = 'xpROv';
+    o.innerHTML = '<div class="hc" role="dialog" aria-modal="true"><h3>' +
+      (kind === 'plan' ? 'What experience will you give her?' : 'What experience did you give her?') + '</h3>' +
+      '<div class="hs">' + (kind === 'plan' ? e(n) : 'Be honest, it helps the team') + '</div>' +
+      '<button type="button" class="o" data-v="standard">' + LAB.standard + '</button>' +
+      '<button type="button" class="o k" data-v="exceptional">' + LAB.exceptional + '</button>' +
+      '<button type="button" class="bk" data-v="x">‹ Back</button></div>';
+    o.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var b = ev.target.closest && ev.target.closest('button[data-v]'); if (!b) return;
+      var v = b.getAttribute('data-v'); o.remove();
+      if (v === 'x') return;
+      var pre = kind === 'plan' ? 'xp_plan_' : 'xp_done_';
+      try { markStep(id, pre + 'exc', v === 'exceptional'); markStep(id, pre + 'std', v === 'standard'); } catch (x) {}
+      if (kind === 'plan' && v === 'exceptional') { try { jToast('✨ Make it exceptional'); } catch (x) {} }
+      if (kind === 'done') { try { jToast('✓ ' + (n || 'She') + ' checked out'); } catch (x) {} }
+      redraw(id);
+    });
+    document.body.appendChild(o);
+  };
+  /* o pop-up do Rebook do RUN385 fecha e o card volta com o verde certo */
+  document.addEventListener('click', function(ev){
+    var b = ev.target && ev.target.closest ? ev.target.closest('#rnOv button') : null;
+    if (b) { var id = null; try { id = modalApptId; } catch (x) {} if (id) soon(id); }
+  }, true);
+})();
+/*BSB-XP389-FIM*/</script>
+
 </body>
 </html>
