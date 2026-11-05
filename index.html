@@ -26299,7 +26299,7 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
         h += '<div class="xp-end">✓ Checked out · ' + LAB[d] + ' given</div>';
       } else {
         h += '<div class="xp-sec">Arrival</div><div class="xp-row">' +
-          '<button type="button" class="xp-b' + (st.drink || m.drink === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (st.drink || m.drink === true ? ' ✓' : '') + '</button></div>';
+          '<button type="button" class="xp-b' + (st.drink || m.drink === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (st.drink || m.drink === true ? (m.drink_paid === true ? ' · Paid ✓' : (m.drink_free === true ? ' · Free ✓' : ' ✓')) : '') + '</button></div>';
         if (m.xp_out === true) {
           var compK = (st.colours !== undefined || m.colours !== undefined) ? 'compliment,colours' : 'compliment';
           h += '<div class="xp-sec">Before she leaves</div><div class="xp-row">' +
@@ -26340,7 +26340,8 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
   window.bsbXpOut = function(id){ try { markStep(id, 'xp_out', true); } catch (x) {} redraw(id); };
   window.bsbXpTap = function(id, k){
     var a = aOf(id), m = a ? marks(a) : {};
-    if (k === 'drink' && m.drink === true) { try { bsbRnUndo(id, 'drink'); } catch (x) {} soon(id); return; }
+    if (k === 'drink' && m.drink === true) { try { bsbRnUndo(id, 'drink'); markStep(id, 'drink_free', false); markStep(id, 'drink_paid', false); } catch (x) {} soon(id); return; }
+    if (k === 'drink') { bsbXpAsk(id, 'drink'); return; }
     try { bsbRnTap(id, k); } catch (x) {}
     soon(id);
   };
@@ -26349,16 +26350,23 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
     var a = aOf(id), n = a ? nome(a) : '';
     o = document.createElement('div'); o.id = 'xpROv';
     o.innerHTML = '<div class="hc" role="dialog" aria-modal="true"><h3>' +
-      (kind === 'plan' ? 'What experience will you give her?' : 'What experience did you give her?') + '</h3>' +
-      '<div class="hs">' + (kind === 'plan' ? e(n) : 'Be honest, it helps the team') + '</div>' +
-      '<button type="button" class="o" data-v="standard">' + LAB.standard + '</button>' +
-      '<button type="button" class="o k" data-v="exceptional">' + LAB.exceptional + '</button>' +
+      (kind === 'drink' ? '🍹 Her drink' : (kind === 'plan' ? 'What experience will you give her?' : 'What experience did you give her?')) + '</h3>' +
+      '<div class="hs">' + (kind === 'done' ? 'Be honest, it helps the team' : e(n)) + '</div>' +
+      (kind === 'drink'
+        ? '<button type="button" class="o" data-v="free">🎁 Free</button><button type="button" class="o k" data-v="paid">💷 Paid</button>'
+        : '<button type="button" class="o" data-v="standard">' + LAB.standard + '</button>' +
+          '<button type="button" class="o k" data-v="exceptional">' + LAB.exceptional + '</button>') +
       '<button type="button" class="bk" data-v="x">‹ Back</button></div>';
     o.addEventListener('click', function(ev){
       ev.stopPropagation();
       var b = ev.target.closest && ev.target.closest('button[data-v]'); if (!b) return;
       var v = b.getAttribute('data-v'); o.remove();
       if (v === 'x') return;
+      if (kind === 'drink') {
+        try { markStep(id, 'drink_free', v === 'free'); markStep(id, 'drink_paid', v === 'paid'); bsbRnTap(id, 'drink'); } catch (x) {}
+        if (v === 'paid') { try { jToast('💷 Add the drink to her Salonized invoice'); } catch (x) {} }
+        soon(id); return;
+      }
       var pre = kind === 'plan' ? 'xp_plan_' : 'xp_done_';
       try { markStep(id, pre + 'exc', v === 'exceptional'); markStep(id, pre + 'std', v === 'standard'); } catch (x) {}
       if (kind === 'plan' && v === 'exceptional') { try { jToast('✨ Make it exceptional'); } catch (x) {} }
