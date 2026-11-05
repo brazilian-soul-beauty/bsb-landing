@@ -363,6 +363,17 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .lvbtn{position:fixed;right:24px;bottom:22px;z-index:20;background:#141117;color:#E9C77B;border:0;border-radius:999px;padding:11px 18px;font:700 13px Inter,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.2);cursor:pointer}
 .lvt{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:13.5px}.lvt th{font-size:12px;color:var(--muted);text-align:left;padding:6px 10px}.lvt td{background:#F7F6FB;padding:10px;vertical-align:top}.lvt td:first-child{font-weight:700;border-radius:12px 0 0 12px;white-space:nowrap}.lvt td:last-child{border-radius:0 12px 12px 0}.lvt td em{font-style:normal;margin-right:6px}
 .lvt .nx{background:#FFF4DC}.lvt th.nx{color:#8A5A12;background:transparent}
+.hero.bzh{background:radial-gradient(120% 90% at 0% 0%,#3A3242 0%,#141117 70%)}.hero.bzh.g .bzr b{color:#5FD39A}.hero.bzh.a .bzr b{color:#FFB86E}.hero.bzh.r .bzr b{color:#FF8F8F}
+.bzr{margin:auto 0 0;z-index:1}.bzr b{font-size:64px;font-weight:800;letter-spacing:-2px;line-height:1;display:block}.bzr span{font-size:12.5px;opacity:.75}
+.bzs{display:flex;gap:8px;margin:14px 0 12px;z-index:1}.bzs>div{flex:1;background:rgba(255,255,255,.1);border-radius:14px;padding:10px}.bzs b{display:block;font-size:18px}.bzs span{font-size:11px;opacity:.75}
+.bzt{display:flex;gap:6px;margin-top:10px;z-index:1}.bzt button{flex:1;border:0;border-radius:12px;padding:10px;font:700 13px Inter,sans-serif;background:rgba(255,255,255,.12);color:#fff;cursor:pointer}.bzt .on{background:#fff;color:#141117}
+.bzg{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:10px;min-height:0}.bzg .w2{grid-column:span 2;grid-row:span 1}
+.bzc{opacity:1;transform:none;animation:none;min-height:0;padding:12px 14px!important}.bzc .big{font-size:28px!important;margin:auto 0 2px}.bzc .sub{font-size:11.5px}
+.bzb{flex:1;display:flex;align-items:flex-end;gap:6px;margin-top:8px;min-height:0}.bzb>div{flex:1;height:100%;display:flex;align-items:flex-end;gap:2px;position:relative;padding-bottom:14px}.bzb i{flex:1;border-radius:4px 4px 0 0;min-height:2px}.bzb small{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:10px;color:var(--faint)}
+.rv{background:#1F9D6B}.gr{background:#D9D2E8}.lg2{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);display:flex;gap:5px;align-items:center}.lg2 i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.bzch{display:flex;flex-direction:column;gap:5px;margin-top:6px}.bzch>div{display:grid;grid-template-columns:62px 1fr 34px;gap:6px;align-items:center;font-size:11.5px;font-weight:600}.bzch u{height:8px;background:#F1EEF7;border-radius:4px;overflow:hidden;text-decoration:none}.bzch u i{display:block;height:100%}
+.bzg2{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;gap:10px;min-height:0}.bzgr{display:flex;flex-direction:column;gap:10px;margin-top:10px}.bzgr>div{display:grid;grid-template-columns:110px 1fr 40px;gap:4px 8px;align-items:center;font-size:13px;font-weight:600}.bzgr small{grid-column:2/4;font-size:11px;color:var(--muted);font-weight:500}.bzgr u{height:10px;background:#F1EEF7;border-radius:5px;overflow:hidden;text-decoration:none}.bzgr u i{display:block;height:100%;background:#6D4AFF}
+.bzr2{display:grid;grid-template-columns:1fr auto;gap:0 8px;padding:9px 0;border-bottom:1px solid var(--line)}.bzr2 span{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bzr2 small{grid-column:1;font-size:11px;color:var(--muted)}.bzr2 b{grid-row:1/3;grid-column:2;align-self:center;font-size:15px}.bzr2 b.g{color:#1F9D6B}.bzr2 b.a{color:#C2410C}.bzr2 b.r{color:#B3261E}
 </style>
 </head>
 <body>
@@ -380,6 +391,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
     <button class="tab" data-t="xm">👑 Performance</button>
     <button class="tab" data-t="ex">💷 Extras</button>
     <button class="tab" data-t="path">🌱 Soul Path</button>
+    <button class="tab" data-t="biz" id="tabBiz" style="display:none">🔒 Business</button>
     <button class="tab" data-t="care" id="tabCare" style="display:none">🌿 Skin ritual</button>
   </div>
   <main id="main"></main>
@@ -474,6 +486,8 @@ function render(){
   if(S.tab==='path'){renderPath(M);if(S.admin){var lb=document.createElement('button');lb.className='lvbtn';lb.textContent='🔒 Levels · draft';lb.onclick=openLv;M.appendChild(lb)}return}
   if(S.tab==='std')return renderStd(M);
   if(S.tab==='ex')return renderEx(M);
+  document.getElementById('tabBiz').style.display=S.admin?'':'none';
+  if(S.tab==='biz'){if(!S.admin){S.tab='today';return render()}return renderBiz(M)}
   if(S.tab==='xm')return renderSM(M);
   var C=calc(S.data),x=S.xm||{},lad=x.ladder||[30,50,80],n=x.new||0,nr=x.new_rev||0,rp=n?Math.round(100*nr/n):null,topR=rp!=null&&rp>=lad[0];
   C=C.filter(function(c){return c.k!=='abs'&&c.k!=='comp'});
@@ -639,6 +653,45 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
      '<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gx" x1="0" x2="1"><stop offset="0" stop-color="#F2D28A"/><stop offset="1" stop-color="#C9962E"/></linearGradient></defs></svg></div>'}
   h+='<div class="bands b3"><div class="bh">💷 How you earn more</div><div class="row exg" style="grid-template-columns:repeat('+(up?2:1)+',1fr)">'+c1+c2+'</div></div>';
   M.innerHTML=h;setTimeout(function(){document.querySelectorAll('.pa').forEach(function(a){a.style.strokeDashoffset=a.getAttribute('data-o')})},120)}
+
+
+/* ---------- Business (admin only) ---------- */
+function gb0(v){return '£'+Math.round(+v||0).toLocaleString('en-GB')}
+function renderBiz(M){var key=S.who;
+  if(S.bzk!==key){S.bzk=key;S.bz=null;M.innerHTML='<div class="wait"><em>🔒</em>Loading…</div>';rpc('soul_business',{p_code:S.code,p_person:S.who}).catch(function(){return null}).then(function(x){if(S.bzk!==key)return;S.bz=x||{};if(S.tab==='biz')renderBiz(M)});return}
+  var b=S.bz||{},ms=b.months||[],pg=S.bzp||1,n=function(v){return +v||0};
+  var paid=ms.filter(function(m){return m.gross!=null}),rv=0,gr=0,hrs=0;paid.forEach(function(m){rv+=n(m.rev);gr+=n(m.gross);hrs+=n(m.hours)});
+  var R=gr?rv/gr:null,rc=R==null?'':R>=3?'g':R>=2?'a':'r';
+  var rev12=0,prod12=0,vis=0,bmin=0,newc=0,tips=0,revs=0,r5=0;ms.forEach(function(m){rev12+=n(m.rev);prod12+=n(m.prod);vis+=n(m.visits);bmin+=n(m.bmin);newc+=n(m.newc);tips+=n(m.tips);revs+=n(m.revs);r5+=n(m.r5)});
+  var ch=b.channels||{},cht=n(ch.treatwell)+n(ch.online)+n(ch.salon),pc=function(v,t){return t?Math.round(100*v/t):0};
+  var occ=hrs?Math.round(100*(paid.reduce(function(a,m){return a+n(m.bmin)},0)/60)/hrs):null,cph=hrs?gr/hrs:n(b.base_rate);
+  var tabs='<div class="bzt"><button class="'+(pg===1?'on':'')+'" onclick="S.bzp=1;renderBiz(document.getElementById(\'main\'))">Overview</button><button class="'+(pg===2?'on':'')+'" onclick="S.bzp=2;renderBiz(document.getElementById(\'main\'))">Treatments</button></div>';
+  var h='<div class="hero bzh '+rc+'"><small>🔒 Only you · last 12 months</small><h2>'+esc(S.who)+'</h2><p>Is she worth it?</p>'+
+   '<div class="bzr"><b>'+(R==null?'–':R.toFixed(1)+'x')+'</b><span>what she brings for every £1 she costs</span></div>'+
+   '<div class="bzs"><div><b>'+gb0(rv)+'</b><span>she brought</span></div><div><b>'+gb0(gr)+'</b><span>she cost</span></div></div>'+
+   '<div class="verdict"><em>'+(rc==='g'?'💚':rc==='a'?'🟠':rc==='r'?'🔴':'🗂️')+'</em><span>'+(R==null?'No payslips yet.':rc==='g'?'Healthy. She pays for herself well.':rc==='a'?'Tight. Watch occupancy and ticket.':'Below cost. Time for a talk.')+'</span></div>'+tabs+'</div>';
+  if(pg===1){var mx=Math.max.apply(null,ms.map(function(m){return Math.max(n(m.rev),n(m.gross))}).concat([1]));
+    var bars='<div class="bzb">'+ms.map(function(m){return '<div><i style="height:'+Math.round(100*n(m.rev)/mx)+'%" class="rv" title="'+gb0(m.rev)+'"></i><i style="height:'+Math.round(100*n(m.gross)/mx)+'%" class="gr" title="'+gb0(m.gross)+'"></i><small>'+MN[+m.ym.slice(5)-1].slice(0,1)+'</small></div>'}).join('')+'</div>';
+    function T(ic,t,big,sub,extra){return '<div class="tile bzc"><div class="h"><em>'+ic+'</em>'+t+'</div><div class="big">'+big+'</div><div class="sub">'+sub+'</div>'+(extra||'')+'</div>'}
+    var chb='<div class="bzch">'+[['Treatwell',ch.treatwell,'#E2557A'],['Online',ch.online,'#6D4AFF'],['Salon',ch.salon,'#1F9D8B']].map(function(c){return '<div><span>'+c[0]+'</span><u><i style="width:'+pc(n(c[1]),cht)+'%;background:'+c[2]+'"></i></u><b>'+pc(n(c[1]),cht)+'%</b></div>'}).join('')+'</div>';
+    h+='<div class="bzg">'+
+     '<div class="tile bzc w2"><div class="h"><em>📅</em>Month by month<span class="lg2"><i class="rv"></i>Brought <i class="gr"></i>Cost</span></div>'+bars+'</div>'+
+     T('💷','Sales',gb0(rev12),'Services '+gb0(rev12-prod12)+' · Products '+gb0(prod12))+
+     T('🎟️','Average ticket',vis?gb0(rev12/vis):'–',vis+' visits')+
+     T('🔁','Clients back in 90 days',(b.ret90==null?'–':b.ret90+'%'),n(b.clients)+' clients · '+Math.round(newc/Math.max(1,ms.length))+' new a month')+
+     T('📲','Bookings from','', cht+' visits',chb)+
+     T('⭐','Reviews',n((b.reviews||{}).n)+'',((b.reviews||{}).avg||'–')+' avg · '+(vis?Math.round(1000*revs/vis)/10:0)+' per 100 visits')+
+     T('💜','Tips',gb0(tips),(hrs?'£'+(tips/hrs).toFixed(2)+'/h':'')+(rev12?' · '+Math.round(100*tips/rev12)+'% of sales':''))+
+     T('⏱️','Occupancy',(occ==null?'–':occ+'%'),'Booked vs paid hours')+
+     T('❌','Cancelled or no-show',(n(b.booked)?Math.round(100*(n(b.cancel)+n(b.noshow))/n(b.booked))+'%':'–'),n(b.cancel)+' cancelled · '+n(b.noshow)+' no-show')+
+     '</div>'}
+  else{var gs=b.groups||[],gt=gs.reduce(function(a,g){return a+n(g.gbp)},0),tr=(b.treat||[]).filter(function(t){return t.gbph!=null});
+    var top=tr.slice(0,6),bot=tr.slice(-6).reverse();
+    function row(t){var mg=n(t.gbph)-cph;return '<div class="bzr2"><span>'+esc(t.svc)+'</span><small>'+t.n+'× · '+(t.mins||'–')+' min · '+gb0(t.avgp)+'</small><b class="'+(mg>cph*2?'g':mg>0?'a':'r')+'">£'+Math.round(t.gbph)+'/h</b></div>'}
+    h+='<div class="bzg2"><div class="tile bzc"><div class="h"><em>🧩</em>Treatment groups</div><div class="bzgr">'+gs.map(function(g){return '<div><span>'+esc(g.g)+'</span><u><i style="width:'+pc(n(g.gbp),gt)+'%"></i></u><b>'+pc(n(g.gbp),gt)+'%</b><small>'+gb0(g.gbp)+'</small></div>'}).join('')+'</div></div>'+
+     '<div class="tile bzc"><div class="h"><em>🏆</em>Most profitable per hour<span class="lg2">Her cost £'+cph.toFixed(2)+'/h</span></div>'+top.map(row).join('')+'</div>'+
+     '<div class="tile bzc"><div class="h"><em>📉</em>Least profitable per hour</div>'+bot.map(row).join('')+'</div></div>'}
+  M.innerHTML=h}
 
 /* ---------- Extra mile ---------- */
 function renderXM(M){var x=S.xm||{},P=x.pers||{clients:0,pe:0},pp=P.clients?Math.round(100*P.pe/P.clients):null,okP=pp==null?null:pp>=80;
