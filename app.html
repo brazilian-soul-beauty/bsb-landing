@@ -626,7 +626,7 @@ function smCrit(d,x,r,up){var DD=d.days||[],td=ymd(today());
   var C=[
    {ic:'✨',t:'Extras',v:ur,ok:ur==null?null:ur>=15,goal:'15%',sub:ur==null?'No chances yet':(up.ups+' of '+up.visits+' chances'),todo:ur!=null&&ur<15?Math.max(1,Math.ceil(0.15*up.visits-up.ups))+' more extras':''},
    {ic:'👑',t:'Exceptional',v:pp,ok:pp==null?null:pp>=G,goal:G+'%',sub:pp==null?'No clients yet':(P.pe+' of '+P.clients+' clients'),todo:pp!=null&&pp<G?(need(+P.pe,+P.clients)>left*4?'👑 next month':need(+P.pe,+P.clients)+' more exceptional'):''},
-   {ic:'🎬',t:'Content',v:cp,ok:cp==null?null:cp>=G,goal:G+'%',sub:exp?(vids+' of '+exp+' videos'):'No free time yet',todo:cp!=null&&cp<G?(exp-vids)+' more videos':''}];
+   {ic:'🎬',t:'Content',v:exp?cp:(W.length?100:null),ok:exp?cp>=G:(W.length?true:null),goal:G+'%',sub:exp?(vids+' of '+exp+' videos'):(W.length?'Full diary ✓':'No work days yet'),todo:cp!=null&&cp<G?(exp-vids)+' more videos':''}];
   var RS={rv:rv,p5:p5,tch:tch,th:th};
   return {C:C,G:G,PRE:PRE,done:done,RS:RS}}
 var SMY0=new Date(2026,10,1);
@@ -887,7 +887,7 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   var lpk=day.slice(0,7);S.lp=S.lp||{};if(!(lpk in S.lp)){S.lp[lpk]=null;rpc('soul_look_prize_get',{p_code:S.code,p_mes:lpk}).then(function(v){S.lp[lpk]=v||'';if(S.tab==='today')renderToday(M)}).catch(function(){})}
   var EX0=S.td.ex&&S.td.ex.up?(S.td.ex.up.days||[]).filter(function(q){return q.d===day})[0]:null,eu=EX0?+EX0.u:0,ev=EX0?+EX0.v:0,en=Math.max(1,Math.ceil(0.15*ev));
   var SE=[{ic:'✨',t:'Extras',ok:ev?(eu>=en?true:null):(eu?true:null),m:ev?(eu+' of '+ev+' chances'):(eu?eu+' today':'No chances today')},
-   {ic:'🎬',t:'Content',ok:exp>0?ctOk:(vd>0?true:null),m:exp>0?(vd+' of '+exp+(exp===1?' video':' videos')):(vd?'Thank you for creating':'No free time today')},
+   {ic:'🎬',t:'Content',ok:exp>0?ctOk:((nc||x.worked)?true:(vd>0?true:null)),m:exp>0?(vd+' of '+exp+(exp===1?' video':' videos')):(vd?'Thank you for creating':((nc||x.worked)?'Full day ✓':'Day off'))},
    {ic:'👑',t:'Exceptional',ok:nc&&pe>=nc?true:null,ex:1,m:nc?(pe+' of '+nc+(nc===1?' client':' clients')):'No clients today'}];
   var won=SE.filter(function(q){return q.ok}).length;
   var STP=[];if(x.worked||isT){STP.push(['⏰','On time',x.worked?!(x.late_min>0):null]);STP.push(['💄','Look',x.look_marked?lkOk:null]);STP.push(['🍽️','Lunch',x.worked&&x.lunch_min!=null?x.lunch_min<=L:null]);STP.push(['☑️','Tasks',x.worked||nc?tkOk:null]);if(fc>0)STP.push(['🧴','Ritual',acOk])}
