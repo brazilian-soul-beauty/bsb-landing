@@ -4518,12 +4518,13 @@ const THERAPISTS = [
   { id: 'ligia',    name: 'Ligia',    role: 'Founder',          accent: '#5B47E0' },
   { id: 'dania',    name: 'Dania',    role: 'Beauty Therapist', accent: '#5B47E0' },
   { id: 'anukis',   name: 'Anukis',   role: 'Nail Therapist',   accent: '#4634C7' },
-  { id: 'sana',     name: 'Sana',     role: 'Nail Therapist',   accent: '#5B47E0' },
-  { id: 'michelle', name: 'Michelle', role: 'Skin Therapist',   accent: '#5B47E0' }
+  { id: 'riya',     name: 'Riya',     role: 'Nail Therapist',   accent: '#5B47E0' },
+  { id: 'michelle', name: 'Michelle', role: 'Skin Therapist',   accent: '#5B47E0' },
+  { id: 'sana',     name: 'Sana',     role: 'Nail Therapist',   accent: '#5B47E0' }
 ];
 /* Quem ainda trabalha aqui (por id, minusculo). Ex-membros (Ari/Arielle/Ariadne) NUNCA
    aparecem como favorita nem em sugestao. Usado pra filtrar o historico antigo. */
-const CURRENT_STAFF = { ligia: 1, dania: 1, anukis: 1, sana: 1, michelle: 1, joana: 1, aluana: 1 };
+const CURRENT_STAFF = { ligia: 1, dania: 1, anukis: 1, riya: 1, sana: 1, michelle: 1, joana: 1, aluana: 1 };
 function isCurrentStaff(tid) {
   if (!tid) return false;
   return !!CURRENT_STAFF[String(tid).toLowerCase()];
