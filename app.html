@@ -542,7 +542,7 @@ function render(){
    '<div class="ring"><svg width="190" height="190"><circle cx="95" cy="95" r="'+R+'" stroke="rgba(255,255,255,.18)" stroke-width="14" fill="none"/>'+
    '<circle id="arc" cx="95" cy="95" r="'+R+'" stroke="#fff" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)"/></svg>'+
    '<div class="c"><div><b id="cnt">0</b><span>of '+tot+(PERF?' going beyond':' standards')+'</span></div></div></div>'+
-   '<div class="verdict"><em>'+(PRE0?'🗂️':all?'💜':'🎯')+'</em><span>'+(PRE0?'Reference only. Before your Soul Path started.':PERF?(all?'Everything above the line. Beautiful.':'Every result here grows your Soul Path.'):all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div>'+(PERF?'':polCard())+'</div><div class="bands '+(PERF?'b2':'b1')+'">';
+   '<div class="verdict"><em>'+(all?'💜':'🎯')+'</em><span>'+(PERF?(all?'Everything above the line. Beautiful.':'Every result here grows your Soul Path.'):all?'Standard met. This is the BSB level.':(tot-met)+' to fix. Tap a card to see the days.')+'</span></div>'+(PERF?'':polCard())+'</div><div class="bands '+(PERF?'b2':'b1')+'">';
   var st0x=S.xm&&S.xm.start?pd(String(S.xm.start).replace(/"/g,'')):null,PRE=st0x&&range()[1]<st0x,Lm=(S.data&&S.data.lunch_max)||30,DD=(S.data&&S.data.days)||[];
   var DF={time:function(x){return x.worked?!(x.late_min>0):null},lunch:function(x){return x.worked&&x.lunch_min!=null?x.lunch_min<=Lm:null},abs:function(x){return x.absent&&!x.on_leave?false:(x.worked?true:null)},look:function(x){return x.worked?(x.look_marked&&x.look_ok!==false):null},tasks:function(x){return x.worked?(x.t_morning>0&&x.t_day>0&&x.t_close>0):null}};
   function strip(k){if(!DF[k]||S.mode==='day'||!DD.length)return '';return '<div class="strip">'+DD.map(function(x){var v=DF[k](x);return '<i class="'+(v===null?'':(PRE?'p':v?'g':'r'))+'" title="'+x.d+'"></i>'}).join('')+'</div>'}
@@ -598,7 +598,7 @@ function renderStd(M){var d=S.data||{},L=d.lunch_max||30,DD=d.days||[],by={},r=r
    '<div class="stc" style="grid-template-columns:repeat('+STL.length+',1fr)">'+STL.map(function(q,i){return '<button'+(q[0]==='ritual'||q[0]==='phone'?'':' onclick="openT(\''+q[0]+'\')"')+'><em>'+q[1]+'</em><b>'+cnt[i]+'<small>/'+n+'</small></b></button>'}).join('')+'</div>'+
    (stk>=2&&!PRE?'<div class="stk" style="text-align:center">🔥 '+stk+' days in a row</div>':'')+
    (S.admin?'<button class="pmb" onclick="polForm()">🔒 📵 Log policy moment</button>':'')+
-   '<div class="verdict"><em>'+(PRE?'🗂️':n&&full===n?'💜':'🌱')+'</em><span>'+(PRE?'Reference only.':!n?'No work days yet.':full===n?'Every day with all stamps. This is BSB.':'Tomorrow starts fresh.')+'</span></div>'+polCard()+'</div>';
+   '<div class="verdict"><em>'+(n&&full===n?'💜':'🌱')+'</em><span>'+(!n?'No work days yet.':full===n?'Every day with all stamps. This is BSB.':'Tomorrow starts fresh.')+'</span></div>'+polCard()+'</div>';
   var a=new Date(r[0]),cells=[];
   if(S.mode==='month'){var lead=(a.getDay()+6)%7;for(var q=0;q<lead;q++)cells.push('<div class="sd x"></div>')}
   for(var dt=new Date(r[0]);dt<=r[1];dt.setDate(dt.getDate()+1)){var k=ymd(dt),x=by[k],fut=k>td,wk=x&&x.worked&&!fut;
