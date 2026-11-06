@@ -45,7 +45,7 @@ p{margin:0;font-size:clamp(18px,2.6vw,21px);line-height:1.55;max-width:34ch}
 .ladder b{font-family:'Cormorant Garamond',serif;font-size:clamp(23px,4.4vw,28px);font-weight:500;line-height:1.1}
 .ladder span{font-size:14px;color:var(--soft)}
 .ladder .here{background:#EDE3D5;border-color:var(--gold);color:var(--ink)}.ladder .here span,.ladder .here .ic{color:#86684A}
-.ladder .ahead{border-style:dashed;color:#7D7266}
+.ladder .ahead{border-style:dashed;color:#7D7266}.ink .ladder li{border-color:#D6C7B3}.ink .ladder .here{background:#FDFBF8;border-color:var(--gold)}
 .ink{background:#EDE3D5;color:var(--ink)}.ink .k,.ink .sig,.ink h2 em{color:#86684A}.ink .soft{color:#5F564C}.ink .ghost{color:#86684A;opacity:.12}.ink .rule:before,.ink .rule:after{background:#D6C7B3}
 .list{display:flex;flex-direction:column;gap:14px}.list div{display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:baseline}.list b{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze)}
 .qq{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,6.4vw,44px);line-height:1.15;max-width:22ch;position:relative}
@@ -76,7 +76,7 @@ var Q=["Looking back at your first day in 2022, what are you most proud of today
 "What helped you give clients the best experience? What sometimes made that difficult?",
 "What did you enjoy about working with the team? What do you think we should improve?",
 "If you were running BSB tomorrow, what’s the first thing you would change, and why?",
-"Could you ever see yourself returning to BSB as Soul Team Manager? What would make that feel right for you?",
+"Could you ever see yourself returning to BSB as Soul Trainer? What would make that feel right for you?",
 "Is there anything you’d like to say to me or leave for the BSB team?"];
 var A={},i=0,P=[];
 function pg(cls,n,inner){return '<section class="pg '+cls+'">'+(n?'<div class="ghost" aria-hidden="true">'+n+'</div>':'')+inner+'</section>'}
@@ -112,11 +112,12 @@ P.push(function(){return pg('','', '<div class="k">In their words</div><div clas
 P.push(function(){return pg('','05','<div class="k">When you started teaching others</div><h2>Something <em>changed</em></h2><p>You went from learning how we do things at BSB to helping other girls learn them too.</p><div class="list push"><div><b>Trials</b><p>You assessed new therapists during their trials.</p></div><div><b>Training</b><p>You gave your first training.</p></div><div><b>Insights</b><p>You started noticing what makes a good BSB therapist and sharing what you knew.</p></div></div>')});
 P.push(function(){return pg('','', '<div class="k">When you started teaching others</div><p class="push">That was an important step. Because doing something well is one thing. Being able to teach someone else is another.</p>'+R+'<p class="quote">I saw that growth in you.</p>')});
 /* 6 path */
-P.push(function(){var L=[['✓','Soul','Completed',''],['✓','Soul+','Completed',''],['★','Senior Soul','Where you’ve reached','here'],['◇','Soul Lead','The next level','ahead'],['◇','Soul Team Manager','The future we had started talking about','ahead']];
+P.push(function(){var L=[['✓','Soul','Completed',''],['✓','Soul+','Completed',''],['★','Senior Soul','Where you’ve reached','here'],['◇','Soul Trainer','Your next step: training the new girls','ahead']];
   return pg('','06','<div class="k">Your Soul Path</div><h2>Look how far you’ve <em>come</em></h2><ul class="ladder push">'+L.map(function(x){return '<li class="'+x[3]+'"><span class="ic">'+x[0]+'</span><b>'+x[1]+'</b><span>'+x[2]+'</span></li>'}).join('')+'</ul>')});
 P.push(function(){return pg('','', '<div class="k">Your Soul Path</div><p class="push">When you first arrived, you had so much ahead of you to learn. Today, I can see someone with the experience to help others grow.</p>'+R+'<p class="quote">Whatever direction you choose, everything you’ve learnt and achieved belongs to you.</p>')});
 /* 7 leaving */
-P.push(function(){return pg('ink','07','<div class="k">The chapter you’re leaving behind</div><h2>Soul Team <em>Manager</em></h2>'+R+'<p class="soft">We had already started talking about your next step at BSB. A role where you could share your experience, guide the girls, help the team grow and take more responsibility for the standards we’ve built together.</p><p class="quote push">Soul Team Manager was a future I could see for you here.</p>')});
+P.push(function(){return pg('ink','07','<div class="k">The chapter you’re leaving behind</div><h2>Soul <em>Trainer</em></h2>'+R+'<p class="soft">We had already started talking about your next step at BSB. Training the new girls, sharing your experience, guiding the team and looking after the standards we’ve built together.</p><p class="quote push">Soul Trainer was a future I could see for you here.</p>')});
+P.push(function(){var L=[['✓','£13.00 an hour','2025',''],['✓','£13.50 an hour','Early 2026',''],['★','£14.00 an hour','Today · about £15.10 with tips','here'],['◇','£16.00 an hour','As Soul Trainer · about £17.10 with tips','ahead']];return pg('ink','','<div class="k">The chapter you’re leaving behind</div><h2>Your hourly <em>rate</em></h2><ul class="ladder push">'+L.map(function(x){return '<li class="'+x[3]+'"><span class="ic">'+x[0]+'</span><b>'+x[1]+'</b><span>'+x[2]+'</span></li>'}).join('')+'</ul><p class="soft">About £300 more a month on your usual hours.</p>')});
 P.push(function(){return pg('ink','', '<div class="k">The chapter you’re leaving behind</div><p class="push">Although you’re choosing a different path now, I wanted you to know that this opportunity was part of your journey with us.</p><p class="soft">And who knows what the future might bring? Some doors don’t have to close just because life takes us in different directions.</p><p class="sig">Lígia x</p>')});
 /* 8 letter */
 P.push(function(){return pg('','08','<div class="k">A little message from me</div><p class="quote push">Anukis,</p><p>Four years is a long time to be part of someone’s everyday life.</p><p class="soft">We’ve shared busy days, challenges, changes and achievements. And during that time, I’ve watched you learn things you couldn’t do when you first arrived.</p>')});
