@@ -26320,6 +26320,26 @@ body.bsb-cardopen #pvPill{visibility:hidden!important}
 /*BSB-PV390-FIM*/
 </script>
 <!--BSB-PV390-FIM-->
+<!--BSB-PROS391-INICIO-->
+<script>
+/*BSB-PROS391-INICIO*/
+/* PROS391 (06/11/2026) Ligia: cliente regular que respondeu o e-mail pos-visita ganha um prosecco na proxima visita.
+   bsb_prosecco_pendentes() lista quem ganhou (visita anterior a hoje, ainda nao dado). O botao Drink mostra "🥂 Prosecco won";
+   ao tocar Free grava bsb_prosecco_dado(client_id). */
+(function(){
+  if (window.__PROS391) return; window.__PROS391 = true;
+  var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/', KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R', S={};
+  function call(fn,body){return fetch(B+fn,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(body||{})}).then(function(r){return r.ok?r.json():null;});}
+  function cid(id){var a=null;try{a=apptSeguro(id);}catch(x){}if(!a)try{a=findApptLoose(id);}catch(x){}return a?String(a.clientId||a.client_id||''):'';}
+  window.bsbProsFor=function(id){var c=cid(id);return !!(c&&S[c]);};
+  window.bsbProsGive=function(id){var c=cid(id);if(!c||!S[c])return;delete S[c];call('bsb_prosecco_dado',{p_client_id:c}).catch(function(){});try{jToast('🥂 Prosecco given');}catch(x){}};
+  function load(){call('bsb_prosecco_pendentes').then(function(r){if(!r)return;var n={};r.forEach(function(x){n[String(x.client_id)]=1;});S=n;}).catch(function(){});}
+  load();setInterval(load,300000);
+})();
+/*BSB-PROS391-FIM*/
+</script>
+<!--BSB-PROS391-FIM-->
+
 
 <style>/*BSB-XP389-CSS-INICIO*/
 .xp-box{margin:8px 0 4px;border:1px solid #ECECF4;border-radius:16px;background:#FCFCFE;padding:14px}
@@ -26394,7 +26414,7 @@ body.bsb-cardopen #pvPill{visibility:hidden!important}
         h += '<div class="xp-end">✓ Checked out · ' + LAB[d] + ' given</div>';
       } else {
         h += '<div class="xp-sec">Arrival</div><div class="xp-row">' +
-          '<button type="button" class="xp-b' + (st.drink || m.drink === true || m.drink_none === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (m.drink_none === true ? ' · No drink ✓' : (st.drink || m.drink === true ? (m.drink_paid === true ? ' · Paid ✓' : (m.drink_free === true ? ' · Free ✓' : ' ✓')) : '')) + '</button></div>';
+          '<button type="button" class="xp-b' + (st.drink || m.drink === true || m.drink_none === true ? ' done' : '') + '" onclick="event.stopPropagation();bsbXpTap(\'' + id + '\',\'drink\')">🍹 Drink' + (m.drink_none === true ? ' · No drink ✓' : (st.drink || m.drink === true ? (m.drink_paid === true ? ' · Paid ✓' : (m.drink_free === true ? ' · Free ✓' : ' ✓')) : (window.bsbProsFor && bsbProsFor(id) ? ' · 🥂 Prosecco won' : ''))) + '</button></div>';
         if (m.xp_out === true) {
           var compK = (st.colours !== undefined || m.colours !== undefined) ? 'compliment,colours' : 'compliment';
           h += '<div class="xp-sec">Before she leaves</div><div class="xp-row">' +
@@ -26448,6 +26468,7 @@ body.bsb-cardopen #pvPill{visibility:hidden!important}
     o.innerHTML = '<div class="hc" role="dialog" aria-modal="true"><h3>' +
       (kind === 'drink' ? '🍹 Her drink' : (kind === 'plan' ? 'What experience will you give her?' : 'What experience did you give her?')) + '</h3>' +
       '<div class="hs">' + (kind === 'done' ? 'Be honest, it helps the team' : e(n)) + '</div>' +
+      (kind === 'drink' && window.bsbProsFor && bsbProsFor(id) ? '<div style="background:#F3EEFF;color:#5B47E0;border-radius:12px;padding:10px 12px;margin:6px 0 10px;font-weight:700">🥂 She won a free prosecco · tap Free</div>' : '') +
       (kind === 'drink'
         ? '<button type="button" class="o" data-v="free">🎁 Free</button><button type="button" class="o k" data-v="paid">💷 Paid</button><button type="button" class="o" data-v="none">🚫 No drink</button>'
         : '<button type="button" class="o" data-v="standard">' + LAB.standard + '</button>' +
@@ -26461,6 +26482,7 @@ body.bsb-cardopen #pvPill{visibility:hidden!important}
       if (kind === 'drink') {
         if (v === 'none') { try { markStep(id, 'drink_none', true); } catch (x) {} soon(id); return; }
         try { markStep(id, 'drink_free', v === 'free'); markStep(id, 'drink_paid', v === 'paid'); bsbRnTap(id, 'drink'); } catch (x) {}
+        if (v === 'free' && window.bsbProsGive) { try { bsbProsGive(id); } catch (x) {} }
         if (v === 'paid') { try { jToast('💷 Add the drink to her Salonized invoice'); } catch (x) {} }
         soon(id); return;
       }
