@@ -388,6 +388,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 @media(max-width:700px){.lvbtn.lpbtn{display:none}.map{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:10px 8px;padding:14px 12px 12px;height:100%}.map .mp{display:none}.map .mh{position:static;grid-column:1/-1;flex-direction:column;gap:6px}.map .mh h2{font-size:28px}.map .mh>div:first-child{column-gap:8px}.map .mv{white-space:normal;font-size:12px;padding:6px 12px;margin:2px 0 0}.mv.rsl{margin-left:0}.map .mc{position:absolute;right:12px;top:12px;padding:6px 10px}.map .mc b{font-size:20px}.map .mc span{display:none}.map .nd{position:static;transform:none;animation-name:popm;gap:2px}.map .nd .seal{width:92px;height:92px}.map .nd .seal svg{width:150px;height:150px;transform:scale(.6133);transform-origin:0 0}.map .nd .ic{font-size:34px}.map .nd .ck{width:26px;height:26px;font-size:12px;right:0;top:0}.map .nd b{font-size:13px;margin-top:4px}.map .nd .v{font-size:19px}.map .nd .todo{font-size:11px;padding:3px 8px}.map .nd.crown .seal{width:92px;height:92px}.map .nd.crown .ic{font-size:44px}.map .nd.crown .ic i{right:14px;bottom:14px;font-size:18px}.map .nd.crown b{font-size:18px}.map .yr{position:static;grid-column:1/-1;flex-wrap:wrap;gap:6px;padding:8px 10px}.yr .yt{flex-direction:row;align-items:baseline;gap:6px;min-width:0;width:100%}.yr .yt b{font-size:20px}.yr .yl{gap:2px}.ym i{width:22px;height:22px;font-size:11px;border-width:1px}.ym small{font-size:8.5px}.ym.lock i{font-size:8px}.yr .ym.trophy{display:none}}
 .tab i{font-style:normal}
 @media(max-width:700px){.tabs .tab span{display:none}.tabs .tab i{font-size:24px;line-height:1}.tabs .tab{flex:1 1 0;padding:8px 2px}.tabs{overflow-x:visible}button{touch-action:manipulation}}
+.dkg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;flex:1;align-content:center;width:100%}.dkm{background:#F7F5FC;border-radius:14px;padding:16px 14px;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center}.dkm em{font-style:normal;font-size:20px;grid-row:span 3}.dkm b{font-size:28px}.dkm span{font-size:12px;font-weight:700}.dkm small{font-size:11px;color:var(--muted)}
 .dcs em{font-style:normal;font-size:24px;grid-row:1/4}.dcs b{font-size:22px;font-weight:800;line-height:1}.dcs span{font-size:12px;font-weight:700}.dcs small{font-size:11px;color:var(--muted)}
 @media(max-width:700px){.tdm{order:-1;flex:0 0 calc(100% - 28px);margin:0 14px;padding:16px 14px;gap:12px}.tds{align-items:start;gap:6px}.nd2 .seal{width:96px;height:96px;border-width:3px}.nd2 .ic{font-size:40px}.nd2 .ck{width:28px;height:28px;right:0;top:0;font-size:12px}.exn em{font-size:24px}.exn b{font-size:22px}.exn b small{font-size:12px}.nd2 b{font-size:14px;margin-top:6px}.nd2 span{font-size:11.5px}.dcs{grid-template-columns:repeat(3,1fr);gap:6px}.dcs>div{grid-template-columns:1fr;grid-template-rows:auto;padding:7px 4px;text-align:center;justify-items:center;row-gap:1px}.dcs em{grid-row:auto;font-size:18px}.dcs b{font-size:18px}.dcs span{font-size:11px}.dcs small{font-size:10px;line-height:1.2}.nd2 .seal{width:84px;height:84px}.nd2 .ic{font-size:34px}.dtk{gap:5px;margin-top:6px}.dtk>b{display:none}.dtk span{padding:6px;font-size:11.5px;justify-content:center;white-space:nowrap}.drv{margin-top:6px;padding:8px 10px;grid-template-columns:1fr;gap:6px}.rvn{justify-content:center}.tdf .nxt{font-size:12.5px}}
 .bzr .dl{display:block;margin:4px 0 6px;font-size:13px}.bzr .dl.u{color:#5FD39A}.bzr .dl.d{color:#FF8F8F}.dl{font-style:normal;font-size:11.5px;font-weight:700;margin-top:4px;color:var(--muted)}.dl.u{color:#1F9D6B}.dl.d{color:#B3261E}
@@ -512,7 +513,7 @@ function render(){
   {var sk=SKIN.indexOf(S.who)>=0;document.getElementById('tabCare').style.display=sk?'':'none';if(S.tab==='care'&&!sk)S.tab='path'}
   document.getElementById('seg').style.display=document.querySelector('.nav').style.display=S.tab==='today'?'none':'';
   document.getElementById('segY').style.display=S.tab==='biz'?'':'none';
-  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.innerHTML=MONEY()?'<i>💷</i><span>My money</span>':'<i>🛍️</i><span>My sales</span>';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none';if(t==='xm')b.style.display=((PEOPLE.filter(function(p){return p.person===S.who})[0]||{}).role==='desk')?'none':''});
+  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.innerHTML=MONEY()?'<i>💷</i><span>My money</span>':isDesk()?'<i>🛎️</i><span>My month</span>':'<i>🛍️</i><span>My sales</span>';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none';if((t==='xm'||t==='path')&&isDesk())b.style.display='none'});
   if(APP&&!S.admin&&['std','path','care','biz'].indexOf(S.tab)>=0){S.tab='today'}
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
@@ -707,7 +708,13 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
   var sp=S.exp||{},el=S.exl||{},tc=sp.tips,py=sp.pay||{},hrs=py.hours!=null?+py.hours:(tc?+tc.hours:0),pay=py.gross!=null?+py.gross:hrs*(+sp.base_rate||0),tips=tc?+tc.tips:0,pk=sp.perks||[];
   var disc=pk.filter(function(p){return p.kind==='discount'}).reduce(function(a,p){return a+(+p.value)},0),gift=pk.filter(function(p){return p.kind==='gift'}).reduce(function(a,p){return a+(+p.value)},0);
   var lcom=(+el.commission||0),ltot=pay+tips+disc+gift+lcom,lh=hrs?ltot/hrs:0,lmn=S.exlm?MN[S.exlm.getMonth()]:'Last month';
-  if(!MONEY()){var uu=up?(+up.ups||0):0;
+  var DK=isDesk();if(DK){var mk0=ymd(new Date(r[0].getFullYear(),r[0].getMonth(),1)),mk1=ymd(new Date(r[0].getFullYear(),r[0].getMonth()+1,0));
+    if(S.exdkk!==S.who+mk0){S.exdkk=S.who+mk0;S.exdk=null;rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:mk0,p_to:mk1}).catch(function(){return null}).then(function(x){S.exdk=x||{};if(S.tab==='ex')renderEx(M)})}
+    var k=S.exdk||{},nn=function(v){return +v||0},cl=nn(k.clients)}
+  if(DK&&!MONEY()){var h='<div class="hero exh"><small>🛎️ My month</small><h2>'+MN[r[0].getMonth()]+'</h2><p>What you did for the salon</p>'+
+     '<div class="ext"><b>'+cl+'</b><span>clients this month</span></div>'+
+     '<div class="exb"><div><em>🥂</em><b>'+nn(k.drinks_paid)+'</b><span>Drinks sold</span></div><div><em>🔁</em><b>'+nn(k.rebook)+'</b><span>Rebooked</span></div><div><em>📲</em><b>'+nn(k.lm_booked)+'</b><span>Last minute</span></div></div></div>'}
+  else if(!MONEY()){var uu=up?(+up.ups||0):0;
     var h='<div class="hero exh"><small>🛍️ My sales</small><h2>'+MN[r[0].getMonth()]+'</h2><p>What you sold and upgraded</p>'+
      '<div class="ext"><b>'+q+'</b><span>products this month</span></div>'+
      '<div class="exb"><div><em>🧴</em><b>'+q+'</b><span>Products</span></div>'+(up?'<div><em>✨</em><b>'+uu+'</b><span>Upgrades</span></div>':'')+'</div>'+
@@ -715,8 +722,8 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
   else{
   var h='<div class="hero exh"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+
    '<div class="ext"><b>'+(lh?'£'+lh.toFixed(2)+'<small>/h</small>':gb0(ltot))+'</b><span>'+(lh?'Your real hour, all in · '+gb0(ltot)+' in '+Math.round(hrs)+'h':'all in')+'</span></div>'+
-   '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients'],['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products you sold']].map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
-   '<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · ✨ '+tu.u+'/'+tu.v:'')+'</span></div></div>';}
+   '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients'],['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products you sold']].filter(function(x){return !(DK&&x[1]==='Commission'&&!x[2])}).map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
+   (DK?'':'<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · ✨ '+tu.u+'/'+tu.v:'')+'</span></div>')+'</div>';}
   function steps(list,cur){return '<div class="lad2">'+list.map(function(s0,i){var on=i<=cur,now=i===cur;return '<div class="st'+(on?' on':'')+(now?' now':'')+'"><i>'+s0[0]+'</i><small>'+s0[1]+'</small></div>'}).join('<u></u>')+'</div>'}
   var c1;
   if(sk&&!MONEY()){c1='<div class="tile exc"><div class="h"><em>🧴</em>Eminence</div><div class="exn2"><b>'+q+'</b><span>products this month</span></div><div class="todo">🛍️ This month</div></div>'}
@@ -733,7 +740,11 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
      '<div class="exr"><svg width="130" height="130"><circle cx="65" cy="65" r="'+RR+'" stroke="#EEEAF6" stroke-width="12" fill="none"/><circle class="pa" cx="65" cy="65" r="'+RR+'" stroke="url(#gx)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="'+CF+'" stroke-dashoffset="'+CF+'" data-o="'+(CF*(1-Math.min(1,rt/15)))+'" transform="rotate(-90 65 65)"/></svg><div><b>'+rt+'%</b><span>'+up.ups+' of '+up.visits+' chances</span></div></div>'+
      steps([['15%','👑 Crown'],['30%','⬆️ 3 months']],rt>=30?1:rt>=15?0:-1)+'<div class="todo">'+(rt>=30?'⬆️ Keep 30% for 3 months':rt>=15?'👑 Seal won · next 30%':'🎯 Reach 15% for your crown')+'</div>'+
      '<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gx" x1="0" x2="1"><stop offset="0" stop-color="#F2D28A"/><stop offset="1" stop-color="#C9962E"/></linearGradient></defs></svg></div>'}
-  h+='<div class="bands b3"><div class="bh">💷 This month</div><div class="row exg" style="grid-template-columns:repeat('+(up?2:1)+',1fr)">'+c1+c2+'</div></div>';
+  if(DK){
+    var st=function(ic,t,v,sub){return '<div class="dkm"><em>'+ic+'</em><b>'+v+'</b><span>'+t+'</span><small>'+sub+'</small></div>'};
+    c1='<div class="tile exc"><div class="h"><em>🥂</em>Drinks sold</div><div class="exn2"><b>'+nn(k.drinks_paid)+'</b><span>of '+cl+' clients · '+nn(k.drinks_free)+' free</span></div><div class="todo">🛍️ This month</div></div>';
+    c2='<div class="tile exc"><div class="h"><em>🛎️</em>Front desk</div><div class="dkg">'+st('🔁','Rebook',cl?Math.round(100*nn(k.rebook)/cl)+'%':'–',nn(k.rebook)+' of '+cl)+st('📲','Last minute',nn(k.lm_booked),'of '+nn(k.lm_sent)+' sent')+st('📧','Newsletter',nn(k.news),'joined')+st('🎁','Gift cards',nn(k.gift_n),'sold')+'</div></div>';up=true}
+  h+='<div class="bands b3"><div class="bh">'+(DK?'🛎️':'💷')+' This month</div><div class="row exg" style="grid-template-columns:repeat('+(up?2:1)+',1fr)">'+c1+c2+'</div></div>';
   M.innerHTML=h;setTimeout(function(){document.querySelectorAll('.pa').forEach(function(a){a.style.strokeDashoffset=a.getAttribute('data-o')})},120)}
 
 
@@ -858,6 +869,7 @@ function renderPath(M){var s=S.sp||{},lv=s.level||1,x=S.xm||{},st=s.start?pd(Str
 /* ---------- Today ---------- */
 function dayGreen(x,L){return x&&x.worked&&!(x.late_min>0)&&!(x.lunch_min!=null&&x.lunch_min>L)&&x.look_marked&&x.look_ok!==false&&x.t_morning>0&&x.t_day>0&&x.t_close>0}
 function boom(){var b=document.createElement('div');b.className='boom';var E=['✨','💜','⭐','🎉','🔥'];for(var i=0;i<26;i++){var e=document.createElement('i');e.textContent=E[i%5];e.style.left=(Math.random()*100)+'%';e.style.animationDelay=(Math.random()*.6)+'s';b.appendChild(e)}document.body.appendChild(b);setTimeout(function(){b.remove()},3200)}
+function isDesk(){return ((PEOPLE.filter(function(p){return p.person===S.who})[0]||{}).role)==='desk'}
 function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+day;
   if(S.dkk!==key){S.dkk=key;S.dk=null;M.innerHTML='<div class="wait"><em>🛎️</em>Loading…</div>';rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null}).then(function(x){if(S.dkk!==key)return;S.dk=x||{};if(S.tab==='today')renderDesk(M)});return}
   var d=S.dk||{},n=function(v){return +v||0},dd=pd(day),isT=day===ymd(td),fn=(S.who||'').split(' ')[0],hr=new Date().getHours(),hi=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
