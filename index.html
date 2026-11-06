@@ -26203,14 +26203,18 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
 
 <!--BSB-LASTMIN-INICIO-->
 <style>
-#lmPill{position:fixed;left:18px;bottom:182px;z-index:9000;display:none;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #E4E4EC;background:#fff;color:#1F2235;font:600 14px/1 Inter,system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 18px rgba(16,24,40,.12);text-decoration:none}
-#lmPill i{font-style:normal}
-#lmPill b{background:#5B47E0;color:#fff;border-radius:999px;padding:3px 8px;font-size:12px}
+#lmPill{position:fixed;left:18px;bottom:18px;z-index:9000;display:none;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #E4E4EC;background:#fff;color:#1F2235;font:600 14px/1 Inter,system-ui,sans-serif;box-shadow:0 4px 14px rgba(16,24,40,.14);cursor:pointer;text-decoration:none}
+#lmPill i{font-style:normal;color:#5B47E0}
+#lmPill b{font-weight:800;color:#5B47E0}
+body.bsb-cardopen #lmPill{visibility:hidden!important}
 </style>
-<a id="lmPill" href="https://bsb-lastminute.vercel.app" target="_blank" rel="noopener"><i>⚡</i> Last minute <b id="lmN">0</b></a>
+<a id="lmPill" href="https://bsb-lastminute.vercel.app" target="bsb_lastmin" rel="opener"><i>⚡</i> Last minute · <b id="lmN">0</b></a>
 <script>
 /*BSB-LASTMIN-INICIO*/
+/* LASTMIN (06/11/2026) Ligia: embaixo do Clapham Circle, mesmo estilo. So aparece com linhas de HOJE (Londres) sem sent_at
+   em bsb_recepcao_lastmin; o numero = quantas faltam. Abre bsb-lastminute sempre na mesma aba "bsb_lastmin". */
 (function(){
+  if (window.__LASTMIN) return; window.__LASTMIN = true;
   var URL_='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/bsb_recepcao_lastmin';
   var KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
   function hoje(){var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());function g(t){return p.find(function(x){return x.type===t}).value}return g('year')+'-'+g('month')+'-'+g('day');}
@@ -26221,6 +26225,10 @@ body.bsb-cardopen #bsbBall,body.bsb-cardopen #bsbTipBall,body.bsb-cardopen #bsbR
         if(!el)return;document.getElementById('lmN').textContent=n;el.style.display=n>0?'inline-flex':'none';
       }).catch(function(){});
   }
+  document.addEventListener('click',function(ev){
+    var a=ev.target&&ev.target.closest?ev.target.closest('#lmPill'):null;if(!a)return;
+    ev.preventDefault();var w=window.open('https://bsb-lastminute.vercel.app','bsb_lastmin');try{if(w)w.focus();}catch(e){}
+  });
   tick();setInterval(tick,120000);
 })();
 /*BSB-LASTMIN-FIM*/
