@@ -294,6 +294,14 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .sd .ss i.on{border:0;background:#F1ECFF}.sd .ss i.o{border:0;color:var(--faint)}
 .sd.full{background:linear-gradient(135deg,#8F6BFF,#5B3BE0);border:0}.sd.full .dn{color:#fff}.sd.full .ss i.on{background:rgba(255,255,255,.22)}
 .sd .md{position:absolute;top:6px;right:8px;font-size:18px}
+.sd2{padding:7px 7px 8px;gap:6px}.sd2 .dn{font-size:12.5px;color:var(--ink)}.sd.full .dn{color:#fff}
+.ss2{flex:1;min-height:0;display:grid;gap:4px;grid-auto-rows:minmax(0,1fr);align-content:end}.ss2 i{font-style:normal;max-height:44px;min-height:0;border-radius:9px;display:grid;place-items:center;font-size:clamp(14px,2.6vh,24px);line-height:1}
+.ss2 i.ok{background:#E3F6EC}.ss2 i.no{background:#FFDCDC;box-shadow:inset 0 0 0 2px #EE7F7F}.ss2 i.na{background:#F3F1F8;filter:grayscale(1);opacity:.35}
+.sd.full .ss2 i.ok{background:rgba(255,255,255,.9)}
+.sd.off .offt{margin:auto 0 0;font-size:11.5px;font-weight:700;color:var(--faint);text-align:center;padding-bottom:6px}.sd.fut{background:transparent;border:1px dashed #E7E3F0}.sd.fut .dn{color:#C9C3D9}
+.slg{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:12.5px;font-weight:700;color:var(--ink)}.slg span{display:flex;align-items:center;gap:5px}.slg i{font-style:normal;font-size:17px}
+.slg .k{margin-left:auto;color:var(--muted);font-weight:600;gap:6px}.slg .k i{width:14px;height:14px;border-radius:4px;display:inline-block}.slg .k i.ok{background:#E3F6EC}.slg .k i.no{background:#FDE3E3;box-shadow:inset 0 0 0 2px #F2A3A3}
+@media(max-width:700px){.ss2 i{font-size:12px;border-radius:6px}.slg{font-size:11px}.slg i{font-size:14px}}
 .scal.one .sd .ss i{width:64px;height:64px;font-size:32px}.scal.one .sd .md{font-size:40px}
 .hero.sm{background:radial-gradient(120% 90% at 0% 0%,#2B2533 0%,#141117 60%,#0B090D 100%);color:#F5E6C8}.hero.sm h2{color:#E9C77B;font-size:40px}
 .hero.sm .crown{margin:auto auto 6px;position:relative;font-size:84px;line-height:1}.hero.sm .crown .lock{filter:grayscale(1) brightness(.45)}.hero.sm .crown i{position:absolute;right:-6px;bottom:0;font-size:30px;font-style:normal}
@@ -304,7 +312,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .smt{display:flex;flex-direction:column;gap:6px}.smt .big{font-size:48px!important}.smt .bar{position:relative}.smt .bar u{position:absolute;top:-4px;bottom:-4px;width:2px;background:#C9A24E;text-decoration:none}
 .smt .bar b{background:linear-gradient(90deg,#E9C77B,#C9A24E)!important}.smt .todo{font-size:13px;font-weight:700;color:#8A5A12;background:#FFF4DC;border-radius:999px;padding:5px 12px;align-self:flex-start}
 .smt.ok{background:linear-gradient(135deg,#2B2533,#141117);color:#F5E6C8;border:0}.smt.ok .h,.smt.ok .big,.smt.ok .big small,.smt.ok .sub{color:#F5E6C8!important}.smt.ok .chip{background:#E9C77B;color:#141117}.smt.ok .bar{background:rgba(255,255,255,.15)}
-.bands.b3{grid-template-rows:auto 1fr!important}.bands.b3s{grid-template-rows:auto auto 1fr!important}
+.bands.b3{grid-template-rows:auto 1fr!important}.bands.b3s{grid-template-rows:auto auto auto 1fr!important}
 .map{grid-column:1/-1;position:relative;border-radius:24px;background:radial-gradient(90% 120% at 50% 100%,#FFF6E3 0%,#FBF8FF 55%,#F6F2FF 100%);border:1px solid var(--line);overflow:hidden;min-height:0}
 .map .mh{position:absolute;left:28px;right:28px;top:22px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
 .map .mh small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}.map .mh h2{font:italic 600 40px/1.1 "Cormorant Garamond",serif;margin:4px 0 0;color:#8A5A12}
@@ -569,6 +577,11 @@ function render(){
 
 
 /* ---------- Standard: daily stamps ---------- */
+function calSt(x,L){var lk=function(v){return x.look_ok===false?false:v===true?true:x.look_marked===false&&v==null?null:v===false?false:null};
+  var a=[['⏰','On time',x.worked?!(x.late_min>0):null],['💄','Makeup',lk(x.look_make)],['💇','Hair',lk(x.look_hair)],['👗','Uniform',lk(x.look_uni)],
+    ['🍽️','Lunch',x.lunch_min!=null?x.lunch_min<=L:null],['☑️','Tasks',x.t_morning>0&&x.t_day>0&&x.t_close>0?true:(x.t_morning>0||x.t_day>0||x.t_close>0||x.worked)?false:null]];
+  if(SKIN.indexOf(S.who)>=0){var q=(S.rit||{})[x.d];a.push(['🧴','Ritual',q?q.a>=q.f:null])}
+  if(isDesk())a.push(['👀','Team',x.team_n>0?x.team_ck>=x.team_n:null]);return a}
 function stOf(x,L){var a=[['time','⏰',!(x.late_min>0)],['look','💄',!(x.look_marked&&x.look_ok===false)],['lunch','🍽️',!(x.lunch_min!=null&&x.lunch_min>L)],['tasks','☑️',x.t_morning>0&&x.t_day>0&&x.t_close>0]];
   if(SKIN.indexOf(S.who)>=0){var q=(S.rit||{})[x.d];a.push(['ritual','🧴',!q||q.a>=q.f])}
   if(S.admin){var pm=(S.pm||{})[x.d]||[];a.push(['phone','📵',pm.indexOf('phone')<0])}return a}
@@ -602,14 +615,15 @@ function renderStd(M){var d=S.data||{},L=d.lunch_max||30,DD=d.days||[],by={},r=r
    (stk>=2&&!PRE?'<div class="stk" style="text-align:center">🔥 '+stk+' days in a row</div>':'')+
    (S.admin?'<button class="pmb" onclick="polForm()">🔒 📵 Log policy moment</button>':'')+
    '<div class="verdict"><em>'+(n&&full===n?'💜':'🌱')+'</em><span>'+(!n?'No work days yet.':full===n?'Every day with all stamps. This is BSB.':'Tomorrow starts fresh.')+'</span></div>'+polCard()+'</div>';
-  var a=new Date(r[0]),cells=[];
+  var a=new Date(r[0]),cells=[],NCOL=0;if(S.mode==='month'&&r[1]>today()){var ld0=(new Date(r[0]).getDay()+6)%7;if(Math.max(2,Math.ceil((ld0+today().getDate())/7))<=3)NCOL=2}else if(S.mode==='week')NCOL=2;
   if(S.mode==='month'){var lead=(a.getDay()+6)%7;for(var q=0;q<lead;q++)cells.push('<div class="sd x"></div>')}
-  for(var dt=new Date(r[0]);dt<=r[1];dt.setDate(dt.getDate()+1)){var k=ymd(dt),x=by[k],fut=k>td,wk=x&&x.worked&&!fut;
-    if(!wk){cells.push('<div class="sd off"><span class="dn">'+dt.getDate()+'</span><div class="ss">'+(fut?'':'<i class="o">'+(x&&x.on_leave?'🌴':'·')+'</i>')+'</div></div>');continue}
-    var st=stOf(x,L),all=st.every(function(z){return z[2]});
-    cells.push('<div class="sd'+(all?' full':'')+'"><span class="dn">'+dt.getDate()+'</span>'+(all?'<span class="md">🏅</span>':'')+'<div class="ss">'+st.map(function(z){return '<i class="'+(z[2]?'on':'')+'">'+(z[2]?z[1]:'')+'</i>'}).join('')+'</div></div>')}
+  for(var dt=new Date(r[0]);dt<=r[1];dt.setDate(dt.getDate()+1)){var k=ymd(dt),x=by[k],fut=k>td,wk=x&&!fut&&(x.worked||(k===td&&(x.look_marked||x.t_morning>0||x.t_day>0||x.t_close>0||x.first_in)));
+    if(!wk){cells.push('<div class="sd off'+(fut?' fut':'')+'"><span class="dn">'+DW[(dt.getDay()+6)%7].slice(0,1)+' '+dt.getDate()+'</span>'+(fut?'':'<div class="offt">'+(x&&x.on_leave?'🌴 Holiday':'Day off')+'</div>')+'</div>');continue}
+    var st=calSt(x,L),all=st.every(function(z){return z[2]});
+    cells.push('<div class="sd sd2'+(all?' full':'')+'"><span class="dn">'+DW[(dt.getDay()+6)%7].slice(0,1)+' '+dt.getDate()+'</span>'+(all?'<span class="md">🏅</span>':'')+'<div class="ss2" style="grid-template-columns:repeat('+(NCOL||Math.ceil(st.length/2))+',1fr)">'+st.map(function(z){return '<i class="'+(z[2]?'ok':z[2]===false?'no':'na')+'">'+z[0]+'</i>'}).join('')+'</div></div>')}
+  if(S.mode==='month'&&r[1]>today()){var lead2=(new Date(r[0]).getDay()+6)%7,upto=lead2+today().getDate(),keep=Math.max(14,Math.ceil(upto/7)*7);cells=cells.slice(0,keep)}
   var rows=Math.ceil(cells.length/7);
-  h+='<div class="bands b3 b3s"><div class="bh">🏅 Your stamps <span class="lg"><i class="on">⏰</i>On time <i class="on">💄</i>Look <i class="on">🍽️</i>Lunch '+L+' min <i class="on">☑️</i>Tasks'+(SK4?' <i class="on">🧴</i>Ritual':'')+(S.admin?' <i class="on">📵</i>Phone free 🔒':'')+'</span></div>'+
+  h+='<div class="bands b3 b3s"><div class="bh">🏅 Your stamps</div><div class="slg">'+calSt({worked:1,look_marked:1,look_make:1,look_hair:1,look_uni:1,lunch_min:0,t_morning:1,t_day:1,t_close:1,team_n:1,team_ck:1,d:''},L).map(function(z){return '<span><i>'+z[0]+'</i>'+z[1]+'</span>'}).join('')+'<span class="k"><i class="ok"></i>Done <i class="no"></i>Missed</span></div>'+
    '<div class="scal">'+(S.mode==='day'?'':DW.map(function(w){return '<b>'+w.slice(0,3)+'</b>'}).join(''))+'</div>'+
    '<div class="scal g'+(S.mode==='day'?' one':'')+'" style="grid-template-rows:repeat('+rows+',1fr)">'+cells.join('')+'</div></div>';
   M.innerHTML=h;setTimeout(function(){var e=document.getElementById('arc');if(e)e.style.strokeDashoffset=CF*(1-(n?full/n:0))},80)}
