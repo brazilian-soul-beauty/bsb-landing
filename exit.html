@@ -63,6 +63,7 @@ textarea::placeholder{color:#A99D8F}.ink textarea{border-color:#D6C7B3}
 .ladder li{padding:18px 22px}.ladder b{font-size:34px}.ladder span{font-size:17px}.bars{max-height:440px}.bars small{font-size:16px}.bars em{font-size:38px}
 .medals span{width:132px;font-size:38px}.medals small{font-size:11px}.list div{grid-template-columns:120px 1fr}.list b{font-size:14px}.sig{font-size:38px}.nav button{min-height:64px;font-size:19px}}
 .stars{color:#B08D5E;letter-spacing:.18em;font-size:16px}.stars.big{font-size:30px;letter-spacing:.12em}.photo.tall{flex:none;height:min(68%,calc((min(100vw,760px) - 32px)*4/3));aspect-ratio:3/4;width:auto;align-self:center;margin:calc(-1*clamp(26px,6vw,56px)) auto 6px;border-radius:0 0 18px 18px}.ink .stars{color:#86684A}
+.medals img{width:clamp(92px,26vw,150px);height:auto;aspect-ratio:1;filter:drop-shadow(0 4px 10px rgba(59,52,45,.14))}
 </style></head><body><div id="app"></div>
 <script>
 var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',T=new URLSearchParams(location.search).get('t')||'',VIEW=new URLSearchParams(location.search).has('v');
@@ -94,7 +95,7 @@ P.push(function(){return pg('','', '<div class="k">Look at everything you’ve l
 P.push(function(){return pg('','', '<div class="photo"><img src="anx/award.jpg" alt="The BSB team with the award" style="object-position:50% 14%"></div><div class="k">A moment I’ll remember</div><h2>Best Nail Salon <em>UK</em></h2><p>When the client connected to the award visited our salon, you were the one who looked after her.</p>')});
 P.push(function(){return pg('','03','<div class="k">A moment I’ll remember</div><p class="push">People see a trophy. But I know how much work happens behind the scenes before a salon earns that recognition.</p>'+R+'<p class="quote">That award belongs to everyone who helped us get there. And that includes you, Anukis.</p>')});
 /* top rated */
-P.push(function(){return pg('','', '<div class="k">Every year you were here</div><h2>Top <em>Rated</em></h2><p class="soft">Our clients rated us Top Rated on Treatwell in every year you were part of the team.</p><div class="medals">'+['2022','2023','2024','2025','2026'].map(function(y){return '<span><small>Top Rated</small>'+y+'</span>'}).join('')+'</div><p class="quote">Each one of those years has your hands in it.</p>')});
+P.push(function(){return pg('','', '<div class="k">Every year you were here</div><h2>Top <em>Rated</em></h2><p class="soft">Our clients rated us Top Rated on Treatwell in every year you were part of the team.</p><div class="medals">'+['2022','2023','2024','2025','2026'].map(function(y){return '<img src="anx/tr'+y+'.png" alt="Treatwell Top Rated '+y+'">'}).join('')+'</div><p class="quote">Each one of those years has your hands in it.</p>')});
 /* moments */
 P.push(function(){return pg('','', '<div class="photo tall"><img src="anx/halloween.jpg" alt="Halloween at the salon" style="object-position:50% 30%"></div><div class="k">Moments we shared</div><p class="quote">Halloween at the salon.</p>')});
 P.push(function(){return pg('','', '<div class="photo tall"><img src="anx/bday.jpg" alt="A birthday at the salon" style="object-position:50% 30%"></div><div class="k">Moments we shared</div><p class="quote">Birthday cakes and little celebrations.</p>')});
