@@ -1,63 +1,67 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Anukis · Your Soul Story</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;font-family:Inter,sans-serif;color:#1E1A2B;background:#F6F3FC}
-#app{height:100dvh;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 16px);max-width:820px;margin:0 auto;gap:14px}
-.dots{display:flex;gap:4px}.dots i{flex:1;height:4px;border-radius:4px;background:#E2DCF1}.dots i.on{background:#5B3BE0}
-.pg{flex:1;min-height:0;border-radius:30px;padding:clamp(24px,5vw,48px);display:flex;flex-direction:column;gap:16px;overflow:hidden;animation:in .5s cubic-bezier(.2,.8,.2,1)}
-@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.hero{background:linear-gradient(135deg,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%);color:#fff;justify-content:center}
-.dark{background:#1E1A2B;color:#fff}.white{background:#fff}
-.k{font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:.75}
-h1,h2{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;margin:0;line-height:1.05}
-h1{font-size:clamp(54px,12vw,104px)}h2{font-size:clamp(34px,7vw,58px)}
-p{margin:0;font-size:clamp(17px,2.6vw,22px);line-height:1.45}
-.big{font-size:clamp(56px,13vw,110px);font-weight:800;letter-spacing:-3px;line-height:1}
-.mut{color:#5E5872}.dark .mut{color:#CFC9DE}
-.tl{display:flex;flex-direction:column;gap:10px;margin-top:6px}
-.tl div{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:baseline;font-size:clamp(16px,2.4vw,20px)}
-.tl b{color:#5B3BE0;font-size:14px;letter-spacing:1px;text-transform:uppercase}
-.bars{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:end;min-height:0;max-height:300px}
-.bars div{display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
-.bars s{display:block;width:100%;border-radius:14px 14px 6px 6px;background:#D9CFF7;text-decoration:none}.bars .on s{background:#5B3BE0}
-.bars em{font-style:normal;font-weight:800;font-size:24px}.bars small{font-weight:700;color:#5E5872}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.two .card{padding:16px;min-width:0}.card{background:#F6F3FC;border-radius:22px;padding:20px}
-.lv{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.lv div{border-radius:18px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:clamp(17px,2.6vw,22px);background:#F6F4FA;color:#8C86A0}
-.lv .done{background:#EFEAFB;color:#5B3BE0}.lv .here{background:#5B3BE0;color:#fff}.lv .next{background:#FFF6E3;color:#8A6200;box-shadow:inset 0 0 0 3px #C9962E}
-.lv span{font-size:14px;font-weight:700}
-textarea{flex:1;min-height:0;width:100%;border:2px solid #E2DCF1;border-radius:20px;padding:18px;font:500 clamp(17px,2.6vw,21px)/1.5 Inter,sans-serif;color:#1E1A2B;resize:none;outline:none;background:#FBFAFE}
-textarea:focus{border-color:#5B3BE0}
-.q{font-size:clamp(24px,4.4vw,36px);font-weight:700;line-height:1.25}
-.nav{display:flex;gap:12px}.nav button{flex:1;min-height:56px;border:0;border-radius:18px;font:700 18px Inter,sans-serif;cursor:pointer}
-.back{background:#fff;color:#5E5872;box-shadow:inset 0 0 0 1px #E2DCF1}.go{background:#5B3BE0;color:#fff}.back[disabled]{visibility:hidden}
-.sv{font-size:13px;color:#5E5872;text-align:right;min-height:16px}
-.gold{color:#C9962E}
-.cream{background:#FBF7F0}.cov{background:#fff}
-.cov{align-items:flex-start;justify-content:flex-end;gap:10px}.cov .por{width:min(62%,300px);align-self:center;margin-bottom:auto;object-fit:contain;max-height:40%}
-.cov h1{color:#2E2A25}.cov .k{color:#8A6D4A;opacity:1}
-.sig{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(20px,3vw,26px)!important;color:#8A6D4A}
-.em{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(19px,3vw,26px)!important;line-height:1.3!important;color:#3E2F6E}
-.dark .em{color:#fff}
-.ph{padding-top:0!important}.phw{margin:0 calc(-1*clamp(24px,5vw,48px)) 4px;height:38%;min-height:0;flex:none;overflow:hidden;border-radius:30px 30px 0 0}.phw img{width:100%;height:100%;object-fit:cover;display:block}
-.mom{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px}.mom img{width:100%;height:100%;object-fit:cover;border-radius:18px;display:block;min-height:0}.mom img:first-child{grid-row:span 2}
-.tr{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px}.tr span{width:clamp(78px,17vw,120px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 30%,#3A2E7A,#1E1A4B);color:#E8C77A;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:clamp(18px,3.4vw,26px);box-shadow:0 0 0 3px #C9962E inset}.tr small{font-size:clamp(10px,1.8vw,13px);color:#fff;font-weight:700}
-blockquote{margin:0;background:#fff;border-radius:22px;padding:20px 22px;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(19px,3vw,26px);line-height:1.35;color:#2E2A25}blockquote cite{display:block;margin-top:8px;font-family:Inter,sans-serif;font-style:normal;font-size:13px;font-weight:700;color:#8A6D4A;letter-spacing:1px}
-@media(max-width:700px){.lv{gap:7px!important}.lv div{padding:9px 14px!important}}
-.lv .fut{background:#FBF7F0;color:#8A6D4A;box-shadow:inset 0 0 0 2px #E7D3A8}
-.lv div{display:grid!important;grid-template-columns:28px 1fr;grid-template-rows:auto auto;column-gap:10px;justify-content:start!important}.lv .ic{grid-row:span 2;font-size:20px!important;align-self:center}.lv .nm{font-size:clamp(17px,2.6vw,22px)!important;font-weight:800}.lv .ds{font-size:13px!important;font-weight:600;opacity:.85}
-.letter p{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(19px,3vw,25px);line-height:1.45;color:#2E2A25}.letter .hi{font-size:clamp(26px,4.4vw,34px)}
-p{font-size:clamp(15.5px,2.4vw,20px)}
-
-.qp .q{margin-top:8px}.qp textarea{background:#fff;border-color:#EEEAF6}
-.stp{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;margin-top:4px}
-.stp div{display:grid;grid-template-columns:22px 64px 1fr;gap:12px;align-items:center;font-size:clamp(17px,2.6vw,22px);font-weight:700}
-.stp i{width:18px;height:18px;border-radius:50%;background:#5B3BE0}.stp b{font-size:13px;letter-spacing:1px;color:#5B3BE0}
-.stp .s2 i{background:#C9962E;box-shadow:0 0 0 5px #FFF1CF}.stp .s2 b{color:#8A6200}.stp em{font-style:normal;font-size:13px;background:#FFF1CF;color:#8A6200;border-radius:99px;padding:3px 10px;margin-left:6px}
-.stp .s0 i{background:#fff;border:2px dashed #C9C3D9}.stp .s0{color:#A49FB4}.stp .s0 b{color:#A49FB4}
-.adm{flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px}.adm .card b{display:block;margin-bottom:6px}.adm .card p{white-space:pre-wrap}
+:root{--bg:#F1EBE1;--paper:#FBF8F3;--ink:#2B2621;--soft:#5F564C;--bronze:#86684A;--line:#DCCFBE;--gold:#B08D5E}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+#app{height:100dvh;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px;padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 14px)}
+.bar{height:3px;border-radius:3px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--bronze);transition:width .5s ease}
+.pg{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--paper);border-radius:28px;padding:clamp(26px,6vw,56px) clamp(22px,6vw,56px);display:flex;flex-direction:column;gap:clamp(12px,1.8vh,18px);animation:in .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pg{animation:none}}
+.ghost{position:absolute;right:clamp(14px,4vw,40px);top:clamp(4px,2vh,20px);font-family:'Cormorant Garamond',serif;font-size:clamp(120px,30vw,230px);line-height:1;color:var(--bronze);opacity:.09;pointer-events:none;user-select:none}
+.k{font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);position:relative}
+h1,h2{font-family:'Cormorant Garamond',serif;font-weight:400;margin:0;line-height:1.05;letter-spacing:-.01em;position:relative}
+h1{font-size:clamp(58px,15vw,112px)}h2{font-size:clamp(38px,9vw,64px)}h1 em,h2 em{font-style:italic;color:var(--bronze)}
+.rule{display:flex;align-items:center;gap:12px;color:var(--gold);font-size:12px;max-width:220px}.rule:before,.rule:after{content:"";flex:1;height:1px;background:var(--line)}
+p{margin:0;font-size:clamp(18px,2.6vw,21px);line-height:1.55;max-width:34ch}
+.soft{color:var(--soft)}
+.quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,5.6vw,38px);line-height:1.2;color:var(--ink);max-width:22ch}
+.sig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,5vw,34px);color:var(--bronze)}
+.push{margin-top:auto}
+.num{font-family:'Cormorant Garamond',serif;font-size:clamp(84px,22vw,150px);line-height:.9;color:var(--ink)}
+.unit{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--bronze)}
+.photo{margin:calc(-1*clamp(26px,6vw,56px)) calc(-1*clamp(22px,6vw,56px)) 6px;height:46%;flex:none;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.por{width:min(58%,280px);align-self:center;flex:0 1 auto;min-height:0;max-height:42%;object-fit:contain}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;flex:1;min-height:0;justify-content:space-evenly}
+.steps li{display:grid;grid-template-columns:64px 18px 1fr;align-items:center;gap:12px;font-size:clamp(18px,2.8vw,22px)}
+.steps b{font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--bronze)}
+.steps i{width:10px;height:10px;border-radius:50%;background:var(--ink);justify-self:center}
+.steps .now i{width:14px;height:14px;background:var(--gold);box-shadow:0 0 0 5px #F0E4CF}.steps .now span{font-weight:600}
+.steps small{display:block;font-size:13px;color:var(--soft);font-weight:400;margin-top:2px}.steps .ahead{color:#9A8F82}.steps .ahead i{background:transparent;border:1.5px dashed #B9AC9B}.steps .ahead b{color:#9A8F82}
+.medals{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:auto 0}
+.medals span{width:clamp(84px,19vw,118px);aspect-ratio:1;border-radius:50%;border:1.5px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5.4vw,34px);color:var(--ink);background:#FFFDF9}
+.medals small{font-family:Inter,sans-serif;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze)}
+.trio{flex:1;min-height:0;display:grid;grid-template-columns:1.1fr 1fr;grid-template-rows:1fr 1fr;gap:8px}.trio img{width:100%;height:100%;object-fit:cover;border-radius:16px;min-height:0;display:block}.trio img:first-child{grid-row:span 2}
+.bars{flex:1;min-height:120px;max-height:260px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:end}
+.bars div{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}
+.bars s{display:block;width:72%;border-radius:999px 999px 6px 6px;background:var(--line)}.bars .hi s{background:var(--bronze)}
+.bars em{font-style:normal;font-family:'Cormorant Garamond',serif;font-size:clamp(24px,5vw,32px)}.bars small{font-size:13px;color:var(--soft)}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ladder li{display:grid;grid-template-columns:30px 1fr;align-items:center;column-gap:10px;padding:12px 16px;border-radius:16px;border:1px solid var(--line)}
+.ladder .ic{grid-row:span 2;font-size:18px;color:var(--bronze);text-align:center}
+.ladder b{font-family:'Cormorant Garamond',serif;font-size:clamp(23px,4.4vw,28px);font-weight:500;line-height:1.1}
+.ladder span{font-size:14px;color:var(--soft)}
+.ladder .here{background:var(--ink);border-color:var(--ink);color:var(--paper)}.ladder .here span,.ladder .here .ic{color:#E8D9BF}
+.ladder .ahead{border-style:dashed;color:#7D7266}
+.ink{background:var(--ink);color:var(--paper)}.ink .k,.ink .sig,.ink h2 em{color:#D9BF95}.ink .soft{color:#CFC4B6}.ink .ghost{color:#D9BF95;opacity:.08}.ink .rule:before,.ink .rule:after{background:#4A423A}
+.list{display:flex;flex-direction:column;gap:14px}.list div{display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:baseline}.list b{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze)}
+.qq{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,6.4vw,44px);line-height:1.15;max-width:22ch;position:relative}
+textarea{flex:1;min-height:0;width:100%;border:0;border-top:1px solid var(--line);padding:18px 2px 0;background:transparent;font:400 clamp(18px,2.6vw,21px)/1.6 Inter,sans-serif;color:var(--ink);resize:none;outline:none}
+textarea::placeholder{color:#A99D8F}.ink textarea{color:var(--paper);border-color:#4A423A}.ink textarea::placeholder{color:#8F8478}
+.sv{font-size:13px;color:var(--soft);min-height:16px}.ink .sv{color:#B7AB9C}
+.nav{display:flex;gap:10px;align-items:center}
+.nav button{min-height:58px;border:0;border-radius:999px;font:600 17px Inter,sans-serif;cursor:pointer}
+.go{flex:1;background:var(--ink);color:var(--paper)}.go:active{transform:scale(.99)}
+.back{width:96px;background:transparent;color:var(--soft)}.back[disabled]{visibility:hidden}
+.go:focus-visible,.back:focus-visible,textarea:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+.adm{flex:1;overflow:auto;display:flex;flex-direction:column;gap:18px}.adm div{border-top:1px solid var(--line);padding-top:12px}.adm b{display:block;font-size:14px;color:var(--bronze);margin-bottom:6px}.adm p{max-width:none;white-space:pre-wrap}
+@media (min-width:700px){p{font-size:24px;max-width:30ch}.quote{font-size:46px}h2{font-size:78px}h1{font-size:120px}.qq{font-size:54px}textarea{font-size:24px}.k{font-size:14px}.unit{font-size:15px}
+.steps li{font-size:26px;grid-template-columns:84px 20px 1fr}.steps b{font-size:15px}.steps small{font-size:15px}
+.ladder li{padding:18px 22px}.ladder b{font-size:34px}.ladder span{font-size:17px}.bars{max-height:440px}.bars small{font-size:16px}.bars em{font-size:38px}
+.medals span{width:132px;font-size:38px}.medals small{font-size:11px}.list div{grid-template-columns:120px 1fr}.list b{font-size:14px}.sig{font-size:38px}.nav button{min-height:64px;font-size:19px}}
 </style></head><body><div id="app"></div>
 <script>
 var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',T=new URLSearchParams(location.search).get('t')||'',VIEW=new URLSearchParams(location.search).has('v');
@@ -71,35 +75,60 @@ var Q=["Looking back at your first day in 2022, what are you most proud of today
 "What did you enjoy about working with the team? What do you think we should improve?",
 "If you were running BSB tomorrow, what’s the first thing you would change, and why?",
 "Could you ever see yourself returning to BSB as Soul Team Manager? What would make that feel right for you?",
-"Is there anything you’d like to say to me or leave for the BSB team? Anything at all. I’d love to hear it."];
+"Is there anything you’d like to say to me or leave for the BSB team?"];
 var A={},i=0,P=[];
-function pg(cls,inner){return '<div class="pg '+cls+'">'+inner+'</div>'}
-P.push(function(){return pg('cream cov','<img class="por" src="anx/cover.jpg" alt="Anukis"><div class="k">Brazilian Soul Beauty · 2022–2026</div><h1>Anukis</h1><p>Before you go, I wanted you to look back at something.</p><p>Not just the work you’ve done, but how far you’ve come and the part you’ve played in our story.</p><p>This is your journey with us. Take your time.</p><p class="sig">Lígia x</p>')});
-P.push(function(){return pg('white','<div class="k mut">1 · Where it all began</div><h2>12 August 2022</h2><p>You arrived at BSB knowing how to do a basic manicure.</p><p><b>Look at you now.</b></p><p class="mut">Step by step, treatment after treatment, you learnt new things, practised and became more confident in your work.</p><div class="card" style="margin-top:auto"><div class="big">1,169</div><p><b>Brazilian Soul Manicures</b></p><p class="mut">That’s 1,169 times you’ve had the opportunity to make someone feel cared for.</p></div><p class="em">I hope you can see how far you’ve come. Because I can.</p>')});
-P.push(function(){var S=[['2022','Basic manicure',1],['2022','Cuticle manicure',1],['2022','Brazilian cuticle',1],['2023','Nail extensions',1],['2024','BIAB',1],['2025','Footlogix',1],['2026','Learning waxing',2],['Ahead','Lash lifts',0],['Ahead','Brows',0],['Ahead','Brow lamination',0]];
-  return pg('white','<div class="k mut">2 · Look at everything you’ve learnt</div><p class="em">You didn’t learn all of this overnight.</p><div class="stp">'+S.map(function(x){return '<div class="s'+x[2]+'"><i></i><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'}).join('')+'</div><p class="mut">Every new skill took time, patience and practice. And nobody can take what you’ve learnt away from you.</p>')});
-P.push(function(){return pg('white ph','<div class="phw"><img src="anx/award.jpg" alt="" style="object-position:50% 14%"></div><div class="k mut">3 · A moment I’ll remember</div><h2>Best Nail Salon UK</h2><p>When the client connected to the award visited our salon, you were the one who looked after her.</p><p class="mut">People see a trophy. But I know how much work happens behind the scenes before a salon earns that recognition.</p><p class="em">That award belongs to everyone who helped us get there. And that includes you, Anukis.</p>')});
-P.push(function(){return pg('white','<div class="k mut">4 · Every year you were here</div><h2>Top Rated</h2><p class="mut">Our clients rated us Top Rated on Treatwell in every year you were part of the team.</p><div class="tr">'+['2022','2023','2024','2025','2026'].map(function(y){return '<span><small>Top Rated</small>'+y+'</span>'}).join('')+'</div><p class="em" style="margin-top:auto">Each one of those years has your hands in it.</p>')});
-P.push(function(){return pg('white','<div class="k mut">5 · Moments we shared</div><div class="mom"><img src="anx/halloween.jpg" alt="" style="object-position:22% 32%"><img src="anx/bday.jpg" alt="" style="object-position:50% 25%"><img src="anx/xmas.jpg" alt="" style="object-position:50% 35%"></div><p>Halloween sweets, birthday cakes, Christmas nights together.</p><p class="mut">And that December in Japan, your big adventure. I hope a little of it is still with you.</p>')});
-P.push(function(){var b=[['July',79],['August',83],['September',88],['October',87]];return pg('white','<div class="k mut">6 · The people who trusted you</div><h2>Almost 9 in 10</h2><p class="mut">of your clients in the most recent months were returning clients.</p><div class="bars">'+b.map(function(x,k){return '<div class="'+(k>=2?'on':'')+'"><em>'+x[1]+'%</em><s style="height:'+((x[1]-50)*5)+'px"></s><small>'+x[0].slice(0,3)+'</small></div>'}).join('')+'</div><p class="mut">Numbers can tell us how busy someone is. But returning clients tell us something else: people felt comfortable enough to come back.</p><p class="em">You helped build that trust. And that matters to me.</p>')});
-P.push(function(){return pg('cream','<div class="k mut">7 · In their words</div><blockquote>“She had a calm and kind aura and made me feel very comfortable.”<cite>Client review · August 2025</cite></blockquote><blockquote>“From start to finish, the experience felt genuinely personal, calm, and thoughtfully done.”<cite>Client review · January 2026</cite></blockquote><blockquote>“So knowledgeable… I wasn’t made to feel like I was a bother.”<cite>Client review · August 2025</cite></blockquote>')});
-P.push(function(){return pg('white','<div class="k mut">8 · When you started teaching others</div><p class="em">Something changed along the way.</p><p>You went from learning how we do things at BSB to helping other girls learn them too.</p><div class="tl"><div><b>Trials</b>You assessed new therapists during their trials.</div><div><b>Training</b>You gave your first training.</div><div><b>Insights</b>You started noticing what makes a good BSB therapist and sharing what you knew.</div></div><p class="mut" style="margin-top:auto">Doing something well is one thing. Being able to teach someone else is another.</p><p class="em">I saw that growth in you.</p>')});
-P.push(function(){var L=[['Soul','Completed','done'],['Soul+','Completed','done'],['Senior Soul','Where you’ve reached','here'],['Soul Lead','The next level','next'],['Soul Team Manager','The future we had started talking about','fut']];
-  return pg('white','<div class="k mut">9 · Your Soul Path</div><h2>Look how far you’ve come</h2><div class="lv">'+L.map(function(x){return '<div class="'+x[2]+'"><span class="ic">'+(x[2]==='done'?'✓':x[2]==='here'?'★':'◇')+'</span><span class="nm">'+x[0]+'</span><span class="ds">'+x[1]+'</span></div>'}).join('')+'</div><p class="mut" style="margin-top:auto">When you first arrived, you had so much ahead of you to learn. Today, I can see someone with the experience to help others grow.</p><p class="em">Whatever direction you choose, everything you’ve learnt and achieved belongs to you.</p>')});
-P.push(function(){return pg('dark','<div class="k gold">10 · The chapter you’re leaving behind</div><h2>Soul Team Manager</h2><p class="mut">We had already started talking about your next step at BSB. A role where you could share your experience, guide the girls, help the team grow and take more responsibility for the standards we’ve built together.</p><p>Soul Team Manager was a future I could see for you here.</p><p class="mut">Although you’re choosing a different path now, I wanted you to know that this opportunity was part of your journey with us.</p><p style="margin-top:auto">And who knows what the future might bring? Some doors don’t have to close just because life takes us in different directions.</p><p class="sig gold">Lígia x</p>')});
-P.push(function(){return pg('cream letter','<div class="k mut">A little message from me</div><p class="hi">Anukis,</p><p>Four years is a long time to be part of someone’s everyday life.</p><p>We’ve shared busy days, challenges, changes and achievements. And during that time, I’ve watched you learn things you couldn’t do when you first arrived.</p><p>I know I’m demanding when it comes to our standards. That’s because I care deeply about what we build here.</p><p class="mut" style="margin-top:auto;text-align:right">continue →</p>')});
-P.push(function(){return pg('cream letter','<p>But I also believe it’s important to recognise the people who’ve helped build it.</p><p>You have been part of BSB’s story, and I want you to know that I recognise that.</p><p>Thank you for your hard work, for what you’ve contributed and for growing with us.</p><p>Whatever comes next for you, I hope you look back and feel proud of how far you’ve come.</p><p class="sig" style="margin-top:auto">With love,<br>Lígia x</p>')});
-P.push(function(){return pg('hero','<div class="k">Now, I’d love to hear from you</div><h2>There are no right or wrong answers</h2><p style="opacity:.94">I want to know how you genuinely felt here: what worked, what didn’t, and what we could have done better.</p><p style="opacity:.94">Your answers are saved as you go. I’ll read them myself.</p>')});
-var Q0=P.length;Q.forEach(function(q,k){P.push(function(){return '<div class="pg qp '+(k===8?'dark':'white')+'"><div class="k '+(k===8?'gold':'mut')+'">'+(k===8?'One last thing…':'&nbsp;')+'</div><div class="q">'+esc(q)+'</div><textarea id="ta" data-q="'+(k+1)+'" placeholder="Write here...">'+esc(A[k+1]||'')+'</textarea><div class="sv" id="sv"></div></div>'})});
-P.push(function(){return pg('hero','<div class="k">With love</div><h1 style="font-size:clamp(48px,11vw,90px)">Thank you, Anukis.</h1><p style="opacity:.94">For being part of our story.</p><p style="opacity:.94">And remember, this is only one chapter of yours.</p><p class="sig">With love,<br>Lígia &amp; Brazilian Soul Beauty 🤍</p><p style="opacity:.8;font-size:14px;margin-top:auto">Your answers have been saved. Lígia will read every word.</p>')});
+function pg(cls,n,inner){return '<section class="pg '+cls+'">'+(n?'<div class="ghost" aria-hidden="true">'+n+'</div>':'')+inner+'</section>'}
+var R='<div class="rule" aria-hidden="true">✦</div>';
+/* cover */
+P.push(function(){return pg('','', '<img class="por" src="anx/cover.jpg" alt="Anukis"><div class="k push">Brazilian Soul Beauty · 2022–2026</div><h1>Anukis</h1>'+R+'<p>Before you go, I wanted you to look back at something.</p><p class="soft">Not just the work you’ve done, but how far you’ve come and the part you’ve played in our story.</p>')});
+P.push(function(){return pg('','', '<div class="k">Before we begin</div><p class="quote push">This is your journey with us.<br>Take your time.</p><p class="sig">Lígia x</p>')});
+/* 1 */
+P.push(function(){return pg('','01','<div class="k">Where it all began</div><h2>12 August <em>2022</em></h2>'+R+'<p>You arrived at BSB knowing how to do an Essential Manicure.</p><p class="quote push">Look at you now.</p><p class="soft">Step by step, treatment after treatment, you learnt new things, practised and became more confident in your work.</p>')});
+P.push(function(){return pg('','', '<div class="k">Where it all began</div><div class="num push">1,169</div><div class="unit">Brazilian Soul Manicures</div><p>That’s 1,169 times you’ve had the opportunity to make someone feel cared for.</p><p class="quote push">I hope you can see how far you’ve come. Because I can.</p>')});
+/* 2 */
+P.push(function(){var S=[['2022','Essential Manicure',''],['2022','Brazilian Soul Manicure','','Brazilian cuticle technique'],['2022','Luxury Brazilian Soul',''],['2023','Nail extensions',''],['2024','BIAB',''],['2025','Footlogix',''],['2026','Learning waxing','now'],['Ahead','Lash lifts','ahead'],['Ahead','Brows','ahead'],['Ahead','Brow lamination','ahead']];
+  return pg('','02','<div class="k">Look at everything you’ve learnt</div><h2>You didn’t learn this <em>overnight</em></h2><ul class="steps">'+S.map(function(x){return '<li class="'+x[2]+'"><b>'+x[0]+'</b><i></i><span>'+x[1]+(x[3]?'<small>'+x[3]+'</small>':'')+'</span></li>'}).join('')+'</ul>')});
+P.push(function(){return pg('','', '<div class="k">Look at everything you’ve learnt</div><p class="quote push">Every new skill took time, patience and practice.</p>'+R+'<p class="quote">And nobody can take what you’ve learnt away from you.</p>')});
+/* 3 award */
+P.push(function(){return pg('','', '<div class="photo"><img src="anx/award.jpg" alt="The BSB team with the award" style="object-position:50% 14%"></div><div class="k">A moment I’ll remember</div><h2>Best Nail Salon <em>UK</em></h2><p>When the client connected to the award visited our salon, you were the one who looked after her.</p>')});
+P.push(function(){return pg('','03','<div class="k">A moment I’ll remember</div><p class="push">People see a trophy. But I know how much work happens behind the scenes before a salon earns that recognition.</p>'+R+'<p class="quote">That award belongs to everyone who helped us get there. And that includes you, Anukis.</p>')});
+/* top rated */
+P.push(function(){return pg('','', '<div class="k">Every year you were here</div><h2>Top <em>Rated</em></h2><p class="soft">Our clients rated us Top Rated on Treatwell in every year you were part of the team.</p><div class="medals">'+['2022','2023','2024','2025','2026'].map(function(y){return '<span><small>Top Rated</small>'+y+'</span>'}).join('')+'</div><p class="quote">Each one of those years has your hands in it.</p>')});
+/* moments */
+P.push(function(){return pg('','', '<div class="k">Moments we shared</div><div class="trio"><img src="anx/halloween.jpg" alt="Halloween at the salon" style="object-position:22% 32%"><img src="anx/bday.jpg" alt="A birthday cake at the salon" style="object-position:50% 25%"><img src="anx/xmas.jpg" alt="The team at Christmas" style="object-position:50% 35%"></div><p>Halloween sweets, birthday cakes, Christmas nights together.</p><p class="soft">And that December in Japan, your big adventure. I hope a little of it is still with you.</p>')});
+/* 4 trust */
+P.push(function(){var b=[['Jul',79],['Aug',83],['Sep',88],['Oct',87]];return pg('','04','<div class="k">The people who trusted you</div><h2>Almost <em>9 in 10</em></h2><p class="soft">of your clients in the most recent months were returning clients.</p><div class="bars">'+b.map(function(x,k){return '<div class="'+(k>=2?'hi':'')+'"><em>'+x[1]+'%</em><s style="height:'+((x[1]-55)*3.4)+'%"></s><small>'+x[0]+'</small></div>'}).join('')+'</div>')});
+P.push(function(){return pg('','', '<div class="k">The people who trusted you</div><p class="push">Numbers can tell us how busy someone is. But returning clients tell us something else: people felt comfortable enough to come back.</p>'+R+'<p class="quote">You helped build that trust. And that matters to me.</p>')});
+/* words */
+P.push(function(){return pg('','', '<div class="k">In their words</div><p class="quote push">“She had a calm and kind aura and made me feel very comfortable.”</p><div class="unit">Client review · August 2025</div>'+R+'<p class="quote">“From start to finish, the experience felt genuinely personal, calm, and thoughtfully done.”</p><div class="unit">Client review · January 2026</div>')});
+/* 5 teaching */
+P.push(function(){return pg('','05','<div class="k">When you started teaching others</div><h2>Something <em>changed</em></h2><p>You went from learning how we do things at BSB to helping other girls learn them too.</p><div class="list push"><div><b>Trials</b><p>You assessed new therapists during their trials.</p></div><div><b>Training</b><p>You gave your first training.</p></div><div><b>Insights</b><p>You started noticing what makes a good BSB therapist and sharing what you knew.</p></div></div>')});
+P.push(function(){return pg('','', '<div class="k">When you started teaching others</div><p class="push">That was an important step. Because doing something well is one thing. Being able to teach someone else is another.</p>'+R+'<p class="quote">I saw that growth in you.</p>')});
+/* 6 path */
+P.push(function(){var L=[['✓','Soul','Completed',''],['✓','Soul+','Completed',''],['★','Senior Soul','Where you’ve reached','here'],['◇','Soul Lead','The next level','ahead'],['◇','Soul Team Manager','The future we had started talking about','ahead']];
+  return pg('','06','<div class="k">Your Soul Path</div><h2>Look how far you’ve <em>come</em></h2><ul class="ladder push">'+L.map(function(x){return '<li class="'+x[3]+'"><span class="ic">'+x[0]+'</span><b>'+x[1]+'</b><span>'+x[2]+'</span></li>'}).join('')+'</ul>')});
+P.push(function(){return pg('','', '<div class="k">Your Soul Path</div><p class="push">When you first arrived, you had so much ahead of you to learn. Today, I can see someone with the experience to help others grow.</p>'+R+'<p class="quote">Whatever direction you choose, everything you’ve learnt and achieved belongs to you.</p>')});
+/* 7 leaving */
+P.push(function(){return pg('ink','07','<div class="k">The chapter you’re leaving behind</div><h2>Soul Team <em>Manager</em></h2>'+R+'<p class="soft">We had already started talking about your next step at BSB. A role where you could share your experience, guide the girls, help the team grow and take more responsibility for the standards we’ve built together.</p><p class="quote push">Soul Team Manager was a future I could see for you here.</p>')});
+P.push(function(){return pg('ink','', '<div class="k">The chapter you’re leaving behind</div><p class="push">Although you’re choosing a different path now, I wanted you to know that this opportunity was part of your journey with us.</p><p class="soft">And who knows what the future might bring? Some doors don’t have to close just because life takes us in different directions.</p><p class="sig">Lígia x</p>')});
+/* 8 letter */
+P.push(function(){return pg('','08','<div class="k">A little message from me</div><p class="quote push">Anukis,</p><p>Four years is a long time to be part of someone’s everyday life.</p><p class="soft">We’ve shared busy days, challenges, changes and achievements. And during that time, I’ve watched you learn things you couldn’t do when you first arrived.</p>')});
+P.push(function(){return pg('','', '<div class="k">A little message from me</div><p class="push">I know I’m demanding when it comes to our standards. That’s because I care deeply about what we build here.</p><p class="soft">But I also believe it’s important to recognise the people who’ve helped build it.</p><p>You have been part of BSB’s story, and I want you to know that I recognise that.</p>')});
+P.push(function(){return pg('','', '<div class="k">A little message from me</div><p class="push">Thank you for your hard work, for what you’ve contributed and for growing with us.</p><p class="quote">Whatever comes next for you, I hope you look back and feel proud of how far you’ve come.</p><p class="sig">With love,<br>Lígia x</p>')});
+/* questions intro */
+P.push(function(){return pg('','', '<div class="k">Now, I’d love to hear from you</div><h2>No right or <em>wrong</em> answers</h2>'+R+'<p class="push">I want to know how you genuinely felt here: what worked, what didn’t, and what we could have done better.</p><p class="soft">Your answers are saved as you go. I’ll read them myself.</p>')});
+var Q0=P.length;
+Q.forEach(function(q,k){P.push(function(){var last=k===8;return pg(last?'ink':'','', '<div class="k">'+(last?'One last thing…':'&nbsp;')+'</div><div class="qq">'+esc(q)+'</div>'+(last?'<p class="soft">Anything at all. I’d love to hear it.</p>':'')+'<textarea id="ta" data-q="'+(k+1)+'" aria-label="Your answer" placeholder="Write here, in your own words…">'+esc(A[k+1]||'')+'</textarea><div class="sv" id="sv" aria-live="polite"></div>')})});
+P.push(function(){return pg('','', '<div class="k">With love</div><h2>Thank you, <em>Anukis.</em></h2>'+R+'<p>For being part of our story.</p><p class="quote push">And remember, this is only one chapter of yours.</p><p class="sig">With love,<br>Lígia &amp; Brazilian Soul Beauty</p><p class="soft" style="font-size:14px">Your answers have been saved. Lígia will read every word.</p>')});
 var tmr=null;
-function save(){var t=document.getElementById('ta');if(!t)return Promise.resolve();var q=+t.getAttribute('data-q'),v=t.value;if((A[q]||'')===v)return Promise.resolve();A[q]=v;var s=document.getElementById('sv');if(s)s.textContent='Saving...';
-  return rpc('exit_save',{p_token:T,p_q:q,p_question:Q[q-1],p_answer:v}).then(function(ok){var s=document.getElementById('sv');if(s)s.textContent=ok?'Saved':'Not saved, check the link'}).catch(function(){var s=document.getElementById('sv');if(s)s.textContent='Not saved, check the connection'})}
-function draw(){var nQ=P.length-1,d=(i>=Q0&&i<nQ?'<div class="dots" style="visibility:hidden"><i></i></div>':'<div class="dots">'+P.slice(0,Q0).map(function(_,k){return '<i class="'+(k<=i?'on':'')+'"></i>'}).join('')+'</div>')+P[i]()+'<div class="nav"><button class="back" '+(i===0?'disabled':'')+' onclick="go(-1)">Back</button>'+(i<P.length-1?'<button class="go" onclick="go(1)">'+(i===0?'Begin':'Next')+'</button>':'')+'</div>';
+function save(){var t=document.getElementById('ta');if(!t)return Promise.resolve();var q=+t.getAttribute('data-q'),v=t.value;if((A[q]||'')===v)return Promise.resolve();A[q]=v;var s=document.getElementById('sv');if(s)s.textContent='Saving…';
+  return rpc('exit_save',{p_token:T,p_q:q,p_question:Q[q-1],p_answer:v}).then(function(ok){var s=document.getElementById('sv');if(s)s.textContent=ok?'Saved ✓':'Not saved, check the link'}).catch(function(){var s=document.getElementById('sv');if(s)s.textContent='Not saved, check the connection'})}
+function draw(){var inQ=i>=Q0&&i<P.length-1,pct=inQ?100:Math.round(100*Math.min(i,Q0)/Q0);
+  var d='<div class="bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div>'+P[i]()+'<nav class="nav"><button class="back" '+(i===0?'disabled':'')+' onclick="go(-1)">Back</button>'+(i<P.length-1?'<button class="go" onclick="go(1)">'+(i===0?'Begin':i===Q0-1?'Start':'Next')+'</button>':'')+'</nav>';
   document.getElementById('app').innerHTML=d;var t=document.getElementById('ta');if(t){t.addEventListener('input',function(){clearTimeout(tmr);tmr=setTimeout(save,1200)})}}
 function go(n){clearTimeout(tmr);save().then(function(){i=Math.max(0,Math.min(P.length-1,i+n));draw()})}
-function admin(){rpc('exit_get',{p_token:T}).then(function(r){if(!r){document.getElementById('app').innerHTML='<div class="pg white"><h2>Link not valid</h2></div>';return}
+function admin(){rpc('exit_get',{p_token:T}).then(function(r){if(!r){document.getElementById('app').innerHTML=pg('','','<h2>Link not valid</h2>');return}
   var by={};(r.answers||[]).forEach(function(x){by[x.q]=x});
-  document.getElementById('app').innerHTML='<div class="pg white" style="flex:1"><div class="k mut">Live answers · '+esc(r.person)+'</div><div class="adm">'+Q.map(function(q,k){var x=by[k+1];return '<div class="card"><b>'+(k+1)+'. '+esc(q)+'</b><p class="'+(x&&x.a?'':'mut')+'">'+(x&&x.a?esc(x.a):'Not answered yet')+'</p></div>'}).join('')+'</div></div>'}).catch(function(){})}
+  document.getElementById('app').innerHTML=pg('','','<div class="k">Live answers · '+esc(r.person)+'</div><div class="adm">'+Q.map(function(q,k){var x=by[k+1];return '<div><b>'+(k+1)+'. '+esc(q)+'</b><p class="'+(x&&x.a?'':'soft')+'">'+(x&&x.a?esc(x.a):'Not answered yet')+'</p></div>'}).join('')+'</div>')}).catch(function(){})}
 if(VIEW){admin();setInterval(admin,5000)}else{rpc('exit_get',{p_token:T}).then(function(r){(r&&r.answers||[]).forEach(function(x){A[x.q]=x.a||''});draw()}).catch(draw)}
 </script></body></html>
