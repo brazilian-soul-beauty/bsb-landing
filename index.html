@@ -872,22 +872,25 @@ function dayGreen(x,L){return x&&x.worked&&!(x.late_min>0)&&!(x.lunch_min!=null&
 function boom(){var b=document.createElement('div');b.className='boom';var E=['✨','💜','⭐','🎉','🔥'];for(var i=0;i<26;i++){var e=document.createElement('i');e.textContent=E[i%5];e.style.left=(Math.random()*100)+'%';e.style.animationDelay=(Math.random()*.6)+'s';b.appendChild(e)}document.body.appendChild(b);setTimeout(function(){b.remove()},3200)}
 function isDesk(){return ((PEOPLE.filter(function(p){return p.person===S.who})[0]||{}).role)==='desk'}
 function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+day;
-  if(S.dkk!==key){S.dkk=key;S.dk=null;M.innerHTML='<div class="wait"><em>🛎️</em>Loading…</div>';rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null}).then(function(x){if(S.dkk!==key)return;S.dk=x||{};if(S.tab==='today')renderDesk(M)});return}
+  if(S.dkk!==key){S.dkk=key;S.dk=null;M.innerHTML='<div class="wait"><em>🛎️</em>Loading…</div>';Promise.all([rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null}),rpc('soul_standard',{p_code:S.code,p_person:S.who,p_from:day,p_to:day}).catch(function(){return null})]).then(function(x){if(S.dkk!==key)return;S.dk=x[0]||{};S.dk._st=((x[1]||{}).days||[]).filter(function(z){return z.d===day})[0]||{};if(S.tab==='today')renderDesk(M)});return}
   var d=S.dk||{},n=function(v){return +v||0},dd=pd(day),isT=day===ymd(td),fn=(S.who||'').split(' ')[0],hr=new Date().getHours(),hi=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
-  var cl=n(d.clients),rb=n(d.rebook),rp=cl?Math.round(100*rb/cl):null;
-  var SE=[{ic:'🔁',t:'Rebook',ok:rb>0?true:null,m:cl?(rb+' of '+cl+' clients'):'No clients today'},
-   {ic:'📲',t:'Last minute',ok:n(d.lm_sent)>0?true:null,m:n(d.lm_sent)?(n(d.lm_sent)+' sent · '+n(d.lm_booked)+' booked'):'None sent yet'},
-   {ic:'📧',t:'Newsletter',ok:n(d.news)>0?true:null,m:n(d.news)?(n(d.news)+' joined'):'No one yet'}];
+  var cl=n(d.clients),rb=n(d.rebook),rp=cl?Math.round(100*rb/cl):null,dk=n(d.drinks_free)+n(d.drinks_paid),drp=cl?Math.min(100,Math.round(100*dk/cl)):null,ls=n(d.lm_sent),lb=n(d.lm_booked);
+  var pin=function(ic,v,sm){return '<span class="exn"><em>'+ic+'</em><b>'+v+'<small>'+sm+'</small></b></span>'};
+  var SE=[{ic:cl?pin('🔁',rp,'%'):'🔁',t:'Rebook',ok:rb>0?true:null,m:cl?(rb+' of '+cl+' clients'):'No clients today'},
+   {ic:cl?pin('🥂',drp,'%'):'🥂',t:'Drinks',ok:dk>0?true:null,m:cl?(n(d.drinks_paid)+' paid · '+n(d.drinks_free)+' free'):'No clients today'},
+   {ic:ls?pin('📲',lb,'/'+ls):'📲',t:'Last minute',ok:lb>0?true:null,m:ls?(lb+' booked · '+n(d.lm_declined)+' no · '+n(d.lm_noreply)+' no reply'):'None sent yet'}];
   var won=SE.filter(function(q){return q.ok}).length;
   var wk=[];for(var j=6;j>=0;j--){var d2=new Date(td);d2.setDate(d2.getDate()-j);var k=ymd(d2);wk.push('<button class="'+(k===day?'on':'')+'" onclick="S.tday=\''+k+'\';renderToday(document.getElementById(\'main\'))"><i class="'+(k===ymd(td)?'t':'')+'">'+(k===ymd(td)?'•':'')+'</i>'+DW[(d2.getDay()+6)%7].slice(0,1)+'<span style="opacity:.7">'+d2.getDate()+'</span></button>')}
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]+'</p>'+
-    '<div class="alive"><em>📅</em><div><b>Fill the quiet days</b><span>Every booking you bring counts</span></div></div><div class="wk">'+wk.join('')+'</div>'+
-    '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
-  var C=[['👥','Clients',cl,'today'],['🥂','Drinks sold',n(d.drinks_paid),'of '+cl+' clients · '+n(d.drinks_free)+' free'],['📅','Filled by us',n(d.fill_n),'services added'],
-   ['✨','Extras offer',n(d.mk_booked),'booked of '+n(d.mk_sent)+' sent'],['🎁','Gift cards',n(d.gift_n),'sold today'],['💜','Tips',d.tips_pct==null?'–':d.tips_pct+'%','of sales']];
-  h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':'na';
-    return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+q.ic+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span></div>'}).join('')+'</div>'+
-    '<div class="dcs">'+C.map(function(c){return '<div><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div></div>';
+    '<div class="alive"><em>📅</em><div><b>Fill the quiet days</b><span>Every booking you bring counts</span></div></div><div class="wk">'+wk.join('')+'</div>'+'</div>';
+  var tv=d.tips_pct==null?null:+d.tips_pct,ta=d.tips_avg==null?null:+d.tips_avg,tar=tv==null||ta==null?'':tv>ta?' ↑':tv<ta?' ↓':'';
+  var C=[['👥','Clients',cl,'today'],['🔁','Rebooked',rb,cl?rp+'% of clients':'–'],['🥂','Drinks paid',n(d.drinks_paid),n(d.drinks_free)+' free'],
+   ['🌟','Experience','–','exceptional'],['🎁','Gift cards',n(d.gift_n),'sold today'],['💜','Tips',tv==null?'–':tv+'%'+tar,ta==null?'of sales':'usual '+ta+'%']];
+  var xs=d._st||{},TK=[['☀️','Morning',xs.t_morning>0],['☑️','Day',xs.t_day>0],['🌙','Close',xs.t_close>0]];
+  h+='<div class="tdm"><div class="bh">👑 My day</div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':'na';
+    return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+q.ic+'</div></div><b>'+q.t+'</b><span>'+esc(q.m)+'</span></div>'}).join('')+'</div>'+
+    '<div class="dcs">'+C.map(function(c){return '<div><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div>'+
+    '<div class="dtk"><b>Tasks</b>'+TK.map(function(t){return '<span class="'+(t[2]?'on':'')+'"><em>'+t[0]+'</em>'+t[1]+(t[2]?' ✓':'')+'</span>'}).join('')+'</div></div>';
   M.innerHTML=h}
 function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   if(((PEOPLE.filter(function(p){return p.person===S.who})[0]||{}).role)==='desk'){renderDesk(M);return}
