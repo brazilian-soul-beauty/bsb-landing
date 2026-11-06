@@ -26234,6 +26234,93 @@ body.bsb-cardopen #lmPill{visibility:hidden!important}
 /*BSB-LASTMIN-FIM*/
 </script>
 <!--BSB-LASTMIN-FIM-->
+<!--BSB-PV390-INICIO-->
+<style>
+#pvPill{position:fixed;left:18px;bottom:130px;z-index:9000;display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid #E4E4EC;background:#fff;color:#1F2235;font:600 14px/1 Inter,system-ui,sans-serif;box-shadow:0 4px 14px rgba(16,24,40,.14);cursor:pointer}
+#pvPill i{font-style:normal;color:#5B47E0}
+#pvPill b{font-weight:800;color:#5B47E0}
+body.bsb-cardopen #pvPill{visibility:hidden!important}
+#pvOv{position:fixed;inset:0;z-index:9500;background:rgba(17,20,40,.45);display:none;align-items:center;justify-content:center;font-family:Inter,system-ui,sans-serif}
+#pvOv.on{display:flex}
+#pvBox{width:min(1100px,94vw);height:min(720px,92vh);background:#F6F6FB;border-radius:20px;padding:22px 26px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;overflow:hidden;color:#1F2235}
+.pv-top{display:flex;align-items:center;gap:12px}
+.pv-top h2{margin:0;font-size:22px;font-weight:800;flex:1}
+.pv-nav{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+.pv-btn{border:1px solid #E4E4EC;background:#fff;border-radius:10px;width:38px;height:38px;font-size:16px;cursor:pointer;color:#5B47E0;font-weight:800}
+.pv-btn:disabled{opacity:.35;cursor:default}
+.pv-x{border:0;background:#fff;border-radius:50%;width:38px;height:38px;font-size:22px;cursor:pointer;color:#1F2235;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.pv-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pv-k{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(16,24,40,.06)}
+.pv-k span{display:block;font-size:13px;color:#6B6E85;font-weight:600}
+.pv-k b{display:block;font-size:30px;font-weight:800;color:#5B47E0;margin-top:4px}
+.pv-list{flex:1;background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(16,24,40,.06);display:flex;flex-direction:column;overflow:hidden}
+.pv-row{display:grid;grid-template-columns:70px 1.6fr 1fr 70px 70px 70px;align-items:center;gap:8px;padding:0 18px;height:52px;border-bottom:1px solid #F0F0F5;font-size:14px;cursor:pointer}
+.pv-row.h{height:40px;font-size:12px;color:#6B6E85;font-weight:700;cursor:default;background:#FAFAFD}
+.pv-row:not(.h):hover{background:#F7F5FF}
+.pv-row .c{text-align:center;font-size:18px}
+.pv-nm{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-tag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700;vertical-align:middle}
+.pv-new{background:#EEEAFE;color:#5B47E0}
+.pv-early{background:#FFF1E6;color:#C2570C}
+.pv-com{padding:0 18px 12px 96px;font-size:13px;color:#44475E;border-bottom:1px solid #F0F0F5;background:#F7F5FF;margin-top:-1px;padding-top:10px}
+.pv-empty{flex:1;display:flex;align-items:center;justify-content:center;color:#6B6E85;font-size:15px}
+.pv-foot{display:flex;justify-content:flex-end;align-items:center;gap:8px;font-size:13px;color:#6B6E85;font-weight:600}
+</style>
+<button id="pvPill" type="button"><i>💌</i> After visit <b id="pvN">0</b></button>
+<div id="pvOv"><div id="pvBox"></div></div>
+<script>
+/*BSB-PV390-INICIO*/
+/* PV390 (06/11/2026) Ligia: botão no dash da Joana para ver quem recebeu o e-mail pós-visita, quem entrou no Circle e quem deixou review.
+   Lê a rpc bsb_posvisita_semana(p_inicio=segunda). Sem rolagem: semana com ◀ ▶ e páginas de 8 linhas. Toque na linha mostra o comentário. */
+(function(){
+  if (window.__PV390) return; window.__PV390 = true;
+  var RPC='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/bsb_posvisita_semana';
+  var KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+  var PER=8, wk=0, pg=0, rows=[], open=-1;
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+  function hoje(){var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());function g(t){return p.find(function(x){return x.type===t}).value}return new Date(Date.UTC(+g('year'),+g('month')-1,+g('day')));}
+  function iso(d){return d.toISOString().slice(0,10);}
+  function monday(off){var d=hoje();var w=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-w+7*off);return d;}
+  function fmt(s){var d=new Date(s+'T12:00:00Z');return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',timeZone:'UTC'});}
+  function load(off){return fetch(RPC,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_inicio:iso(monday(off))})}).then(function(r){if(!r.ok)throw new Error('Hub '+r.status);return r.json();});}
+  var FACE={loved:'😍',good:'🙂',better:'😕'};
+  function render(){
+    var box=document.getElementById('pvBox'),m=monday(wk),e=new Date(m);e.setUTCDate(e.getUTCDate()+6);
+    var lab=m.toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'UTC'})+' – '+e.toLocaleDateString('en-GB',{day:'numeric',month:'short',timeZone:'UTC'});
+    var n=rows.length,resp=0,circ=0,rev=0;rows.forEach(function(r){if(r.carinha)resp++;if(r.circle)circ++;if(r.review)rev++;});
+    var pages=Math.max(1,Math.ceil(n/PER));if(pg>=pages)pg=pages-1;
+    var h='<div class="pv-top"><h2>💌 After visit</h2><div class="pv-nav"><button class="pv-btn" data-a="wp">◀</button><span>'+esc(lab)+'</span><button class="pv-btn" data-a="wn"'+(wk>=0?' disabled':'')+'>▶</button></div><button class="pv-x" data-a="x">×</button></div>';
+    h+='<div class="pv-kpis"><div class="pv-k"><span>📧 Received</span><b>'+n+'</b></div><div class="pv-k"><span>😍 Answered</span><b>'+resp+'</b></div><div class="pv-k"><span>💜 Joined Circle</span><b>'+circ+'</b></div><div class="pv-k"><span>⭐ Google review</span><b>'+rev+'</b></div></div>';
+    h+='<div class="pv-list">';
+    if(!n){h+='<div class="pv-empty">No emails this week</div>';}
+    else{
+      h+='<div class="pv-row h"><span>Day</span><span>Client</span><span>Therapist</span><span class="c" style="font-size:12px">Face</span><span class="c" style="font-size:12px">Circle</span><span class="c" style="font-size:12px">Review</span></div>';
+      rows.slice(pg*PER,pg*PER+PER).forEach(function(r,i){
+        var k=pg*PER+i;
+        h+='<div class="pv-row" data-i="'+k+'"><span>'+esc(fmt(r.dia))+'</span><span class="pv-nm">'+esc(r.cliente)+(r.tipo==='new'?'<span class="pv-tag pv-new">New</span>':'')+(r.antes?'<span class="pv-tag pv-early">⚠️ Sent early</span>':'')+'</span><span>'+esc(r.terapeuta||'')+'</span><span class="c">'+(FACE[r.carinha]||'·')+'</span><span class="c">'+(r.circle?'✅':'·')+'</span><span class="c">'+(r.review?'⭐':'·')+'</span></div>';
+        if(open===k)h+='<div class="pv-com">'+(r.comentario?'💬 '+esc(r.comentario):'No comment')+' · sent '+esc(r.enviado||'')+'</div>';
+      });
+    }
+    h+='</div><div class="pv-foot">'+(pages>1?'<button class="pv-btn" data-a="pp"'+(pg<=0?' disabled':'')+'>◀</button><span>'+(pg+1)+' / '+pages+'</span><button class="pv-btn" data-a="pn"'+(pg>=pages-1?' disabled':'')+'>▶</button>':'')+'</div>';
+    box.innerHTML=h;
+  }
+  function show(){open=-1;pg=0;document.getElementById('pvBox').innerHTML='<div class="pv-empty">Loading…</div>';load(wk).then(function(r){rows=r||[];render();}).catch(function(e){document.getElementById('pvBox').innerHTML='<div class="pv-top"><h2>💌 After visit</h2><button class="pv-x" data-a="x">×</button></div><div class="pv-empty">Could not load. Check the internet and try again.</div>';});}
+  document.addEventListener('click',function(ev){
+    var t=ev.target;if(!t||!t.closest)return;
+    if(t.closest('#pvPill')){wk=0;document.getElementById('pvOv').classList.add('on');show();return;}
+    if(t.id==='pvOv'){document.getElementById('pvOv').classList.remove('on');return;}
+    var b=t.closest('#pvBox [data-a]');
+    if(b){var a=b.getAttribute('data-a');if(a==='x')document.getElementById('pvOv').classList.remove('on');else if(a==='wp'){wk--;show();}else if(a==='wn'&&wk<0){wk++;show();}else if(a==='pp'){pg--;open=-1;render();}else if(a==='pn'){pg++;open=-1;render();}return;}
+    var row=t.closest('#pvBox .pv-row[data-i]');
+    if(row){var i=+row.getAttribute('data-i');open=(open===i?-1:i);render();}
+  });
+  function tick(){load(0).then(function(r){var d=iso(hoje()),n=(r||[]).filter(function(x){return x.dia===d}).length;var el=document.getElementById('pvN');if(el)el.textContent=n;}).catch(function(){});}
+  tick();setInterval(tick,300000);
+})();
+/*BSB-PV390-FIM*/
+</script>
+<!--BSB-PV390-FIM-->
+
 <style>/*BSB-XP389-CSS-INICIO*/
 .xp-box{margin:8px 0 4px;border:1px solid #ECECF4;border-radius:16px;background:#FCFCFE;padding:14px}
 .xp-tag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;border-radius:12px;padding:8px 12px;margin-bottom:12px}
