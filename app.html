@@ -878,13 +878,13 @@ function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+
   var pin=function(ic,v,sm){return '<span class="exn"><em>'+ic+'</em><b>'+v+'<small>'+sm+'</small></b></span>'};
   var SE=[{ic:cl?pin('🔁',rp,'%'):'🔁',t:'Rebook',ok:rb>0?true:null,m:cl?(rb+' of '+cl+' clients'):'No clients today'},
    {ic:cl?pin('🥂',drp,'%'):'🥂',t:'Drinks',ok:dk>0?true:null,m:cl?(n(d.drinks_paid)+' paid · '+n(d.drinks_free)+' free'):'No clients today'},
-   {ic:ls?pin('📲',lb,'/'+ls):'📲',t:'Last minute',ok:lb>0?true:null,m:ls?(lb+' booked · '+n(d.lm_declined)+' no · '+n(d.lm_noreply)+' no reply'):'None sent yet'}];
+   {ic:ls?pin('📲',Math.round(100*lb/ls),'%'):'📲',t:'Last minute',ok:lb>0?true:null,m:ls?(lb+' of '+ls+' booked · '+n(d.lm_declined)+' no · '+n(d.lm_noreply)+' no reply'):'None sent yet'}];
   var won=SE.filter(function(q){return q.ok}).length;
   var wk=[];for(var j=6;j>=0;j--){var d2=new Date(td);d2.setDate(d2.getDate()-j);var k=ymd(d2);wk.push('<button class="'+(k===day?'on':'')+'" onclick="S.tday=\''+k+'\';renderToday(document.getElementById(\'main\'))"><i class="'+(k===ymd(td)?'t':'')+'">'+(k===ymd(td)?'•':'')+'</i>'+DW[(d2.getDay()+6)%7].slice(0,1)+'<span style="opacity:.7">'+d2.getDate()+'</span></button>')}
   var h='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#FF9F6E 0%,#E2557A 45%,#7A3FD1 100%)"><small>'+(isT?hi+', '+esc(fn):DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()])+'</small><h2>'+(isT?'Today':'My day')+'</h2><p>'+DW[(dd.getDay()+6)%7]+' '+dd.getDate()+' '+MN[dd.getMonth()]+'</p>'+
     '<div class="alive"><em>📅</em><div><b>Fill the quiet days</b><span>Every booking you bring counts</span></div></div><div class="wk">'+wk.join('')+'</div>'+'</div>';
   var tv=d.tips_pct==null?null:+d.tips_pct,ta=d.tips_avg==null?null:+d.tips_avg,tar=tv==null||ta==null?'':tv>ta?' ↑':tv<ta?' ↓':'';
-  var C=[['👥','Clients',cl,'today'],['🔁','Rebooked',rb,cl?rp+'% of clients':'–'],['🥂','Drinks paid',n(d.drinks_paid),n(d.drinks_free)+' free'],
+  var C=[['👥','Clients',cl,'today'],['🥤','Free drinks',cl?Math.min(100,Math.round(100*n(d.drinks_free)/cl))+'%':'–',n(d.drinks_free)+' of '+cl+' clients'],['🥂','Drinks paid',cl?Math.round(100*n(d.drinks_paid)/cl)+'%':'–',n(d.drinks_paid)+' of '+cl+' clients'],
    ['🌟','Experience','–','exceptional'],['🎁','Gift cards',n(d.gift_n),'sold today'],['💜','Tips',tv==null?'–':tv+'%'+tar,ta==null?'of sales':'usual '+ta+'%']];
   var xs=d._st||{},TK=[['☀️','Morning',xs.t_morning>0],['☑️','Day',xs.t_day>0],['🌙','Close',xs.t_close>0]];
   h+='<div class="tdm"><div class="bh">👑 My day</div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':'na';
