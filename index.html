@@ -187,6 +187,7 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;gap:14px}
 .team{display:flex;gap:6px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px 6px}
 .team button .av{width:34px;height:34px;font-size:13px;box-shadow:none;opacity:.55}
 .team button.on .av{opacity:1;box-shadow:0 0 0 2px var(--p)}
+@media (min-width:701px) and (orientation:portrait){main{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}main>.hero{min-height:0}main>.hero .verdict{display:none}main>:first-child:not(.hero){grid-row:1/span 2}.nd2 .seal{width:120px!important;height:120px!important}.nd2 .ic{font-size:48px!important}.map .nd.crown .seal{width:150px;height:150px}.map .nd.crown .ic{font-size:64px}.lvbtn.lpbtn{display:none}}
 @media (max-width:700px){
 #app{height:100dvh;padding:calc(env(safe-area-inset-top) + 10px) 0 calc(74px + env(safe-area-inset-bottom));gap:10px}
 .top{flex-wrap:wrap;gap:8px;padding:0 14px}
