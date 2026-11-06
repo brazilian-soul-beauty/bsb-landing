@@ -918,7 +918,7 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
     '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(!x.worked&&!nc?'Day off. Rest well.':won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
   h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':q.ok===false?'no':'na';
     return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+(q.ex&&nc?'<span class="exn"><em>'+q.ic+'</em><b>'+pe+'<small>/'+nc+'</small></b></span>':q.ic)+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span>'+'</div>'}).join('')+'</div>'+(S.lp[lpk]?'<div class="lpr"><span>💄 Look wow all month</span><b>🎁 '+esc(S.lp[lpk])+'</b></div>':'')+
-    dayCounters(S.td,day,vd,x,ap,rvT,rvA)+'<div class="tdf">'+(nx&&isT?'<div class="nxt">⏭️ Next client at <b>'+nx.s+'</b> · '+esc(nx.service||'')+'</div>':'')+'</div></div>';
+    dayCounters(S.td,day,vd,x,ap,rvT,rvA)+'</div>';
   M.innerHTML=h;
   if(won===3&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
 /* ---------- Eminence ---------- */
