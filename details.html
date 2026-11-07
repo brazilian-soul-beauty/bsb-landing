@@ -270,7 +270,7 @@ footer .next::after{display:none}
       <div class="num">My details</div>
       <h1>All <em>done</em></h1><div class="orn"><i></i>✦<i></i></div>
       <p class="sub">Thank you. See you at the salon.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><button class="golink" id="pdfBtn">Download my PDF</button><a class="golink dark" id="toCh" href="index.html">Continue ›</a></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><button class="golink" id="pdfBtn">Download my PDF</button><a class="golink dark" id="toCh" href="way.html">Continue ›</a></div>
     </section>
 
   </main>
@@ -291,7 +291,7 @@ const IMG={reception:"https://raw.githubusercontent.com/brazilian-soul-beauty/bs
 const POS={vg_cover:'50% 18%',vg_brunette:'50% 12%',vg_uniform:'50% 6%',vg_coat:'50% 30%',vg_hair:'50% 12%',vg_hair2:'50% 12%',vg_curls:'50% 15%',vg_selfie:'50% 30%',vg_mk1:'50% 35%',vg_mk2:'25% 40%',team:'50% 35%',sink:'50% 72%',logo:'52% 45%',drink:'60% 65%',envelope:'45% 55%',bath:'60% 50%'};
 const PICS=[['team','Welcome'],['reception','About you'],['sink','Your photo'],['T','Right to <em>work</em>'],['envelope','Documents'],['T','<em>Pay</em>'],['T','Next of <em>kin</em>'],['bath','Your uniform'],['room','Health at work'],['drink','Your favourites'],['nails','Your path'],['hall','Your goals'],['stations','How I work'],['logo','Sign'],['paper','Welcome to the team']];
 const QS=new URLSearchParams(location.search);const PERSON=(QS.get('p')||'').trim(),PCODE=(QS.get('c')||'').trim();
-const HUB='index.html'+(PERSON?'?p='+encodeURIComponent(PERSON)+'&c='+encodeURIComponent(PCODE)+(QS.has('preview')?'&preview=1':''):'');
+const HUB='way.html'+(PERSON?'?p='+encodeURIComponent(PERSON)+'&c='+encodeURIComponent(PCODE)+(QS.has('preview')?'&preview=1':''):'');
 document.getElementById('logo').onclick=()=>{location.href=HUB};document.getElementById('toCh').href=HUB;
 async function markHub(name){if(!PERSON||!PCODE)return;try{await fetch('https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/onb_save',{method:'POST',headers:{apikey:'sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',Authorization:'Bearer sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R','Content-Type':'application/json'},body:JSON.stringify({p_person:PERSON,p_code:PCODE,p_rows:[{module:'00-details',field:'__done',answer:new Date().toISOString()},{module:'00-details',field:'full_name',answer:name}]})})}catch(e){}}
 const LAST=13;let SKIP=-1,RET=0;
