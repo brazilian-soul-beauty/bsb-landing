@@ -29,40 +29,54 @@ textarea{width:100%;height:130px;border:1px solid #E6E1D8;border-radius:2px;padd
 .gift{border:1px solid rgba(168,136,98,.35);background:#fff;padding:16px 14px;margin:4px 0 6px}
 .gift b{display:block;font-family:Newsreader,serif;font-weight:300;font-size:40px;color:#8A6D4A;line-height:1}
 .gift span{display:block;margin-top:6px;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
-
+.code{border:1px dashed #A88862;background:#fff;padding:16px;margin:6px 0 10px;font:400 22px Inter,sans-serif;letter-spacing:.12em;color:#8A6D4A}
+.sep{height:1px;background:rgba(168,136,98,.25);margin:26px 0 22px}
+.lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8A6D4A;margin:0 0 8px}
 </style></head>
 <body><div class="in">
   <div class="logo">BRAZILIAN SOUL</div>
   <div id="v"></div>
 </div>
 <script>
+/* 07/11/2026 Ligia: "deixar tudo numa pagina so". Cliente nova: tocou a carinha → UMA pagina com
+   obrigada + £10 + £10 + formulario ja preenchido. Um clique em Claim → o codigo aparece na tela. */
 var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/', KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
 var REVIEW='https://search.google.com/local/writereview?placeid=ChIJK8FVwFkEdkgRMTCOuNJSfdw';
-var CIRCLE='https://circle.braziliansoulbeauty.co.uk';
+var MC='https://braziliansoulbeauty.us14.list-manage.com/subscribe/post-json?u=945a42f70df1284122909cecd&id=937bbcba51&f_id=0065bbe5f0';
+var CODE='BSB-WELCOME10';
 var q=new URLSearchParams(location.search), T=q.get('t')||'', R=q.get('r')||'';
 function rpc(fn,body){return fetch(SB+fn,{method:'POST',keepalive:true,headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
 function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var V=document.getElementById('v');
-function claimBox(){return '<div class="box"><b>Your £20 is waiting 🎁</b><p style="margin:0">£10 when you join our Clapham Circle + £10 more for your Google review.</p><a class="btn o" style="margin:14px 0 0" href="?t='+encodeURIComponent(T)+'&r=claim">Claim my £20</a></div>'}
+function rvBtn(txt,cls){return '<a class="btn'+(cls||'')+'" href="'+REVIEW+'" onclick="rpc(\'bsb_feedback_click\',{p_token:T,p_what:\'review\'})">'+txt+'</a>'}
 
-var MC='https://braziliansoulbeauty.us14.list-manage.com/subscribe/post-json?u=945a42f70df1284122909cecd&id=937bbcba51&f_id=0065bbe5f0';
-function claimView(d){
+/* o bloco do £20, com o formulario ali mesmo */
+function claimBlock(d){
   var fn=d&&d.first?esc(d.first):'', em=d&&d.email?esc(d.email):'';
-  V.innerHTML='<h1>Your £20 is waiting 🎁</h1>'+
-   '<div class="two"><div><b>£10</b><span>Your next visit</span></div><div><b>£10</b><span>Your Google review</span></div></div>'+
-   '<p>Join the Clapham Circle and we will send both to your inbox.</p>'+
+  return '<div id="cw"><div class="two"><div><b>£10</b><span>Your next visit</span></div><div><b>£10</b><span>Your Google review</span></div></div>'+
    '<form id="cf" class="cf" novalidate><label>First name</label><input id="cn" type="text" value="'+fn+'" autocomplete="given-name">'+
    '<label>Email</label><input id="ce" type="email" value="'+em+'" autocomplete="email" inputmode="email">'+
    '<button class="btn" id="cb" type="submit">Claim my £20</button><p class="small" id="cerr"></p>'+
-   '<p class="small">One care note a month, never more. Leave whenever you like.</p></form>';
-  var f=document.getElementById('cf'), b=document.getElementById('cb'), er=document.getElementById('cerr');
+   '<p class="small">Joins our Clapham Circle: one care note a month, never more.</p></form></div>';
+}
+function wireClaim(){
+  var f=document.getElementById('cf'); if(!f) return;
+  var b=document.getElementById('cb'), er=document.getElementById('cerr');
   f.onsubmit=function(e){e.preventDefault(); er.textContent='';
     var n=document.getElementById('cn').value.trim(), m=document.getElementById('ce').value.trim();
     if(!n){er.textContent='Please add your first name.';return}
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)){er.textContent='Please check your email address.';return}
     n=n.charAt(0).toUpperCase()+n.slice(1); b.disabled=true; b.textContent='One moment';
+    rpc('bsb_feedback_claim_info',{p_token:T});
     var cb='mc'+Date.now(), sc=document.createElement('script'), to;
-    function ok(){ rpc('bsb_feedback_claimed',{p_token:T}); V.innerHTML='<h1>Welcome in, '+esc(n)+' 💜</h1><p>Your £20 is on its way to your inbox. Take a look in the next few minutes.</p><div class="stars">✨</div>'; }
+    function ok(){ rpc('bsb_feedback_claimed',{p_token:T});
+      document.getElementById('cw').innerHTML='<p class="lbl">Welcome in, '+esc(n)+' 💜</p>'+
+        '<p style="margin:0 0 6px">Your £10 code</p><div class="code">'+CODE+'</div>'+
+        '<p class="small">Use it on your next visit of £60 or more, within 30 days. We also sent it to your inbox.</p>'+
+        '<div class="sep"></div><p class="lbl">Your second £10</p>'+
+        '<p>Leave us a Google review, then paste the link in the comments when you book. £10 off another visit.</p>'+
+        rvBtn('Leave a Google review');
+    }
     window[cb]=function(r){clearTimeout(to); delete window[cb]; sc.remove();
       if(r&&(r.result==='success'||/already subscribed/i.test(r.msg||''))) ok();
       else { b.disabled=false; b.textContent='Claim my £20'; er.textContent=(String(r&&r.msg||'Something went wrong. Please try again.')).replace(/<[^>]+>/g,'').replace(/^\d+\s*-\s*/,''); } };
@@ -72,26 +86,28 @@ function claimView(d){
     document.body.appendChild(sc);
   };
 }
-function gift(){return '<div class="gift"><b>£10 off</b><span>Your next visit</span></div>'}
+function wireComment(){
+  var s=document.getElementById('s'); if(!s) return;
+  s.onclick=function(){var c=document.getElementById('c').value.trim(); if(!c){return} s.disabled=true; s.textContent='Sending…';
+    rpc('bsb_feedback_comment',{p_token:T,p_comment:c}).then(function(){ s.outerHTML='<p><b>Thank you 💜</b> We got your message.</p>'; document.getElementById('c').remove(); });};
+}
 function draw(d){
   var th=d&&d.therapist?esc(d.therapist):'Our team', isNew=d&&d.kind==='new';
-  var rv='<a class="btn" href="'+REVIEW+'" onclick="rpc(\'bsb_feedback_click\',{p_token:T,p_what:\'review\'})">Leave a Google review</a>';
   if(R==='loved'){
-    if(isNew){
-      V.innerHTML='<h1>So happy you loved it! 😍</h1><p>'+th+' will be over the moon. Share it on Google and get £10 off your next visit.</p>'+gift()+rv+claimBox();
-    } else {
-      V.innerHTML='<h1>So happy you loved it! 😍</h1><p>'+th+' will be over the moon. Would you share it on Google?</p><div class="stars">★★★★★</div>'+rv;
-    }
+    V.innerHTML='<h1>So happy you loved it! 😍</h1>'+
+      (isNew ? '<p>'+th+' will be over the moon. Here is your £20, with our thanks.</p>'+claimBlock(d)
+             : '<p>'+th+' will be over the moon. Would you share it on Google?</p><div class="stars">★★★★★</div>'+rvBtn('Leave a Google review'));
   } else if(R==='good'){
-    V.innerHTML='<h1>Thank you! 🙂</h1><p>Anything that would have made it perfect? We read every message.</p><textarea id="c" placeholder="Write here (optional)"></textarea><button class="btn" id="s">Send</button>'+(isNew?claimBox():'');
+    V.innerHTML='<h1>Thank you! 🙂</h1>'+
+      (isNew ? '<p>Here is your £20, with our thanks.</p>'+claimBlock(d)+'<div class="sep"></div>' : '')+
+      '<p>Anything that would have made it perfect? We read every message.</p><textarea id="c" placeholder="Write here (optional)"></textarea><button class="btn o" id="s">Send</button>';
   } else {
     V.innerHTML='<h1>Thank you for telling us</h1><p>We want every visit to feel special. What could we do better?</p><textarea id="c" placeholder="Write here…"></textarea><button class="btn" id="s">Send to Brazilian Soul</button><p class="small">Only our team reads this. We will get back to you.</p>';
   }
-  var s=document.getElementById('s');
-  if(s) s.onclick=function(){var c=document.getElementById('c').value.trim(); if(!c){return} s.disabled=true; s.textContent='Sending…';
-    rpc('bsb_feedback_comment',{p_token:T,p_comment:c}).then(function(){ s.outerHTML='<p><b>Thank you 💜</b> We got your message.</p>'; document.getElementById('c').remove(); });};
+  wireClaim(); wireComment();
 }
-if(T&&R==='claim'){ rpc('bsb_feedback_claim_info',{p_token:T}).then(claimView); }
+/* links antigos (&r=claim) continuam abrindo: viram a mesma pagina unica */
+if(T&&R==='claim'){ rpc('bsb_feedback_claim_info',{p_token:T}).then(function(d){ V.innerHTML='<h1>Your £20 is waiting 🎁</h1>'+claimBlock(d); wireClaim(); }); }
 else if(!T||['loved','good','better'].indexOf(R)<0){ V.innerHTML='<h1>Thank you 💜</h1><p>See you soon at Brazilian Soul.</p>'; }
 else { rpc('bsb_feedback_rate',{p_token:T,p_rating:R}).then(draw); }
 </script>
