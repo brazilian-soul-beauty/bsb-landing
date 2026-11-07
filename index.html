@@ -404,6 +404,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 @media(max-width:700px){.tdm{order:-1;flex:0 0 calc(100% - 28px);margin:0 14px;padding:16px 14px;gap:12px}.tds{align-items:start;gap:6px}.nd2 .seal{width:96px;height:96px;border-width:3px}.nd2 .ic{font-size:40px}.nd2 .ck{width:28px;height:28px;right:0;top:0;font-size:12px}.exn em{font-size:24px}.exn b{font-size:22px}.exn b small{font-size:12px}.nd2 b{font-size:14px;margin-top:6px}.nd2 span{font-size:11.5px}.dcs{grid-template-columns:repeat(3,1fr);gap:6px}.dcs>div{grid-template-columns:1fr;grid-template-rows:auto;padding:7px 4px;text-align:center;justify-items:center;row-gap:1px}.dcs em{grid-row:auto;font-size:18px}.dcs b{font-size:18px}.dcs span{font-size:11px}.dcs small{font-size:10px;line-height:1.2}.nd2 .seal{width:84px;height:84px}.nd2 .ic{font-size:34px}.dtk{gap:5px;margin-top:6px}.dtk>b{display:none}.dtk span{padding:6px;font-size:11.5px;justify-content:center;white-space:nowrap}.drv{margin-top:6px;padding:8px 10px;grid-template-columns:1fr;gap:6px}.rvn{justify-content:center}.tdf .nxt{font-size:12.5px}}
 .bzr .dl{display:block;margin:4px 0 6px;font-size:13px}.bzr .dl.u{color:#5FD39A}.bzr .dl.d{color:#FF8F8F}.dl{font-style:normal;font-size:11.5px;font-weight:700;margin-top:4px;color:var(--muted)}.dl.u{color:#1F9D6B}.dl.d{color:#B3261E}
 .tds.t4{grid-template-columns:repeat(4,1fr)!important}.dcs.d4{grid-template-columns:repeat(4,1fr)!important}@media(max-width:700px){.dcs.d4{grid-template-columns:repeat(2,1fr)!important}}
+.trcard{position:relative;z-index:1;display:flex;align-items:center;gap:14px;margin-top:14px;padding:18px;border-radius:20px;background:#fff;border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:0 6px 18px rgba(31,34,53,.06)}.trcard em{font-style:normal;font-size:34px}.trcard span{flex:1;display:flex;flex-direction:column;gap:3px}.trcard b{font-size:18px}.trcard small{color:var(--faint);font-size:13.5px;text-transform:none;letter-spacing:0;font-weight:500;opacity:1}.trcard i{font-style:normal;background:var(--p);color:#fff;font-weight:700;border-radius:999px;padding:10px 16px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -421,6 +422,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
     <button class="tab" data-t="xm"><i>👑</i><span>Performance</span></button>
     <button class="tab" data-t="ex"><i>💷</i><span>My money</span></button>
     <button class="tab" data-t="path"><i>🌱</i><span>Soul Path</span></button>
+    <button class="tab" data-t="tr" id="tabTr" style="display:none"><i>🎓</i><span>Training</span></button>
     <button class="tab" data-t="biz" id="tabBiz" style="display:none"><i>🔒</i><span>Business</span></button>
     <button class="tab" data-t="care" id="tabCare" style="display:none"><i>🌿</i><span>Skin ritual</span></button>
   </div>
@@ -516,6 +518,11 @@ function calc(d){
    {k:'comp',ic:'🙅',t:'Complaints',ok:comp.length===0,big:comp.length,of:'',sub:comp.length?'Open the details':'Zero complaints',pct:comp.length?0:1,list:comp},
    {k:'stars',ic:'⭐',t:'5 stars',ok:p5==null?null:p5>=std,big:p5==null?'–':p5,of:p5==null?'':'%',sub:p5==null?'No reviews yet':'BSB standard '+std+'%',pct:p5==null?0:p5/100,rv:rv,std:std}
   ]}
+var TRAIN={'Joana':{url:'https://bsb-joana-path.vercel.app',t:'Career plan'}};
+function renderTr(M){var t=TRAIN[S.who]||{},p=(PEOPLE.filter(function(x){return x.person===S.who})[0]||{}),fn=(S.who||'').split(' ')[0];
+  M.innerHTML='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#8B7CF6 0%,#5B47E0 55%,#3B2BB5 100%)"><small>🎓 My training</small><h2>Grow with BSB</h2><p>'+esc(fn)+' · Level '+(p.level||1)+'</p>'+
+   '<div class="verdict"><em>🌱</em><span>Study a little every week. Every step you finish moves you to the next level.</span></div>'+
+   '<a class="trcard" href="'+t.url+'" target="_blank" rel="noopener"><em>🪜</em><span><b>'+esc(t.t)+'</b><small>Read, study and write what you learnt</small></span><i>Continue ›</i></a></div>'}
 function render(){
   document.getElementById('main').classList.remove('load');
   var M=document.getElementById('main');
@@ -527,6 +534,8 @@ function render(){
   document.getElementById('segY').style.display=S.tab==='biz'?'':'none';
   [].forEach.call(document.querySelectorAll('#tabs .tab'),function(b){var t=b.getAttribute('data-t');if(t==='ex')b.innerHTML=MONEY()?'<i>💷</i><span>My money</span>':isDesk()?'<i>🛎️</i><span>My month</span>':'<i>🛍️</i><span>My sales</span>';if(APP&&!S.admin&&['std','path','care','biz'].indexOf(t)>=0)b.style.display='none';if((t==='xm'||t==='path')&&isDesk())b.style.display='none'});
   if(APP&&!S.admin&&['std','path','care','biz'].indexOf(S.tab)>=0){S.tab='today'}
+  {var tl=TRAIN[S.who]&&(APP||S.admin);document.getElementById('tabTr').style.display=tl?'':'none';if(S.tab==='tr'&&!tl)S.tab='today'}
+  if(S.tab==='tr'){document.getElementById('seg').style.display=document.querySelector('.nav').style.display='none';return renderTr(M)}
   if(S.tab==='today')return renderToday(M);
   if(S.tab==='em')return renderEm(M);
   if(S.tab==='care')return renderCare(M);
