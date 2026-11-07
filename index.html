@@ -156,6 +156,15 @@ textarea:focus{border-color:var(--p)}
 .ck{display:flex;gap:10px;align-items:flex-start;font-size:14px}.ck input{width:18px;height:18px;margin-top:2px;flex:none}
 .note{font-size:13px;color:var(--mute);background:var(--bg);border-radius:10px;padding:12px 14px;line-height:1.45}
 .saved{font-size:11px;color:var(--ok);font-weight:700}
+.tgrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:12px}
+.tc{flex-direction:row;padding:12px;gap:12px;overflow:hidden}
+.tph{width:42%;flex:none;border-radius:10px;overflow:hidden;background:var(--bg);display:grid;place-items:center;color:var(--mute);font-size:12px}
+.tph img{width:100%;height:100%;object-fit:cover}
+.tb{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.tt{font-weight:700;font-size:14px;display:flex;flex-direction:column}.tt span{font-weight:500;font-size:12px;color:var(--mute)}
+.tc .r{display:flex;flex-direction:column;font-size:12px;border-bottom:1px solid var(--line);padding:3px 0}.tc .r b{color:var(--mute);font-weight:600}
+.tg{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.btn:disabled{opacity:.4}
 </style>
 </head>
 <body>
@@ -180,7 +189,7 @@ const DOCS='bsb-staff-docs';
 const TRIALS='https://bsb-trials.vercel.app/?p=ligia';
 const STAGES=[
  [1,'Interview','🔎'],[2,'Trial','💅'],[3,'Offer','📩'],[4,'Onboarding form','📝'],[5,'Contract','✍️'],
- [6,'The BSB Way','📖'],[7,'First days','🎓'],[8,'Probation','✅'],[9,'Open questions','❓']
+ [6,'The BSB Way','📖'],[7,'Training period','🎓'],[8,'Probation','✅'],[9,'Open questions','❓']
 ];
 const QQ=9,WAYN=6;
 const WAY=[['00-details','I · My details'],['01-welcome','II · Welcome'],['02-this-house','III · This House'],['03-words','IV · The Words of the House'],['04-calendar','V · Calendar'],['05-policies','VI · Policies'],['07-etiquette','VII · Etiquette'],['08-image','VIII · Image & Uniform']];
@@ -209,6 +218,7 @@ async function load(){
     api('bsb_route_items?select=txt&stage=eq.9&order=ord')
   ]);
   (await api('bsb_route_form?select=*')).forEach(f=>forms[f.person_id]=f);
+  await Promise.all(people.map(p=>loadTraining(p.id)));
   await Promise.all(people.filter(p=>p.onb_person).map(async p=>{try{const r=await api('rpc/bsb_route_way_status',{method:'POST',body:JSON.stringify({p_person:p.onb_person})});WS[p.id]={};(r||[]).forEach(x=>WS[p.id][x.module]=x)}catch(e){}}));
   const saved=new URLSearchParams(location.search).get('s');
   person=(people.find(p=>p.id===saved)||people[people.length-1]||{}).id||null;
@@ -225,6 +235,7 @@ function status(n){
   if(n===4){const f=forms[p.id];return f&&f.submitted_at?['ok','Done '+fmtDay(f.submitted_at)]:f?['soon','In progress']:['no','Not started']}
   if(n===5)return p.contract_file?['ok','Uploaded '+fmtDay(p.contract_at)]:['no','Not yet'];
   if(n===WAYN){const w=WS[p.id];if(!w)return['no','Not started'];const d=WAY.filter(x=>(w[x[0]]||{}).done).length;return d===WAY.length?['ok','Done']:d?['soon',d+' of '+WAY.length]:['no','Not started']}
+  if(n===7){const L=TR[p.id];return L&&L.length?['ok',L.length+' models']:['no','No models yet']}
   if(n===QQ)return['soon',qs.length+' open'];
   return['soon','Soon'];
 }
@@ -270,6 +281,7 @@ function body(n){
   }
   if(n===4)return formReport(p);
   if(n===WAYN)return wayPage(p);
+  if(n===7)return trainPage(p);
   if(n===5){
     if(p.contract_file)return `<div class="card big"><div class="ico">✍️</div><h3>Contract</h3><p>Uploaded ${fmtD(p.contract_at)}</p>
       <button class="btn lg" onclick="openContract()">Open contract ↗</button><span class="small" onclick="pick()">Replace file</span></div>`;
@@ -346,6 +358,66 @@ async function openContract(){
   }catch(e){w.close();toast('Could not open')}
 }
 document.getElementById('who').onchange=e=>{priv=null;person=e.target.value;history.replaceState(null,'','?s='+person);window._editOffer=0;render()};
+/* ===== TRAINING PERIOD ===== */
+const TBUCK='bsb-training',TPUB=BASE+'/storage/v1/object/public/bsb-training/';
+let TR={};
+async function loadTraining(pid){try{TR[pid]=await api('bsb_route_training?select=*&person_id=eq.'+pid+'&order=day.desc,id.desc')||[]}catch(e){TR[pid]=[]}}
+function trCard(e){const ph=(e.photos||[])[0];
+ return `<div class="card tc">${ph?`<a class="tph" href="${TPUB+ph}" target="_blank"><img src="${TPUB+ph}" loading="lazy"></a>`:'<div class="tph none">No photo</div>'}
+  <div class="tb"><div class="tt">${esc(e.treatment||'Model')}<span>${fmtDay(e.day)}${e.minutes?' · '+e.minutes+' min':''}</span></div>
+  <div class="r"><b>Easier</b><span>${esc(e.easier||'—')}</span></div><div class="r"><b>Harder</b><span>${esc(e.harder||'—')}</span></div>
+  <div class="tg">${e.compare?`<span class="pill ${e.compare==='Faster'?'ok':e.compare==='Slower'?'w':'no'}">${esc(e.compare)}</span>`:''}${e.help?`<span class="pill no">Help: ${esc(e.help)}</span>`:''}</div></div></div>`}
+function trainPage(p){
+ if(!TR[p.id]){loadTraining(p.id).then(render);return '<div class="card big"><p>Loading…</p></div>'}
+ const L=TR[p.id],link=APP+'?t='+p.id,per=6,pages=Math.max(1,Math.ceil(L.length/per));if((window._tpg||0)>=pages)window._tpg=pages-1;const pg=window._tpg||0;
+ const mins=L.filter(e=>e.minutes).map(e=>e.minutes),avg=mins.length?Math.round(mins.reduce((a,b)=>a+b,0)/mins.length):0;
+ const bar=`<div class="linkbar"><span class="pill ok">${L.length} models</span>${avg?`<span class="pill no">Avg ${avg} min</span>`:''}<div style="flex:1"></div><button class="btn g" onclick="navigator.clipboard.writeText('${link}').then(()=>toast('Link copied'))">🔗 Copy her link</button><a class="btn g" style="text-decoration:none" href="${link}" target="_blank">Open her page ↗</a></div>`;
+ if(!L.length)return `<div style="flex:1;display:flex;flex-direction:column">${bar}<div class="card big"><div class="ico">💅</div><h3>No models yet</h3><p>She adds each model from her link</p></div></div>`;
+ return `<div style="flex:1;display:flex;flex-direction:column;min-height:0">${bar}<div class="tgrid">${L.slice(pg*per,pg*per+per).map(trCard).join('')}</div>
+  <div class="nav" style="margin-top:10px"><span></span><div class="lk" style="align-items:center"><button class="btn g" ${pg?'':'disabled'} onclick="window._tpg=${pg-1};render()">‹</button><span class="sub">${pg+1} / ${pages}</span><button class="btn g" ${pg<pages-1?'':'disabled'} onclick="window._tpg=${pg+1};render()">›</button></div></div></div>`;
+}
+/* trainee page ?t= */
+const TID=new URLSearchParams(location.search).get('t');
+let TP=null,TL=[],tview='list',tpg=0,TNEW={photos:[]};
+async function tload(){
+ document.querySelector('.who').style.display='none';document.querySelector('.top h1').textContent='My training';
+ const pp=await api('bsb_route_people?select=id,name&id=eq.'+TID);
+ if(!pp||!pp.length){document.getElementById('main').innerHTML='<div class="card big"><div class="ico">🔗</div><h3>Link not valid</h3></div>';return}
+ TP=pp[0];TL=await api('bsb_route_training?select=*&person_id=eq.'+TID+'&order=day.desc,id.desc')||[];trender();
+}
+function chipsRow(k,opts){return `<div class="yn">${opts.map(o=>`<button class="${TNEW[k]===o?'on':''}" onclick="tkeep();TNEW['${k}']='${o}';trender()">${o}</button>`).join('')}</div>`}
+function tkeep(){document.querySelectorAll('[id^="n_"]').forEach(el=>TNEW[el.id.slice(2)]=el.value)}
+function trender(){
+ const m=document.getElementById('main');
+ if(tview==='new'){const v=k=>esc(TNEW[k]||'');
+  m.innerHTML=`<div class="ef"><div class="pane"><h2>New model</h2><div class="fg three">
+   <div class="f"><label>Date</label><input id="n_day" type="date" value="${v('day')||new Date().toLocaleDateString('en-CA',{timeZone:'Europe/London'})}"></div>
+   <div class="f"><label>Treatment</label><input id="n_treatment" value="${v('treatment')}" placeholder="Gel manicure…"></div>
+   <div class="f"><label>Time it took (min)</label><input id="n_minutes" type="number" value="${v('minutes')}"></div>
+   <div class="f w2"><label>What was easier</label><input id="n_easier" value="${v('easier')}"></div>
+   <div class="f"><label>Compared to the last one</label>${chipsRow('compare',['Faster','The same','Slower'])}</div>
+   <div class="f w2"><label>What was harder</label><input id="n_harder" value="${v('harder')}"></div>
+   <div class="f"><label>Did you need help?</label>${chipsRow('help',['Yes','No'])}</div>
+   <div class="f w2"><label>Anything else</label><input id="n_notes" value="${v('notes')}"></div>
+   <div class="f"><label>Photo of the result</label><div class="up ${TNEW.photos.length?'ok':''}"><span class="nm">${TNEW.photos.length?'✓ '+TNEW.photos.length+' photo(s)':'No photo yet'}</span><button class="btn g" onclick="tkeep();document.getElementById('file').click()">Add</button></div></div>
+  </div></div><div class="nav"><button class="btn g lg" onclick="tkeep();tview='list';trender()">← Back</button><span></span><button class="btn lg" onclick="tsave()">Save ✓</button></div></div>`;return}
+ const per=6,pages=Math.max(1,Math.ceil(TL.length/per));if(tpg>=pages)tpg=pages-1;
+ m.innerHTML=`<div class="ef"><div class="linkbar"><h2 style="font-size:22px">Hello ${esc((TP.name||'').split(' ')[0])} 💅</h2><div style="flex:1"></div><span class="pill ok">${TL.length} models</span><button class="btn lg" onclick="TNEW={photos:[]};tview='new';trender()">+ New model</button></div>
+  ${TL.length?`<div class="tgrid">${TL.slice(tpg*per,tpg*per+per).map(trCard).join('')}</div><div class="nav"><span></span><div class="lk" style="align-items:center"><button class="btn g" ${tpg?'':'disabled'} onclick="tpg--;trender()">‹</button><span class="sub">${tpg+1} / ${pages}</span><button class="btn g" ${tpg<pages-1?'':'disabled'} onclick="tpg++;trender()">›</button></div></div>`
+  :'<div class="card big"><div class="ico">💅</div><h3>Your training log</h3><p>After each model, add what was easier, what was harder and a photo of the result.</p></div>'}</div>`;
+}
+async function tsave(){tkeep();
+ if(!TNEW.treatment||!TNEW.easier||!TNEW.harder||!TNEW.compare||!TNEW.help||!TNEW.photos.length){toast('Please answer everything and add a photo');return}
+ const b={person_id:TID,day:TNEW.day||null,treatment:TNEW.treatment,minutes:TNEW.minutes?+TNEW.minutes:null,easier:TNEW.easier,harder:TNEW.harder,compare:TNEW.compare,help:TNEW.help,notes:TNEW.notes||null,photos:TNEW.photos};
+ try{const r=await api('bsb_route_training',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(b)});TL.unshift(r[0]);TNEW={photos:[]};tview='list';tpg=0;trender();toast('Saved')}catch(e){toast('Not saved, try again')}
+}
+if(TID){
+ document.getElementById('file').accept='image/*';
+ document.getElementById('file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  const path='route/'+TID+'/'+Date.now()+'-'+f.name.replace(/[^\w.\-]/g,'_');toast('Uploading…');
+  try{const r=await fetch(`${BASE}/storage/v1/object/${TBUCK}/${path}`,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':f.type||'image/jpeg'},body:f});if(!r.ok)throw 0;TNEW.photos.push(path);trender();toast('Photo added')}catch(err){toast('Upload failed')}};
+}
+
 /* ===== EMPLOYEE FORM ===== */
 const FID=new URLSearchParams(location.search).get('f');
 let FD={},fstep=0,fsub=null,mine={},fp=null,pend={},fkey=null;
@@ -426,7 +498,7 @@ if(FID){
       await api('bsb_route_form',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({person_id:FID,data:FD,step:fstep})});frender();toast('Uploaded')}catch(err){toast('Upload failed')}
   };
   fload().catch(()=>toast('Could not load'));
-} else load().catch(()=>toast('Could not load'));
+} else if(TID){tload().catch(()=>toast('Could not load'))} else load().catch(()=>toast('Could not load'));
 
 </script>
 </body>
