@@ -708,12 +708,13 @@ function renderSM(M){var r=range(),K=smCrit(S.data||{},S.xm||{},r,S.smx&&S.smx.u
 /* ---------- Extras (commission) ---------- */
 function dayCounters(td,day,vd,x,ap,rvT,rvA){x=x||{};ap=ap||[];rvT=rvT||[];var e=td.ex||{},pd0=(e.days||[]).filter(function(q){return q.d===day})[0],qn=pd0?+pd0.q:0,u=e.up?(e.up.days||[]).filter(function(q){return q.d===day})[0]:null,tp=td.tp||{};
   var nw=ap.filter(function(a){return a.new}).length,r5=rvT.filter(function(q){return +q.rating>=5}).length;
-  var C=[['🆕','New clients',nw,ap.length?'of '+ap.length+' clients':'today'],['⭐','Reviews',rvT.length,rvT.length?r5+' with 5★':'today','showRv()'],
-   ['✨','Extras',u?u.u:0,u&&u.v?'of '+u.v+' chances':'today'],['🧴','Products',qn,'sold today'],
-   ['💜','Tips',tp.pct==null?'–':tp.pct+'%',tp.pct==null?'no sales yet':'of your sales'],['🎬','Content',vd||0,vd?'Thank you':'not yet']];
+  var tq=+tp.q||0,tn=+tp.n||0,tv=tn?Math.round(100*tq/tn):null,ta=tp.avg==null?null:+tp.avg;
+  var C=[['⭐','Reviews',rvT.length,(rvT.length?'Tap to read · ':'')+(nw?'for '+nw+' new client'+(nw>1?'s':''):'no new clients')+(rvT.length?' · '+r5+' with 5★':''),'showRv()',rvT.length>0&&rvT.length>=nw],
+   ['💛','Tips',tv==null?'–':tv+'%'+(tv!=null&&ta!=null?(tv>ta?' ↑':tv<ta?' ↓':''):''),(tn?tq+' of '+tn+' gave a tip':'clients who tipped')+(ta==null?'':' · usual '+ta+'%'),null,tv!=null&&ta!=null&&tv>=ta],
+   ['🧴','Products',qn,'your commission',null,qn>=1]];
   var T=[['☀️','Morning',x.t_morning>0],['☑️','Day',x.t_day>0],['🌙','Close',x.t_close>0]];
   var last=(rvA||[])[0];S.rvList=(rvA||[]).slice(0,10);if(S.rvFor!==S.who+day){S.rvFor=S.who+day;S.rvI=0}
-  return '<div class="dcs">'+C.map(function(c){return '<div onclick="'+(c[4]||'goTab(\'ex\')')+'"><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div>'+
+  return '<div class="bh" style="margin-top:4px">📈 My results</div><div class="dcs">'+C.map(function(c){return '<div class="'+(c[5]?'good':'')+'" onclick="'+(c[4]||'goTab(\'ex\')')+'"><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div>'+
    '<div class="dtk"><b>Tasks</b>'+T.map(function(t){return '<span class="'+(t[2]?'on':'')+'"><em>'+t[0]+'</em>'+t[1]+(t[2]?' ✓':'')+'</span>'}).join('')+'</div>'+
    (last?'<div class="drv" id="drv">'+rvCard()+'</div>':'')}
 function lookForm(){var k=ymd(range()[0]).slice(0,7),m=pd(k+'-01'),v=(S.lp&&S.lp[k])||'';
@@ -991,9 +992,13 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
   var lkMiss=days.filter(function(z){return z.d.slice(0,7)===mon&&z.d<=day&&z.worked&&z.look_marked&&z.look_ok===false}).length,rvBad=rvA.filter(function(q){return String(q.date).slice(0,7)===mon&&+q.rating<5}).length,alive=!lkMiss&&!rvBad;
   var lpk=day.slice(0,7);S.lp=S.lp||{};if(!(lpk in S.lp)){S.lp[lpk]=null;rpc('soul_look_prize_get',{p_code:S.code,p_mes:lpk}).then(function(v){S.lp[lpk]=v||'';if(S.tab==='today')renderToday(M)}).catch(function(){})}
   var EX0=S.td.ex&&S.td.ex.up?(S.td.ex.up.days||[]).filter(function(q){return q.d===day})[0]:null,eu=EX0?+EX0.u:0,ev=EX0?+EX0.v:0,en=Math.max(1,Math.ceil(0.15*ev));
-  var SE=[{ic:'✨',t:'Extras',ok:ev?(eu>=en?true:null):(eu?true:null),m:ev?(eu+' of '+ev+' chances'):(eu?eu+' today':'No chances today')},
-   {ic:'🎬',t:'Content',ok:exp>0?ctOk:((nc||x.worked)?true:(vd>0?true:null)),m:exp>0?(vd+' of '+exp+(exp===1?' video':' videos')):(vd?'Thank you for creating':((nc||x.worked)?'Full day ✓':'Day off'))},
-   {ic:'👑',t:'Exceptional',ok:nc&&pe>=nc?true:null,ex:1,m:nc?(pe+' of '+nc+(nc===1?' client':' clients')):'No clients today'}];
+  var SE=[{ic:'✨',t:'Extras',w:ev?eu>=en:false,p:eu>0,g:'15%',ok:ev?(eu>=en?true:null):(eu?true:null),m:ev?(eu+' of '+ev+' chances'):(eu?eu+' today':'No chances today')},
+   {ic:'🎬',t:'Content',w:exp>0&&ctOk,p:vd>0,g:exp>0?String(exp):'',ok:exp>0?ctOk:((nc||x.worked)?true:(vd>0?true:null)),m:exp>0?(vd+' of '+exp+(exp===1?' video':' videos')):(vd?'Thank you for creating':((nc||x.worked)?'Full day ✓':'Day off'))},
+   {ic:'👑',t:'Exceptional',w:nc&&pe>=nc,p:pe>0,g:'100%',ok:nc&&pe>=nc?true:null,ex:1,m:nc?(pe+' of '+nc+(nc===1?' client':' clients')):'No clients today'}];
+  var TBP=[ev?Math.min(1,eu/en):null,exp>0?Math.min(1,vd/exp):null,nc?Math.min(1,pe/nc):null].filter(function(v){return v!=null}),TBT=TBP.length?Math.round(100*TBP.reduce(function(a,b){return a+b},0)/TBP.length):0,TBS=Math.round(TBT/10);
+  var TBM=TBT>=100?'Full day ⚡':TBT>=80?'Almost full':TBT>=40?'Halfway there':TBT>0?'Charging…':'Let\'s start',TND='';
+  if(nc&&pe<nc)TND='👑 '+(nc-pe)+' more client'+(nc-pe>1?'s':'')+' with an exceptional experience';else if(ev&&eu<en)TND='✨ '+(en-eu)+' more extra'+(en-eu>1?'s':'')+' to hit 15%';else if(exp>0&&vd<exp)TND='🎬 '+(exp-vd)+' more video'+(exp-vd>1?'s':'')+' in your free time';
+  var TBH=(TBP.length?'<div class="bat"><div class="bat-b">'+Array.apply(null,{length:10}).map(function(_,i){return '<i class="'+(i<TBS?(TBT>=100?'f':TBT>=60?'g':'y'):'')+'" style="animation-delay:'+(i*70)+'ms"></i>'}).join('')+'</div><span class="bat-t"></span><div class="bat-l"><b>'+TBT+'%</b><span>'+TBM+'</span></div></div>'+(TND?'<div class="bat-n"><span>'+TND+'</span></div>':''):'');
   var won=SE.filter(function(q){return q.ok}).length;
   var STP=[];if(x.worked||isT){STP.push(['⏰','On time',x.worked?!(x.late_min>0):null]);STP.push(['💄','Look',x.look_marked?lkOk:null]);STP.push(['🍽️','Lunch',x.worked&&x.lunch_min!=null?x.lunch_min<=L:null]);STP.push(['☑️','Tasks',x.worked||nc?tkOk:null]);if(fc>0)STP.push(['🧴','Ritual',acOk])}
   var allSt=STP.length&&STP.every(function(q){return q[2]});
@@ -1002,8 +1007,8 @@ function renderToday(M){var td=today(),day=S.tday||ymd(td),key=S.who+'|'+day;
     '<div class="wk">'+wk.join('')+'</div>'+
     (STP.length?'<div class="tst"><div class="tsh">🤝 Standard today'+(allSt?' 🏅':'')+'</div><div class="tsr">'+STP.map(function(q){return '<div class="'+(q[2]?'on':q[2]===false?'no':'')+'"><i>'+(q[2]?q[0]:'')+'</i><span>'+q[1]+'</span></div>'}).join('')+'</div></div>':'')+
     '<div class="verdict" style="margin-top:12px"><em>'+(won===3?'💜':'🌱')+'</em><span>'+(!x.worked&&!nc?'Day off. Rest well.':won===3?'Three seals today. Master level.':'Every seal today feeds your crown.')+'</span></div></div>';
-  h+='<div class="tdm"><div class="bh">👑 My seals today<span class="lg">'+won+' of 3</span></div><div class="tds">'+SE.map(function(q,k){var st=q.ok?'ok':q.ok===false?'no':'na';
-    return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+(q.ex&&nc?'<span class="exn"><em>'+q.ic+'</em><b>'+pe+'<small>/'+nc+'</small></b></span>':q.ic)+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span>'+'</div>'}).join('')+'</div>'+(S.lp[lpk]?'<div class="lpr"><span>💄 Look wow all month</span><b>🎁 '+esc(S.lp[lpk])+'</b></div>':'')+
+  h+='<div class="tdm"><div class="bh">👑 What I do today</div>'+TBH+'<div class="tds">'+SE.map(function(q,k){var st=q.w?'ok win':q.ok?'ok':q.p?'ok':q.ok===false?'no':'na';
+    return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+(q.ex&&nc?'<span class="exn"><em>'+q.ic+'</em><b>'+pe+'<small>/'+nc+'</small></b></span>':q.ic)+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span>'+(q.g?'<em class="gl">🎯 '+q.g+'</em>':'')+'</div>'}).join('')+'</div>'+(S.lp[lpk]?'<div class="lpr"><span>💄 Look wow all month</span><b>🎁 '+esc(S.lp[lpk])+'</b></div>':'')+
     dayCounters(S.td,day,vd,x,ap,rvT,rvA)+'</div>';
   M.innerHTML=h;
   if(won===3&&isT&&!S.boomed){S.boomed=1;setTimeout(boom,400)}}
