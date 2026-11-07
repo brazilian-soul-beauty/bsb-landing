@@ -65,6 +65,7 @@ textarea::placeholder{color:#A99D8F}.ink textarea{border-color:#D6C7B3}
 .stars{color:#B08D5E;letter-spacing:.18em;font-size:16px}.stars.big{font-size:30px;letter-spacing:.12em}.photo.tall{flex:none;height:min(68%,calc((min(100vw,760px) - 32px)*4/3));aspect-ratio:3/4;width:auto;align-self:center;margin:calc(-1*clamp(26px,6vw,56px)) auto 6px;border-radius:0 0 18px 18px}.ink .stars{color:#86684A}
 .medals img{width:clamp(92px,26vw,150px);height:auto;aspect-ratio:1;filter:drop-shadow(0 4px 10px rgba(59,52,45,.14))}
 .polaroid{align-self:center;width:min(86%,340px);background:#fff;padding:10px 10px 30px;box-shadow:0 10px 30px rgba(59,52,45,.16);transform:rotate(-2deg);margin-bottom:10px}.polaroid img{display:block;width:100%;height:auto}
+.cover .k{letter-spacing:.12em;white-space:nowrap}.pg.cover{background:#EED9C4;justify-content:flex-start}.cover .push{margin-top:auto}.coverimg{flex:0 1 auto;min-height:0;height:52%;display:flex;justify-content:center}.coverimg img{height:100%;width:auto;max-width:100%;object-fit:contain}
 </style></head><body><div id="app"></div>
 <script>
 var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',T=new URLSearchParams(location.search).get('t')||'',VIEW=new URLSearchParams(location.search).has('v');
@@ -83,7 +84,7 @@ var A={},i=0,P=[];
 function pg(cls,n,inner){return '<section class="pg '+cls+'">'+(n?'<div class="ghost" aria-hidden="true">'+n+'</div>':'')+inner+'</section>'}
 var R='<div class="rule" aria-hidden="true">✦</div>';
 /* cover */
-P.push(function(){return pg('','', '<img class="por" src="anx/cover.jpg" alt="Anukis"><div class="k push">Brazilian Soul Beauty · 2022–2026</div><h1>Anukis</h1>'+R+'<p>Before you go, I wanted you to look back at something.</p><p class="soft">Not just the work you’ve done, but how far you’ve come and the part you’ve played in our story.</p>')});
+P.push(function(){return pg('cover','', '<div class="coverimg"><img src="anx/cover2.jpg" alt="Anukis"></div><div class="k push">Brazilian Soul Beauty · 2022–2026</div><h1>Anukis</h1>'+R+'<p>Before you go, I wanted you to look back at something.</p><p class="soft">Not just the work you’ve done, but how far you’ve come and the part you’ve played in our story.</p>')});
 P.push(function(){return pg('','', '<div class="k">Before we begin</div><p class="quote push">This is your journey with us.<br>Take your time.</p><p class="sig">Lígia x</p>')});
 /* 1 */
 P.push(function(){return pg('','01','<div class="k">Where it all began</div><h2>12 August <em>2022</em></h2>'+R+'<p>You arrived at BSB knowing how to do an Essential Manicure.</p><p class="quote push">Look at you now.</p><p class="soft">Step by step, treatment after treatment, you learnt new things, practised and became more confident in your work.</p>')});
@@ -93,7 +94,7 @@ P.push(function(){var S=[['2022','Essential Manicure',''],['2022','Brazilian Sou
   return pg('','02','<div class="k">Look at everything you’ve learnt</div><h2>You didn’t learn this <em>overnight</em></h2><ul class="steps">'+S.map(function(x){return '<li class="'+x[2]+'"><b>'+x[0]+'</b><i></i><span>'+x[1]+(x[3]?'<small>'+x[3]+'</small>':'')+'</span></li>'}).join('')+'</ul>')});
 P.push(function(){return pg('','', '<div class="k">Look at everything you’ve learnt</div><p class="quote push">Every new skill took time, patience and practice.</p>'+R+'<p class="quote">And nobody can take what you’ve learnt away from you.</p>')});
 /* 3 award */
-P.push(function(){return pg('','', '<div class="photo tall" style="aspect-ratio:864/900;height:min(60%,calc((min(100vw,760px) - 32px)*900/864))"><img src="anx/award2.jpg" alt="The BSB team with the award"></div><div class="k">A moment I’ll remember</div><h2>Best Nail Salon <em>UK</em></h2><p>When the client connected to the award visited our salon, you were the one who looked after her.</p>')});
+P.push(function(){return pg('','', '<div class="photo tall" style="aspect-ratio:1229/1280;height:min(60%,calc((min(100vw,760px) - 32px)*1280/1229))"><img src="anx/award3.jpg" alt="The BSB team with the award"></div><div class="k">A moment I’ll remember</div><h2>Best Nail Salon <em>UK</em></h2><p>When the client connected to the award visited our salon, you were the one who looked after her.</p>')});
 P.push(function(){return pg('','03','<div class="k">A moment I’ll remember</div><p class="push">People see a trophy. But I know how much work happens behind the scenes before a salon earns that recognition.</p>'+R+'<p class="quote">That award belongs to everyone who helped us get there. And that includes you, Anukis.</p>')});
 /* top rated */
 P.push(function(){return pg('','', '<div class="k">Every year you were here</div><h2>Top <em>Rated</em></h2><p class="soft">Our clients rated us Top Rated on Treatwell in every year you were part of the team.</p><div class="medals">'+['2022','2023','2024','2025','2026'].map(function(y){return '<img src="anx/tr'+y+'.png" alt="Treatwell Top Rated '+y+'">'}).join('')+'</div><p class="quote">Each one of those years has your hands in it.</p>')});
