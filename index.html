@@ -755,5 +755,88 @@ if(S.loaded)render();
 })();
 /*BSB-HUB2-FIM*/</script>
 
+<style>/*BSB-HUBLOG-INICIO*/
+#logv{display:none;max-width:1180px;margin:0 auto;padding:18px 24px;font-family:Inter,system-ui,sans-serif;color:#1D1F33}
+body.lg-on #logv{display:block}body.lg-on #app{display:none!important}
+#logv .lh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+#logv .lh h2{margin:0;font-size:20px;font-weight:700}
+#logv .nav{margin-left:auto;display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+#logv .nav button,#logv .pg button{border:1px solid #E2E2EC;background:#fff;border-radius:10px;width:36px;height:32px;cursor:pointer;color:#4634C7;font-size:14px}
+#logv button:disabled{opacity:.35;cursor:default}
+#logv .em{display:grid;grid-template-columns:110px repeat(4,1fr);gap:8px;background:#fff;border:1px solid #EEEEF4;border-radius:16px;padding:12px 16px;margin-bottom:16px;align-items:center}
+#logv .em .h{font:700 11px Inter,sans-serif;color:#8B8DA8;text-transform:uppercase;letter-spacing:.4px}
+#logv .em .k{font-weight:700;font-size:13px}
+#logv .em b{font-size:22px;font-weight:800;color:#5B47E0}
+#logv .em .nw{color:#1B7A4A}#logv .em .rg{color:#5B47E0}
+#logv .sec{display:flex;align-items:center;font:700 11px Inter,sans-serif;color:#8B8DA8;text-transform:uppercase;letter-spacing:.5px;margin:4px 0 8px}
+#logv .sec .bot{margin-left:10px;text-transform:none;letter-spacing:0;background:#F2F2F6;color:#585A75;border-radius:999px;padding:2px 9px}
+#logv .pg{margin-left:auto;display:flex;align-items:center;gap:8px;color:#585A75;font-size:13px;text-transform:none}
+#logv .gr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#logv .it{background:#fff;border:1px solid #EEEEF4;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;min-height:62px}
+#logv .it .ic{font-size:18px;line-height:1.2}
+#logv .it .tx{flex:1;font-size:14px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#logv .it.and{background:#FFFBF0;border-color:#F4E3B5}
+#logv .it a{flex:none;align-self:center;text-decoration:none;font:700 12px Inter,sans-serif;color:#4634C7;background:#ECE8FC;border-radius:999px;padding:6px 11px;white-space:nowrap}
+#logv .who{display:flex;gap:6px;margin-left:16px}#logv .who button{border:1px solid #E2E2EC;background:#fff;border-radius:999px;padding:6px 12px;font:600 12px Inter,sans-serif;color:#585A75;cursor:pointer}#logv .who button.on{background:#5B47E0;border-color:#5B47E0;color:#fff}
+#logv .it .pp{flex:none;font:700 11px Inter,sans-serif;border-radius:999px;padding:3px 9px;background:#F2F2F6;color:#585A75;align-self:center}#logv .pp.Ligia{background:#ECE8FC;color:#4634C7}#logv .pp.Aluana{background:#DCF4E7;color:#1B7A4A}#logv .pp.Manu{background:#FFE8EF;color:#B0305A}#logv .pp.Joana{background:#FFF3D6;color:#8A5A00}
+#logv .vz{color:#9A9BB4;font-size:14px;padding:16px 4px}
+/*BSB-HUBLOG-FIM*/</style>
+<div id="logv">
+ <div class="lh"><h2>📒 What we did</h2><div class="who" id="lgW"></div><div class="nav"><button id="lgP">◀</button><span id="lgD"></span><button id="lgN">▶</button></div></div>
+ <div class="em" id="lgE"></div>
+ <div class="sec">Done &amp; in progress<span class="bot" id="lgB"></span><span class="pg"><button id="lgA">◀</button><span id="lgPg"></span><button id="lgZ">▶</button></span></div>
+ <div class="gr" id="lgL"></div>
+</div>
+<script>/*BSB-HUBLOG-INICIO*/
+(function(){
+  var lk=new URLSearchParams(location.search).get('p');if(lk&&!/^ligia$/i.test(lk))return;
+  var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+  var off=0,pg=0,N=8,itens=[],bots=0,em=[],quem='All',PS=['All','Ligia','Aluana','Manu','Joana'];
+  function nm(p){p=String(p||'Ligia');return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase()}
+  var tabs=document.querySelector('.tabs');if(!tabs)return;
+  var t=document.createElement('div');t.className='tab';t.dataset.t='log';t.textContent='📒 What we did';
+  var w=document.getElementById('whob');tabs.insertBefore(t,w||null);
+  function iso(o){var d=new Date();d.setDate(d.getDate()-o);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function auto(x){return /^🩺/.test(x.titulo||'')||/enviados, \d+ com erro/.test(x.titulo||'')}
+  function load(){
+    var d=iso(off),H={headers:{apikey:KEY}};
+    return Promise.all([
+      fetch(SB+'bsb_ligia_diario?select=titulo,status,link,conversa,person,created_at&dia=eq.'+d+'&order=created_at.desc',H).then(function(r){return r.json()}),
+      fetch(SB+'email_pos_visita_3_por_dia?select=*&dia=eq.'+d,H).then(function(r){return r.json()}).catch(function(){return[]})
+    ]).then(function(a){var all=Array.isArray(a[0])?a[0]:[];bots=all.filter(auto).length;itens=all.filter(function(x){return !auto(x)});em=Array.isArray(a[1])?a[1]:[];draw();});
+  }
+  function draw(){
+    var d=new Date();d.setDate(d.getDate()-off);
+    document.getElementById('lgD').textContent=off===0?'Today':off===1?'Yesterday':d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+    document.getElementById('lgN').disabled=off<=0;
+    function row(kind,lab,cl){var r=em.filter(function(x){return x.kind===kind})[0]||{};
+      return '<span class="k '+cl+'">'+lab+'</span><span><b>'+(r.enviados||0)+'</b></span><span><b>'+(r.amou||0)+'</b></span><span><b>'+(r.clicou_google||0)+'</b></span><span><b>'+(r.entrou_circle||0)+'</b></span>'}
+    document.getElementById('lgE').innerHTML='<span class="h">💌 Post-visit</span><span class="h">Sent</span><span class="h">😍 Loved</span><span class="h">⭐ Google</span><span class="h">✦ Circle</span>'+row('new','New','nw')+row('regular','Regular','rg');
+    document.getElementById('lgB').textContent=bots?'🤖 '+bots+' automatic':'';document.getElementById('lgB').style.display=bots?'':'none';
+    document.getElementById('lgW').innerHTML=PS.map(function(p){var n=p==='All'?itens.length:itens.filter(function(x){return nm(x.person)===p}).length;return '<button data-w="'+p+'" class="'+(p===quem?'on':'')+'">'+p+' '+n+'</button>'}).join('');
+    var vis=quem==='All'?itens:itens.filter(function(x){return nm(x.person)===quem});
+    var mx=Math.max(0,Math.ceil(vis.length/N)-1);if(pg>mx)pg=mx;
+    document.getElementById('lgL').innerHTML=vis.length?vis.slice(pg*N,pg*N+N).map(function(x){
+      var u=x.conversa||'';var lnk=u?'<a href="'+esc(u)+'" target="_blank">💬 Chat</a>':'';
+      if(x.link)lnk+='<a href="'+esc(x.link)+'" target="_blank">🔗 Open</a>';
+      return '<div class="it'+(x.status==='andamento'?' and':'')+'"><span class="ic">'+(x.status==='andamento'?'⏳':'✅')+'</span><span class="tx">'+esc(x.titulo)+'</span><span class="pp '+nm(x.person)+'">'+nm(x.person)+'</span>'+lnk+'</div>';
+    }).join(''):'<div class="vz">Nothing logged this day.</div>';
+    document.getElementById('lgPg').textContent=(pg+1)+' / '+(mx+1);
+    document.getElementById('lgA').disabled=pg<=0;document.getElementById('lgZ').disabled=pg>=mx;
+  }
+  document.addEventListener('click',function(e){
+    var x=e.target;if(!x.closest)return;var tb=x.closest('.tabs .tab');
+    if(tb){if(tb.dataset.t==='log'){e.stopPropagation();[].forEach.call(document.querySelectorAll('.tabs .tab'),function(b){b.classList.toggle('on',b===tb)});document.body.classList.add('lg-on');off=0;pg=0;load();}
+      else{document.body.classList.remove('lg-on');t.classList.remove('on');}return;}
+    if(!document.body.classList.contains('lg-on'))return;
+    if(x.id==='lgP'){off++;pg=0;load();}if(x.id==='lgN'&&off>0){off--;pg=0;load();}
+    var wb=x.closest('#lgW button');if(wb){quem=wb.dataset.w;pg=0;draw();return;}
+    if(x.id==='lgA'){pg--;draw();}if(x.id==='lgZ'){pg++;draw();}
+  },true);
+  setInterval(function(){if(document.body.classList.contains('lg-on'))load();},5*60*1000);
+})();
+/*BSB-HUBLOG-FIM*/</script>
+
 </body>
 </html>
