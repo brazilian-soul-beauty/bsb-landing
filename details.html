@@ -241,7 +241,7 @@ footer .next::after{display:none}
     <section class="page" data-p="10">
       <div class="ico">🪜</div><div class="num">My details · 09</div><h1>Your path</h1><div class="orn"><i></i>✦<i></i></div>
       <div class="f"><label>I do</label><div class="chips" data-chip="treatments_do" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span></div><input type="text" id="treatments_do_other" class="hide" placeholder="What else do you do?" style="margin-top:10px"></div>
-      <div class="f"><label>I would love to learn</label><div class="chips" data-chip="treatments_learn" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span></div><input type="text" id="treatments_learn_other" class="hide" placeholder="What else would you love to learn?" style="margin-top:10px"></div>
+      <div class="f"><label>I would love to learn</label><div class="chips" data-chip="treatments_learn" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span><span class="chip" data-v="Nothing">Nothing for now</span></div><input type="text" id="treatments_learn_other" class="hide" placeholder="What else would you love to learn?" style="margin-top:10px"></div>
     </section>
 
     <section class="page" data-p="11">
@@ -421,8 +421,8 @@ function check(n){
     case 6: return need(['kin_name','kin_relation','kin_phone']);
     case 7: return (chips.top_size&&chips.trouser_size&&chips.shoe_size)?'':'Please choose all sizes.';
     case 8: if(!v('allergies')) return 'Write “none” if nothing.'; return (chips.food_intolerance||[]).length?'':'Please choose your food intolerance, or None.';
-    case 9: return (v('fav_food')&&v('fav_shop'))?'':'Please fill in both.';
-    case 10: return (chips.treatments_do||[]).length?'':'Please choose what you do.';
+    case 9: return need(['fav_food','fav_shop','fav_coffee','fav_soft_drink','fav_alcohol'])?'Please answer all. Write “none” if nothing.':'';
+    case 10: if(!(chips.treatments_do||[]).length) return 'Please choose what you do.'; if(!(chips.treatments_learn||[]).length) return 'Please choose what you would love to learn, or Nothing.'; if((chips.treatments_do||[]).includes('Other')&&!v('treatments_do_other')) return 'Please write your other treatment.'; if((chips.treatments_learn||[]).includes('Other')&&!v('treatments_learn_other')) return 'Please write what else you would love to learn.'; return '';
     case 11: return (v('goal_1y')&&v('goal_3y')&&v('promise_1y'))?'':'Please answer all three.';
     case 12: { const n=(chips.work_traits||[]).length; return !n?'Please choose at least one.':n>5?'Choose up to 5.':''; }
     case 13: if(!$('declaration').checked) return 'Please tick to confirm.'; return signed?'':'Please sign with your finger.';
@@ -510,7 +510,7 @@ $('next').onclick=async()=>{
   saveDraft();
   if(PREVIEW){ if(cur<LAST) show(cur+1); else $('err').textContent='Preview only. Nothing is sent.'; return; }
   const m=check(cur);
-  if(cur<LAST){ if(m&&SKIP!==cur){ SKIP=cur; $('err').innerHTML=m+' <a href="#" id="later">Fill in later ›</a>'; $('later').onclick=e=>{e.preventDefault();$('next').click()}; return; }
+  if(cur<LAST){ if(m){ $('err').textContent=m; return; }
     SKIP=-1; if(RET){ const r=RET; RET=0; show(r); return; } show(cur+1); return; }
   if(missing().length){ $('err').textContent='Please complete the missing parts above.'; return; }
   if(m){ $('err').textContent=m; return; }
