@@ -77,7 +77,7 @@ function wireClaim(){
     rpc('bsb_feedback_claim_info',{p_token:T});
     var cb='mc'+Date.now(), sc=document.createElement('script'), to;
     function ok(){ rpc('bsb_feedback_claimed',{p_token:T});
-      document.getElementById('cw').innerHTML='<p class="lbl">Welcome in, '+esc(n)+' 💜</p>'+
+      document.getElementById('cw').innerHTML='<p class="lbl">Welcome in, '+esc(n)+' 🤍</p>'+
         '<p style="margin:0 0 6px">Your £10 code</p><div class="code">'+CODE+'</div>'+
         '<p class="small">Use it on your next visit of £60 or more, within 30 days. We also sent it to your inbox.</p>'+
         '<div class="sep"></div><p class="lbl">Your second £10</p>'+
@@ -96,7 +96,7 @@ function wireClaim(){
 function wireComment(){
   var s=document.getElementById('s'); if(!s) return;
   s.onclick=function(){var c=document.getElementById('c').value.trim(); if(!c){return} s.disabled=true; s.textContent='Sending…';
-    rpc('bsb_feedback_comment',{p_token:T,p_comment:c}).then(function(){ s.outerHTML='<p><b>Thank you 💜</b> We got your message.</p>'; document.getElementById('c').remove(); });};
+    rpc('bsb_feedback_comment',{p_token:T,p_comment:c}).then(function(){ s.outerHTML='<p><b>Thank you 🤍</b> We got your message.</p>'; document.getElementById('c').remove(); });};
 }
 function draw(d){
   var th=d&&d.therapist?esc(d.therapist):'Our team', isNew=d&&(d.offer||d.kind==='new');
@@ -115,7 +115,7 @@ function draw(d){
 }
 /* links antigos (&r=claim) continuam abrindo: viram a mesma pagina unica */
 if(T&&R==='claim'){ rpc('bsb_feedback_claim_info',{p_token:T}).then(function(d){ V.innerHTML='<h1>Your £20 is waiting 🎁</h1>'+claimBlock(d); wireClaim(); }); }
-else if(!T||['loved','good','better'].indexOf(R)<0){ V.innerHTML='<h1>Thank you 💜</h1><p>See you soon at Brazilian Soul.</p>'; }
+else if(!T||['loved','good','better'].indexOf(R)<0){ V.innerHTML='<h1>Thank you 🤍</h1><p>See you soon at Brazilian Soul.</p>'; }
 else { rpc('bsb_feedback_rate',{p_token:T,p_rating:R}).then(draw); }
 </script>
 </body></html>
