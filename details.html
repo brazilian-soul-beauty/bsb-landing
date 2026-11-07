@@ -297,7 +297,7 @@ async function markHub(name){if(!PERSON||!PCODE)return;try{await fetch('https://
 const LAST=13;let SKIP=-1,RET=0;
 const PNAME=['','About you','Your photo','Right to work','Documents','Pay','Next of kin','Uniform','Health at work','Favourites','Your path','Your goals','How I work'];
 function missing(){const o=[];for(let i=1;i<LAST;i++)if(check(i))o.push(i);return o}
-function recap(){const el=$('recap');if(!el)return;const mi=missing();el.innerHTML=mi.length?'<div class="rc-t">Still missing</div><div class="rc">'+mi.map(i=>`<button type="button" class="chip" data-go="${i}">${PNAME[i]} ›</button>`).join('')+'</div>':'';
+function recap(){const el=$('recap');if(!el)return;el.innerHTML='';return;const mi=missing();el.innerHTML=mi.length?'<div class="rc-t">Still missing</div><div class="rc">'+mi.map(i=>`<button type="button" class="chip" data-go="${i}">${PNAME[i]} ›</button>`).join('')+'</div>':'';
  el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{RET=LAST;show(+b.dataset.go);$('err').textContent=check(+b.dataset.go)})}
 let cur=0;
 const files={}; const chips={};
