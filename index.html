@@ -528,18 +528,16 @@ function calc(d){
    {k:'stars',ic:'⭐',t:'5 stars',ok:p5==null?null:p5>=std,big:p5==null?'–':p5,of:p5==null?'':'%',sub:p5==null?'No reviews yet':'BSB standard '+std+'%',pct:p5==null?0:p5/100,rv:rv,std:std}
   ]}
 var TRAIN={'Joana':{url:'https://bsb-joana-path.vercel.app',t:'Career plan'}};
-var SAY=[['A client arrives','Hi Sarah, welcome! Let me take your coat. Can I get you a drink?','Hi, take a seat, someone will be with you.','Use her name and offer something. She feels expected, not processed.'],
- ['You are running late','I am so sorry for the wait. You are next, and I will make sure you are not rushed.','We are a bit behind, it has been busy today.','Own it and reassure her. Her time matters more than our busy day.'],
- ['She does not like the shape','Thank you for telling me. Let us fix it now so you leave happy.','That is the shape you asked for.','Never defend, always fix. A happy client comes back.'],
- ['Offering an Extra','Your cuticles would love our oil finish, it takes no extra time. Shall I add it?','Do you want to pay for anything else?','Sell the feeling, not the price. Make it easy to say yes.'],
- ['Asking what she wants','How would you like your nails today? Short and natural, or a little longer?','What do you want?','Give her options. It feels personal and professional.'],
- ['Recommending a product','For your skin I would use this Eminence serum at home, it keeps the result going.','You can buy any serum online, they are all the same.','We are Eminence representatives. Recommend with care and confidence.'],
- ['She asks the price','The BIAB is £55 and lasts up to four weeks with good care.','It is on the menu.','Answer clearly and add the value. Never send her to look.'],
- ['Saying goodbye','Your nails will be perfect for about three weeks. Shall we book your next visit now so you get your favourite time?','See you next time.','Rebook with a reason. It helps her and fills our diary.'],
- ['Asking for a review','If you loved today, a review would mean the world to us.','Can you leave us five stars?','Ask warmly, never push for stars.'],
- ['Something goes wrong','I am so sorry, let me sort that for you straight away.','Oops, it happens.','Calm, sorry and action. She remembers how you handled it.'],
- ['She complains about a colleague','Thank you for sharing this. I will let our manager know so we can make it right.','Yes, she is always like that.','Never gossip. Protect the team and take it to management.'],
- ['You cannot fit her request','Today I cannot fit a full set, but I can do a gel refresh now and book the full set for Thursday.','No, we do not have time.','Never just say no. Always offer the best option.']];
+var SAY=[['She says thank you','My pleasure.','No problem.','"No problem" sounds like it could have been one.'],
+ ['Giving her advice','What I would suggest is...','You have to...','Suggest, never order.'],
+ ['She asks something you do not know','Let me find out for you.','I do not know.','She gets an answer, not a dead end.'],
+ ['She asks for something that is not your area','Let me get the right person for you.','That is not my job.','To her, we are one team.'],
+ ['She is upset','I hear you, let me sort this out.','Calm down.','Listen first, then act.'],
+ ['She tells you about a problem late','Thank you for telling me, we will fix it.','You should have told me.','No blame. Thank her and fix it.'],
+ ['She asks the price of an extra','It is ten pounds, and it lasts you three weeks.','It is only ten pounds.','Say the value. Never "only".'],
+ ['She has been waiting','Thank you so much for waiting, it is lovely to see you.','Sorry for the wait.','Thank her, do not apologise.'],
+ ['She arrives late, flustered','Don\u2019t worry at all, you\u2019re here and that\u2019s what matters.','You are late, we have less time now.','She already feels bad. Make her feel welcome.'],
+ ['Saying goodbye','To keep them like this, we\u2019d see you in about three weeks. Shall I save your spot?','See you next time.','Give her a reason and offer the time.']];
 function renderTr(M){var t=TRAIN[S.who]||null,p=(PEOPLE.filter(function(x){return x.person===S.who})[0]||{}),fn=(S.who||'').split(' ')[0],td=today(),k0=ymd(new Date(td.getFullYear(),td.getMonth(),td.getDate()-27)),key=S.who+'|'+ymd(td),sk=SKIN.indexOf(S.who)>=0;
   if(S.trk!==key){S.trk=key;S.trd=null;S.trq=null;S.trbk=null;S.trl=undefined;
     rpc('soul_training_days',{p_code:S.code,p_person:S.who,p_from:k0,p_to:ymd(td)}).catch(function(){return []}).then(function(z){if(S.trk!==key)return;S.trd={};(z||[]).forEach(function(q){S.trd[q.d]=q.n});if(S.tab==='tr')renderTr(M)});
