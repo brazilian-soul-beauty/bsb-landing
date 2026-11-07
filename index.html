@@ -13165,5 +13165,44 @@ function acBtnHtml(a){var d=a.date||(typeof currentDate!=='undefined'?currentDat
 .modal-head .ac-tx small{font:500 13px Inter,system-ui,sans-serif;opacity:.9}
 .modal-head .ac-go{margin-left:auto;font-size:30px;line-height:1;opacity:.9}
 </style>
+<style>/*BSB-GPL378-INICIO*/
+.gplBtn{position:absolute;top:18px;right:60px;border:1px solid #E4DEF8;background:#FBF9FF;color:#5B47E0;border-radius:99px;padding:7px 13px;font:600 13px Inter,system-ui,sans-serif;cursor:pointer}
+.gplBtn:active{transform:scale(.97)}
+#gplOv{position:fixed;inset:0;z-index:99999;background:rgba(31,34,53,.45);display:flex;align-items:center;justify-content:center;padding:24px}
+#gplOv .gp{background:#F6F6FA;border-radius:22px;width:min(1100px,100%);max-height:100%;padding:22px 24px;font-family:Inter,system-ui,sans-serif;color:#1F2235;display:flex;flex-direction:column;gap:14px}
+#gplOv .gh{display:flex;align-items:center;gap:12px}
+#gplOv .gh b{font-size:20px}
+#gplOv .gh button{margin-left:auto;border:none;background:#5B47E0;color:#fff;border-radius:99px;padding:9px 18px;font:600 14px Inter,system-ui,sans-serif;cursor:pointer}
+#gplOv .gc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#gplOv .card{background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #ECECF3}
+#gplOv .card h3{margin:0 0 4px;font-size:15px}
+#gplOv .card .sub{font-size:12px;color:#8B8DA8;margin-bottom:10px}
+#gplOv .card ol{margin:0;padding-left:18px;font-size:13.5px;line-height:1.55}
+#gplOv .r{border-top:5px solid #E5484D}#gplOv .x{border-top:5px solid #8B8DA8}#gplOv .y{border-top:5px solid #F2B705}
+#gplOv .ft{font-size:13px;color:#5B47E0;font-weight:600;text-align:center}
+@media (max-width:820px){#gplOv .gc{grid-template-columns:1fr}}
+/*BSB-GPL378-FIM*/</style>
+<script>/*BSB-GPL378-JS*/
+/* Ligia 07/11: guia de condicoes de saude (carta do GP) a um toque, dentro do agendamento */
+(function(){
+  function li(a){return '<ol>'+a.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ol>'}
+  var R=['Lupus or other autoimmune conditions','Heart conditions or pacemaker','Uncontrolled high or low blood pressure','Diabetes','Epilepsy','Cancer, under treatment or in the last 5 years','Thrombosis, blood clots or blood thinners','Surgery in the last 3 months','Kidney or liver problems','MS or other neurological conditions','Pregnancy with complications'];
+  var X=['Fever, flu, covid or any infection','Open wounds, burns or sunburn on the area','Contagious skin conditions (active cold sore, impetigo, fungal)','Roaccutane in the last 6 months (facials)','Botox or fillers in the last 2 weeks (facials)'];
+  var Y=['Varicose veins: avoid the area','Pregnancy, no complications: pregnancy massage','Allergies: change the product','Sensitive skin or mild eczema: gentle products'];
+  window.gplOpen=function(){
+    if(document.getElementById('gplOv'))return;
+    var o=document.createElement('div');o.id='gplOv';
+    o.onclick=function(e){if(e.target===o)o.remove()};
+    o.innerHTML='<div class="gp"><div class="gh"><b>🩺 Health guide</b><button onclick="document.getElementById(\'gplOv\').remove()">Close</button></div>'+
+      '<div class="gc"><div class="card r"><h3>🔴 GP letter needed</h3><div class="sub">No letter by the day before = reschedule</div>'+li(R)+'</div>'+
+      '<div class="card x"><h3>⛔ Reschedule</h3><div class="sub">No treatment today, no letter needed</div>'+li(X)+'</div>'+
+      '<div class="card y"><h3>🟡 You adapt</h3><div class="sub">No letter needed</div>'+li(Y)+'</div></div>'+
+      '<div class="ft">Not sure? Don’t go ahead. Message Ligia first.</div></div>';
+    document.body.appendChild(o);
+  };
+  function put(){var h=document.querySelector('#modal .modal-head');if(h&&!h.querySelector('.gplBtn')){var b=document.createElement('button');b.className='gplBtn';b.type='button';b.textContent='🩺 Health guide';b.onclick=function(e){e.stopPropagation();gplOpen()};h.appendChild(b);}}
+  put();new MutationObserver(put).observe(document.documentElement,{childList:true,subtree:true});
+})();
+/*BSB-GPL378-FIM*/</script>
 </body>
 </html>
