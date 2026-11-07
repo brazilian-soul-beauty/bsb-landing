@@ -125,8 +125,8 @@ footer .next::after{display:none}
       <div class="ico">🌿</div>
       <div class="num">My details</div>
       <h1>Welcome to<br>the <em>team</em></h1><div class="orn"><i></i>✦<i></i></div>
-      <p class="sub">13 short pages. About 5 minutes.<br>Have these with you:</p>
-      <ul class="need"><li>🪪 Passport</li><li>🔢 National Insurance number</li><li>🏦 Bank details</li><li>🏠 Proof of address</li><li>🎓 Beauty certificates</li><li>📸 A photo of your face</li></ul>
+      <p class="sub">12 short pages. About 5 minutes.<br>Have these with you:</p>
+      <ul class="need"><li>🪪 Passport</li><li>🔢 National Insurance number</li><li>🏦 Bank details</li><li>🏠 Proof of address</li><li>🎓 Beauty certificates</li></ul>
       <button type="button" class="big" id="go">Begin ›</button>
     </section>
 
@@ -289,7 +289,7 @@ const SB = supabase.createClient('https://qwumncqcyurojhuyazuj.supabase.co','sb_
 const BUCKET='bsb-staff-docs';
 const IMG={reception:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/reception.jpg",room:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/room.jpg",stations:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/stations.jpg",sink:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/sink.jpg",hall:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/hall.jpg",bath:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/bath.jpg",nails:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/nails.jpg",vg_cover:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_cover.jpg",vg_brunette:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_brunette.jpg",vg_uniform:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_uniform.jpg",vg_coat:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_coat.jpg",vg_knit:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_knit.jpg",vg_bag:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_bag.jpg",vg_curls:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_curls.jpg",vg_ears:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_ears.jpg",vg_mk1:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_mk1.jpg",vg_mk2:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_mk2.jpg",vg_nails1:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_nails1.jpg",vg_nails2:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_nails2.jpg",vg_hair:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_hair.jpg",vg_hair2:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_hair2.jpg",vg_selfie:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_selfie.jpg",vg_cafe:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/vg/vg_cafe.jpg",team:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/team.jpg",logo:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/logo.jpg",paper:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/paper.jpg",envelope:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/envelope.jpg",drink:"https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/salon/drink.jpg"};
 const POS={vg_cover:'50% 18%',vg_brunette:'50% 12%',vg_uniform:'50% 6%',vg_coat:'50% 30%',vg_hair:'50% 12%',vg_hair2:'50% 12%',vg_curls:'50% 15%',vg_selfie:'50% 30%',vg_mk1:'50% 35%',vg_mk2:'25% 40%',team:'50% 35%',sink:'50% 72%',logo:'52% 45%',drink:'60% 65%',envelope:'45% 55%',bath:'60% 50%'};
-const PICS=[['team','Welcome'],['reception','About you'],['sink','Your photo'],['T','Right to <em>work</em>'],['envelope','Documents'],['T','<em>Pay</em>'],['T','Next of <em>kin</em>'],['bath','Your uniform'],['room','Health at work'],['drink','Your favourites'],['nails','Your path'],['hall','Your goals'],['stations','How I work'],['logo','Sign'],['paper','Welcome to the team']];
+const PICS=[['reception','Welcome'],['hall','About you'],['sink','Your photo'],['T','Right to <em>work</em>'],['envelope','Documents'],['T','<em>Pay</em>'],['T','Next of <em>kin</em>'],['bath','Your uniform'],['room','Health at work'],['drink','Your favourites'],['nails','Your path'],['hall','Your goals'],['stations','How I work'],['logo','Sign'],['paper','Welcome to the team']];
 const QS=new URLSearchParams(location.search);const PERSON=(QS.get('p')||'').trim(),PCODE=(QS.get('c')||'').trim();
 const HUB='way.html'+(PERSON?'?p='+encodeURIComponent(PERSON)+'&c='+encodeURIComponent(PCODE)+(QS.has('preview')?'&preview=1':''):'');
 document.getElementById('logo').onclick=()=>{location.href=HUB};document.getElementById('toCh').href=HUB;
@@ -308,6 +308,7 @@ if(PREVIEW){ const b=document.createElement('div'); b.className='pv'; b.textCont
 
 function titlePanel(on,label,title,num){const p=$('pic');p.classList.toggle('tp',!!on);if(!on)return;$('tl').textContent=label||'';$('tt').innerHTML=title||'';$('tg').textContent=num||'';p.style.backgroundImage='none'}
 function show(n){
+  if(n===2)n=cur<2?3:1;
   pages.forEach(p=>p.classList.toggle('on',+p.dataset.p===n));
   cur=n; $('err').textContent='';
   $('back').classList.toggle('hide',n===0||n>LAST);
@@ -402,7 +403,7 @@ function check(n){
   const need=(ids)=>{ for(const id of ids){ if(!v(id)) return 'Please fill in everything.'; } return ''; };
   switch(n){
     case 1: { const m=need(['full_name','dob','phone','email','address','postcode']); if(m) return m; if(!/^\S+@\S+\.\S+$/.test(v('email'))) return 'Check your email.'; return ''; }
-    case 2: return files.photo?'':'Please add your photo.';
+    case 2: return '';
     case 3: { if(!chips.british_irish) return 'Please choose Yes or No.';
       if(!files.passport) return 'Please add your passport.';
       if(chips.british_irish==='no'&&v('share_code').replace(/\s/g,'').length!==9) return 'Share code has 9 characters.';
