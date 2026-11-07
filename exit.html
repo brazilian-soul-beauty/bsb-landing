@@ -64,6 +64,7 @@ textarea::placeholder{color:#A99D8F}.ink textarea{border-color:#D6C7B3}
 .medals span{width:132px;font-size:38px}.medals small{font-size:11px}.list div{grid-template-columns:120px 1fr}.list b{font-size:14px}.sig{font-size:38px}.nav button{min-height:64px;font-size:19px}}
 .stars{color:#B08D5E;letter-spacing:.18em;font-size:16px}.stars.big{font-size:30px;letter-spacing:.12em}.photo.tall{flex:none;height:min(68%,calc((min(100vw,760px) - 32px)*4/3));aspect-ratio:3/4;width:auto;align-self:center;margin:calc(-1*clamp(26px,6vw,56px)) auto 6px;border-radius:0 0 18px 18px}.ink .stars{color:#86684A}
 .medals img{width:clamp(92px,26vw,150px);height:auto;aspect-ratio:1;filter:drop-shadow(0 4px 10px rgba(59,52,45,.14))}
+.polaroid{align-self:center;width:min(86%,340px);background:#fff;padding:10px 10px 30px;box-shadow:0 10px 30px rgba(59,52,45,.16);transform:rotate(-2deg);margin-bottom:10px}.polaroid img{display:block;width:100%;height:auto}
 </style></head><body><div id="app"></div>
 <script>
 var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',T=new URLSearchParams(location.search).get('t')||'',VIEW=new URLSearchParams(location.search).has('v');
@@ -99,7 +100,8 @@ P.push(function(){return pg('','', '<div class="k">Every year you were here</div
 /* moments */
 P.push(function(){return pg('','', '<div class="photo tall"><img src="anx/halloween2.jpg" alt="Halloween at the salon" style="object-position:50% 30%"></div><div class="k">Moments we shared</div><p class="quote">Halloween at the salon.</p>')});
 P.push(function(){return pg('','', '<div class="photo tall"><img src="anx/bday2.jpg" alt="A birthday at the salon" style="object-position:50% 30%"></div><div class="k">Moments we shared</div><p class="quote">Birthday cakes and little celebrations.</p>')});
-P.push(function(){return pg('','', '<div class="photo tall"><img src="anx/xmas2.jpg" alt="The team at Christmas" style="object-position:50% 35%"></div><div class="k">Moments we shared</div><p class="quote">Christmas nights together.</p><p class="soft">And that December in Japan, your big adventure. I hope a little of it is still with you.</p>')});
+P.push(function(){return pg('','', '<div class="photo tall"><img src="anx/xmas2.jpg" alt="The team at Christmas" style="object-position:50% 35%"></div><div class="k">Moments we shared</div><p class="quote">Christmas nights together.</p>')});
+P.push(function(){return pg('','', '<div class="polaroid"><img src="anx/japan.jpg" alt="The team holding your photo while you were in Japan"></div><div class="k">Moments we shared</div><p class="quote">That December in Japan, your big adventure.</p><p class="soft">We were all here, waiting for you. I hope a little of it is still with you.</p>')});
 /* 4 trust */
 P.push(function(){var b=[['Jul',79],['Aug',83],['Sep',88],['Oct',87]];return pg('','04','<div class="k">The people who trusted you</div><h2>Almost <em>9 in 10</em></h2><p class="soft">of your clients in the most recent months were returning clients.</p><div class="bars">'+b.map(function(x,k){return '<div class="'+(k>=2?'hi':'')+'"><em>'+x[1]+'%</em><s style="height:'+((x[1]-55)*3.4)+'%"></s><small>'+x[0]+'</small></div>'}).join('')+'</div>')});
 P.push(function(){return pg('','', '<div class="k">The people who trusted you</div><p class="push">Numbers can tell us how busy someone is. But returning clients tell us something else: people felt comfortable enough to come back.</p>'+R+'<p class="quote">You helped build that trust. And that matters to me.</p>')});
