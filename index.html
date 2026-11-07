@@ -59,6 +59,13 @@ function claimBlock(d){
    '<button class="btn" id="cb" type="submit">Claim my £20</button><p class="small" id="cerr"></p>'+
    '<p class="small">Joins our Clapham Circle: one care note a month, never more.</p></form></div>';
 }
+/* 07/11: quem ja assina o newsletter ganha so o £10 do review (sem formulario do Circle) */
+function reviewBlock(){
+  return '<div class="gift"><b>£10 off</b><span>Your next visit</span></div>'+
+   '<p class="small" style="margin:10px 0 0">Leave a Google review, then paste the link in the comments when you book.</p>'+
+   rvBtn('Leave a Google review');
+}
+function offerBlock(d){ return (d&&d.nl) ? reviewBlock() : claimBlock(d); }
 function wireClaim(){
   var f=document.getElementById('cf'); if(!f) return;
   var b=document.getElementById('cb'), er=document.getElementById('cerr');
@@ -95,11 +102,11 @@ function draw(d){
   var th=d&&d.therapist?esc(d.therapist):'Our team', isNew=d&&(d.offer||d.kind==='new');
   if(R==='loved'){
     V.innerHTML='<h1>So happy you loved it! 😍</h1>'+
-      (isNew ? '<p>'+th+' will be over the moon. Here is your £20, with our thanks.</p>'+claimBlock(d)
+      (isNew ? '<p>'+th+' will be over the moon. Here is your '+(d.nl?'£10':'£20')+', with our thanks.</p>'+offerBlock(d)
              : '<p>'+th+' will be over the moon. Would you share it on Google?</p><div class="stars">★★★★★</div>'+rvBtn('Leave a Google review'));
   } else if(R==='good'){
     V.innerHTML='<h1>Thank you! 🙂</h1>'+
-      (isNew ? '<p>Here is your £20, with our thanks.</p>'+claimBlock(d)+'<div class="sep"></div>' : '')+
+      (isNew ? '<p>Here is your '+(d.nl?'£10':'£20')+', with our thanks.</p>'+offerBlock(d)+'<div class="sep"></div>' : '')+
       '<p>Anything that would have made it perfect? We read every message.</p><textarea id="c" placeholder="Write here (optional)"></textarea><button class="btn o" id="s">Send</button>';
   } else {
     V.innerHTML='<h1>Thank you for telling us</h1><p>We want every visit to feel special. What could we do better?</p><textarea id="c" placeholder="Write here…"></textarea><button class="btn" id="s">Send to Brazilian Soul</button><p class="small">Only our team reads this. We will get back to you.</p>';
