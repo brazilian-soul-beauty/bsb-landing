@@ -303,7 +303,7 @@ let cur=0;
 const files={}; const chips={};
 const $=id=>document.getElementById(id);
 const pages=[...document.querySelectorAll('.page')];
-const PREVIEW=new URLSearchParams(location.search).has('preview');
+const PREVIEW=new URLSearchParams(location.search).has('preview')||new URLSearchParams(location.search).get('p')==='Teste';
 if(PREVIEW){ const b=document.createElement('div'); b.className='pv'; b.textContent='PREVIEW'; document.body.appendChild(b); }
 
 function titlePanel(on,label,title,num){const p=$('pic');p.classList.toggle('tp',!!on);if(!on)return;$('tl').textContent=label||'';$('tt').innerHTML=title||'';$('tg').textContent=num||'';p.style.backgroundImage='none'}

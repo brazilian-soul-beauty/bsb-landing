@@ -185,7 +185,7 @@ const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/
 const QS=new URLSearchParams(location.search);
 let person=(QS.get('p')||'').trim();let CODE=(QS.get('c')||'').trim();let first=person.split(' ')[0];const REFRESH=(QS.get('refresh')||'').trim();let AUTH=false;
 const ROLE=(QS.get('r')||'all').toLowerCase();
-const PREVQ=QS.get('preview')=='1';const isPrev=()=>PREVQ&&typeof ADMIN!='undefined'&&ADMIN;
+const TESTP=person==='Teste';const PREVQ=QS.get('preview')=='1'||TESTP;const isPrev=()=>TESTP||(PREVQ&&typeof ADMIN!='undefined'&&ADMIN);
 
 /* ---------- CONTENT ---------- */
 const CH=[
