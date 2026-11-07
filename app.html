@@ -405,6 +405,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .bzr .dl{display:block;margin:4px 0 6px;font-size:13px}.bzr .dl.u{color:#5FD39A}.bzr .dl.d{color:#FF8F8F}.dl{font-style:normal;font-size:11.5px;font-weight:700;margin-top:4px;color:var(--muted)}.dl.u{color:#1F9D6B}.dl.d{color:#B3261E}
 .tds.t4{grid-template-columns:repeat(4,1fr)!important}.dcs.d4{grid-template-columns:repeat(4,1fr)!important}@media(max-width:700px){.dcs.d4{grid-template-columns:repeat(2,1fr)!important}}
 .trcard{position:relative;z-index:1;display:flex;align-items:center;gap:14px;margin-top:14px;padding:18px;border-radius:20px;background:#fff;border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:0 6px 18px rgba(31,34,53,.06)}.trcard em{font-style:normal;font-size:34px}.trcard span{flex:1;display:flex;flex-direction:column;gap:3px}.trcard b{font-size:18px}.trcard small{color:var(--faint);font-size:13.5px;text-transform:none;letter-spacing:0;font-weight:500;opacity:1}.trcard i{font-style:normal;background:var(--p);color:#fff;font-weight:700;border-radius:999px;padding:10px 16px;white-space:nowrap}
+.hidemoney{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}.hidemoney .ext b,.hidemoney .ext span,.hidemoney .exl i{filter:blur(11px);transition:filter .25s}.hidemoney.show .ext b,.hidemoney.show .ext span,.hidemoney.show .exl i{filter:none}.hmh{display:inline-block;align-self:flex-start;margin-top:8px;background:rgba(255,255,255,.18);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700}.hidemoney.show .hmh{opacity:0}
 </style>
 </head>
 <body>
@@ -523,6 +524,8 @@ function renderTr(M){var t=TRAIN[S.who]||{},p=(PEOPLE.filter(function(x){return 
   M.innerHTML='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#8B7CF6 0%,#5B47E0 55%,#3B2BB5 100%)"><small>🎓 My training</small><h2>Grow with BSB</h2><p>'+esc(fn)+' · Level '+(p.level||1)+'</p>'+
    '<div class="verdict"><em>🌱</em><span>Study a little every week. Every step you finish moves you to the next level.</span></div>'+
    '<a class="trcard" href="'+t.url+'" target="_blank" rel="noopener"><em>🪜</em><span><b>'+esc(t.t)+'</b><small>Read, study and write what you learnt</small></span><i>Continue ›</i></a></div>'}
+(function(){function on(e){var x=e.target.closest&&e.target.closest('.hidemoney');if(x)x.classList.add('show')}function off(){[].forEach.call(document.querySelectorAll('.hidemoney.show'),function(x){x.classList.remove('show')})}
+  document.addEventListener('pointerdown',on);document.addEventListener('pointerup',off);document.addEventListener('pointercancel',off);document.addEventListener('pointerleave',off);document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('.hidemoney'))e.preventDefault()})})();
 function render(){
   document.getElementById('main').classList.remove('load');
   var M=document.getElementById('main');
@@ -750,7 +753,7 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
      '<div class="exb"><div><em>🧴</em><b>'+q+'</b><span>Products</span></div>'+(up?'<div><em>✨</em><b>'+uu+'</b><span>Upgrades</span></div>':'')+'</div>'+
      '<div class="verdict"><em>☀️</em><span>Today: 🧴 '+(tdy?tdy.q:0)+(tu?' · ✨ '+tu.u+' of '+tu.v+' chances':'')+'</span></div></div>';}
   else{
-  var h='<div class="hero exh"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+
+  var h='<div class="hero exh'+(S.admin?'':' hidemoney')+'"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+(S.admin?'':'<div class="hmh">👆 Hold to see</div>')+
    '<div class="ext"><b>'+(lh?'£'+lh.toFixed(2)+'<small>/h</small>':gb0(ltot))+'</b><span>'+(lh?'Your real hour, all in · '+gb0(ltot)+' in '+Math.round(hrs)+'h':'all in')+'</span></div>'+
    '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients']].concat(DK?[['🥂','Drinks commission',dcom,dpaid+' paid drinks · £0.50 each']]:[]).concat([['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products you sold']]).filter(function(x){return !(DK&&x[1]==='Commission'&&!x[2])}).map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
    (DK?'':'<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · ✨ '+tu.u+'/'+tu.v:'')+'</span></div>')+'</div>';}
