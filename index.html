@@ -92,7 +92,7 @@ function wireComment(){
     rpc('bsb_feedback_comment',{p_token:T,p_comment:c}).then(function(){ s.outerHTML='<p><b>Thank you 💜</b> We got your message.</p>'; document.getElementById('c').remove(); });};
 }
 function draw(d){
-  var th=d&&d.therapist?esc(d.therapist):'Our team', isNew=d&&d.kind==='new';
+  var th=d&&d.therapist?esc(d.therapist):'Our team', isNew=d&&(d.offer||d.kind==='new');
   if(R==='loved'){
     V.innerHTML='<h1>So happy you loved it! 😍</h1>'+
       (isNew ? '<p>'+th+' will be over the moon. Here is your £20, with our thanks.</p>'+claimBlock(d)
