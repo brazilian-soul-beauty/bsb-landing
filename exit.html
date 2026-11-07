@@ -66,6 +66,7 @@ textarea::placeholder{color:#A99D8F}.ink textarea{border-color:#D6C7B3}
 .medals img{width:clamp(92px,26vw,150px);height:auto;aspect-ratio:1;filter:drop-shadow(0 4px 10px rgba(59,52,45,.14))}
 .polaroid{align-self:center;width:min(86%,340px);background:#fff;padding:10px 10px 30px;box-shadow:0 10px 30px rgba(59,52,45,.16);transform:rotate(-2deg);margin-bottom:10px}.polaroid img{display:block;width:100%;height:auto}
 .cover .k{letter-spacing:.12em;white-space:nowrap}.pg.cover{background:#EED9C4;justify-content:flex-start}.cover .push{margin-top:auto}.coverimg{flex:0 1 auto;min-height:0;height:52%;display:flex;justify-content:center}.coverimg img{height:100%;width:auto;max-width:100%;object-fit:contain}
+.qbar{display:flex;align-items:center;justify-content:space-between;gap:12px}.mic{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font:500 15px Inter,sans-serif;cursor:pointer}.mic{align-self:flex-start;background:#F3EADF;border-color:#E2D2BF}.mic .ico{font-size:18px}.mic.on{border-color:#B5523B;color:#8E3B28}.mic.on{background:#FBE9E4}.mic.on .ico{animation:pulse 1.2s infinite}@keyframes pulse{50%{transform:scale(1.5);opacity:.5}}.ink .mic{background:#FDFBF8}
 </style></head><body><div id="app"></div>
 <script>
 var B='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',K='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',T=new URLSearchParams(location.search).get('t')||'',VIEW=new URLSearchParams(location.search).has('v');
@@ -129,7 +130,7 @@ P.push(function(){return pg('','', '<div class="k">A little message from me</div
 /* questions intro */
 P.push(function(){return pg('','', '<div class="k">Now, I’d love to hear from you</div><h2>No right or <em>wrong</em> answers</h2>'+R+'<p class="push">I want to know how you genuinely felt here: what worked, what didn’t, and what we could have done better.</p><p class="soft">Your answers are saved as you go. I’ll read them myself.</p>')});
 var Q0=P.length;
-Q.forEach(function(q,k){P.push(function(){var last=k===8;return pg(last?'ink':'','', '<div class="k">'+(last?'One last thing…':'&nbsp;')+'</div><div class="qq">'+esc(q)+'</div>'+(last?'<p class="soft">Anything at all. I’d love to hear it.</p>':'')+'<textarea id="ta" data-q="'+(k+1)+'" aria-label="Your answer" placeholder="Write here, in your own words…">'+esc(A[k+1]||'')+'</textarea><div class="sv" id="sv" aria-live="polite"></div>')})});
+Q.forEach(function(q,k){P.push(function(){var last=k===8;return pg(last?'ink':'','', '<div class="k">'+(last?'One last thing…':'&nbsp;')+'</div><div class="qq">'+esc(q)+'</div>'+(last?'<p class="soft">Anything at all. I’d love to hear it.</p>':'')+'<button type="button" class="mic" id="mic" onclick="mic()"><span class="ico">🎤</span><span id="micl">Tap to speak</span></button><textarea id="ta" data-q="'+(k+1)+'" aria-label="Your answer" placeholder="Write here, or tap 🎤 and just talk…">'+esc(A[k+1]||'')+'</textarea><div class="sv" id="sv" aria-live="polite"></div>')})});
 P.push(function(){return pg('','', '<div class="k">With love</div><h2>Thank you, <em>Anukis.</em></h2>'+R+'<p>For being part of our story.</p><p class="quote push">And remember, this is only one chapter of yours.</p><p class="sig">With love,<br>Lígia &amp; Brazilian Soul Beauty</p><p class="soft" style="font-size:14px">Your answers have been saved. Lígia will read every word.</p>')});
 var tmr=null;
 function save(){var t=document.getElementById('ta');if(!t)return Promise.resolve();var q=+t.getAttribute('data-q'),v=t.value;if((A[q]||'')===v)return Promise.resolve();A[q]=v;var s=document.getElementById('sv');if(s)s.textContent='Saving…';
@@ -137,7 +138,20 @@ function save(){var t=document.getElementById('ta');if(!t)return Promise.resolve
 function draw(){var inQ=i>=Q0&&i<P.length-1,pct=inQ?100:Math.round(100*Math.min(i,Q0)/Q0);
   var d='<div class="bar" aria-hidden="true"><i style="width:'+pct+'%"></i></div>'+P[i]()+'<nav class="nav"><button class="back" '+(i===0?'disabled':'')+' onclick="go(-1)">Back</button>'+(i<P.length-1?'<button class="go" onclick="go(1)">'+(i===0?'Begin':i===Q0-1?'Start':'Next')+'</button>':'')+'</nav>';
   document.getElementById('app').innerHTML=d;var t=document.getElementById('ta');if(t){t.addEventListener('input',function(){clearTimeout(tmr);tmr=setTimeout(save,1200)})}}
-function go(n){clearTimeout(tmr);save().then(function(){i=Math.max(0,Math.min(P.length-1,i+n));draw()})}
+var REC=null,recOn=false;
+function micStop(){recOn=false;try{REC&&REC.stop()}catch(e){}var b=document.getElementById('mic');if(b){b.classList.remove('on');document.getElementById('micl').textContent='Tap to speak'}}
+function mic(){var t=document.getElementById('ta');if(!t)return;if(recOn){micStop();return}
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById('micl').textContent='Use the 🎤 on your keyboard';t.focus();return}
+  REC=new SR();REC.lang='en-GB';REC.continuous=true;REC.interimResults=true;
+  var base=t.value;
+  REC.onresult=function(e){var fin='',tmp='';for(var k=e.resultIndex;k<e.results.length;k++){var r=e.results[k];if(r.isFinal)fin+=r[0].transcript;else tmp+=r[0].transcript}
+    if(fin){base=(base&&!/\s$/.test(base)?base+' ':base)+fin.trim();}
+    t.value=base+(tmp?(base?' ':'')+tmp:'');clearTimeout(tmr);tmr=setTimeout(save,1200)};
+  REC.onend=function(){if(recOn){try{REC.start()}catch(e){micStop()}}};
+  REC.onerror=function(e){if(e.error==='not-allowed'||e.error==='service-not-allowed'){micStop();document.getElementById('micl').textContent='Use the 🎤 on your keyboard';t.focus()}};
+  try{REC.start();recOn=true;var b=document.getElementById('mic');b.classList.add('on');document.getElementById('micl').textContent='Listening… tap to stop'}catch(e){micStop()}}
+function go(n){micStop();clearTimeout(tmr);save().then(function(){i=Math.max(0,Math.min(P.length-1,i+n));draw()})}
 function admin(){rpc('exit_get',{p_token:T}).then(function(r){if(!r){document.getElementById('app').innerHTML=pg('','','<h2>Link not valid</h2>');return}
   var by={};(r.answers||[]).forEach(function(x){by[x.q]=x});
   document.getElementById('app').innerHTML=pg('','','<div class="k">Live answers · '+esc(r.person)+'</div><div class="adm">'+Q.map(function(q,k){var x=by[k+1];return '<div><b>'+(k+1)+'. '+esc(q)+'</b><p class="'+(x&&x.a?'':'soft')+'">'+(x&&x.a?esc(x.a):'Not answered yet')+'</p></div>'}).join('')+'</div>')}).catch(function(){})}
