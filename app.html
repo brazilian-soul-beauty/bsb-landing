@@ -550,16 +550,16 @@ function renderTr(M){var t=TRAIN[S.who]||null,p=(PEOPLE.filter(function(x){retur
   for(var i=0;i<7;i++){var dd=new Date(mon);dd.setDate(mon.getDate()+i);var k=ymd(dd),on=!!D[k],fut=dd>td;if(on)wn++;wk.push('<div class="trd'+(on?' on':'')+(fut?' fut':'')+(k===ymd(td)?' t':'')+'"><i>'+(on?'✓':'')+'</i><small>'+DW[i].slice(0,1)+'</small></div>')}
   var m30=Object.keys(D).length,last=Object.keys(D).sort().pop(),qd=(S.trq||[]).filter(function(q){return q.topic==='say-it-right'})[0],bk=S.trbk||[],bkd=bk.filter(function(b){return b.note&&b.note.trim().length>20}).length;
   var card=function(ic,tt,sub,act,btn,done){return '<a class="trcard'+(done?' done':'')+'" '+act+'><em>'+ic+'</em><span><b>'+tt+'</b><small>'+sub+'</small></span><i>'+btn+'</i></a>'};
-  var C=[];
+  var C=[],LK=[];
   if(S.trl)C.push(card('🔄','Team refresh','Our policies and the BSB Standard','href="'+S.trl+'" target="_blank" rel="noopener" onclick="trOpen()"','Open ›'));
   C.push(card('💬','Say it right','Client care: right words, wrong words','href="javascript:void(0)" onclick="sayOpen(0,0)"',qd?'Again ›':'Start ›',!!qd));
-  WPOL.forEach(function(P,ti){var dn=(S.trq||[]).filter(function(q){return q.topic==='pol-'+P.k})[0];if(!S.admin&&POL_LOCK){C.push(card(P.ic,P.t,'🔒 Coming soon','style="opacity:.55"','🔒'));return}C.push(card(P.ic,P.t,P.sub,'href="javascript:void(0)" onclick="polOpen('+ti+',0)"',S.admin?(dn?'Read ›':'Not yet'):dn?'Done ✓':'Write ›',!!dn))});
+  WPOL.forEach(function(P,ti){var dn=(S.trq||[]).filter(function(q){return q.topic==='pol-'+P.k})[0];if(!S.admin&&POL_LOCK){LK.push(card(P.ic,P.t,'🔒 Coming soon','style="opacity:.55"','🔒'));return}C.push(card(P.ic,P.t,P.sub,'href="javascript:void(0)" onclick="polOpen('+ti+',0)"',S.admin?(dn?'Read ›':'Not yet'):dn?'Done ✓':'Write ›',!!dn))});
   C.push(card('📚','My books',bk.length?bkd+' of '+bk.length+' written':(S.admin?'Add her first book':'Lígia will choose your first book'),'href="javascript:void(0)" onclick="bookOpen()"',bk.length||S.admin?'Open ›':'Soon'));
   if(sk)C.push(card('🌿','Eminence','Know every product, one at a time','href="javascript:void(0)" onclick="S.tab=\'em\';renderEm(document.getElementById(\'main\'))"','Study ›'));
   if(t)C.push(card('🪜',esc(t.t),'Read, study and write what you learnt','href="'+t.url+'" target="_blank" rel="noopener" onclick="trOpen()"','Continue ›'));
   M.innerHTML='<div class="hero" style="background:radial-gradient(120% 90% at 0% 0%,#8B7CF6 0%,#5B47E0 55%,#3B2BB5 100%)"><small>🎓 My training</small><h2>Grow with BSB</h2><p>'+esc(fn)+' · Level '+(p.level||1)+' · 🎯 30 min a day</p>'+
    '<div class="trw"><div class="trh"><b>This week</b><span>'+wn+' of 5 days</span></div><div class="trds">'+wk.join('')+'</div><div class="trf">'+(S.trd==null?'…':m30?'📚 '+m30+' day'+(m30>1?'s':'')+' in the last 4 weeks':'Your first day starts today')+'</div></div>'+
-   '<div class="trcs">'+C.join('')+'</div>'+
+   '<div class="trcs">'+C.concat(LK).join('')+'</div>'+
    (S.admin?'<div class="trf" style="margin-top:10px">🔒 Last training: '+(last?pd(last).getDate()+' '+MN[pd(last).getMonth()]:'never')+(qd?' · 💬 done '+new Date(qd.at).getDate()+' '+MN[new Date(qd.at).getMonth()]:'')+'</div>':'')+'</div>'}
 function sayOpen(i,sc){var q=SAY[i],pn=document.getElementById('panel'),flip=(i*7+3)%2,A=flip?[q[2],q[1]]:[q[1],q[2]];
   pn.innerHTML='<div class="how sayq"><div class="howd">'+SAY.map(function(_,k){return '<i class="'+(k<=i?'on':'')+'" style="width:14px"></i>'}).join('')+'</div><div class="hown">'+(i+1)+' of '+SAY.length+'</div><h3>'+q[0]+'</h3><p class="hows">Which one would you say?</p>'+
