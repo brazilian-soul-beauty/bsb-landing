@@ -838,5 +838,83 @@ body.lg-on #logv{display:block}body.lg-on #app{display:none!important}
 })();
 /*BSB-HUBLOG-FIM*/</script>
 
+<style>/*BSB-HUBJOURNEY-INICIO*/
+#jnv{display:none;max-width:1240px;margin:0 auto;padding:18px 24px;font-family:Inter,system-ui,sans-serif;color:#1D1F33}
+body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
+#jnv .lh{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+#jnv .lh h2{margin:0;font-size:20px;font-weight:700}
+#jnv .sw{margin-left:auto;display:flex;gap:6px}
+#jnv .sw button{border:1px solid #E2E2EC;background:#fff;border-radius:999px;padding:7px 14px;font:600 13px Inter,sans-serif;color:#585A75;cursor:pointer}
+#jnv .sw button.on{background:#5B47E0;border-color:#5B47E0;color:#fff}
+#jnv .path{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:14px}
+#jnv .st{background:#fff;border:1px solid #EEEEF4;border-radius:14px;padding:12px 10px;cursor:pointer;text-align:center;position:relative}
+#jnv .st.on{border-color:#5B47E0;box-shadow:0 0 0 2px #ECE8FC}
+#jnv .st .i{font-size:24px}#jnv .st .n{font:700 13px Inter,sans-serif;margin:4px 0}
+#jnv .st b{display:block;font-size:20px;color:#5B47E0}#jnv .st small{font-size:11px;color:#8B8DA8}
+#jnv .st:not(:last-child):after{content:'›';position:absolute;right:-8px;top:40%;color:#C9C9D9;font-size:18px}
+#jnv .det{background:#fff;border:1px solid #EEEEF4;border-radius:16px;padding:16px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#jnv .det .c{background:#F7F7FB;border-radius:12px;padding:12px}
+#jnv .det .h{font:700 11px Inter,sans-serif;color:#8B8DA8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+#jnv .det .v{font-size:14px;line-height:1.45}
+#jnv .det .wide{grid-column:span 4;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#jnv .chip{font:700 12px Inter,sans-serif;border-radius:999px;padding:5px 11px;background:#F2F2F6;color:#585A75}
+#jnv .chip.live{background:#DCF4E7;color:#1B7A4A}#jnv .chip.off{background:#FFF3D6;color:#8A5A00}
+#jnv .extra{margin-top:12px;background:#FFFBF0;border:1px solid #F4E3B5;border-radius:14px;padding:12px 16px;font-size:14px}
+#jnv .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#jnv .rules div{background:#fff;border:1px solid #EEEEF4;border-radius:16px;padding:18px;font-size:15px;line-height:1.45}
+#jnv .rules b{display:block;font-size:26px;margin-bottom:6px}
+#jnv .cal{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+#jnv .cal div{background:#fff;border:1px solid #EEEEF4;border-radius:14px;padding:12px;min-height:110px}
+#jnv .cal .m{font:700 12px Inter,sans-serif;color:#5B47E0;text-transform:uppercase;margin-bottom:6px}
+#jnv .cal .t{font-size:13px;line-height:1.4}
+#jnv .cal .empty{background:#FAFAFC;color:#9A9BB4}
+/*BSB-HUBJOURNEY-FIM*/</style>
+<div id="jnv">
+ <div class="lh"><h2>🗺️ Client journey 2027</h2><div class="sw"><button data-p="path" class="on">Path</button><button data-p="rules">Rules</button><button data-p="cal">2027</button></div></div>
+ <div id="jnBody"></div>
+</div>
+<script>/*BSB-HUBJOURNEY-INICIO*/
+(function(){
+  var lk=new URLSearchParams(location.search).get('p');if(lk&&!/^ligia$/i.test(lk))return;
+  var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+  var C={},sel=1,page='path';
+  var S=[
+   {i:'🌱',n:'Not yet',k:null,lab:'never came',gets:'15% off her first visit',how:'Website popup → Mailchimp email + reminder day 10',code:'SOULWELCOME15',who:'Mailchimp',on:1},
+   {i:'💌',n:'1st visit',k:'primeira',lab:'last 60 days',gets:'Post-visit email: £10 Circle + £10 Google review (or prosecco if she reviewed). 3 weeks later: "Your £10 is still here"',how:'Email 15 min after her visit · Mailchimp 3 weeks',code:'BSB-WELCOME10 · GOOGLE-REVIEW',who:'Robot + Mailchimp',on:1},
+   {i:'🔁',n:'2nd visit',k:'segunda',lab:'last 90 days',gets:'No discount. Extra service tomorrow, Due back, BIAB infill reminder',how:'WhatsApp from reception',code:'none',who:'Joana',on:0},
+   {i:'💎',n:'Regular',k:'regular',lab:'3+ visits',gets:'Bring someone you love: £15 for her friend, £15 for her',how:'Email 7 days after her 3rd visit · friend writes FRIEND + name',code:'FRIEND',who:'Robot + Joana',on:1},
+   {i:'👑',n:'Member',k:'membro',lab:'last 60 days',gets:'Perks, never a discount',how:'Membership invite (clients spending £120+ a month)',code:'MEMBER',who:'Ligia',on:0},
+   {i:'🎂',n:'Birthday',k:null,lab:'every year',gets:'20% off 3 treatments from £100 + prosecco + truffles',how:'Mailchimp email 7 days before',code:'BDAY20',who:'Mailchimp',on:1},
+   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'We miss you A, B, C: 15% off',how:'Email at 65, 76 and 101 days',code:'WELCOMEBACK15',who:'Mailchimp',on:0}
+  ];
+  var R=[['✉️','1 message every 7 days per client, all channels together'],['🏷️','1 discount per visit. Codes never add up'],['👑','Members get perks, never discounts'],['🎁','Regulars get gifts. Discounts only to bring new clients and win back lost ones'],['🚪','She books, she leaves the stage and stops receiving'],['⚖️','Same week? Rhythm first, then stage, then the month campaign']];
+  var M=[['Jan','Body scrub & drainage · Waxing'],['Feb','Hands and feet together'],['Mar','Massage · Waxing for spring'],['Apr','Sandal season pedicure'],['May',''],['Jun','Massage for waxing clients'],['Jul','Holiday lashes & brows'],['Aug','Pre-book your autumn facial'],['Sep','Facial & massage'],['Oct','October Reset · Body scrub film'],['Nov','Black Tie Skin · Soul Friday gift cards'],['Dec','Lash lift · Christmas card gift for January']];
+  var tabs=document.querySelector('.tabs');if(!tabs)return;
+  var t=document.createElement('div');t.className='tab';t.dataset.t='journey';t.textContent='🗺️ Journey';
+  tabs.insertBefore(t,document.getElementById('whob')||null);
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function draw(){
+    [].forEach.call(document.querySelectorAll('#jnv .sw button'),function(b){b.classList.toggle('on',b.dataset.p===page)});
+    var B=document.getElementById('jnBody');
+    if(page==='rules'){B.innerHTML='<div class="rules">'+R.map(function(r){return '<div><b>'+r[0]+'</b>'+esc(r[1])+'</div>'}).join('')+'</div>';return;}
+    if(page==='cal'){B.innerHTML='<div class="cal">'+M.map(function(m){return '<div class="'+(m[1]?'':'empty')+'"><div class="m">'+m[0]+'</div><div class="t">'+(m[1]?esc(m[1]):'Free month')+'</div></div>'}).join('')+'</div>';return;}
+    var s=S[sel];
+    B.innerHTML='<div class="path">'+S.map(function(x,ix){var n=x.k&&C[x.k]!=null?C[x.k]:'·';return '<div class="st'+(ix===sel?' on':'')+'" data-i="'+ix+'"><div class="i">'+x.i+'</div><div class="n">'+x.n+'</div><b>'+n+'</b><small>'+x.lab+'</small></div>'}).join('')+'</div>'+
+      '<div class="det"><div class="c"><div class="h">She gets</div><div class="v">'+esc(s.gets)+'</div></div><div class="c"><div class="h">How</div><div class="v">'+esc(s.how)+'</div></div><div class="c"><div class="h">Code</div><div class="v">'+esc(s.code)+'</div></div><div class="c"><div class="h">Who</div><div class="v">'+esc(s.who)+'</div></div>'+
+      '<div class="wide"><span class="chip '+(s.on?'live':'off')+'">'+(s.on?'● Live':'○ To switch on')+'</span></div></div>'+
+      '<div class="extra">⚡ <b>Last minute</b> sits above every stage: only when a slot is empty, sent by Joana from the Last minute dash.</div>';
+  }
+  function load(){fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){})}
+  document.addEventListener('click',function(e){
+    var x=e.target;if(!x.closest)return;var tb=x.closest('.tabs .tab');
+    if(tb){if(tb.dataset.t==='journey'){e.stopPropagation();[].forEach.call(document.querySelectorAll('.tabs .tab'),function(b){b.classList.toggle('on',b===tb)});document.body.classList.remove('lg-on');document.body.classList.add('jn-on');draw();load();}
+      else{document.body.classList.remove('jn-on');t.classList.remove('on');}return;}
+    if(!document.body.classList.contains('jn-on'))return;
+    var sb=x.closest('#jnv .sw button');if(sb){page=sb.dataset.p;draw();return;}
+    var st=x.closest('#jnv .st');if(st){sel=+st.dataset.i;draw();}
+  },true);
+})();
+/*BSB-HUBJOURNEY-FIM*/</script>
+
 </body>
 </html>
