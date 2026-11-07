@@ -500,7 +500,7 @@ function goTarget(){const cur=curStep();
 function home(){if(REFRESH)return refreshHome();
  const cur=curStep(),i=PSEL==null?cur:PSEL,p=PATH[i];frame('team','','',PATH.filter((x,k)=>pDone(k)).length/PATH.length*100);
  const d=pDone(i),o=pOpen(i);let body='';
- if(i==1&&o){body=CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
+ if(i==1&&o){body=`<button data-p="0" class="${pDone(0)?'done':''}"><span class="r">0</span><span class="t">My details</span><span class="s">${pDone(0)?'<b class="ck">✓</b>':'5 min'}</span></button>`+CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
  else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
  $('main').innerHTML=`<div class="num">Step ${i+1} of ${PATH.length}</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
  ${i==1&&o?`<div class="stp">${p.t}</div>`:""}<div class="chap path">${body}</div>`;
