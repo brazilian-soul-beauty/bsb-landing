@@ -240,8 +240,8 @@ footer .next::after{display:none}
 
     <section class="page" data-p="10">
       <div class="ico">🪜</div><div class="num">My details · 09</div><h1>Your path</h1><div class="orn"><i></i>✦<i></i></div>
-      <div class="f"><label>I do</label><div class="chips" data-chip="treatments_do" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span></div></div>
-      <div class="f"><label>I would love to learn</label><div class="chips" data-chip="treatments_learn" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span></div></div>
+      <div class="f"><label>I do</label><div class="chips" data-chip="treatments_do" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span></div><input type="text" id="treatments_do_other" class="hide" placeholder="What else do you do?" style="margin-top:10px"></div>
+      <div class="f"><label>I would love to learn</label><div class="chips" data-chip="treatments_learn" data-multi="1"><span class="chip" data-v="BIAB">BIAB</span><span class="chip" data-v="Gel">Gel</span><span class="chip" data-v="Acrylic">Acrylic</span><span class="chip" data-v="Pedicure">Pedicure</span><span class="chip" data-v="Lashes">Lashes</span><span class="chip" data-v="Brows">Brows</span><span class="chip" data-v="Waxing">Waxing</span><span class="chip" data-v="Facials">Facials</span><span class="chip" data-v="Massage">Massage</span><span class="chip" data-v="Drainage">Drainage</span><span class="chip" data-v="Make-up">Make-up</span><span class="chip" data-v="Other">Other</span></div><input type="text" id="treatments_learn_other" class="hide" placeholder="What else would you love to learn?" style="margin-top:10px"></div>
     </section>
 
     <section class="page" data-p="11">
@@ -328,7 +328,7 @@ function show(n){
 document.querySelectorAll('[data-chip]').forEach(g=>{
   g.addEventListener('click',e=>{
     const c=e.target.closest('.chip'); if(!c) return;
-    if(g.dataset.multi){ c.classList.toggle('on'); chips[g.dataset.chip]=[...g.querySelectorAll('.chip.on')].map(x=>x.dataset.v); return; }
+    if(g.dataset.multi){ c.classList.toggle('on'); chips[g.dataset.chip]=[...g.querySelectorAll('.chip.on')].map(x=>x.dataset.v); const oi=$(g.dataset.chip+'_other'); if(oi){ const on=chips[g.dataset.chip].includes('Other'); oi.classList.toggle('hide',!on); if(on&&c.dataset.v==='Other') oi.focus(); } return; }
     g.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
     c.classList.add('on'); chips[g.dataset.chip]=c.dataset.v;
     if(g.dataset.chip==='dbs_has'){ $('dbsYes').classList.toggle('hide',c.dataset.v!=='yes'); $('dbsNo').classList.toggle('hide',c.dataset.v!=='no'); }
@@ -394,11 +394,13 @@ async function loadDraft(){if(!CAN_DRAFT())return;try{const r=await (await fetch
   for(const id in st.vals){const e=$(id);if(e)e.value=st.vals[id]}
   for(const k in st.chips){const val=st.chips[k],grp=document.querySelector(`[data-chip="${k}"]`);if(!grp)continue;const vs=Array.isArray(val)?val:[val];
    grp.querySelectorAll('.chip').forEach(c=>{if(vs.includes(c.dataset.v)){if(Array.isArray(val))c.classList.add('on');else c.click()}});chips[k]=val}
+  ['treatments_do','treatments_learn'].forEach(k=>{const oi=$(k+'_other');if(oi)oi.classList.toggle('hide',!(chips[k]||[]).includes('Other'))});
   for(const k in st.files){files[k]=st.files[k];if(k==='photo'){if(PHOTO_SMALL){$('photoBox').style.backgroundImage='url('+PHOTO_SMALL+')';$('photoBox').firstChild.textContent='';$('photoRm').classList.remove('hide')}continue}
    const inp=document.querySelector(`input[data-file="${k}"]`);if(!inp)continue;const box=inp.closest('.up');box.classList.add('done');box.querySelector('.s').textContent='✓ '+(files[k].length>1?files[k].length+' files':files[k][0].name);box.querySelector('.rm').classList.remove('hide')}
   if(st.page>1&&st.page<=LAST){$('go').textContent='Continue ›';$('go').onclick=()=>show(Math.min(st.page,LAST))}
  }catch(e){console.error(e)}}
 const v=id=>($(id).value||'').trim();
+const withOther=(a,id)=>(a||[]).map(x=>x==='Other'&&v(id)?'Other: '+v(id):x);
 function check(n){
   const need=(ids)=>{ for(const id of ids){ if(!v(id)) return 'Please fill in everything.'; } return ''; };
   switch(n){
@@ -494,7 +496,7 @@ async function send(){
     bank_name:v('bank_name'),account_name:v('account_name'),sort_code:v('sort_code').replace(/\D/g,''),account_number:v('account_number').replace(/\D/g,''),
     starter_statement:chips.p45==='no'?chips.starter_statement:null,p45_path:P.p45||null,
     kin_name:v('kin_name'),kin_relation:v('kin_relation'),kin_phone:v('kin_phone'),kin_phone2:v('kin_phone2')||null,
-    top_size:chips.top_size,trouser_size:chips.trouser_size,shoe_size:chips.shoe_size,allergies:v('allergies'),qualified_in:chips.qualified_in||[],treatments_do:chips.treatments_do||[],treatments_learn:chips.treatments_learn||[],work_traits:chips.work_traits||[],goal_1y:v('goal_1y'),goal_3y:v('goal_3y'),promise_1y:v('promise_1y'),fav_food:v('fav_food'),fav_shop:v('fav_shop'),fav_coffee:v('fav_coffee')||null,fav_soft_drink:v('fav_soft_drink')||null,fav_alcohol:v('fav_alcohol')||null,food_intolerance:chips.food_intolerance||[],
+    top_size:chips.top_size,trouser_size:chips.trouser_size,shoe_size:chips.shoe_size,allergies:v('allergies'),qualified_in:chips.qualified_in||[],treatments_do:withOther(chips.treatments_do,'treatments_do_other'),treatments_learn:withOther(chips.treatments_learn,'treatments_learn_other'),work_traits:chips.work_traits||[],goal_1y:v('goal_1y'),goal_3y:v('goal_3y'),promise_1y:v('promise_1y'),fav_food:v('fav_food'),fav_shop:v('fav_shop'),fav_coffee:v('fav_coffee')||null,fav_soft_drink:v('fav_soft_drink')||null,fav_alcohol:v('fav_alcohol')||null,food_intolerance:chips.food_intolerance||[],
     declaration:true,signature:sigPath,signed_at:new Date().toISOString()};
   PDF=await makePdf(row);
   PDFNAME='BSB_My_Details_'+row.full_name.replace(/[^A-Za-z]+/g,'_')+'.pdf';
