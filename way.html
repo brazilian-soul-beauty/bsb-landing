@@ -189,13 +189,13 @@ const TESTP=person==='Teste';const PREVQ=QS.get('preview')=='1'||TESTP;const isP
 
 /* ---------- CONTENT ---------- */
 const CH=[
-{id:'01-welcome',n:'I',title:'Welcome',min:5,S:[
+{id:'01-welcome',n:'II',title:'Welcome',min:5,S:[
  {pic:'reception',cap:'Clapham Old Town',t:'open',h:'Welcome to<br>the <em>House</em>@@FIRST@@.',lede:'Before your first day, we want you to feel at home. Here you will learn how we work, how we care for every client, and what makes a visit to Brazilian Soul so special.',meta:'Chapter by chapter · Paid time'},
  {id:'p_ready',pic:'hall',cap:'Guess first',t:'choose',h:'Guess first',q:'Your first client is at 10:00. What time do you start in the salon, changed and ready to prep?',o:['10:00','9:45','9:30'],c:1,why:'9:45. You start 15 minutes before your first client, to prep. At 10:00 you are at your station with her.'},
  {id:'before',pic:'sink',cap:'The details',t:'form',h:'Before you begin',f:[{id:'hope',l:'What would you most like to learn here',ty:'area'}]},
  {pic:'hall',cap:'Until your first day',t:'done',h:'Thank you@@FIRST@@.',lede:'Your answers are kept with us. Next, the story of this House.',sign:true}
 ]},
-{id:'02-this-house',n:'II',title:'This House',min:12,S:[
+{id:'02-this-house',n:'III',title:'This House',min:12,S:[
  {pic:'hall',cap:'36 Bromell’s Road',t:'open',h:'This <em>House</em>',lede:'Who we are, why we exist, and how we live together, inside and out.',meta:'About 12 minutes'},
  {id:'p_year',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'When did Brazilian Soul open its doors?',o:['2012','2016','2019'],c:0,why:'In 2012, in Stockwell. Since November 2025, our home is 36 Bromell’s Road, Clapham Old Town.'},
  {pic:'reception',cap:'Since 2012',t:'read',h:'Our story',lines:['In 2012, Ligia opened Brazilian Soul with one idea: bring the beauty secrets of Brazil to London.','Many clients have been with us for years.','They come back for the results, and for the feeling of being at home.']},
@@ -217,9 +217,9 @@ const CH=[
  {id:'case1',pic:'stations',cap:'Case',t:'case',h:'Case 1',q:'A colleague is running late and her next client has arrived. You have 10 free minutes. What do you do?',a:'Help her. Prepare her station, offer her client a drink, and let Front of House know. We are a team, not a group of stars.'},
  {id:'case2',pic:'room',cap:'Case',t:'case',h:'Case 2',q:'During a treatment, a client shares something private. Later, a friend asks you about her. What do you say?',a:'Nothing. What happens here, stays here. Clients trust us with their stories.'},
  {id:'case3',pic:'sink',cap:'Case',t:'case',h:'Case 3',q:'You will be late tomorrow. How do you let us know?',a:'Through Connecteam and by telling Front of House, as early as possible and before your shift starts. Never by personal message only.'},
- {pic:'hall',cap:'Chapter II complete',t:'done',h:'Welcome to the <em>House</em>@@FIRST@@.',lede:'Now you know who we are. Next: the words we use with every client.'}
+ {pic:'hall',cap:'Chapter III complete',t:'done',h:'Welcome to the <em>House</em>@@FIRST@@.',lede:'Now you know who we are. Next: the words we use with every client.'}
 ]},
-{id:'03-words',n:'III',title:'The Words of the House',min:15,S:[
+{id:'03-words',n:'IV',title:'The Words of the House',min:15,S:[
  {pic:'nails',cap:'The words of the House',t:'open',h:'The <em>Words</em><br>of the House',lede:'In this House, words are part of the treatment. The same care, the same phrases, from every one of us.',meta:'About 15 minutes · Say them out loud'},
  {id:'p_name',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'How often should a client hear her own name during one visit?',o:['Once is enough','In every interaction we can, above all when she arrives and when she leaves','Never, it is too personal'],c:1,why:'The brain hears its own name through any noise. It is the fastest way to say “I see you, not a booking”. Use her name every time you can, and always in your first and your last sentence.'},
  {id:'s_new',pic:'reception',cap:'Welcome',t:'choose',say:1,h:'A new client walks in',q:'Which one do we say?',o:['Hi, do you have a booking?','Emma! Welcome in, we’re so happy you found us. I’m [your name], come with me, let me take your coat.','Hello. Take a seat, someone will be with you soon.'],c:1,why:'Her name in the first breath, your name right after, and one act of care: the coat. A new client decides in ten minutes if she returns, and minute one is yours.'},
@@ -234,9 +234,9 @@ const CH=[
  {id:'o_late',pic:'reception',cap:'She is late',t:'order',h:'She arrives late',q:'Put the three steps in the right order.',items:['Reassure first: “You’re here, that’s what matters.”','Let it settle: a seat, some water, a moment.','Then adjust: focus on what makes the biggest difference today.'],why:'A late client walks in stressed. One word of blame keeps the stress firing. Warmth first, then a pause, and only then the plan, framed as a gain, never a loss.'},
  {id:'case_late',pic:'reception',cap:'Case',t:'case',h:'Case',q:'She arrives 20 minutes late and the treatment must be adapted. Write what you say to her.',a:'“You’re here, that’s what matters. Sit down for one second. So you don’t feel rushed at all, we will focus today on what makes the biggest difference, and it will look just as beautiful.”'},
  {id:'w_practise',pic:'nails',cap:'Your turn',t:'write',h:'Your turn',q:'Which phrase will you practise out loud this week?'},
- {pic:'hall',cap:'Chapter III complete',t:'done',h:'Now you speak<br>our <em>language</em>@@FIRST@@.',lede:'Say these phrases out loud until they feel like yours. Next: our calendar, hours and holidays.'}
+ {pic:'hall',cap:'Chapter IV complete',t:'done',h:'Now you speak<br>our <em>language</em>@@FIRST@@.',lede:'Say these phrases out loud until they feel like yours. Next: our calendar, hours and holidays.'}
 ]},
-{id:'04-calendar',n:'IV',title:'Calendar',min:10,S:[
+{id:'04-calendar',n:'V',title:'Calendar',min:10,S:[
  {pic:'hall',cap:'Our calendar',t:'open',h:'Our <em>calendar</em>',lede:'Our week, your hours, and how our holiday calendar works.',meta:'About 10 minutes'},
  {id:'p_closed',pic:'reception',cap:'Guess first',t:'choose',h:'Guess first',q:'Which days is the salon closed?',o:['Saturday and Sunday','Sunday and Monday','Only Sunday'],c:1,why:'Sunday and Monday. We open Tuesday to Saturday.'},
  {pic:'reception',cap:'Our week',t:'week',h:'Our <em>week</em>'},
@@ -259,10 +259,10 @@ const CH=[
  {pic:'reception',cap:'Before you ask',t:'read',h:'Before you <em>ask</em>',lines:['<b>✓</b> The dates are not blocked.','<b>✓</b> You still have days left.','<b>✓</b> You still have days for that weekday.','<b>✓</b> You signed the Holiday Policy.']},
  {pic:'reception',cap:'Where to see it',t:'read',h:'Where to <em>see it</em>',lines:['<b>1</b> Check the Holidays calendar.','<b>2</b> Ask on Connecteam: Request Time Off.','<b>3</b> January, or no calendar yet? Talk to management.','<b>4</b> Wait for approval before you book any travel.'],link:['Open Holidays','https://bsb-holidays.vercel.app']},
  {id:'case_trip',pic:'reception',cap:'Case',t:'case',h:'Case',q:'You found cheap flights for July. What do you do?',a:'Check the Holidays calendar, ask on Connecteam, and only buy the flights after it is approved.'},
- {pic:'hall',cap:'Chapter IV complete',t:'done',h:'Now you know<br>our <em>rhythm</em>@@FIRST@@.',lede:'Next: our policies.'}
+ {pic:'hall',cap:'Chapter V complete',t:'done',h:'Now you know<br>our <em>rhythm</em>@@FIRST@@.',lede:'Next: our policies.'}
 ]},
-{id:'05-policies',n:'V',title:'Policies',pol:1,min:60},
-{id:'07-etiquette',n:'VI',title:'Etiquette',min:12,S:[
+{id:'05-policies',n:'VI',title:'Policies',pol:1,min:60},
+{id:'07-etiquette',n:'VII',title:'Etiquette',min:12,S:[
  {pic:'room',cap:'Etiquette',t:'open',h:'<em>Etiquette</em>',lede:'How we move, speak and care in this House, from the first hello to the last goodbye.',meta:'About 12 minutes'},
  {id:'w_name',pic:'reception',cap:'Her name',t:'case',h:'Her name, every time',q:'She sits down at your station. Write what you say, using her name.',a:'“Emma, can I serve you a nice cappuccino, herbal tea, or a glass of water?” Her name in every interaction, above all at the start and at the end.'},
  {pic:'stations',cap:'Clean first',t:'read',h:'Clean <em>first</em>',lines:['Every manicure starts by cleaning her hands with <b>alcohol</b>.','Files, buffers and towels are <b>single use</b>.','Metal tools are <b>sterilised and sealed</b>. Open them in front of her.','Wax: <b>never double dip</b>.']},
@@ -278,9 +278,9 @@ const CH=[
  {id:'c_bye',pic:'nails',cap:'Check',t:'choose',say:1,h:'Which is our goodbye?',q:'The treatment is finished.',o:['Thank you so much for coming, see you soon!','Emma, it was a pleasure to look after your hands today. I hope to see you soon.'],c:1,why:'Her name, the care you gave, and an invitation to come back.'},
  {id:'c_hand',pic:'reception',cap:'Check',t:'choose',say:1,h:'Handover',q:'You finish and your next client is waiting. What do you say?',o:['Ok, you can go now.','Emma, Joana will look after you now at reception.','Nothing, I just go to my next client.'],c:1,why:'She always knows who looks after her next and where to go.'},
  {id:'case_pol',pic:'room',cap:'Case',t:'case',h:'Case',q:'A client starts talking about politics. What do you do?',a:'Listen kindly, do not share your view, and gently bring the talk back to her and her treatment.'},
- {pic:'hall',cap:'Chapter VI complete',t:'done',h:'Grace in every<br><em>detail</em>@@FIRST@@.',lede:'Next: our image and uniform.'}
+ {pic:'hall',cap:'Chapter VII complete',t:'done',h:'Grace in every<br><em>detail</em>@@FIRST@@.',lede:'Next: our image and uniform.'}
 ]},
-{id:'08-image',n:'VII',title:'Image & Uniform',min:15,S:[
+{id:'08-image',n:'VIII',title:'Image & Uniform',min:15,S:[
  {pic:'vg_cover',cap:'Vanilla Girl',t:'open',h:'The <em>Vanilla Girl</em>',lede:'Our look is minimal, neutral and elegant. Simple pieces, impeccable care, every day.',meta:'About 15 minutes'},
  {pic:'vg_cover',cap:'The magazine',t:'mag',h:'Read the <em>magazine</em>',pages:11},
  {id:'p_vanilla',pic:'vg_brunette',cap:'Guess first',t:'choose',h:'Guess first',q:'Which colours make the Vanilla Girl look?',o:['Bright and neon','White, nude, beige and soft neutrals','Black only'],c:1,why:'White, nude, beige, grey and soft pastels. Clean, calm and elegant.'},
@@ -298,9 +298,9 @@ const CH=[
  {pic:'vg_hair',cap:'Hair',t:'read',h:'<em>Hair</em>',lines:['Low bun, sleek ponytail, neat braids, defined curls or natural waves.','Every hair type is welcome.','Always <b>neat and aligned</b>.','Healthy and cared for.']},
  {id:'c_ready_look',pic:'vg_hair2',cap:'Check',t:'choose',h:'Ready for the floor?',q:'Which look is ready?',o:['Messy loose hair and bold red lips','Sleek low bun, nude lips, small gold earrings','Big hoops and bright blue eyeshadow'],c:1,why:'Neat hair, soft makeup, discreet jewellery. Ready before you clock in.'},
  {id:'sign_image',pic:'vg_cafe',cap:'Declaration',t:'sign',h:'Your <em>signature</em>',decl:'I declare I have received the uniform and personal image standard of Brazilian Soul Beauty, and I will follow it.'},
- {pic:'vg_selfie',cap:'Chapter VII complete',t:'done',h:'Simple, neutral,<br><em>impeccable</em>@@FIRST@@.',lede:'Next: our treatments.'}
+ {pic:'vg_selfie',cap:'Chapter VIII complete',t:'done',h:'Simple, neutral,<br><em>impeccable</em>@@FIRST@@.',lede:'Next: our treatments.'}
 ]},
-{id:'06-treatments',n:'VIII',title:'Treatments',soon:1}
+{id:'06-treatments',n:'IX',title:'Treatments',soon:1}
 ];
 
 /* ---------- STATE ---------- */
@@ -345,7 +345,7 @@ function polHome(){
  const rows=POL.slice(PV.pg*per,PV.pg*per+per).map((p,j)=>{const i=PV.pg*per+j,s=pSigned(i),u=pUnlocked(i);
   const st=s?'<b class="ck">✓</b>':!pLive(i)?'Soon':u?pMin(p)+' min':`<img src="${LOCK}" alt="">`;
   return `<button data-pi="${i}" class="${s?'done':''}" ${u||s?'':'disabled'}><span class="r">${String(i+1).padStart(2,'0')}</span><span class="t">${esc(p.title)}</span><span class="s">${st}</span></button>`}).join('');
- $('main').innerHTML=`<div class="num">Chapter V</div><h1>Our <em>policies</em></h1><p class="lede pl-lede">Read each step and confirm. Sign at the end of every policy.</p><div class="chap pol">${rows}</div>${pages>1?`<div class="pager"><button id="pp" ${PV.pg?'':'disabled'}>‹</button>${PV.pg+1} / ${pages}<button id="pn" ${PV.pg<pages-1?'':'disabled'}>›</button></div>`:''}`;
+ $('main').innerHTML=`<div class="num">Chapter VI</div><h1>Our <em>policies</em></h1><p class="lede pl-lede">Read each step and confirm. Sign at the end of every policy.</p><div class="chap pol">${rows}</div>${pages>1?`<div class="pager"><button id="pp" ${PV.pg?'':'disabled'}>‹</button>${PV.pg+1} / ${pages}<button id="pn" ${PV.pg<pages-1?'':'disabled'}>›</button></div>`:''}`;
  $('bk').style.visibility='visible';
  const nx=POL.findIndex((p,i)=>pUnlocked(i)&&!pSigned(i));
  $('nx').textContent=nx<0?'Next chapter':'Start '+String(nx+1).padStart(2,'0');$('nx').disabled=false;
@@ -462,7 +462,7 @@ function printReport(){
  const dd=RP.A['00-details|__done'];
  $('print').innerHTML=`<header><img src="${$('logo').src}"><div><h1>The BSB Way · Onboarding report</h1><p>${esc(RP.who)} · ${n} of ${POL.length} policies signed · Printed ${fmtT(new Date().toISOString())}</p></div></header>
  <section><h2>Step 1 · My details</h2><p class="ns">${dd?'Sent '+fmtT(dd)+'. Full form and documents saved in Staff docs.':'Not sent yet'}</p></section>
- ${chapRep()}<section><h2>Chapter V · Policies</h2></section>${pol||'<p>No policies signed yet.</p>'}`;
+ ${chapRep()}<section><h2>Chapter VI · Policies</h2></section>${pol||'<p>No policies signed yet.</p>'}`;
  document.title='BSB Onboarding · '+RP.who;window.print();setTimeout(()=>document.title='The BSB Way',1500)}
 
 
@@ -500,7 +500,7 @@ function goTarget(){const cur=curStep();
 function home(){if(REFRESH)return refreshHome();
  const cur=curStep(),i=PSEL==null?cur:PSEL,p=PATH[i];frame('team','','',PATH.filter((x,k)=>pDone(k)).length/PATH.length*100);
  const d=pDone(i),o=pOpen(i);let body='';
- if(i==1&&o){body=`<button data-p="0" class="${pDone(0)?'done':''}"><span class="r">0</span><span class="t">My details</span><span class="s">${pDone(0)?'<b class="ck">✓</b>':'5 min'}</span></button>`+CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
+ if(i==1&&o){body=`<button data-p="0" class="${pDone(0)?'done':''}"><span class="r">I</span><span class="t">My details</span><span class="s">${pDone(0)?'<b class="ck">✓</b>':'5 min'}</span></button>`+CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
  else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
  $('main').innerHTML=`<div class="num">Step ${i+1} of ${PATH.length}</div><h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1>
  ${i==1&&o?`<div class="stp">${p.t}</div>`:""}<div class="chap path">${body}</div>`;
