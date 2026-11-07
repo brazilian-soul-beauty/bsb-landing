@@ -13197,7 +13197,7 @@ function acBtnHtml(a){var d=a.date||(typeof currentDate!=='undefined'?currentDat
       '<div class="gc"><div class="card r"><h3>🔴 GP letter needed</h3><div class="sub">No letter by the day before = reschedule</div>'+li(R)+'</div>'+
       '<div class="card x"><h3>⛔ Reschedule</h3><div class="sub">No treatment today, no letter needed</div>'+li(X)+'</div>'+
       '<div class="card y"><h3>🟡 You adapt</h3><div class="sub">No letter needed</div>'+li(Y)+'</div></div>'+
-      '<div class="ft">Not sure? Don’t go ahead. Message Ligia first.</div></div>';
+      '<div class="ft">Not sure? Don’t go ahead. Message Reception first.</div></div>';
     document.body.appendChild(o);
   };
   function put(){var h=document.querySelector('#modal .modal-head');if(h&&!h.querySelector('.gplBtn')){var b=document.createElement('button');b.className='gplBtn';b.type='button';b.textContent='🩺 Health guide';b.onclick=function(e){e.stopPropagation();gplOpen()};h.appendChild(b);}}
