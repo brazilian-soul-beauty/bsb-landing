@@ -904,7 +904,7 @@ function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+
     '<div class="alive"><em>📅</em><div><b>Fill the quiet days</b><span>Every booking you bring counts</span></div></div><div class="wk">'+wk.join('')+'</div>'+'</div>';
   var tv=d.tips_pct==null?null:+d.tips_pct,ta=d.tips_avg==null?null:+d.tips_avg,tar=tv==null||ta==null?'':tv>ta?' ↑':tv<ta?' ↓':'';
   var rn=n(d.reviews_n),r5=n(d.reviews_5);
-  var C=[['👥','Clients',cl,'today'],['⭐','Reviews',rn,rn?r5+' with 5★':'salon today'],['💜','Tips',tv==null?'–':tv+'%'+tar,ta==null?'of sales':'usual '+ta+'%']];
+  var C=[['👥','Clients',cl,'today'],['⭐','Reviews',rn,rn?r5+' with 5★':'salon today'],['💛','Tips',tv==null?'–':tv+'%'+tar,(d.tips_n?n(d.tips_q)+' of '+n(d.tips_n)+' gave a tip':'clients who tipped')+(ta==null?'':' · usual '+ta+'%')]];
   var xs=d._st||{},TK=[['☀️','Morning',xs.t_morning>0],['☑️','Day',xs.t_day>0],['🌙','Close',xs.t_close>0]];
   h+='<div class="tdm"><div class="bh">👑 My day</div><div class="tds t5">'+SE.map(function(q,k){var st=q.ok||q.p?'ok':'na';
     return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+q.ic+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span>'+(q.g?'<em class="gl">🎯 '+q.g+'</em>':'')+'</div>'}).join('')+'</div>'+
