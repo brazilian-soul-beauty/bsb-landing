@@ -729,6 +729,9 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
   var DK=isDesk();if(DK){var mk0=ymd(new Date(r[0].getFullYear(),r[0].getMonth(),1)),mk1=ymd(new Date(r[0].getFullYear(),r[0].getMonth()+1,0));
     if(S.exdkk!==S.who+mk0){S.exdkk=S.who+mk0;S.exdk=null;rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:mk0,p_to:mk1}).catch(function(){return null}).then(function(x){S.exdk=x||{};if(S.tab==='ex')renderEx(M)})}
     var k=S.exdk||{},nn=function(v){return +v||0},cl=nn(k.clients)}
+  var dpaid=0,dcom=0;if(DK&&S.exlm){var a0=ymd(S.exlm),a1=ymd(new Date(S.exlm.getFullYear(),S.exlm.getMonth()+1,0));
+    if(S.exdlk!==S.who+a0){S.exdlk=S.who+a0;S.exdl=null;rpc('soul_desk',{p_code:S.code,p_person:S.who,p_from:a0,p_to:a1}).catch(function(){return null}).then(function(x){S.exdl=x||{};if(S.tab==='ex')renderEx(M)})}
+    dpaid=+((S.exdl||{}).drinks_paid)||0;dcom=dpaid*0.5;ltot+=dcom;lh=hrs?ltot/hrs:0}
   if(DK&&!MONEY()){var h='<div class="hero exh"><small>🛎️ My month</small><h2>'+MN[r[0].getMonth()]+'</h2><p>What you did for the salon</p>'+
      '<div class="ext"><b>'+cl+'</b><span>clients this month</span></div>'+
      '<div class="exb"><div><em>🥂</em><b>'+nn(k.drinks_paid)+'</b><span>Drinks sold</span></div><div><em>🔁</em><b>'+nn(k.rebook)+'</b><span>Rebooked</span></div><div><em>📲</em><b>'+nn(k.lm_booked)+'</b><span>Last minute</span></div></div></div>'}
@@ -740,7 +743,7 @@ function renderEx(M){var r=range(),m=ymd(new Date(r[0].getFullYear(),r[0].getMon
   else{
   var h='<div class="hero exh"><small>💷 My money</small><h2>'+lmn+'</h2><p>Everything you earned, all in</p>'+
    '<div class="ext"><b>'+(lh?'£'+lh.toFixed(2)+'<small>/h</small>':gb0(ltot))+'</b><span>'+(lh?'Your real hour, all in · '+gb0(ltot)+' in '+Math.round(hrs)+'h':'all in')+'</span></div>'+
-   '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients'],['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products you sold']].filter(function(x){return !(DK&&x[1]==='Commission'&&!x[2])}).map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
+   '<div class="exl">'+[['💷','Pay',pay,'Your salary'],['💜','Tips',tips,'From your clients']].concat(DK?[['🥂','Drinks commission',dcom,dpaid+' paid drinks · £0.50 each']]:[]).concat([['💅','Staff treatments',disc,'25% off your treatments'],['🎁','Gifts',gift,'From the salon'],['🧴','Commission',lcom,'Products you sold']]).filter(function(x){return !(DK&&x[1]==='Commission'&&!x[2])}).map(function(q){return '<div><em>'+q[0]+'</em><span><b>'+q[1]+'</b><small>'+q[3]+'</small></span><i>'+gb0(q[2])+(hrs?'<small>£'+(q[2]/hrs).toFixed(2)+'/h</small>':'')+'</i></div>'}).join('')+'</div>'+
    (DK?'':'<div class="verdict"><em>☀️</em><span>This month so far: '+gb2(tot)+' commission · today 🧴 '+(tdy?tdy.q:0)+(tu?' · ✨ '+tu.u+'/'+tu.v:'')+'</span></div>')+'</div>';}
   function steps(list,cur){return '<div class="lad2">'+list.map(function(s0,i){var on=i<=cur,now=i===cur;return '<div class="st'+(on?' on':'')+(now?' now':'')+'"><i>'+s0[0]+'</i><small>'+s0[1]+'</small></div>'}).join('<u></u>')+'</div>'}
   var c1;
