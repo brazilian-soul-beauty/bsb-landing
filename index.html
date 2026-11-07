@@ -4855,7 +4855,7 @@ var NEVER_SAY = [
   { no:'Calm down.',                  yes:'I hear you, let me sort this out.' },
   { no:'You should have told me.',    yes:'Thank you for telling me, we will fix it.' },
   { no:'It is only ten pounds.',      yes:'It is ten pounds, and it lasts you three weeks.' },
-  { no:'Sorry for the wait.',         yes:'Thank you for your patience, you have my full attention now.' }
+  { no:'Sorry for the wait.',         yes:'Thank you so much for waiting, it\u2019s lovely to see you.' }
 ];
 function renderPhrasesPage() {
   var root = document.getElementById('phrasesRoot'); if (!root) return;
@@ -8558,7 +8558,7 @@ function runAlerts(a) {
   }
   /* you started late → a red heads-up + a line for the room */
   if (today && rs.phase === 'running' && rs.startedLate >= 5 && !((runFor(a) || {}).assumed)) {   /* v37.6: inicio assumido nao e atraso dela */
-    out += '<div class="run-alert warn">🔴 <b>You started ' + rs.startedLate + ' min late.</b> Keep the pace calm and, if it was noticed: <i>“Thank you for your patience, you have my full attention now.”</i></div>';
+    out += '<div class="run-alert warn">🔴 <b>You started ' + rs.startedLate + ' min late.</b> Keep the pace calm and, if it was noticed: <i>“Thank you so much for waiting, it\u2019s lovely to see you.”</i></div>';
   }
   /* handoff: she has a later service with another therapist today → finish-by time, in RED */
   var ho = nextHandoff(a);
