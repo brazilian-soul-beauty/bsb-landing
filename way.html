@@ -360,7 +360,7 @@ function polScreen(){
    ready=PV.pts.length>0&&!!(PV.name||'').trim();label='Sign'}}
  else if(s.t=='pdone'){const nx=PV.pi+1<POL.length&&pLive(PV.pi+1);
   h=`<div class="num">Policy ${no} · Signed</div><h1>Thank you${first?', '+esc(first):''}.</h1><p class="lede">${esc(p.title)} is signed and saved.${nx?' Next: '+esc(POL[PV.pi+1].title)+'.':''}</p>`;label=nx?'Next policy':'Back to policies'}
- $('main').innerHTML=h;$('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&!isPrev();$('nx').dataset.hint=s.t=='sign'?'Sign to continue':'Tick the box to continue';$('nx').onclick=polNext;
+ $('main').innerHTML=h;$('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&(!isPrev()||s.t=='case'||s.t=='write');$('nx').dataset.hint=s.t=='sign'?'Sign to continue':'Tick the box to continue';$('nx').onclick=polNext;
  if(s.t=='ack'&&$('ack')&&!pAck(p,s.k))$('ack').onclick=()=>{PV.tick=!PV.tick;$('ack').classList.toggle('on',PV.tick);$('ack').querySelector('.box').textContent=PV.tick?'✓':'';$('nx').disabled=!PV.tick};
  if(s.t=='sign'&&$('sgcv'))sigWire();
 }
@@ -538,7 +538,7 @@ function screen(){$('nx').dataset.hint='Answer to continue';
   if(st.seen)h+=`<div class="why"><b>Our answer</b>${s.a}</div>`;ready=!!(st.v||'').trim();if(!st.seen)label='See our answer'}
  $('main').innerHTML=h;
  $('nx').dataset.hint={choose:(st.v!=null?'Tap I was sure or I guessed':'Tap one answer'),write:'Write your answer',case:'Write your answer',form:'Fill in every box',match:'Choose every answer',sign:'Sign to continue'}[s.t]||'Answer to continue';
- $('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&!isPrev();
+ $('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&(!isPrev()||s.t=='case'||s.t=='write');
  wire(s,c,id,st);
 }
 function fld(x){const C=CH[ci].id;const v=get(C,x.id)||'';
