@@ -23,7 +23,7 @@ input,select{font-family:inherit;font-size:14px}
 .btn.g{background:var(--p2);color:var(--p)}
 .main{flex:1;min-height:0;display:flex;flex-direction:column}
 /* grid */
-.grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:14px;min-height:0}
+.grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:14px;min-height:0}
 .st{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-align:left;display:flex;flex-direction:column;gap:8px;transition:.15s;position:relative;overflow:hidden}
 .st:hover{border-color:var(--p);transform:translateY(-2px);box-shadow:0 6px 18px rgba(109,75,216,.12)}
 .st .n{font-size:12px;font-weight:700;color:var(--p);background:var(--p2);border-radius:20px;padding:3px 9px;align-self:flex-start}
@@ -189,9 +189,9 @@ const DOCS='bsb-staff-docs';
 const TRIALS='https://bsb-trials.vercel.app/?p=ligia';
 const STAGES=[
  [1,'Interview','🔎'],[2,'Trial','💅'],[3,'Offer','📩'],[4,'Onboarding form','📝'],[5,'Contract','✍️'],
- [6,'The BSB Way','📖'],[7,'Training period','🎓'],[8,'Probation','✅'],[9,'Open questions','❓']
+ [6,'The BSB Way','📖'],[7,'Training period','🎓'],[8,'Probation','✅']
 ];
-const QQ=9,WAYN=6;
+const QQ=-1,WAYN=6;
 const WAY=[['00-details','I · My details'],['01-welcome','II · Welcome'],['02-this-house','III · This House'],['03-words','IV · The Words of the House'],['04-calendar','V · Calendar'],['05-policies','VI · Policies'],['07-etiquette','VII · Etiquette'],['08-image','VIII · Image & Uniform']];
 let WS={},WL={};
 const APP=location.origin+location.pathname;
