@@ -877,16 +877,23 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
 #jnv .mh{display:grid;grid-template-columns:120px 1.3fr 1fr 1fr 1.4fr 1.2fr;gap:10px;padding:0 12px 6px;font:700 11px Inter,sans-serif;color:#8B8DA8;text-transform:uppercase}
 #jnv .tp{display:inline-block;font:700 10px Inter,sans-serif;border-radius:999px;padding:2px 7px;margin-right:4px;background:#ECE8FC;color:#4634C7}
 #jnv .tp.gift{background:#FFE8EF;color:#B0305A}#jnv .tp.booking{background:#DCF4E7;color:#1B7A4A}#jnv .tp.brand{background:#F2F2F6;color:#585A75}#jnv .tp.winback{background:#FFF3D6;color:#8A5A00}
+#jnv .fn{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+#jnv .fn .cp{background:#fff;border:1px solid #EEEEF4;border-radius:16px;padding:14px 16px}
+#jnv .fn .cp h4{margin:0 0 4px;font-size:15px}#jnv .fn .cp small{color:#8B8DA8;font-size:12px}
+#jnv .fn .row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #F2F2F6;font-size:14px}
+#jnv .fn .row:last-child{border-bottom:0}#jnv .fn .row b{font-size:17px}
+#jnv .fn .row.g b{color:#1B7A4A}#jnv .fn .row.r b{color:#B0305A}
 /*BSB-HUBJOURNEY-FIM*/</style>
 <div id="jnv">
- <div class="lh"><h2>🗺️ Client journey 2027</h2><div class="sw"><button data-p="path" class="on">Path</button><button data-p="rules">Rules</button><button data-p="cal">2027</button></div></div>
+ <div class="lh"><h2>🗺️ Client journey 2027</h2><div class="sw"><button data-p="path" class="on">Path</button><button data-p="rules">Rules</button><button data-p="motor">Motor</button><button data-p="cal">2027</button></div></div>
  <div id="jnBody"></div>
 </div>
 <script>/*BSB-HUBJOURNEY-INICIO*/
 (function(){
   var lk=new URLSearchParams(location.search).get('p');if(lk&&!/^ligia$/i.test(lk))return;
   var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
-  var C={},sel=1,page='path',CAL=[],mes=0;
+  var C={},sel=1,page='path',CAL=[],mes=0,F=[];
+  var FN=[['due_back','🔔','Due back','late for her rhythm'],['miss_a','💔','We miss you A','65 to 75 days'],['miss_b','💔','We miss you B','76 to 100 days'],['miss_c','💔','We miss you C','101 to 120 days']];
   var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var TP={season:'Season',gift:'Gift cards',booking:'Booking opens',brand:'Brand',winback:'Win back',member:'Members',lastmin:'Last minute'};
   function dm(d){if(!d)return'';var x=new Date(d+'T12:00');return x.getDate()+' '+MN[x.getMonth()]}
@@ -897,7 +904,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
    {i:'💎',n:'Regular',k:'regular',lab:'3+ visits',gets:'Bring someone you love: £15 for her friend, £15 for her',how:'Email 7 days after her 3rd visit · friend writes FRIEND + name',code:'FRIEND',who:'Robot + Joana',on:1},
    {i:'👑',n:'Member',k:'membro',lab:'last 60 days',gets:'Perks, never a discount',how:'Membership invite (clients spending £120+ a month)',code:'MEMBER',who:'Ligia',on:0},
    {i:'🎂',n:'Birthday',k:null,lab:'every year',gets:'20% off 3 treatments from £100 + prosecco + truffles',how:'Mailchimp email 7 days before',code:'BDAY20',who:'Mailchimp',on:1},
-   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'We miss you A, B, C: 15% off',how:'Email at 65, 76 and 101 days',code:'WELCOMEBACK15',who:'Mailchimp',on:0}
+   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'We miss you A, B, C: 15% off',how:'Email at 65, 76 and 101 days + reminder day 7',code:'WELCOMEBACK15',who:'Motor (test)',on:0}
   ];
   var R=[['✉️','1 message every 7 days per client, all channels together'],['🏷️','1 discount per visit. Codes never add up'],['👑','Members get perks, never discounts'],['🎁','Regulars get gifts. Discounts only to bring new clients and win back lost ones'],['🚪','She books, she leaves the stage and stops receiving'],['⚖️','Same week? Rhythm first, then stage, then the month campaign']];
   var M=[['Jan','Body scrub & drainage · Waxing'],['Feb','Hands and feet together'],['Mar','Massage · Waxing for spring'],['Apr','Sandal season pedicure'],['May',''],['Jun','Massage for waxing clients'],['Jul','Holiday lashes & brows'],['Aug','Pre-book your autumn facial'],['Sep','Facial & massage'],['Oct','October Reset · Body scrub film'],['Nov','Black Tie Skin · Soul Friday gift cards'],['Dec','Lash lift · Christmas card gift for January']];
@@ -909,6 +916,11 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
     [].forEach.call(document.querySelectorAll('#jnv .sw button'),function(b){b.classList.toggle('on',b.dataset.p===page)});
     var B=document.getElementById('jnBody');
     if(page==='rules'){B.innerHTML='<div class="rules">'+R.map(function(r){return '<div><b>'+r[0]+'</b>'+esc(r[1])+'</div>'}).join('')+'</div>';return;}
+    if(page==='motor'){var tst=F.some(function(f){return f.teste});
+      B.innerHTML='<div class="fn">'+FN.map(function(c){var f=F.filter(function(x){return x.campanha===c[0]})[0]||{};
+        function rw(l,v,k){return '<div class="row'+(k?' '+k:'')+'"><span>'+l+'</span><b>'+(v==null?0:v)+'</b></div>'}
+        return '<div class="cp"><h4>'+c[1]+' '+c[2]+'</h4><small>'+c[3]+'</small>'+rw('📥 In',f.entraram)+rw('⏰ Reminder',f.lembrete)+rw('📅 Booked',f.marcaram,'g')+rw('✅ Came',(f.vieram||0)+' · £'+(f.gbp||0),'g')+rw('🚪 No reply',f.sem_resposta,'r')+rw('⏳ In now',f.agora)+'</div>'}).join('')+'</div>'+
+        '<div class="extra">'+(tst?'🧪 <b>Test</b>: nothing goes to clients. Ligia gets the preview by email every day at 10:00.':'● <b>Live</b>')+' · Reminder day 7 · Pause 60 days · 1 message every 7 days</div>';return;}
     if(page==='cal'){
       if(mes){var L=CAL.filter(function(c){return c.mes===mes});
         B.innerHTML='<div class="mdet"><div class="top"><button data-m="0">◀ Year</button><b>'+MN[mes-1]+' 2027</b><span style="margin-left:auto;display:flex;gap:6px"><button data-m="'+(mes>1?mes-1:12)+'">◀</button><button data-m="'+(mes<12?mes+1:1)+'">▶</button></span></div>'+
@@ -923,6 +935,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
       '<div class="extra">⚡ <b>Last minute</b> sits above every stage: only when a slot is empty, sent by Joana from the Last minute dash.</div>';
   }
   function load(){fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){});
+    fetch(SB+'vw_bsb_flow_funnel?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){F=Array.isArray(a)?a:[];draw();}).catch(function(){});
     fetch(SB+'bsb_mkt_calendar?select=*&ano=eq.2027&order=ini.asc',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){CAL=Array.isArray(a)?a:[];draw();}).catch(function(){})}
   document.addEventListener('click',function(e){
     var x=e.target;if(!x.closest)return;var tb=x.closest('.tabs .tab');
