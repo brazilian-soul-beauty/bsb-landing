@@ -469,7 +469,7 @@ function renderSteps(){const el=$('steps');if(!el)return;const inCh=view=='ch'||
  if(inCh||view=='tr'){const L=CH.filter(c=>!c.soon);el.innerHTML=L.map(c=>{const k=CH.indexOf(c),d=chDone(c),cur=inCh&&k==ci;return `<span class="${d&&!cur?'d':''} ${cur?'c':''}" title="${c.title}">${d&&!cur?'✓':c.n}</span>`}).join('<i></i>')+(inCh?`<b>${CH[ci].title}</b>`:'<b>The BSB Way</b>');return}
  if(view=='home'){const cur=curStep(),sel=PSEL==null?cur:PSEL;el.innerHTML=PATH.map((p,i)=>`<span data-s="${i}" class="${pDone(i)&&i!=sel?'d':''} ${i==sel?'c':''}" style="${i==cur||pDone(i)||pOpen(i)?'cursor:pointer':''}">${pDone(i)&&i!=sel?'✓':i+1}</span>`).join('<i></i>')+`<b>${PATH[sel].t}</b>`;return}
  el.innerHTML=''}
-function frame(pic,cap,cnt,pct){$('bk').textContent=view=='home'&&ADMIN?'Team answers':'Back';$('main').classList.toggle('ph',view=='home');const use=picRule(pic);const C=CH[ci];const inCh=view=='ch'||view=='pol'||view=='ps';
+function frame(pic,cap,cnt,pct){$('nx').style.visibility='visible';$('bk').textContent=view=='home'&&ADMIN?'Team answers':'Back';$('main').classList.toggle('ph',view=='home');const use=picRule(pic);const C=CH[ci];const inCh=view=='ch'||view=='pol'||view=='ps';
  $('pic').classList.toggle('paper',use=='paper');if(use){titlePanel(false);$('pic').style.backgroundPosition=POS[use]||'center';$('pic').style.backgroundImage=`url(${IMG[use]})`}
  else{const lab=inCh?'Chapter '+C.n+' · '+C.title:view=='wi'?'The BSB Way':(view=='home'?'The BSB Way':view=='tr'?'Step 2':cap);const t=inCh?cap:(view=='home'?'Your <em>path</em>':view=='tr'?'The BSB <em>Way</em>':cap);titlePanel(true,lab,t,(view=='ch'&&C.S[si].t=='open')?String(ci+1).padStart(2,'0'):'')}
  renderSteps();if(isPrev())cnt='PREVIEW · '+cnt;$('cap').textContent=cap;$('cnt').textContent=cnt;$('bar').style.width=pct+'%';$('sv').textContent=''}
@@ -494,7 +494,7 @@ function home(){if(REFRESH)return refreshHome();
  else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
  $('main').innerHTML=`<h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1><div class="chap path">${body}</div>`;
  $('bk').style.visibility=ADMIN?'visible':'hidden';
- const go=goTarget();$('nx').textContent=go.t;$('nx').disabled=!go.f;$('nx').onclick=go.f||null;
+ $('nx').style.visibility='hidden';$('nx').onclick=null;
  document.querySelectorAll('.path button[data-p]').forEach(b=>b.onclick=()=>{if(+b.dataset.p==0)location.href='details.html'+location.search});
  document.querySelectorAll('.path button[data-k]').forEach(b=>b.onclick=()=>{PSEL=null;ci=+b.dataset.k;if(CH[ci].pol){view='pol';PV.pg=0;return polHome()}si=resumeAt(CH[ci]);T0=Date.now();view='ch';render()});
  document.querySelectorAll('#steps span[data-s]').forEach(x=>x.onclick=()=>{const k=+x.dataset.s;if(k==cur||pDone(k)||pOpen(k)){PSEL=k==cur?null:k;home()}});
