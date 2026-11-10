@@ -868,6 +868,15 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
 #jnv .cal .m{font:700 12px Inter,sans-serif;color:#5B47E0;text-transform:uppercase;margin-bottom:6px}
 #jnv .cal .t{font-size:13px;line-height:1.4}
 #jnv .cal .empty{background:#FAFAFC;color:#9A9BB4}
+#jnv .cal div.mo{cursor:pointer}#jnv .cal div.mo:hover{border-color:#5B47E0}
+#jnv .cal .t span{display:block;margin-bottom:3px}
+#jnv .mdet .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}#jnv .mdet .top button{border:1px solid #E2E2EC;background:#fff;border-radius:10px;padding:6px 12px;cursor:pointer;color:#4634C7;font:700 13px Inter,sans-serif}
+#jnv .mdet .top b{font-size:17px}
+#jnv .mrow{display:grid;grid-template-columns:120px 1.3fr 1fr 1fr 1.4fr 1.2fr;gap:10px;background:#fff;border:1px solid #EEEEF4;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.4;align-items:start}
+#jnv .mrow .d{color:#8B8DA8;font-weight:600}#jnv .mrow .n{font-weight:700}
+#jnv .mh{display:grid;grid-template-columns:120px 1.3fr 1fr 1fr 1.4fr 1.2fr;gap:10px;padding:0 12px 6px;font:700 11px Inter,sans-serif;color:#8B8DA8;text-transform:uppercase}
+#jnv .tp{display:inline-block;font:700 10px Inter,sans-serif;border-radius:999px;padding:2px 7px;margin-right:4px;background:#ECE8FC;color:#4634C7}
+#jnv .tp.gift{background:#FFE8EF;color:#B0305A}#jnv .tp.booking{background:#DCF4E7;color:#1B7A4A}#jnv .tp.brand{background:#F2F2F6;color:#585A75}#jnv .tp.winback{background:#FFF3D6;color:#8A5A00}
 /*BSB-HUBJOURNEY-FIM*/</style>
 <div id="jnv">
  <div class="lh"><h2>🗺️ Client journey 2027</h2><div class="sw"><button data-p="path" class="on">Path</button><button data-p="rules">Rules</button><button data-p="cal">2027</button></div></div>
@@ -877,7 +886,10 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
 (function(){
   var lk=new URLSearchParams(location.search).get('p');if(lk&&!/^ligia$/i.test(lk))return;
   var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
-  var C={},sel=1,page='path';
+  var C={},sel=1,page='path',CAL=[],mes=0;
+  var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var TP={season:'Season',gift:'Gift cards',booking:'Booking opens',brand:'Brand',winback:'Win back',member:'Members',lastmin:'Last minute'};
+  function dm(d){if(!d)return'';var x=new Date(d+'T12:00');return x.getDate()+' '+MN[x.getMonth()]}
   var S=[
    {i:'🌱',n:'Not yet',k:null,lab:'never came',gets:'15% off her first visit',how:'Website popup → Mailchimp email + reminder day 10',code:'SOULWELCOME15',who:'Mailchimp',on:1},
    {i:'💌',n:'1st visit',k:'primeira',lab:'last 60 days',gets:'Post-visit email: £10 Circle + £10 Google review (or prosecco if she reviewed). 3 weeks later: "Your £10 is still here"',how:'Email 15 min after her visit · Mailchimp 3 weeks',code:'BSB-WELCOME10 · GOOGLE-REVIEW',who:'Robot + Mailchimp',on:1},
@@ -897,20 +909,29 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
     [].forEach.call(document.querySelectorAll('#jnv .sw button'),function(b){b.classList.toggle('on',b.dataset.p===page)});
     var B=document.getElementById('jnBody');
     if(page==='rules'){B.innerHTML='<div class="rules">'+R.map(function(r){return '<div><b>'+r[0]+'</b>'+esc(r[1])+'</div>'}).join('')+'</div>';return;}
-    if(page==='cal'){B.innerHTML='<div class="cal">'+M.map(function(m){return '<div class="'+(m[1]?'':'empty')+'"><div class="m">'+m[0]+'</div><div class="t">'+(m[1]?esc(m[1]):'Free month')+'</div></div>'}).join('')+'</div>';return;}
+    if(page==='cal'){
+      if(mes){var L=CAL.filter(function(c){return c.mes===mes});
+        B.innerHTML='<div class="mdet"><div class="top"><button data-m="0">◀ Year</button><b>'+MN[mes-1]+' 2027</b><span style="margin-left:auto;display:flex;gap:6px"><button data-m="'+(mes>1?mes-1:12)+'">◀</button><button data-m="'+(mes<12?mes+1:1)+'">▶</button></span></div>'+
+          '<div class="mh"><span>When</span><span>Moment</span><span>Who</span><span>How</span><span>She gets</span><span>Why</span></div>'+
+          L.map(function(c){return '<div class="mrow"><span class="d">'+dm(c.ini)+(c.fim&&c.fim!==c.ini?' – '+dm(c.fim):'')+'</span><span class="n"><span class="tp '+esc(c.tipo)+'">'+esc(TP[c.tipo]||c.tipo)+'</span><br>'+esc(c.nome)+'</span><span>'+esc(c.publico)+'</span><span>'+esc(c.canal)+'</span><span>'+esc(c.oferta)+'</span><span>'+esc(c.objetivo)+'</span></div>'}).join('')+
+          '<div class="extra">🔁 All year, under every month: post-visit email, 3 week reminder, Due back, Bring someone you love, Birthday week, We miss you, Last minute.</div></div>';return;}
+      B.innerHTML='<div class="cal">'+MN.map(function(m,ix){var L=CAL.filter(function(c){return c.mes===ix+1});return '<div class="mo'+(L.length?'':' empty')+'" data-mo="'+(ix+1)+'"><div class="m">'+m+'</div><div class="t">'+(L.length?L.slice(0,4).map(function(c){return '<span><span class="tp '+esc(c.tipo)+'">'+esc((TP[c.tipo]||'').split(' ')[0])+'</span>'+esc(c.nome)+'</span>'}).join(''):'Free month')+'</div></div>'}).join('')+'</div>';return;}
     var s=S[sel];
     B.innerHTML='<div class="path">'+S.map(function(x,ix){var n=x.k&&C[x.k]!=null?C[x.k]:'·';return '<div class="st'+(ix===sel?' on':'')+'" data-i="'+ix+'"><div class="i">'+x.i+'</div><div class="n">'+x.n+'</div><b>'+n+'</b><small>'+x.lab+'</small></div>'}).join('')+'</div>'+
       '<div class="det"><div class="c"><div class="h">She gets</div><div class="v">'+esc(s.gets)+'</div></div><div class="c"><div class="h">How</div><div class="v">'+esc(s.how)+'</div></div><div class="c"><div class="h">Code</div><div class="v">'+esc(s.code)+'</div></div><div class="c"><div class="h">Who</div><div class="v">'+esc(s.who)+'</div></div>'+
       '<div class="wide"><span class="chip '+(s.on?'live':'off')+'">'+(s.on?'● Live':'○ To switch on')+'</span></div></div>'+
       '<div class="extra">⚡ <b>Last minute</b> sits above every stage: only when a slot is empty, sent by Joana from the Last minute dash.</div>';
   }
-  function load(){fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){})}
+  function load(){fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){});
+    fetch(SB+'bsb_mkt_calendar?select=*&ano=eq.2027&order=ini.asc',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){CAL=Array.isArray(a)?a:[];draw();}).catch(function(){})}
   document.addEventListener('click',function(e){
     var x=e.target;if(!x.closest)return;var tb=x.closest('.tabs .tab');
     if(tb){if(tb.dataset.t==='journey'){e.stopPropagation();[].forEach.call(document.querySelectorAll('.tabs .tab'),function(b){b.classList.toggle('on',b===tb)});document.body.classList.remove('lg-on');document.body.classList.add('jn-on');draw();load();}
       else{document.body.classList.remove('jn-on');t.classList.remove('on');}return;}
     if(!document.body.classList.contains('jn-on'))return;
-    var sb=x.closest('#jnv .sw button');if(sb){page=sb.dataset.p;draw();return;}
+    var sb=x.closest('#jnv .sw button');if(sb){page=sb.dataset.p;mes=0;draw();return;}
+    var mo=x.closest('#jnv .cal .mo');if(mo){mes=+mo.dataset.mo;draw();return;}
+    var mb=x.closest('#jnv .mdet button');if(mb){mes=+mb.dataset.m;draw();return;}
     var st=x.closest('#jnv .st');if(st){sel=+st.dataset.i;draw();}
   },true);
 })();
