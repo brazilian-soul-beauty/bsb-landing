@@ -175,6 +175,10 @@ textarea:focus{border-color:var(--p)}
 .dinf .r{display:flex;flex-direction:column;font-size:13px;border-bottom:1px solid var(--line);padding:4px 0}.dinf .r b{color:var(--mute);font-weight:600;font-size:12px}
 .steps2{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12px}.steps2 div{display:flex;justify-content:space-between}.steps2 b.h{color:#c53030}.steps2 b.e{color:var(--ok)}
 .ef .yn button{padding:7px 14px}
+.tabs2{display:flex;gap:6px;margin-bottom:10px}.tabs2 button{padding:8px 14px;border-radius:10px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:13px}.tabs2 button.on{background:var(--p);color:#fff;border-color:var(--p)}
+.dc{padding:14px;gap:6px;cursor:pointer;overflow:hidden}.dc .r{display:flex;flex-direction:column;font-size:12px;border-bottom:1px solid var(--line);padding:3px 0}.dc .r b{color:var(--mute);font-weight:600}
+.pass{flex:1;gap:10px;padding:24px 28px;justify-content:center}.pass h4{font-size:13px;color:var(--p);text-transform:uppercase;letter-spacing:.06em}.pass ol{padding-left:20px;display:grid;gap:6px;font-size:15px}.pass p{color:var(--mute)}
+.pl{display:grid;grid-template-columns:1fr 1fr;gap:16px}.pl div{background:var(--bg);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:14px}.pl span{color:var(--mute);font-size:13px}
 </style>
 </head>
 <body>
@@ -228,7 +232,7 @@ async function load(){
     api('bsb_route_items?select=txt&stage=eq.9&order=ord')
   ]);
   (await api('bsb_route_form?select=*')).forEach(f=>forms[f.person_id]=f);
-  await Promise.all(people.map(p=>loadTraining(p.id)));
+  await Promise.all(people.map(p=>loadTraining(p.id).then(()=>loadDays(p.id))));
   await Promise.all(people.filter(p=>p.onb_person).map(async p=>{try{const r=await api('rpc/bsb_route_way_status',{method:'POST',body:JSON.stringify({p_person:p.onb_person})});WS[p.id]={};(r||[]).forEach(x=>WS[p.id][x.module]=x)}catch(e){}}));
   const saved=new URLSearchParams(location.search).get('s');
   person=(people.find(p=>p.id===saved)||people[people.length-1]||{}).id||null;
@@ -453,6 +457,78 @@ if(TID){
   const path='route/'+TID+'/'+Date.now()+'-'+f.name.replace(/[^\w.\-]/g,'_');toast('Uploading…');
   try{const r=await fetch(`${BASE}/storage/v1/object/${TBUCK}/${path}`,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':f.type||'image/jpeg'},body:f});if(!r.ok)throw 0;TNEW.photos.push(path);trender();toast('Photo added')}catch(err){toast('Upload failed')}};
 }
+/* ===== TRAINING DAYS + PASS + FINAL TEST ===== */
+const TAUGHT=['Cut and file','Push back the cuticle and buffing','Contour finish around the cuticle','Prep: clean nail, no residue','Thin base, clean contour, not touching the cuticle','Thin colour coats, no marks, clean contour','Cap the edge','Cure, oil and photo'];
+const PASSCARD=`<div class="card pass"><h4>To pass, you need 3 things</h4><ol><li><b>A perfect cuticle.</b> Clean, and no cuts.</li><li><b>A perfect finish.</b> No colour on the skin. Every nail looks like our photos.</li><li><b>The right time.</b> You finish the service on time.</li></ol><p>You need all 3, in 3 services in a row.</p>
+ <h4>What we look at</h4><div class="pl"><div><b>The cuticle</b><span>Push it back gently · Only take off dead skin · Never cut the skin · Every nail clean around the edge</span></div><div><b>The colour</b><span>Never touches the skin · Same amount on every nail · Sides and tip clean · Top coat smooth and shiny</span></div></div></div>`;
+let TD={};
+async function loadDays(pid){try{TD[pid]=await api('bsb_route_training_days?select=*&person_id=eq.'+pid+'&order=day.desc,id.desc')||[]}catch(e){TD[pid]=[]}}
+function dayCard(e,admin){const tk=e.taught||{},n=TAUGHT.filter((t,i)=>tk['t'+i]).length;
+ return `<div class="card dc" onclick="dayOpen(${e.id},${admin?1:0})"><div class="tt">${fmtDay(e.day)||'Day'}<span>${n}/${TAUGHT.length} steps taught</span></div>
+ <div class="r"><b>Learned</b><span>${esc(e.learn||'—')}</span></div><div class="r"><b>Hardest</b><span>${esc(e.hard||'—')}</span></div>
+ <div class="tg">${e.cmp?`<span class="pill ${e.cmp==='Faster'?'ok':e.cmp==='Slower'?'w':'no'}">${esc(e.cmp)}</span>`:''}${e.help?`<span class="pill ${e.help==='Yes'?'ok':'w'}">Help: ${esc(e.help)}</span>`:''}${e.confirmed?'<span class="pill ok">✓ Signed</span>':''}</div></div>`}
+function dayOpen(id,admin){const L=admin?TD[person]:TDL;const e=(L||[]).find(x=>x.id===id);if(!e)return;const tk=e.taught||{};
+ const d=document.createElement('div');d.className='ov';d.onclick=ev=>{if(ev.target===d)d.remove()};
+ d.innerHTML=`<div class="md big2"><div class="linkbar" style="margin:0"><h3>Training day · ${fmtDay(e.day)}</h3><div style="flex:1"></div><button class="btn g" id="x">✕</button></div>
+ <div class="dd"><div class="dinf"><h4 class="sub">What we taught ${admin?'· tap to tick':''}</h4>${TAUGHT.map((t,i)=>`<label class="ck"><input type="checkbox" data-t="${i}" ${tk['t'+i]?'checked':''} ${admin?'':'disabled'}>${t}</label>`).join('')}</div>
+ <div class="dinf">${[['What did I learn?',e.learn],['What did I not learn yet?',e.notyet],['What was the hardest part?',e.hard],['What did I think of this day?',e.think],['Did I get all the help I needed?',e.help+(e.helpwhy?' · '+e.helpwhy:'')],['Compared with the day before',e.cmp]].map(([k,v])=>`<div class="r"><b>${k}</b><span>${esc(v||'—')}</span></div>`).join('')}</div></div>
+ <div class="nav">${e.confirmed?'<span class="pill ok">✓ She confirmed she attended this day</span>':'<span></span>'}${admin?'<button class="btn lg" id="sv">Save ticks</button>':''}</div></div>`;
+ document.body.appendChild(d);d.querySelector('#x').onclick=()=>d.remove();
+ if(admin)d.querySelector('#sv').onclick=async()=>{const t={};d.querySelectorAll('[data-t]').forEach(c=>{if(c.checked)t['t'+c.dataset.t]=true});
+  try{await api('bsb_route_training_days?id=eq.'+e.id,{method:'PATCH',body:JSON.stringify({taught:t})});e.taught=t;d.remove();render();toast('Saved')}catch(err){toast('Not saved')}};
+}
+/* admin: tabs inside Training period */
+let TTAB='models';
+function trainTabs(cur,fn){return `<div class="tabs2">${[['models','💅 Models'],['days','📅 Days'],['test','🏁 Final test'],['pass','⭐ Standard']].map(([k,l])=>`<button class="${cur===k?'on':''}" onclick="${fn}('${k}')">${l}</button>`).join('')}</div>`}
+function setTT(k){TTAB=k;render()}
+const _trainPage=trainPage;
+trainPage=function(p){
+ if(!TD[p.id]){loadDays(p.id).then(render)}
+ const tabs=trainTabs(TTAB,'setTT');
+ if(TTAB==='models')return `<div style="flex:1;display:flex;flex-direction:column;min-height:0">${tabs}${_trainPage(p)}</div>`;
+ if(TTAB==='pass')return `<div style="flex:1;display:flex;flex-direction:column;min-height:0">${tabs}${PASSCARD}</div>`;
+ if(TTAB==='days'){const L=TD[p.id]||[];return `<div style="flex:1;display:flex;flex-direction:column;min-height:0">${tabs}${L.length?`<div class="tgrid">${L.slice(0,6).map(e=>dayCard(e,1)).join('')}</div>`:'<div class="card big"><div class="ico">📅</div><h3>No training days yet</h3><p>She adds each day from her link</p></div>'}</div>`}
+ const r=p.test_result||'';
+ return `<div style="flex:1;display:flex;flex-direction:column;min-height:0">${tabs}<div class="two"><div class="card big"><div class="ico">🏁</div><h3>Final test</h3><p>3 Essential manicures in a row · each in 30 minutes · perfect contour and even colour · trainer checks every one</p>
+  <div class="f" style="width:240px"><label>Test date</label><input type="date" id="tdate" value="${p.test_date||''}"></div></div>
+  <div class="card big"><div class="ico">📋</div><h3>Result</h3><div class="ans"><button class="a ${r==='Passed'?'on':''}" onclick="setTest('Passed')">✓ Passed</button><button class="w ${r==='Practise more'?'on':''}" onclick="setTest('Practise more')">⏳ Practise more</button></div>
+  <textarea id="tnotes" placeholder="Notes">${esc(p.test_notes||'')}</textarea><button class="btn lg" onclick="setTest()">Save</button></div></div></div>`;
+};
+async function setTest(v){const p=P();const o={test_date:document.getElementById('tdate').value||null,test_notes:document.getElementById('tnotes').value.trim()||null};if(v)o.test_result=v;
+ try{await patch(o);render();toast('Saved')}catch(e){toast('Not saved')}}
+/* trainee: tabs */
+let TDL=[],DNEW={},TTT='models';
+const _trender=trender;
+trender=function(){
+ if(tview!=='list'){return _trender()}
+ if(TTT==='models'){_trender();const ef=document.querySelector('.ef');if(ef)ef.insertAdjacentHTML('afterbegin',trainTabs('models','setTTT'));return}
+ const m=document.getElementById('main'),head=`<div class="linkbar"><h2 style="font-size:22px">Hello ${esc((TP.name||'').split(' ')[0])} 💅</h2><div style="flex:1"></div>${TTT==='days'?'<button class="btn lg" onclick="DNEW={};dview=1;drender()">+ New day</button>':''}</div>`;
+ if(TTT==='pass'){m.innerHTML=`<div class="ef">${trainTabs('pass','setTTT')}${head}${PASSCARD}</div>`;return}
+ if(TTT==='test'){m.innerHTML=`<div class="ef">${trainTabs('test','setTTT')}${head}<div class="card big"><div class="ico">🏁</div><h3>My final test</h3><p>3 Essential manicures in a row · each one in 30 minutes · a perfect contour and an even colour on every nail · my trainer checks every manicure</p>${TP.test_date?`<p><b>Date: ${fmtDay(TP.test_date)}</b></p>`:''}${TP.test_result?`<span class="pill ${TP.test_result==='Passed'?'ok':'w'}">${esc(TP.test_result)}</span>`:''}</div></div>`;return}
+ m.innerHTML=`<div class="ef">${trainTabs('days','setTTT')}${head}${TDL.length?`<div class="tgrid">${TDL.slice(0,6).map(e=>dayCard(e,0)).join('')}</div>`:'<div class="card big"><div class="ico">📅</div><h3>My training days</h3><p>At the end of each training day, tap New day and answer the questions.</p></div>'}</div>`;
+};
+function setTTT(k){TTT=k;tview='list';trender()}
+let dview=0;
+function dkeep(){document.querySelectorAll('[id^="d_"]').forEach(el=>DNEW[el.id.slice(2)]=el.type==='checkbox'?el.checked:el.value)}
+function dchips(k,label,opts){return `<div class="f"><label>${label}</label><div class="yn">${opts.map(o=>`<button class="${DNEW[k]===o?'on':''}" onclick="dkeep();DNEW['${k}']='${o}';drender()">${o}</button>`).join('')}</div></div>`}
+function drender(){const v=k=>esc(DNEW[k]||'');
+ document.getElementById('main').innerHTML=`<div class="ef"><div class="pane"><h2>My training day</h2><div class="fg">
+  <div style="display:flex;flex-direction:column;gap:10px"><div class="f"><label>Date</label><input id="d_day" type="date" value="${v('day')||new Date().toLocaleDateString('en-CA',{timeZone:'Europe/London'})}"></div>
+   <div class="f"><label>What did I learn on this training day?</label><textarea id="d_learn">${v('learn')}</textarea></div>
+   <div class="f"><label>What did I not learn yet?</label><textarea id="d_notyet">${v('notyet')}</textarea></div>
+   <div class="f"><label>What was the hardest part?</label><textarea id="d_hard">${v('hard')}</textarea></div></div>
+  <div style="display:flex;flex-direction:column;gap:10px"><div class="f"><label>What did I think of this training day?</label><textarea id="d_think">${v('think')}</textarea></div>
+   ${dchips('help','Did I get all the help I needed?',['Yes','No'])}
+   ${DNEW.help==='No'?`<div class="f"><label>If no, what did I need?</label><input id="d_helpwhy" value="${v('helpwhy')}"></div>`:''}
+   ${dchips('cmp','Compared with the day before, I was',['Faster','The same','Slower','First day'])}
+   <label class="ck"><input type="checkbox" id="d_confirmed" ${DNEW.confirmed?'checked':''}>I confirm I attended this training day.</label></div>
+ </div></div><div class="nav"><button class="btn g lg" onclick="tview='list';trender()">Cancel</button><span></span><button class="btn lg" onclick="dsave()">Save ✓</button></div></div>`;}
+async function dsave(){dkeep();
+ if(!['learn','notyet','hard','think'].every(k=>(DNEW[k]||'').trim())||!DNEW.help||!DNEW.cmp||(DNEW.help==='No'&&!(DNEW.helpwhy||'').trim())||!DNEW.confirmed){toast('Please answer everything and confirm');return}
+ const b={person_id:TID,day:DNEW.day||null,learn:DNEW.learn,notyet:DNEW.notyet,hard:DNEW.hard,think:DNEW.think,help:DNEW.help,helpwhy:DNEW.helpwhy||null,cmp:DNEW.cmp==='First day'?null:DNEW.cmp,confirmed:true};
+ try{const r=await api('bsb_route_training_days',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(b)});TDL.unshift(r[0]);tview='list';trender();toast('Saved')}catch(e){toast('Not saved, try again')}}
+const _tload=tload;
+tload=async function(){await _tload();if(!TP)return;try{const x=await api('bsb_route_people?select=test_date,test_result&id=eq.'+TID);Object.assign(TP,x[0]||{});TDL=await api('bsb_route_training_days?select=*&person_id=eq.'+TID+'&order=day.desc,id.desc')||[]}catch(e){}trender()};
 
 /* ===== EMPLOYEE FORM ===== */
 const FID=new URLSearchParams(location.search).get('f');
