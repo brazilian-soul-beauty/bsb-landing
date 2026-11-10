@@ -105,7 +105,7 @@ footer button{flex:1;border:0;border-radius:12px;padding:14px;font:600 15px Inte
 </head>
 <body>
 <div id="app">
-  <header><div><div class="t">Nail Finishing Programme</div><div class="s">BSB Academy · <span id="nmh">Kiana</span> · Level 1: Essential Manicure · Trainer: Anukis</div></div><div class="sp"></div><div id="save"></div><button id="menuBtn">Pages</button></header>
+  <header><div><div class="t">Nail Finishing Programme</div><div class="s">BSB Academy · <span id="nmh">Kiana</span> · Level 1: Essential Manicure</div></div><div class="sp"></div><div id="save"></div><button id="menuBtn">Pages</button></header>
   <div id="bar"><i></i></div>
   <main><div class="card" id="page"></div></main>
   <footer><button id="back">Back</button><button id="next">Next</button></footer>
@@ -186,9 +186,9 @@ P.push({m:'Welcome',r:()=>`<div style="flex:1;display:flex;flex-direction:column
 <div class="sec">BSB Academy · Professional Nail Training</div>
 <div style="font-size:38px;font-weight:700;line-height:1.1">Nail Finishing Programme</div>
 <div style="font-size:18px;color:var(--mute)">From beginner to salon standard</div>
-<div style="display:flex;gap:10px;margin-top:14px">${['Level 1 · Essential Manicure','Started Tue 13 Oct'].map(x=>`<span class="chip on" style="pointer-events:none">${x}</span>`).join('')}</div>
+<div style="display:flex;gap:10px;margin-top:14px">${['Level 1 · Essential Manicure',OFR?(OFR.offer_start?'Starts '+fmtStart(OFR.offer_start):'Start date: to be confirmed'):'Started Tue 13 Oct'].map(x=>`<span class="chip on" style="pointer-events:none">${x}</span>`).join('')}</div>
 <div style="margin-top:18px;font-size:15px">Student: <b>${FULL}</b></div>
-<div style="display:flex;gap:10px;margin-top:10px">${[['Ligia','Founder, BSB Academy'],['Anukis','Nail Technician, 4 years · your trainer']].map(t=>`<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left"><div style="font-weight:700">${t[0]}</div><div class="note">${t[1]}</div></div>`).join('')}</div>
+<div style="display:flex;gap:10px;margin-top:10px">${[['Ligia','Founder, BSB Academy']].map(t=>`<div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;text-align:left"><div style="font-weight:700">${t[0]}</div><div class="note">${t[1]}</div></div>`).join('')}</div>
 <div class="ref" style="width:min(640px,90%);margin-top:16px">${BSBREF.map(u=>`<img src="${u}">`).join('')}</div></div>`});
 P.push({m:'Chapter 1 · Essential',r:()=>`<div class="chap" style="background:linear-gradient(160deg,var(--p2),#fff)"><div class="sec">Chapter 1 · Level 1</div><div style="font-size:34px;font-weight:700">Essential Manicure</div><div class="note" style="font-size:15px">The perfect colour: prep, base, colour, contour and cap</div><div class="chips" style="justify-content:center"><span class="chip on" style="pointer-events:none">You are here</span></div></div>`});
 P.push({m:'What we look at',r:()=>head('Level 1 · Essential Manicure','What we look at','')+`<div class="cols"><div><div class="q"><label style="font-size:16px">1 · Prep</label></div>${['Cut and file every nail into the same shape','Push back the cuticle','Buffing','Contour finish around the cuticle','Clean nail, no residue'].map(x=>`<div class="info" style=""><b>•</b>${x}</div>`).join('')}</div><div><div class="q"><label style="font-size:16px">2 · Colour</label></div>${['Thin base, perfect contour, never touching the cuticle','Thin colour coats, no marks','Clean contour on every nail','Cap the edge','Cure, oil and photo'].map(x=>`<div class="info" style=""><b>•</b>${x}</div>`).join('')}</div></div>`});
