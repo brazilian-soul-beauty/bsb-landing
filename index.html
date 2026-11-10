@@ -249,7 +249,7 @@ function status(n){
   if(n===4){const f=forms[p.id];return f&&f.submitted_at?['ok','Done '+fmtDay(f.submitted_at)]:f?['soon','In progress']:['no','Not started']}
   if(n===5)return p.contract_file?['ok','Uploaded '+fmtDay(p.contract_at)]:['no','Not yet'];
   if(n===WAYN){const w=WS[p.id];if(!w)return['no','Not started'];const d=WAY.filter(x=>(w[x[0]]||{}).done).length;return d===WAY.length?['ok','Done']:d?['soon',d+' of '+WAY.length]:['no','Not started']}
-  if(n===7){const L=TR[p.id];return L&&L.length?['ok',L.length+' models']:['no','No models yet']}
+  if(n===7)return['soon','Programme']
   if(n===QQ)return['soon',qs.length+' open'];
   return['soon','Soon'];
 }
@@ -530,6 +530,14 @@ async function dsave(){dkeep();
 const _tload=tload;
 tload=async function(){await _tload();if(!TP)return;try{const x=await api('bsb_route_people?select=test_date,test_result&id=eq.'+TID);Object.assign(TP,x[0]||{});TDL=await api('bsb_route_training_days?select=*&person_id=eq.'+TID+'&order=day.desc,id.desc')||[]}catch(e){}trender()};
 
+
+/* ===== TRAINING = replica of the Nail Finishing Programme ===== */
+function jLink(p,adm){const k=(p.onb_person||(p.name||'').split(' ')[0]||'').toLowerCase();const base=location.origin+location.pathname.replace(/[^/]*$/,'')+'training.html';
+ return base+'?t='+encodeURIComponent(k)+'&n='+encodeURIComponent((p.name||'').split(' ')[0])+'&full='+encodeURIComponent(p.name||'')+(adm?'&ligia':'')}
+trainPage=function(p){const L=jLink(p),A=jLink(p,1);
+ return `<div style="flex:1;display:flex;flex-direction:column;min-height:0"><div class="linkbar"><span class="pill ok">Nail Finishing Programme</span><div style="flex:1"></div>
+  <button class="btn g" onclick="navigator.clipboard.writeText('${L}').then(()=>toast('Link copied'))">🔗 Copy her link</button><a class="btn g" style="text-decoration:none" href="${L}" target="_blank">Open her page ↗</a><a class="btn" style="text-decoration:none" href="${A}" target="_blank">Admin view ↗</a></div>
+  <iframe src="${A}" style="flex:1;border:1px solid var(--line);border-radius:16px;background:#fff;width:100%"></iframe></div>`};
 /* ===== EMPLOYEE FORM ===== */
 const FID=new URLSearchParams(location.search).get('f');
 let FD={},fstep=0,fsub=null,mine={},fp=null,pend={},fkey=null;
