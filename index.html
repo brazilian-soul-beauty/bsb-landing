@@ -282,11 +282,18 @@ function body(n){
      ${photosHtml(c.trial_photos&&c.trial_photos.length?c.trial_photos:[c.trial_photo])}`:'</div><div class="none">Trial not done yet</div>'}</div>`;
   }
   if(n===3){
-    let left;
-    if(p.offer_url&&!window._editOffer)left=`<div class="card big"><div class="ico">📩</div><h3>Offer sent</h3><p>${fmtD(p.offer_at)}</p>
-      <a class="btn lg" href="${esc(p.offer_url)}" target="_blank">Open offer ↗</a><span class="small" onclick="window._editOffer=1;render()">Change link</span></div>`;
-    else left=`<div class="card big"><div class="ico">📩</div><h3>Offer</h3><p>Paste the offer link</p>
-      <form class="row2" onsubmit="event.preventDefault();saveOffer()"><input type="url" id="ou" placeholder="https://" value="${esc(p.offer_url||'')}" required><button class="btn lg">Save</button></form></div>`;
+    const left=`<div class="card big"><div class="ico">📩</div><h3>The offer</h3><p>Shown on her job offer page</p>
+      <div class="fg" style="width:min(560px,92%);text-align:left">
+       <div class="f"><label>Role</label><input id="o_role" value="${esc(p.offer_role||p.role||'Nail technician')}"></div>
+       <div class="f"><label>Start date</label><input id="o_start" type="date" value="${p.offer_start||''}"></div>
+       <div class="f w2"><label>Pay line</label><input id="o_pay" value="${esc(p.offer_pay||'')}" placeholder="We pay you from day 1"></div>
+       <div class="f"><label>Pay step 1 · Training</label><input id="ot_pay1t" value="${esc((p.offer_text||{}).pay1t||'')}" placeholder="National Minimum Wage, per hour"></div>
+       <div class="f"><label>Pay step 2 · Fully trained</label><input id="ot_pay2t" value="${esc((p.offer_text||{}).pay2t||'')}" placeholder="Your full salary, as in your contract, plus tips"></div>
+       <div class="f"><label>Step 1 · when</label><input id="ot_pay1d" value="${esc((p.offer_text||{}).pay1d||'')}" placeholder="While you do your training…"></div>
+       <div class="f"><label>Step 2 · when</label><input id="ot_pay2d" value="${esc((p.offer_text||{}).pay2d||'')}" placeholder="When you pass both parts…"></div>
+       <div class="f w2"><label>Offer link (optional)</label><input id="ou" type="url" value="${esc(p.offer_url||'')}" placeholder="https://"></div></div>
+      <div class="lk" style="justify-content:center"><button class="btn lg" onclick="saveOfferDetails()">Save offer</button><a class="btn g lg" href="${jLink(p)}" target="_blank">See her offer page ↗</a></div>
+      ${p.offer_at?`<p>Saved ${fmtD(p.offer_at)}</p>`:''}</div>`;
     const r=p.offer_reply||'';
     const right=`<div class="card big"><div class="ico">💬</div><h3>Her answer</h3><p>${p.offer_reply_at?fmtD(p.offer_reply_at):'No answer yet'}</p>
       <div class="ans"><button class="a ${r==='Accepted'?'on':''}" onclick="setReply('Accepted')">✓ Accepted</button><button class="w ${r==='Waiting'?'on':''}" onclick="setReply('Waiting')">⏳ Waiting</button><button class="d ${r==='Declined'?'on':''}" onclick="setReply('Declined')">✕ Declined</button></div>
@@ -314,6 +321,8 @@ async function saveOffer(){
   const u=document.getElementById('ou').value.trim();if(!u)return;
   try{await patch({offer_url:u,offer_at:new Date().toISOString()});window._editOffer=0;render();toast('Saved')}catch(e){toast('Not saved')}
 }
+async function saveOfferDetails(){const g=id=>document.getElementById(id).value.trim();
+  try{await patch({offer_role:g('o_role')||null,offer_start:g('o_start')||null,offer_pay:g('o_pay')||null,offer_url:g('ou')||null,offer_text:{pay1t:g('ot_pay1t'),pay1d:g('ot_pay1d'),pay2t:g('ot_pay2t'),pay2d:g('ot_pay2d')},offer_at:new Date().toISOString()});render();toast('Saved')}catch(e){toast('Not saved')}}
 async function setReply(v){try{await patch({offer_reply:v,offer_reply_at:new Date().toISOString()});render();toast('Saved')}catch(e){toast('Not saved')}}
 async function saveReplyNote(){try{await patch({offer_reply_note:document.getElementById('rn').value.trim(),offer_reply_at:P().offer_reply_at||new Date().toISOString()});render();toast('Saved')}catch(e){toast('Not saved')}}
 function myLink(id){return APP+'?f='+id}
@@ -533,7 +542,7 @@ tload=async function(){await _tload();if(!TP)return;try{const x=await api('bsb_r
 
 /* ===== TRAINING = replica of the Nail Finishing Programme ===== */
 function jLink(p,adm){const k=(p.onb_person||(p.name||'').split(' ')[0]||'').toLowerCase();const base=location.origin+location.pathname.replace(/[^/]*$/,'')+'training.html';
- return base+'?t='+encodeURIComponent(k)+'&n='+encodeURIComponent((p.name||'').split(' ')[0])+'&full='+encodeURIComponent(p.name||'')+(adm?'&ligia':'')}
+ return base+'?t='+encodeURIComponent(k)+'&n='+encodeURIComponent((p.name||'').split(' ')[0])+'&full='+encodeURIComponent(p.name||'')+'&r='+p.id+(adm?'&ligia':'')}
 trainPage=function(p){const L=jLink(p),A=jLink(p,1);
  return `<div style="flex:1;display:flex;flex-direction:column;min-height:0"><div class="linkbar"><span class="pill ok">Nail Finishing Programme</span><div style="flex:1"></div>
   <button class="btn g" onclick="navigator.clipboard.writeText('${L}').then(()=>toast('Link copied'))">🔗 Copy her link</button><a class="btn g" style="text-decoration:none" href="${L}" target="_blank">Open her page ↗</a><a class="btn" style="text-decoration:none" href="${A}" target="_blank">Admin view ↗</a></div>
