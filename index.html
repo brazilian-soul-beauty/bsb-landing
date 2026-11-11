@@ -897,6 +897,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
 #jnv .qc .bt button{flex:1;border:0;border-radius:10px;padding:8px;font:700 12px Inter,sans-serif;cursor:pointer;background:#F2F2F6;color:#1D1F33}
 #jnv .qc .bt button.ok{background:#DCF4E7;color:#1B7A4A}#jnv .qc .bt button:disabled{opacity:.45;cursor:default}
 #jnv .em{background:#F7F7FB;border-radius:14px;padding:12px 14px;margin-bottom:10px;font-size:14px}
+@media (max-width:700px){#jnv{padding:12px}#jnv .lh{flex-wrap:wrap}#jnv .lh h2{font-size:17px}#jnv .sw{margin-left:0}#jnv .qg{grid-template-columns:1fr}#jnv .fn{grid-template-columns:1fr 1fr}#jnv .msw{flex-wrap:wrap}#jnv .qc{min-height:0}#jnv .fn .row{padding:4px 0}}
 #jnv .pgb{display:flex;gap:6px;justify-content:center;margin-top:10px;align-items:center;font:600 12px Inter,sans-serif;color:#8B8DA8}
 /*BSB-HUBJOURNEY-FIM*/</style>
 <div id="jnv">
@@ -907,7 +908,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
 (function(){
   var lk=new URLSearchParams(location.search).get('p');if(lk&&!/^ligia$/i.test(lk))return;
   var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
-  var C={},sel=1,page='path',CAL=[],mes=0,F=[],H=[],TX=[],mp='today',fil='All',pg=0;
+  var C={},sel=1,page='path',CAL=[],mes=0,F=[],H=[],TX=[],ST=null,mp='today',fil='All',pg=0,ERR=0;
   var CN={due_back:'Due back',miss_a:'Miss you A',miss_b:'Miss you B',miss_c:'Miss you C',miss:'Miss you'};
   var FN=[['due_back','🔔','Due back','late for her rhythm'],['miss_a','💔','We miss you A','65 to 75 days'],['miss_b','💔','We miss you B','76 to 100 days'],['miss_c','💔','We miss you C','101 to 120 days']];
   var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -932,23 +933,26 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
     [].forEach.call(document.querySelectorAll('#jnv .sw button'),function(b){b.classList.toggle('on',b.dataset.p===page)});
     var B=document.getElementById('jnBody');
     if(page==='rules'){B.innerHTML='<div class="rules">'+R.map(function(r){return '<div><b>'+r[0]+'</b>'+esc(r[1])+'</div>'}).join('')+'</div>';return;}
-    if(page==='motor'){var tst=F.some(function(f){return f.teste});
-      var top='<div class="msw"><button data-mp="today" class="'+(mp==='today'?'on':'')+'">📲 Today</button><button data-mp="funnel" class="'+(mp==='funnel'?'on':'')+'">📊 Funnel</button><button data-mp="texts" class="'+(mp==='texts'?'on':'')+'">✉️ Texts</button><span class="sp"></span>'+(tst?'<span class="chip off">🧪 Test</span>':'<span class="chip live">● Live</span>')+'</div>';
+    if(page==='motor'){var tst=!ST||ST.modo!=='live';
+      var tk=ST&&ST.ultimo_tick?new Date(ST.ultimo_tick):null,tkOk=tk&&tk.toDateString()===new Date().toDateString();
+      var src='<span class="chip '+(tkOk?'live':'off')+'" title="Source: Hub">🔄 '+(tk?(tkOk?'Today ':dm(tk.toISOString().slice(0,10))+' ')+('0'+tk.getHours()).slice(-2)+':'+('0'+tk.getMinutes()).slice(-2):'Not run yet')+'</span>'+(ERR?'<span class="chip off">⚠️ Hub</span>':'');
+      var top='<div class="msw"><button data-mp="today" class="'+(mp==='today'?'on':'')+'">📲 Today</button><button data-mp="funnel" class="'+(mp==='funnel'?'on':'')+'">📊 Funnel</button><button data-mp="texts" class="'+(mp==='texts'?'on':'')+'">✉️ Texts</button><span class="sp"></span>'+src+(tst?'<span class="chip off">🧪 Test</span>':'<span class="chip live">● Live</span>')+'</div>';
+      var PER=innerWidth<700?1:(innerHeight<850?3:6);
       function pager(n,per){var tp=Math.max(1,Math.ceil(n/per));if(pg>=tp)pg=tp-1;return '<div class="pgb"><button data-pg="-1">◀</button>'+(pg+1)+' / '+tp+'<button data-pg="1">▶</button></div>'}
       if(mp==='funnel'){
         B.innerHTML=top+'<div class="fn">'+FN.map(function(c){var f=F.filter(function(x){return x.campanha===c[0]})[0]||{};
         function rw(l,v,k){return '<div class="row'+(k?' '+k:'')+'"><span>'+l+'</span><b>'+(v==null?0:v)+'</b></div>'}
-        return '<div class="cp"><h4>'+c[1]+' '+c[2]+'</h4><small>'+c[3]+'</small>'+rw('📥 In',f.entraram)+rw('⏰ Reminder',f.lembrete)+rw('📅 Booked',f.marcaram,'g')+rw('✅ Came',(f.vieram||0)+' · £'+(f.gbp||0),'g')+rw('🚪 No reply',f.sem_resposta,'r')+rw('⏳ In now',f.agora)+'</div>'}).join('')+'</div>';return;}
-      if(mp==='texts'){var per=6,L=TX.slice().sort(function(a,b){return (a.campanha+a.canal+a.etapa).localeCompare(b.campanha+b.canal+b.etapa)});
-        function ex(t){return String(t||'').replace(/\{first\}/g,'Sophie').replace(/\{treatment\}/g,'wax').replace(/\{gift\}/g,'a head massage ritual, on us').replace(/\{therapist\}/g,'Dania').replace(/\{date\}/g,'2 December')}
+        return '<div class="cp"><h4>'+c[1]+' '+c[2]+'</h4><small>'+c[3]+'</small>'+rw('📥 In',f.entraram)+rw('⏰ Reminder',f.lembrete)+rw('📅 Booked',f.marcaram,'g')+rw('✅ Came',(f.vieram||0)+' · £'+(f.gbp||0),'g')+rw('🚪 No reply',f.sem_resposta,'r')+rw('⏳ In now',f.agora)+'</div>'}).join('')+'</div>'+(ST?'<div class="extra">⏰ Reminder day '+ST.lembrete_dias+' · 🚪 Pause '+ST.pausa_dias+' days · ✉️ 1 message every '+ST.intervalo_msg_dias+' days · 👑 Top £'+ST.top_gbp+'+</div>':'');return;}
+      if(mp==='texts'){var per=PER,L=TX.slice().sort(function(a,b){return (a.campanha+a.canal+a.etapa).localeCompare(b.campanha+b.canal+b.etapa)});
+        function ex(t){return String(t||'').replace(/\{first\}/g,'[name]').replace(/\{treatment\}/g,'[treatment]').replace(/\{gift\}/g,'[gift]').replace(/\{therapist\}/g,'[therapist]').replace(/\{date\}/g,'[date]')}
         B.innerHTML=top+'<div class="qg">'+L.slice(pg*per,pg*per+per).map(function(t){var np=/_np$/.test(t.etapa);return '<div class="qc"><div class="top"><span class="tp">'+esc(CN[t.campanha]||t.campanha)+'</span><span class="chip">'+(/lembrete/.test(t.etapa)?'⏰ Reminder':'1st')+'</span><span class="chip">'+(t.canal==='whatsapp'?'💬 WhatsApp':'📧 Email')+'</span>'+(np?'<span class="chip off">Busy month</span>':'')+'</div>'+(t.subject?'<b>'+esc(ex(t.subject))+'</b>':'')+'<div class="tx">'+esc(ex(t.body))+'</div></div>'}).join('')+'</div>'+pager(L.length,per);return;}
       var W=H.filter(function(h){return h.canal==='whatsapp'}),E=H.length-W.length;
       var ters=['All'].concat(W.map(function(h){return h.terapeuta}).filter(function(v,i,a){return a.indexOf(v)===i}).sort());
-      var L2=W.filter(function(h){return fil==='All'||h.terapeuta===fil}),per2=6;
-      B.innerHTML=top+(tst?'<div class="test">🧪 Test: nothing goes to clients yet. Look only, don\'t send.</div>':'')+
-        '<div class="em">📧 <b>'+E+'</b> emails go by themselves · 💬 <b>'+W.length+'</b> WhatsApp for the girls to send</div>'+
+      var L2=W.filter(function(h){return fil==='All'||h.terapeuta===fil}),per2=PER;
+      B.innerHTML=top+
+        '<div class="em">'+(tst?'🧪 <b>Test: look only, don\'t send.</b> · ':'')+'📧 <b>'+E+'</b> '+(tst?'emails waiting (nothing goes in test)':'emails go out by themselves, 10:00 to 18:00')+' · 💬 <b>'+W.length+'</b> WhatsApp for the girls to send</div>'+
         '<div class="msw">'+ters.map(function(t){var n=t==='All'?W.length:W.filter(function(h){return h.terapeuta===t}).length;return '<button data-fil="'+esc(t)+'" class="'+(fil===t?'on':'')+'">'+esc(t)+' '+n+'</button>'}).join('')+'</div>'+
-        '<div class="qg">'+L2.slice(pg*per2,pg*per2+per2).map(function(h){return '<div class="qc"><div class="top"><b>'+esc(h.cliente)+'</b><span class="tp">'+esc(CN[h.campanha]||h.campanha)+'</span><span class="chip">'+(h.etapa==='lembrete'?'⏰ Reminder':'1st')+'</span></div><small style="color:#8B8DA8">'+esc(h.terapeuta)+' · '+esc(h.tratamento)+'</small><div class="tx">'+esc(h.body)+'</div><div class="bt"><button data-cp="'+h.id+'">📋 Copy</button><button class="ok" data-ok="'+h.id+'"'+(tst?' disabled':'')+'>✓ Sent</button></div></div>'}).join('')+'</div>'+pager(L2.length,per2);
+        (L2.length?'':'<div class="em">✅ Nothing to send.</div>')+'<div class="qg">'+L2.slice(pg*per2,pg*per2+per2).map(function(h){return '<div class="qc"><div class="top"><b>'+esc(h.cliente)+'</b><span class="tp">'+esc(CN[h.campanha]||h.campanha)+'</span><span class="chip">'+(h.etapa==='lembrete'?'⏰ Reminder':'1st')+'</span></div><small style="color:#8B8DA8">'+esc(h.terapeuta)+' · '+esc(h.tratamento)+'</small><div class="tx">'+esc(h.body)+'</div><div class="bt"><button data-cp="'+h.id+'">📋 Copy</button><button class="ok" data-ok="'+h.id+'"'+(tst?' disabled':'')+'>✓ Sent</button></div></div>'}).join('')+'</div>'+pager(L2.length,per2);
       return;}
     if(page==='cal'){
       if(mes){var L=CAL.filter(function(c){return c.mes===mes});
@@ -964,6 +968,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
       '<div class="extra">⚡ <b>Last minute</b> sits above every stage: only when a slot is empty, sent by Joana from the Last minute dash.</div>';
   }
   function load(){fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){});
+    ERR=0;fetch(SB+'vw_bsb_flow_status?select=*',{headers:{apikey:KEY}}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(a){ST=(a&&a[0])||null;draw();}).catch(function(){ERR=1;draw();});
     fetch(SB+'vw_bsb_flow_hoje?select=id,campanha,etapa,canal,terapeuta,cliente,tratamento,subject,body&order=terapeuta.asc,id.asc',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){H=Array.isArray(a)?a:[];draw();}).catch(function(){});
     fetch(SB+'vw_bsb_flow_textos?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){TX=Array.isArray(a)?a:[];draw();}).catch(function(){});
     fetch(SB+'vw_bsb_flow_funnel?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){F=Array.isArray(a)?a:[];draw();}).catch(function(){});
@@ -977,7 +982,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
     var m1=x.closest('#jnv [data-mp]');if(m1){mp=m1.dataset.mp;pg=0;draw();return;}
     var f1=x.closest('#jnv [data-fil]');if(f1){fil=f1.dataset.fil;pg=0;draw();return;}
     var p1=x.closest('#jnv [data-pg]');if(p1){pg=Math.max(0,pg+(+p1.dataset.pg));draw();return;}
-    var c1=x.closest('#jnv [data-cp]');if(c1){var h=H.filter(function(z){return String(z.id)===c1.dataset.cp})[0];if(h&&navigator.clipboard){navigator.clipboard.writeText(h.body).then(function(){c1.textContent='✓ Copied';setTimeout(function(){c1.textContent='📋 Copy'},1500)})}return;}
+    var c1=x.closest('#jnv [data-cp]');if(c1){var h=H.filter(function(z){return String(z.id)===c1.dataset.cp})[0];if(h){var done=function(){c1.textContent='✓ Copied';setTimeout(function(){c1.textContent='📋 Copy'},1500)},fail=function(){c1.textContent='⚠️ Copy failed'};if(navigator.clipboard){navigator.clipboard.writeText(h.body).then(done,fail)}else fail()}return;}
     var o1=x.closest('#jnv [data-ok]');if(o1&&!o1.disabled){o1.disabled=true;o1.textContent='…';fetch(SB+'rpc/bsb_flow_wa_feito',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({p_id:+o1.dataset.ok})}).then(function(r){if(!r.ok)throw 0;H=H.filter(function(z){return String(z.id)!==o1.dataset.ok});draw();}).catch(function(){o1.disabled=false;o1.textContent='✓ Sent'});return;}
     var mo=x.closest('#jnv .cal .mo');if(mo){mes=+mo.dataset.mo;draw();return;}
     var mb=x.closest('#jnv .mdet button');if(mb){mes=+mb.dataset.m;draw();return;}
