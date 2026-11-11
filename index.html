@@ -915,16 +915,21 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
   var TP={season:'Season',gift:'Gift cards',booking:'Booking opens',brand:'Brand',winback:'Win back',member:'Members',lastmin:'Last minute'};
   function dm(d){if(!d)return'';var x=new Date(d+'T12:00');return x.getDate()+' '+MN[x.getMonth()]}
   var S=[
-   {i:'🌱',n:'Not yet',k:null,lab:'never came',gets:'15% off her first visit',how:'Website popup → Mailchimp email + reminder day 10',code:'SOULWELCOME15',who:'Mailchimp',on:1},
-   {i:'💌',n:'1st visit',k:'primeira',lab:'last 60 days',gets:'Post-visit email: £10 Circle + £10 Google review (or prosecco if she reviewed). 3 weeks later: "Your £10 is still here"',how:'Email 15 min after her visit · Mailchimp 3 weeks',code:'BSB-WELCOME10 · GOOGLE-REVIEW',who:'Robot + Mailchimp',on:1},
-   {i:'🔁',n:'2nd visit',k:'segunda',lab:'last 90 days',gets:'No discount. Extra service tomorrow, Due back, BIAB infill reminder',how:'WhatsApp from reception',code:'none',who:'Joana',on:0},
-   {i:'💎',n:'Regular',k:'regular',lab:'3+ visits',gets:'Bring someone you love: £15 for her friend, £15 for her',how:'Email 7 days after her 3rd visit · friend writes FRIEND + name',code:'FRIEND',who:'Robot + Joana',on:1},
-   {i:'👑',n:'Member',k:'membro',lab:'last 60 days',gets:'Perks, never a discount',how:'Membership invite (clients spending £120+ a month)',code:'MEMBER',who:'Ligia',on:0},
-   {i:'🎂',n:'Birthday',k:null,lab:'every year',gets:'20% off 3 treatments from £100 + prosecco + truffles',how:'Mailchimp email 7 days before',code:'BDAY20',who:'Mailchimp',on:1},
-   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'We miss you A, B, C: 15% off',how:'Email at 65, 76 and 101 days + reminder day 7',code:'WELCOMEBACK15',who:'Motor (test)',on:0}
+   {i:'🌱',n:'Not yet',k:null,lab:'never came',gets:'15% off her first visit',how:'Website popup → Mailchimp email + reminder day 10',code:'SOULWELCOME15',who:'Mailchimp',src:'mc'},
+   {i:'💌',n:'1st visit',k:'primeira',lab:'last 60 days',gets:'Post-visit email: £10 Circle + £10 Google review (or prosecco if she reviewed). 3 weeks later: "Your £10 is still here"',how:'Email 15 min after her visit · Mailchimp 3 weeks',code:'BSB-WELCOME10 · GOOGLE-REVIEW',who:'Robot + Mailchimp',src:'posvisita'},
+   {i:'🔁',n:'2nd visit',k:'segunda',lab:'last 90 days',gets:'Due back: we save her a time before the diary fills',how:'Email, or WhatsApp from her therapist for top clients',code:'none',who:'Motor',src:'motor'},
+   {i:'💎',n:'Regular',k:'regular',lab:'3+ visits',gets:'Bring someone you love: £15 for her friend, £15 for her',how:'Email 7 days after her 3rd visit · friend writes FRIEND + name',code:'FRIEND',who:'Robot + Joana',src:'referral'},
+   {i:'👑',n:'Member',k:'membro',lab:'last 60 days',gets:'Perks, never a discount',how:'Membership invite (clients spending £120+ a month)',code:'MEMBER',who:'Ligia',src:null},
+   {i:'🎂',n:'Birthday',k:null,lab:'every year',gets:'20% off 3 treatments from £100 + prosecco + truffles',how:'Mailchimp email 7 days before',code:'BDAY20',who:'Mailchimp',src:'mc'},
+   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'A priority time + head massage ritual on us (no gift in busy months)',how:'Email at 65, 76 and 101 days, reminder day 7 · WhatsApp from her therapist for top clients',code:'none',who:'Motor',src:'motor'}
   ];
+  var JS={};
+  function chip(src){if(src==='mc')return '<span class="chip">📧 Mailchimp · not in Hub</span>';if(!src)return '<span class="chip">○ Not built</span>';var j=JS[src];if(!j)return '<span class="chip">…</span>';
+    var d=j.ultimo?new Date(j.ultimo):null,age=d?(Date.now()-d)/864e5:99,when=d?dm(j.ultimo.slice(0,10)):'never';
+    if(src==='motor'&&!j.ligado)return '<span class="chip off">🧪 Test · ran '+when+'</span>';
+    if(!j.ligado)return '<span class="chip off">○ Off</span>';
+    return age<=3?'<span class="chip live">● Live · last '+when+'</span>':'<span class="chip off">⚠️ Stopped · last '+when+'</span>'}
   var R=[['✉️','1 message every 7 days per client, all channels together'],['🏷️','1 discount per visit. Codes never add up'],['👑','Members get perks, never discounts'],['🎁','Regulars get gifts. Discounts only to bring new clients and win back lost ones'],['🚪','She books, she leaves the stage and stops receiving'],['⚖️','Same week? Rhythm first, then stage, then the month campaign']];
-  var M=[['Jan','Body scrub & drainage · Waxing'],['Feb','Hands and feet together'],['Mar','Massage · Waxing for spring'],['Apr','Sandal season pedicure'],['May',''],['Jun','Massage for waxing clients'],['Jul','Holiday lashes & brows'],['Aug','Pre-book your autumn facial'],['Sep','Facial & massage'],['Oct','October Reset · Body scrub film'],['Nov','Black Tie Skin · Soul Friday gift cards'],['Dec','Lash lift · Christmas card gift for January']];
   var tabs=document.querySelector('.tabs');if(!tabs)return;
   var t=document.createElement('div');t.className='tab';t.dataset.t='journey';t.textContent='🗺️ Journey';
   tabs.insertBefore(t,document.getElementById('whob')||null);
@@ -964,10 +969,11 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
     var s=S[sel];
     B.innerHTML='<div class="path">'+S.map(function(x,ix){var n=x.k&&C[x.k]!=null?C[x.k]:'·';return '<div class="st'+(ix===sel?' on':'')+'" data-i="'+ix+'"><div class="i">'+x.i+'</div><div class="n">'+x.n+'</div><b>'+n+'</b><small>'+x.lab+'</small></div>'}).join('')+'</div>'+
       '<div class="det"><div class="c"><div class="h">She gets</div><div class="v">'+esc(s.gets)+'</div></div><div class="c"><div class="h">How</div><div class="v">'+esc(s.how)+'</div></div><div class="c"><div class="h">Code</div><div class="v">'+esc(s.code)+'</div></div><div class="c"><div class="h">Who</div><div class="v">'+esc(s.who)+'</div></div>'+
-      '<div class="wide"><span class="chip '+(s.on?'live':'off')+'">'+(s.on?'● Live':'○ To switch on')+'</span></div></div>'+
+      '<div class="wide">'+chip(s.src)+'</div></div>'+
       '<div class="extra">⚡ <b>Last minute</b> sits above every stage: only when a slot is empty, sent by Joana from the Last minute dash.</div>';
   }
-  function load(){fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){});
+  function load(){fetch(SB+'vw_bsb_journey_status?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){JS={};(Array.isArray(a)?a:[]).forEach(function(x){JS[x.k]=x});draw();}).catch(function(){});
+    fetch(SB+'vw_bsb_journey_counts?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){C=(a&&a[0])||{};draw();}).catch(function(){});
     ERR=0;fetch(SB+'vw_bsb_flow_status?select=*',{headers:{apikey:KEY}}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(a){ST=(a&&a[0])||null;draw();}).catch(function(){ERR=1;draw();});
     fetch(SB+'vw_bsb_flow_hoje?select=id,campanha,etapa,canal,terapeuta,cliente,tratamento,subject,body&order=terapeuta.asc,id.asc',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){H=Array.isArray(a)?a:[];draw();}).catch(function(){});
     fetch(SB+'vw_bsb_flow_textos?select=*',{headers:{apikey:KEY}}).then(function(r){return r.json()}).then(function(a){TX=Array.isArray(a)?a:[];draw();}).catch(function(){});
