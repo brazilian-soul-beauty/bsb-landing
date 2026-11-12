@@ -897,7 +897,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
 #jnv .qc .bt button{flex:1;border:0;border-radius:10px;padding:8px;font:700 12px Inter,sans-serif;cursor:pointer;background:#F2F2F6;color:#1D1F33}
 #jnv .qc .bt button.ok{background:#DCF4E7;color:#1B7A4A}#jnv .qc .bt button:disabled{opacity:.45;cursor:default}
 #jnv .em{background:#F7F7FB;border-radius:14px;padding:12px 14px;margin-bottom:10px;font-size:14px}
-@media (max-width:700px){#jnv{padding:12px}#jnv .lh{flex-wrap:wrap}#jnv .lh h2{font-size:17px}#jnv .sw{margin-left:0}#jnv .qg{grid-template-columns:1fr}#jnv .fn{grid-template-columns:1fr 1fr}#jnv .msw{flex-wrap:wrap}#jnv .qc{min-height:0}#jnv .fn .row{padding:4px 0}#jnv .path{grid-template-columns:repeat(4,1fr);gap:6px}#jnv .st{padding:8px 4px}#jnv .st .i{font-size:18px}#jnv .st b{font-size:16px}#jnv .st:not(:last-child):after{display:none}#jnv .det{grid-template-columns:1fr 1fr;padding:10px;gap:8px}#jnv .det .wide{grid-column:span 2}#jnv .rules{grid-template-columns:1fr}#jnv .rules div{padding:10px;font-size:13px}#jnv .rules b{font-size:18px;margin-bottom:2px}#jnv .cal{grid-template-columns:repeat(3,1fr);gap:6px}#jnv .cal>div{min-height:0;padding:8px}#jnv .cal .t{font-size:11px}#jnv .mh{display:none}#jnv .mrow{grid-template-columns:1fr}}
+@media (max-width:700px){#jnv{padding:8px 12px}#jnv .lh h2{display:none}#jnv .lh{margin-bottom:8px}#jnv .em{padding:8px 10px;margin-bottom:6px;font-size:13px}#jnv .msw{margin-bottom:6px}#jnv .fn{gap:6px}#jnv .fn .cp{padding:8px 10px}#jnv .fn .cp small{display:none}#jnv .fn .cp h4{font-size:13px}#jnv .fn .row{font-size:12px}#jnv .fn .row b{font-size:14px}#jnv .extra{display:none}#jnv .path{margin-bottom:8px}#jnv .st small{display:none}#jnv .st .n{font-size:12px;margin:2px 0}#jnv .det .c{padding:8px}#jnv .det .v{font-size:13px;line-height:1.3}#jnv .lh{flex-wrap:wrap}#jnv .lh h2{font-size:17px}#jnv .sw{margin-left:0}#jnv .qg{grid-template-columns:1fr}#jnv .fn{grid-template-columns:1fr 1fr}#jnv .msw{flex-wrap:wrap}#jnv .qc{min-height:0}#jnv .fn .row{padding:2px 0}#jnv .path{grid-template-columns:repeat(4,1fr);gap:6px}#jnv .st{padding:8px 4px}#jnv .st .i{font-size:18px}#jnv .st b{font-size:16px}#jnv .st:not(:last-child):after{display:none}#jnv .det{grid-template-columns:1fr 1fr;padding:10px;gap:8px}#jnv .det .wide{grid-column:span 2}#jnv .rules{grid-template-columns:1fr}#jnv .rules div{padding:10px;font-size:13px}#jnv .rules b{font-size:18px;margin-bottom:2px}#jnv .cal{grid-template-columns:repeat(3,1fr);gap:6px}#jnv .cal>div{min-height:0;padding:8px}#jnv .cal .t{font-size:11px}#jnv .mh{display:none}#jnv .mrow{grid-template-columns:1fr}}
 #jnv .pgb{display:flex;gap:6px;justify-content:center;margin-top:10px;align-items:center;font:600 12px Inter,sans-serif;color:#8B8DA8}
 /*BSB-HUBJOURNEY-FIM*/</style>
 <div id="jnv">
@@ -1003,6 +1003,102 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
   },true);
 })();
 /*BSB-HUBJOURNEY-FIM*/</script>
+<style>/*BSB-HUBCICLOS-INICIO*/
+#cyv{display:none;max-width:1240px;margin:0 auto;padding:18px 24px;font-family:Inter,system-ui,sans-serif;color:#1D1F33}
+body.cy-on #cyv{display:block}body.cy-on #app,body.cy-on #jnv,body.cy-on #logv{display:none!important}
+#cyv .lh{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+#cyv .lh h2{margin:0;font-size:20px;font-weight:700}
+#cyv .sw{margin-left:auto;display:flex;gap:6px}
+#cyv button{font-family:Inter,system-ui,sans-serif}
+#cyv .sw button,#cyv .pgb button,#cyv .bk{border:1px solid #E2E2EC;background:#fff;border-radius:999px;padding:7px 14px;font:600 13px Inter,sans-serif;color:#585A75;cursor:pointer}
+#cyv .sw button.on{background:#5B47E0;border-color:#5B47E0;color:#fff}
+#cyv .chip{display:inline-block;border-radius:999px;padding:3px 9px;font:600 11px Inter,sans-serif;background:#F2F2F6;color:#585A75;white-space:nowrap}
+#cyv .chip.g{background:#DCF4E7;color:#1B7A4A}#cyv .chip.r{background:#FDE7EC;color:#B0305A}#cyv .chip.y{background:#FFF3D6;color:#8A5A00}
+#cyv .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#cyv .cy{background:#fff;border:1px solid #EEEEF4;border-radius:16px;padding:16px 18px;cursor:pointer;text-align:left}
+#cyv .cy:hover{border-color:#5B47E0}
+#cyv .cy .tp{display:flex;align-items:center;gap:8px}#cyv .cy .ic{font-size:24px}#cyv .cy h3{margin:0;font-size:16px}
+#cyv .cy .pc{margin-left:auto;font:700 20px Inter,sans-serif;color:#5B47E0}
+#cyv .bar{height:8px;background:#F0EFF7;border-radius:99px;margin:12px 0 10px;overflow:hidden}#cyv .bar i{display:block;height:100%;background:#5B47E0;border-radius:99px}
+#cyv .cy .ob{font-size:13px;color:#585A75;min-height:34px;line-height:1.3}
+#cyv .cy .ch{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+#cyv .hd{background:#fff;border:1px solid #EEEEF4;border-radius:14px;padding:12px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+#cyv .hd .g{font-size:13px;color:#585A75}#cyv .hd b{font-size:15px}
+#cyv .rw{background:#fff;border:1px solid #EEEEF4;border-radius:12px;padding:9px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+#cyv .rw .s{font-size:17px;width:24px;text-align:center}#cyv .rw .t{flex:1;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cyv .rw.dn .t{color:#8B8DA8}
+#cyv .rw a{font:600 12px Inter,sans-serif;color:#5B47E0;text-decoration:none;white-space:nowrap}
+#cyv .rw button{border:0;border-radius:9px;padding:6px 10px;font:700 12px Inter,sans-serif;cursor:pointer;background:#F2F2F6;color:#1D1F33;white-space:nowrap}
+#cyv .rw button.ok{background:#DCF4E7;color:#1B7A4A}
+#cyv .em{background:#F7F7FB;border-radius:14px;padding:12px 14px;font-size:14px}
+#cyv .pgb{display:flex;gap:8px;justify-content:center;margin-top:8px;align-items:center;font:600 12px Inter,sans-serif;color:#8B8DA8}
+#cyv .dy{font:700 13px Inter,sans-serif;color:#5B47E0;margin:8px 0 4px}
+@media (max-width:700px){.tabs{overflow-x:auto}#cyv{padding:8px 12px}#cyv .lh h2{display:none}#cyv .lh{margin-bottom:8px}#cyv .sw{margin-left:0}#cyv .grid{grid-template-columns:1fr;gap:5px}#cyv .cy{padding:7px 12px}#cyv .cy .ob{display:none}#cyv .bar{margin:6px 0}#cyv .cy .ch{margin-top:4px}#cyv .cy .ic{font-size:18px}#cyv .cy h3{font-size:14px}#cyv .cy .pc{font-size:16px}#cyv .rw{flex-wrap:wrap;padding:8px 10px}#cyv .rw .t{flex-basis:70%;white-space:normal}}
+/*BSB-HUBCICLOS-FIM*/</style>
+<div id="cyv"><div class="lh"><h2>🔁 Cycles</h2><span id="cySrc"></span><div class="sw"><button data-v="cy">Cycles</button><button data-v="done">Done</button><button data-v="stuck">Stuck</button></div></div><div id="cyBody"></div></div>
+<script>/*BSB-HUBCICLOS-INICIO*/
+(function(){
+  var lk=new URLSearchParams(location.search).get('p');if(lk&&!/^ligia$/i.test(lk))return;
+  var SB='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R',HD={apikey:KEY,'Content-Type':'application/json'};
+  var CY=[],PS=[],DD=[],LD={},ERR=0,view='cy',open=null,pg=0,at=null;
+  var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var tabs=document.querySelector('.tabs');if(!tabs)return;
+  var t=document.createElement('div');t.className='tab';t.dataset.t='cycles';t.textContent='🔁 Cycles';
+  tabs.insertBefore(t,document.getElementById('whob')||null);
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function dm(d){if(!d)return'';var x=new Date(String(d).slice(0,10)+'T12:00');return x.getDate()+' '+MN[x.getMonth()]}
+  function per(){return innerWidth<700?4:(innerHeight<850?6:9)}
+  function clamp(n,p){var tp=Math.max(1,Math.ceil(n/p));if(pg>=tp)pg=tp-1}
+  function pager(n,p){var tp=Math.max(1,Math.ceil(n/p));return tp>1?'<div class="pgb"><button data-pg="-1">◀</button>'+(pg+1)+' / '+tp+'<button data-pg="1">▶</button></div>':''}
+  var IC={done:'✅',doing:'⏳',todo:'🔵',hold:'⏸️'},OR={doing:0,todo:1,hold:2,done:3};
+  function row(p){var u=/^https?:\/\//.test(p.source_url||'')?p.source_url:'';
+    return '<div class="rw'+(p.status==='done'?' dn':'')+'"><span class="s">'+(IC[p.status]||'•')+'</span><span class="t" title="'+esc(p.title)+'">'+esc(p.title)+'</span>'+
+      (p.atrasada?'<span class="chip r">Late '+esc(dm(p.deadline))+'</span>':'')+(p.parada?'<span class="chip y">Stuck</span>':'')+(p.status==='done'?'<span class="chip g">'+esc(dm(p.done_at))+'</span>':'')+
+      (u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">💬 Chat</a>':'')+
+      (p.status==='hold'?'<button data-act="todo" data-id="'+esc(p.id)+'">↩ Reopen</button>':'')+
+      (p.status==='done'?'<button data-act="todo" data-id="'+esc(p.id)+'">↩ Reopen</button>':'')+
+      (p.status!=='done'?'<button class="ok" data-act="done" data-id="'+esc(p.id)+'">✓ Done</button>':'')+
+      (p.status==='todo'||p.status==='doing'?'<button data-act="hold" data-id="'+esc(p.id)+'">🧊 Park</button>':'')+'</div>'}
+  function draw(){
+    [].forEach.call(document.querySelectorAll('#cyv .sw button'),function(b){b.classList.toggle('on',b.dataset.v===view)});
+    document.getElementById('cySrc').innerHTML=ERR?'<span class="chip r">⚠️ Hub</span>':at?'<span class="chip g" title="Source: Hub">🔄 '+('0'+at.getHours()).slice(-2)+':'+('0'+at.getMinutes()).slice(-2)+'</span>':'';
+    var B=document.getElementById('cyBody');
+    if(!LD.cy||!LD.ps||!LD.dd){B.innerHTML='<div class="em">'+(ERR?'⚠️ The Hub did not answer. Try again in a minute.':'…')+'</div>';return;}
+    var warn=ERR?'<div class="em" style="margin-bottom:8px;background:#FDE7EC;color:#B0305A">⚠️ The Hub did not answer. This may be old. Try again in a minute.</div>':'';
+    if(view==='done'){var L=[];DD.forEach(function(d){(d.itens||[]).forEach(function(x){L.push({dia:d.dia,n:d.n,t:x.t,id:x.id})})});var p=per();
+      if(!L.length){B.innerHTML='<div class="em">Nothing finished in the last 30 days.</div>';return;}
+      clamp(L.length,p);var last='';B.innerHTML=warn+L.slice(pg*p,pg*p+p).map(function(x){var h=x.dia!==last?'<div class="dy">'+esc(dm(x.dia))+' · '+(+x.n)+' done</div>':'';last=x.dia;return h+'<div class="rw dn"><span class="s">✅</span><span class="t">'+esc(x.t)+'</span><button data-act="todo" data-id="'+esc(x.id)+'">↩ Reopen</button></div>'}).join('')+pager(L.length,p);return;}
+    if(view==='stuck'){var S=PS.filter(function(x){return x.parada}).sort(function(a,b){return a.created_at<b.created_at?-1:1}),p2=per();clamp(S.length,p2);
+      B.innerHTML=warn+(S.length?'<div class="em" style="margin-bottom:8px">🧊 Open for more than 3 weeks. Finish, or park it out of the way.</div>':'<div class="em">✅ Nothing stuck.</div>')+S.slice(pg*p2,pg*p2+p2).map(row).join('')+pager(S.length,p2);return;}
+    if(open){var c=CY.filter(function(x){return x.id===open})[0];if(!c){open=null;return draw();}
+      var P=PS.filter(function(x){return x.ciclo_id===open}).sort(function(a,b){return OR[a.status]-OR[b.status]||(a.created_at<b.created_at?-1:1)}),p3=per()-1;clamp(P.length,p3);
+      B.innerHTML=warn+'<div class="hd"><button class="bk" data-bk="1">◀ All</button><b>'+esc(c.icone)+' '+esc(c.nome)+'</b><span class="g">🎯 '+esc(c.objetivo)+'</span><span class="g">🏁 '+esc(c.roda_quando)+'</span><span class="chip g">'+(+c.feitas)+' of '+(+c.total)+' done</span></div>'+(P.length?'':'<div class="em">No steps in this cycle yet.</div>')+
+        P.slice(pg*p3,pg*p3+p3).map(row).join('')+pager(P.length,p3);return;}
+    if(!CY.length){B.innerHTML=warn+'<div class="em">No cycles yet.</div>';return;}
+    B.innerHTML=warn+'<div class="grid">'+CY.map(function(c){var pc=+c.total?Math.round(100*c.feitas/c.total):0;
+      return '<button class="cy" data-cy="'+esc(c.id)+'"><div class="tp"><span class="ic">'+esc(c.icone)+'</span><h3>'+esc(c.nome)+'</h3><span class="pc">'+pc+'%</span></div><div class="bar"><i style="width:'+pc+'%"></i></div><div class="ob">'+esc(c.objetivo)+'</div><div class="ch"><span class="chip g">✅ '+(+c.feitas)+'</span><span class="chip">⏳ '+(+c.andando)+'</span><span class="chip">🔵 '+(+c.abertas)+'</span>'+(c.espera?'<span class="chip">⏸️ '+(+c.espera)+'</span>':'')+(c.atrasadas?'<span class="chip r">Late '+(+c.atrasadas)+'</span>':'')+(c.paradas?'<span class="chip y">Stuck '+(+c.paradas)+'</span>':'')+'</div></button>'}).join('')+'</div>';
+  }
+  function get(u,k,cb){fetch(SB+u,{headers:{apikey:KEY}}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(a){if(!Array.isArray(a))throw 0;cb(a);LD[k]=1;at=new Date();draw();}).catch(function(){ERR=1;draw();})}
+  function load(){ERR=0;
+    get('vw_bsb_ciclos?select=*&order=ordem.asc','cy',function(a){CY=a});
+    get('vw_bsb_ciclo_passos?select=*','ps',function(a){PS=a});
+    get('vw_bsb_feitas_dia?select=*&order=dia.desc','dd',function(a){DD=a});}
+  addEventListener('resize',function(){if(document.body.classList.contains('cy-on'))draw()});
+  document.addEventListener('click',function(e){
+    var x=e.target;if(!x.closest)return;var tb=x.closest('.tabs .tab');
+    if(tb){if(tb.dataset.t==='cycles'){e.stopPropagation();[].forEach.call(document.querySelectorAll('.tabs .tab'),function(b){b.classList.toggle('on',b===tb)});document.body.classList.remove('lg-on','jn-on');document.body.classList.add('cy-on');draw();load();}
+      else{document.body.classList.remove('cy-on');t.classList.remove('on');}return;}
+    if(!document.body.classList.contains('cy-on'))return;
+    var sb=x.closest('#cyv .sw button');if(sb){view=sb.dataset.v;open=null;pg=0;draw();return;}
+    var c=x.closest('#cyv [data-cy]');if(c){open=c.dataset.cy;pg=0;draw();return;}
+    if(x.closest('#cyv [data-bk]')){open=null;pg=0;draw();return;}
+    var p=x.closest('#cyv [data-pg]');if(p){pg=Math.max(0,pg+(+p.dataset.pg));draw();return;}
+    var a=x.closest('#cyv [data-act]');if(a&&!a.disabled){a.disabled=true;var tx=a.textContent;a.textContent='…';var st=a.dataset.act,now=new Date().toISOString();
+      var body=st==='done'?{status:'done',done_at:now,running_by:null,running_since:null}:st==='hold'?{status:'hold',hold_reason:'Parked by Ligia',hold_by:'Ligia',hold_at:now}:{status:'todo',done_at:null,hold_reason:null,hold_by:null,hold_at:null};
+      fetch(SB+'bsb_todo?id=eq.'+a.dataset.id,{method:'PATCH',headers:Object.assign({Prefer:'return=representation'},HD),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(r){if(!Array.isArray(r)||r.length!==1||r[0].status!==st)throw 0;load();}).catch(function(){a.disabled=false;a.textContent='⚠️ Not saved';setTimeout(function(){a.textContent=tx},2000)});return;}
+  },true);
+})();
+/*BSB-HUBCICLOS-FIM*/</script>
 
 </body>
 </html>
