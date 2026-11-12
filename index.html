@@ -917,11 +917,11 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
   var S=[
    {i:'🌱',n:'Not yet',k:null,lab:'never came',gets:'15% off her first visit',how:'Website popup → Mailchimp email + reminder day 10',code:'SOULWELCOME15',who:'Mailchimp',src:'mc'},
    {i:'💌',n:'1st visit',k:'primeira',lab:'last 60 days',gets:'Post-visit email: £10 Circle + £10 Google review (or prosecco if she reviewed). 3 weeks later: "Your £10 is still here"',how:'Email 15 min after her visit · Mailchimp 3 weeks',code:'BSB-WELCOME10 · GOOGLE-REVIEW',who:'Robot + Mailchimp',src:'posvisita'},
-   {i:'🔁',n:'2nd visit',k:'segunda',lab:'last 90 days',gets:'Due back: we save her a time before the diary fills',how:'Email, or WhatsApp from her therapist for top clients',code:'none',who:'Motor',src:'motor'},
+   {i:'🔁',n:'2nd visit',k:'segunda',lab:'last 90 days',gets:'Due back: we save her a time before the diary fills',how:'Email, or WhatsApp in her therapist\'s name for top clients',code:'none',who:'Motor',src:'motor'},
    {i:'💎',n:'Regular',k:'regular',lab:'3+ visits',gets:'Bring someone you love: £15 for her friend, £15 for her',how:'Email 7 days after her 3rd visit · friend writes FRIEND + name',code:'FRIEND',who:'Robot + Joana',src:'referral'},
    {i:'👑',n:'Member',k:'membro',lab:'last 60 days',gets:'Perks, never a discount',how:'Membership invite (clients spending £120+ a month)',code:'MEMBER',who:'Ligia',src:null},
    {i:'🎂',n:'Birthday',k:null,lab:'every year',gets:'20% off 3 treatments from £100 + prosecco + truffles',how:'Mailchimp email 7 days before',code:'BDAY20',who:'Mailchimp',src:'mc'},
-   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'A priority time + head massage ritual on us (no gift in busy months)',how:'Email at 65, 76 and 101 days, reminder day 7 · WhatsApp from her therapist for top clients',code:'none',who:'Motor',src:'motor'}
+   {i:'💔',n:'Gone quiet',k:'sumida',lab:'90 to 365 days',gets:'A priority time + head massage ritual on us (no gift in busy months)',how:'Email at 65, 76 and 101 days, reminder day 7 · WhatsApp in her therapist\'s name for top clients',code:'none',who:'Motor',src:'motor'}
   ];
   var JS={};
   function chip(src){if(src==='mc')return '<span class="chip">📧 Mailchimp · not in Hub</span>';if(!src)return '<span class="chip">○ Not built</span>';var j=JS[src];if(!j)return '<span class="chip">…</span>';
@@ -948,7 +948,7 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
       if(mp==='funnel'){if(wait('f')){B.innerHTML=top+wait('f');return;}
         B.innerHTML=top+'<div class="fn">'+FN.map(function(c){var f=F.filter(function(x){return x.campanha===c[0]})[0]||{};
         function rw(l,v,k){return '<div class="row'+(k?' '+k:'')+'"><span>'+l+'</span><b>'+(v==null?0:v)+'</b></div>'}
-        return '<div class="cp"><h4>'+c[1]+' '+c[2]+'</h4><small>'+c[3]+'</small>'+rw('📥 In',f.entraram)+rw('⏰ Reminder',f.lembrete)+rw('📅 Booked',f.marcaram,'g')+rw('✅ Came',(f.vieram||0)+' · £'+(f.gbp||0),'g')+rw('🚪 No reply',f.sem_resposta,'r')+rw('⏳ In now',f.agora)+'</div>'}).join('')+'</div>'+(ST?'<div class="extra">⏰ Reminder day '+ST.lembrete_dias+' · 🚪 Pause '+ST.pausa_dias+' days · ✉️ 1 message every '+ST.intervalo_msg_dias+' days · 👑 Top £'+ST.top_gbp+'+</div>':'');return;}
+        return '<div class="cp"><h4>'+c[1]+' '+c[2]+'</h4><small>'+c[3]+'</small>'+rw('📥 In',f.entraram)+rw('⏰ Reminder',f.lembrete)+rw('📅 Booked',f.marcaram,'g')+rw('✅ Came',(f.vieram||0)+' · £'+(f.gbp||0),'g')+rw('🚪 No reply',f.sem_resposta,'r')+rw('⏳ In now',f.agora)+'</div>'}).join('')+'</div>'+(ST?'<div class="extra">⏰ Reminder day '+ST.lembrete_dias+' · 🚪 Pause '+ST.pausa_dias+' days · ✉️ 1 message every '+ST.intervalo_msg_dias+' days · 👑 Top £'+ST.top_gbp+'+ · 📧 '+(ST.max_email_dia||20)+' emails a day · 💬 '+(ST.max_wa_dia||5)+' WhatsApp per therapist a day</div>':'');return;}
       if(mp==='texts'){if(wait('tx')){B.innerHTML=top+wait('tx');return;}var per=PER,L=TX.slice().sort(function(a,b){return (a.campanha+a.canal+a.etapa).localeCompare(b.campanha+b.canal+b.etapa)});
         function ex(t){return String(t||'').replace(/\{first\}/g,'[name]').replace(/\{treatment\}/g,'[treatment]').replace(/\{gift\}/g,'[gift]').replace(/\{therapist\}/g,'[therapist]').replace(/\{date\}/g,'[date]')}
         B.innerHTML=top+'<div class="qg">'+L.slice(pg*per,pg*per+per).map(function(t){var np=/_np$/.test(t.etapa);return '<div class="qc"><div class="top"><span class="tp">'+esc(CN[t.campanha]||t.campanha)+'</span><span class="chip">'+(/lembrete/.test(t.etapa)?'⏰ Reminder':'1st')+'</span><span class="chip">'+(t.canal==='whatsapp'?'💬 WhatsApp':'📧 Email')+'</span>'+(np?'<span class="chip off">Busy month</span>':'')+'</div>'+(t.subject?'<b>'+esc(ex(t.subject))+'</b>':'')+'<div class="tx">'+esc(ex(t.body))+'</div></div>'}).join('')+'</div>'+pager(L.length,per);return;}
@@ -958,9 +958,9 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
       if(ters.indexOf(fil)<0)fil='All';
       var L2=W.filter(function(h){return fil==='All'||h.terapeuta===fil}),per2=PER;
       B.innerHTML=top+
-        '<div class="em">'+(tst?'🧪 <b>Test: look only, don\'t send.</b> · ':'')+'📧 <b>'+E+'</b> '+(tst?'emails waiting (nothing goes in test)':'emails go out by themselves, 10:00 to 18:00')+' · 💬 <b>'+W.length+'</b> WhatsApp for the girls to send</div>'+
+        '<div class="em">'+(tst?'🧪 <b>Test: look only, don\'t send.</b> · ':'')+'📧 <b>'+E+'</b> '+(tst?'emails waiting (nothing goes in test)':'emails go out by themselves, '+((ST&&ST.max_email_dia)||20)+' a day')+' · 💬 <b>'+W.length+'</b> WhatsApp, sent by reception in her therapist\'s name</div>'+
         '<div class="msw">'+ters.map(function(t){var n=t==='All'?W.length:W.filter(function(h){return h.terapeuta===t}).length;return '<button data-fil="'+esc(t)+'" class="'+(fil===t?'on':'')+'">'+esc(t)+' '+n+'</button>'}).join('')+'</div>'+
-        (L2.length?'':'<div class="em">✅ Nothing to send.</div>')+'<div class="qg">'+L2.slice(pg*per2,pg*per2+per2).map(function(h){return '<div class="qc"><div class="top"><b>'+esc(h.cliente)+'</b><span class="tp">'+esc(CN[h.campanha]||h.campanha)+'</span><span class="chip">'+(h.etapa==='lembrete'?'⏰ Reminder':'1st')+'</span></div><small style="color:#8B8DA8">'+esc(h.terapeuta)+' · '+esc(h.tratamento)+'</small><div class="tx">'+esc(h.body)+'</div><div class="bt"><button data-cp="'+h.id+'">📋 Copy</button><button class="ok" data-ok="'+h.id+'"'+(tst?' disabled':'')+'>✓ Sent</button></div></div>'}).join('')+'</div>'+pager(L2.length,per2);
+        (L2.length?'':'<div class="em">✅ Nothing to send.</div>')+'<div class="qg">'+L2.slice(pg*per2,pg*per2+per2).map(function(h){return '<div class="qc"><div class="top"><b>'+esc(h.cliente)+'</b><span class="tp">'+esc(CN[h.campanha]||h.campanha)+'</span><span class="chip">'+(h.etapa==='lembrete'?'⏰ Reminder':'1st')+'</span></div><small style="color:#8B8DA8">'+esc(h.terapeuta)+' · '+esc(h.tratamento)+'</small><div class="tx">'+esc(h.body)+'</div></div>'}).join('')+'</div>'+pager(L2.length,per2);
       return;}
     if(page==='cal'&&!LD.cal){B.innerHTML='<div class="em">'+(ERR?'⚠️ The Hub did not answer. Try again in a minute.':'…')+'</div>';return;}
     if(page==='cal'){
@@ -995,8 +995,6 @@ body.jn-on #jnv{display:block}body.jn-on #app{display:none!important}
     var m1=x.closest('#jnv [data-mp]');if(m1){mp=m1.dataset.mp;pg=0;draw();return;}
     var f1=x.closest('#jnv [data-fil]');if(f1){fil=f1.dataset.fil;pg=0;draw();return;}
     var p1=x.closest('#jnv [data-pg]');if(p1){pg=Math.max(0,pg+(+p1.dataset.pg));draw();return;}
-    var c1=x.closest('#jnv [data-cp]');if(c1){var h=H.filter(function(z){return String(z.id)===c1.dataset.cp})[0];if(h){var done=function(){c1.textContent='✓ Copied';setTimeout(function(){c1.textContent='📋 Copy'},1500)},fail=function(){c1.textContent='⚠️ Copy failed'};if(navigator.clipboard){navigator.clipboard.writeText(h.body).then(done,fail)}else fail()}return;}
-    var o1=x.closest('#jnv [data-ok]');if(o1&&!o1.disabled){o1.disabled=true;o1.textContent='…';fetch(SB+'rpc/bsb_flow_wa_feito',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({p_id:+o1.dataset.ok})}).then(function(r){if(!r.ok)throw 0;H=H.filter(function(z){return String(z.id)!==o1.dataset.ok});draw();}).catch(function(){o1.disabled=false;o1.textContent='✓ Sent'});return;}
     var mo=x.closest('#jnv .cal .mo');if(mo){mes=+mo.dataset.mo;draw();return;}
     var mb=x.closest('#jnv .mdet button');if(mb){mes=+mb.dataset.m;draw();return;}
     var st=x.closest('#jnv .st');if(st){sel=+st.dataset.i;draw();}
@@ -1053,7 +1051,7 @@ body.cy-on #cyv{display:block}body.cy-on #app,body.cy-on #jnv,body.cy-on #logv{d
   var IC={done:'✅',doing:'⏳',todo:'🔵',hold:'⏸️'},OR={doing:0,todo:1,hold:2,done:3};
   function row(p){var u=/^https?:\/\//.test(p.source_url||'')?p.source_url:'';
     return '<div class="rw'+(p.status==='done'?' dn':'')+'"><span class="s">'+(IC[p.status]||'•')+'</span><span class="t" title="'+esc(p.title)+'">'+esc(p.title)+'</span>'+
-      (p.atrasada?'<span class="chip r">Late '+esc(dm(p.deadline))+'</span>':'')+(p.parada?'<span class="chip y">Stuck</span>':'')+(p.status==='done'?'<span class="chip g">'+esc(dm(p.done_at))+'</span>':'')+
+      (+p.steps_total?'<span class="chip">'+(+p.steps_done)+' of '+(+p.steps_total)+' steps</span>':'')+(p.atrasada?'<span class="chip r">Late '+esc(dm(p.deadline))+'</span>':'')+(p.parada?'<span class="chip y">Stuck</span>':'')+(p.status==='done'?'<span class="chip g">'+esc(dm(p.done_at))+'</span>':'')+
       (u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">💬 Chat</a>':'')+
       (p.status==='hold'?'<button data-act="todo" data-id="'+esc(p.id)+'">↩ Reopen</button>':'')+
       (p.status==='done'?'<button data-act="todo" data-id="'+esc(p.id)+'">↩ Reopen</button>':'')+
