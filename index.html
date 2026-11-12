@@ -1066,7 +1066,7 @@ body.cy-on #cyv{display:block}body.cy-on #app,body.cy-on #jnv,body.cy-on #logv{d
     if(!LD.cy||!LD.ps||!LD.dd){B.innerHTML='<div class="em">'+(ERR?'⚠️ The Hub did not answer. Try again in a minute.':'…')+'</div>';return;}
     var warn=ERR?'<div class="em" style="margin-bottom:8px;background:#FDE7EC;color:#B0305A">⚠️ The Hub did not answer. This may be old. Try again in a minute.</div>':'';
     if(view==='done'){var L=[];DD.forEach(function(d){(d.itens||[]).forEach(function(x){L.push({dia:d.dia,n:d.n,t:x.t,id:x.id})})});var p=per();
-      if(!L.length){B.innerHTML='<div class="em">Nothing finished in the last 30 days.</div>';return;}
+      if(!L.length){B.innerHTML=warn+'<div class="em">Nothing finished in the last 30 days.</div>';return;}
       clamp(L.length,p);var last='';B.innerHTML=warn+L.slice(pg*p,pg*p+p).map(function(x){var h=x.dia!==last?'<div class="dy">'+esc(dm(x.dia))+' · '+(+x.n)+' done</div>':'';last=x.dia;return h+'<div class="rw dn"><span class="s">✅</span><span class="t">'+esc(x.t)+'</span><button data-act="todo" data-id="'+esc(x.id)+'">↩ Reopen</button></div>'}).join('')+pager(L.length,p);return;}
     if(view==='stuck'){var S=PS.filter(function(x){return x.parada}).sort(function(a,b){return a.created_at<b.created_at?-1:1}),p2=per();clamp(S.length,p2);
       B.innerHTML=warn+(S.length?'<div class="em" style="margin-bottom:8px">🧊 Open for more than 3 weeks. Finish, or park it out of the way.</div>':'<div class="em">✅ Nothing stuck.</div>')+S.slice(pg*p2,pg*p2+p2).map(row).join('')+pager(S.length,p2);return;}
