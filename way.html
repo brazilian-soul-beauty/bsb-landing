@@ -43,6 +43,11 @@ h1 em{font-style:italic}
 .conf{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--ink);background:var(--paper);padding:12px 14px;border-left:2px solid var(--bronze)}
 .conf button{background:#FBF9F5;border:1px solid var(--bronze);padding:9px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
 .conf button.on{border-color:var(--ok);background:var(--ok);color:#fff}
+.tcard{border:1px solid var(--line);background:#FBF9F5;padding:18px 20px;display:flex;flex-direction:column;gap:10px;animation:in .4s ease both}
+.tch{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.tch b{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--ink)}.tch span{font-size:13px;color:var(--bronze);white-space:nowrap}
+.tcard p{font-size:15px;line-height:1.55;color:var(--ink2)}.tcard .tho{font-size:16.5px;color:var(--ink)}
+.tdots{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.tdots button{width:30px;height:30px;border:1px solid var(--line);background:#fff;font-size:12px;cursor:pointer;color:var(--ink2)}.tdots button.d{border-color:var(--ok);color:var(--ok)}.tdots button.c{border-color:var(--ink);color:var(--ink)}
+.tsteps{display:flex;flex-direction:column;gap:6px}.tsteps button{display:flex;align-items:center;gap:12px;text-align:left;background:#FBF9F5;border:1px solid var(--line);padding:9px 12px;cursor:pointer;font-size:14.5px;line-height:1.4;color:var(--ink)}.tsteps .n{width:22px;flex:none;color:var(--bronze)}.tsteps .t{flex:1}.tsteps .g{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze)}.tsteps button.d{border-color:var(--ok);background:rgba(94,122,69,.06)}.tsteps button.d .n,.tsteps button.d .g{color:var(--ok)}
 .why{border-left:2px solid var(--bronze);padding:4px 0 4px 16px;font-size:15px;line-height:1.6;color:var(--ink2);animation:in .4s ease both}
 .why b{display:block;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--bronze);font-weight:400;margin-bottom:4px}
 .mrow{display:grid;grid-template-columns:1fr 1.2fr;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0}
@@ -185,7 +190,7 @@ const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/
 const QS=new URLSearchParams(location.search);
 let person=(QS.get('p')||'').trim();let CODE=(QS.get('c')||'').trim();let first=person.split(' ')[0];const REFRESH=(QS.get('refresh')||'').trim();let AUTH=false;
 const ROLE=(QS.get('r')||'all').toLowerCase();
-const TESTP=person==='Teste';const PREVQ=QS.get('preview')=='1'||TESTP;const isPrev=()=>TESTP||(PREVQ&&typeof ADMIN!='undefined'&&ADMIN);
+const TESTP=person==='Teste';const NAILS=person==='Riya'||QS.get('route')=='nails';const PREVQ=QS.get('preview')=='1'||TESTP;const isPrev=()=>TESTP||(PREVQ&&typeof ADMIN!='undefined'&&ADMIN);
 
 /* ---------- CONTENT ---------- */
 const CH=[
@@ -286,6 +291,59 @@ const CH=[
 {id:'06-treatments',n:'IX',title:'Treatments',soon:1}
 ];
 
+if(NAILS){
+ const G=id=>CH.find(c=>c.id==id);
+ const wel=G('01-welcome'),et=G('07-etiquette'),im=G('08-image');
+ wel.S.splice(wel.S.length-1,0,{pic:'room',cap:'Connecteam',t:'read',h:'Policies and <em>contract</em>',lines:['You already have access to all our policies on <b>Connecteam</b>.','Your contract is handled separately.','A question about them? Talk to management.']});
+ et.S.splice(et.S.length-1,0,
+  {pic:'reception',cap:'The golden rule',t:'read',h:'Changes go through <em>reception</em>',lines:['You do the treatment that is booked.','She asks for something different, or something extra? <b>Do not change it yourself.</b>','Call reception first.','Reception checks there is time, tells her about any price difference and confirms with her.','Only then you change the treatment.']},
+  {id:'c_change',pic:'reception',cap:'Check',t:'choose',h:'Check',q:'Why must every change go through reception?',o:['Reception likes to know everything','Reception checks the time, the price difference and confirms with her','It does not matter, the client asked'],c:1,why:'Reception checks the time, tells her the price difference and confirms. Never change a treatment on your own.'},
+  {id:'case_change',pic:'stations',cap:'Case',t:'case',h:'Case',q:'She booked a Brazilian Soul Manicure. Halfway through, she asks for BIAB instead. What do you do?',a:'You do not change it yourself. Tell her kindly you will check with reception. Reception checks the time and the price difference, and confirms with her. Only then you change the treatment.'});
+ im.S=im.S.filter(x=>x.t!='sign');
+ const rule={pic:'reception',cap:'Before you start',t:'read',h:'Before you <em>start</em>',lines:['You do the treatment that is booked.','She asks for a change? <b>Call reception first.</b>']};
+ const NC=[
+ {id:'n1-manicures',title:'Manicures',min:15,S:[
+  {pic:'nails',cap:'Manicures',t:'open',h:'Our <em>manicures</em>',lede:'Every manicure on our menu, what is included, and our step by step. Tap Got it on each one.',meta:'About 15 minutes'},{...rule},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'Manicures',areas:['Manicures'],titles:["Men's Soul Manicure",'Brazilian Soul Manicure (Classic Polish) + Caipirinha']},
+  {id:'steps',pic:'stations',cap:'Step by step',t:'steps',h:'Manicure <em>step by step</em>',cat:'Manicures'},
+  {id:'q_lux',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What does the Luxury Soul Manicure add to the Brazilian Soul Manicure?',o:['Gel only','A 20-minute hand and arm massage','Nothing, same treatment'],c:1,why:'Everything in the Brazilian Soul Manicure, plus a 20-minute hand and arm massage.'},
+  {id:'m_mani',pic:'nails',cap:'Quiz',t:'match',h:'Match them',q:'What makes each one different?',pairs:[['Essential Soul Manicure','Cuticles gently pushed back'],['Brazilian Soul Manicure','Cuticles softened and trimmed by hand'],['Luxury Soul Manicure','Plus a 20-minute massage'],["Men's Soul Manicure",'No polish']]},
+  {id:'q_prep',pic:'stations',cap:'Quiz',t:'choose',h:'Quiz',q:'What do you do right before any product goes on the nail?',o:['Buff and dehydrate the plate','Cuticle oil','Hand massage'],c:0,why:'Buff and dehydrate the plate before any product.'},
+  {pic:'hall',cap:'Chapter complete',t:'done',h:'Manicures, <em>done</em>@@FIRST@@.',lede:'Next: our pedicures.'}]},
+ {id:'n2-pedicures',title:'Pedicures',min:15,S:[
+  {pic:'room',cap:'Pedicures',t:'open',h:'Our <em>pedicures</em>',lede:'Every pedicure on our menu, what is included, and our step by step. Tap Got it on each one.',meta:'About 15 minutes'},{...rule},
+  {id:'menu',pic:'room',cap:'The menu',t:'menu',h:'Pedicures',areas:['Pedicures'],titles:["Men's Soul Pedicure"]},
+  {id:'steps',pic:'room',cap:'Step by step',t:'steps',h:'Pedicure <em>step by step</em>',cat:'Pedicures'},
+  {id:'q_soles',pic:'room',cap:'Quiz',t:'choose',h:'Quiz',q:'Which treatment covers only the hard skin on the soles, not the toenails?',o:['Essential Soul Pedicure','Footlogix Callus Renewal','Luxury Soul Pedicure'],c:1,why:'Footlogix Callus Renewal covers the soles only, not the toenails.'},
+  {id:'m_pedi',pic:'room',cap:'Quiz',t:'match',h:'Match them',q:'What makes each one different?',pairs:[['Luxury Soul Pedicure','Plus a 20-minute foot massage'],['Footlogix Callus Renewal','Soles only, no toenails'],['Footlogix Plus Care','Hard skin, nails and cuticles, no polish'],['Gel Removal Pedicure','Gel taken off the toenails']]},
+  {id:'q_add',pic:'reception',cap:'Quiz',t:'choose',h:'Quiz',q:'During her pedicure she asks you to add Footlogix. What do you do?',o:['Add it, she is paying','Call reception first'],c:1,why:'Every change goes through reception: time, price difference and confirmation.'},
+  {pic:'hall',cap:'Chapter complete',t:'done',h:'Pedicures, <em>done</em>@@FIRST@@.',lede:'Next: BIAB and extensions.'}]},
+ {id:'n3-biab',title:'BIAB & Extensions',min:12,S:[
+  {pic:'nails',cap:'BIAB & Extensions',t:'open',h:'BIAB and <em>extensions</em>',lede:'Our BIAB, infills and Gel-X, what is included, and our step by step. Tap Got it on each one.',meta:'About 12 minutes'},{...rule},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'BIAB & Extensions',areas:['Gel Extensions & Enhancements'],titles:[]},
+  {id:'steps',pic:'stations',cap:'Step by step',t:'steps',h:'Extensions <em>step by step</em>',cat:'Gel Extensions & Enhancements'},
+  {id:'q_biab',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What is BIAB?',o:['A soft gel tip that covers the whole nail','A builder gel that strengthens her own nail','A polish that lasts a week'],c:1,why:'BIAB is a builder gel that strengthens her own nail. The soft gel tip is Aprés Gel-X.'},
+  {id:'m_biab',pic:'nails',cap:'Quiz',t:'match',h:'Match them',q:'What makes each one different?',pairs:[['Brazilian Soul BIAB','Full Brazilian cuticle care'],['Essential Soul BIAB','Cuticles gently pushed back'],['BIAB Infill','For clients already wearing BIAB'],['Aprés Gel-X','Soft gel tip for instant length']]},
+  {id:'q_plate',pic:'stations',cap:'Quiz',t:'choose',h:'Quiz',q:'During removal or infill prep with the e-file, what must never happen?',o:['Damage to the natural nail plate','Using the e-file','Cuticle oil at the end'],c:0,why:'No damage to the natural plate, ever.'},
+  {pic:'hall',cap:'Chapter complete',t:'done',h:'BIAB, <em>done</em>@@FIRST@@.',lede:'Next: IBX and nail art.'}]},
+ {id:'n4-ibx-art',title:'IBX & Nail Art',min:10,S:[
+  {pic:'nails',cap:'IBX & Nail Art',t:'open',h:'IBX and <em>nail art</em>',lede:'Our nail care treatment and our nail art add-ons. Tap Got it on each one.',meta:'About 10 minutes'},{...rule},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'IBX & Nail Art',areas:['IBX Nail Care','Nail Art'],titles:[]},
+  {id:'q_ibx',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What does IBX do?',o:['Adds colour','Soaks into the nail and hardens inside it, making weak nails stronger','Removes gel'],c:1,why:'IBX soaks into the nail and hardens inside it, filling ridges and creating a protective shield.'},
+  {id:'q_cat',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'Cat Eye and Chrome are add-ons to which manicure?',o:['Classic polish','Gel manicure','Any pedicure'],c:1,why:'Both are add-ons to a gel manicure.'},
+  {id:'q_art',pic:'reception',cap:'Quiz',t:'choose',h:'Quiz',q:'At the end of her manicure she asks for nail art she did not book. What do you do?',o:['Do it quickly, it is small','Call reception first'],c:1,why:'Even a small add-on changes the time and the price. Reception first.'},
+  {pic:'hall',cap:'Chapter complete',t:'done',h:'All our nails, <em>done</em>@@FIRST@@.',lede:'You now know every nail treatment on our menu.',sign:true}]}];
+ const keep=['01-welcome','02-this-house','03-words','07-etiquette','08-image'].map(G);
+ CH.length=0;CH.push(...keep,...NC);
+ const RN=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+ CH.forEach((c,k)=>{c.n=RN[k];c.S.forEach(x=>{if(x.t=='done'&&/^Chapter /.test(x.cap||'')||x.cap=='Chapter complete')x.cap='Chapter '+RN[k]+' complete'})});
+ im.S[im.S.length-1].lede='Next: our treatments.';
+}
+let SVC=null;
+async function loadSvc(){if(SVC)return;try{const [a,b]=await Promise.all([fetch(SBU+'bsb_mkt_service_copy?select=title,area,minutes,price,body',{headers:H}).then(r=>r.json()),fetch(SBU+'bsb_service_steps?select=category,ord,step&order=ord',{headers:H}).then(r=>r.json())]);SVC={copy:a,steps:{}};b.forEach(x=>(SVC.steps[x.category]=SVC.steps[x.category]||[]).push(x.step))}catch(e){SVC={copy:[],steps:{},err:1}}}
+const pnum=v=>+(String(v||'').replace(/[^0-9.]/g,''))||0;
+function menuItems(s){if(!SVC)return[];return SVC.copy.filter(x=>s.areas.includes(x.area)||s.titles.includes(x.title)).sort((a,b)=>{const ia=s.areas.indexOf(a.area),ib=s.areas.indexOf(b.area);return (ia<0?99:ia)-(ib<0?99:ib)||pnum(a.price)-pnum(b.price)})}
+
 /* ---------- STATE ---------- */
 let A={};let view='home',ci=0,si=0,T0=Date.now(),WI={rows:[],area:'All',qq:'',pg:0,open:null};
 const $=s=>document.getElementById(s);
@@ -301,7 +359,7 @@ const chDone=c=>c.pol?POL.every((p,i)=>!pLive(i)||pSigned(i)):!!get(c.id,'__done
 const detDone=()=>!!get('00-details','__done');
 const unlocked=k=>isPrev()||CH.slice(0,k).every(c=>c.soon||chDone(c));
 const PATH=[{t:'My details',m:'5 min'},{t:'The BSB Way',m:'Training'},{t:'Treatments',soon:1},{t:'My apps',soon:1},{t:'The team',soon:1},{t:'First week',soon:1}];
-const pDone=i=>i==0?detDone():i==1?CH.filter(c=>!c.soon).every(chDone):false;
+const pDone=i=>i==0?(NAILS||detDone()):i==1?CH.filter(c=>!c.soon).every(chDone):false;
 const released=i=>i==0||!!get('00-path','rel_'+(i+1))||(i==1&&CH.some(chDone));
 const pOpen=i=>!PATH[i].soon&&(isPrev()||released(i));
 const shuffle=(a,seed)=>{const r=a.map((x,i)=>[x,i]);let s=seed;for(let i=r.length-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r};
@@ -483,12 +541,12 @@ function goTarget(){const cur=curStep();
 let INTRO=true;
 function home(){if(REFRESH)return refreshHome();
  if(INTRO&&!ADMIN){frame('reception','Welcome','',0);
-  $('main').innerHTML=`<div class="num">Brazilian Soul Beauty</div><h1>Welcome${first?',<br>'+esc(first):''}.</h1><p class="lede">We are so happy to have you with us. This is your path into the House: first your details, then our way of working, chapter by chapter.</p>`;
+  $('main').innerHTML=`<div class="num">Brazilian Soul Beauty</div><h1>Welcome${first?',<br>'+esc(first):''}.</h1><p class="lede">We are so happy to have you with us. ${NAILS?'This is your path into the House: our story, our way of working and all our nail treatments, chapter by chapter.':'This is your path into the House: first your details, then our way of working, chapter by chapter.'}</p>`;
   $('bk').style.visibility='hidden';$('nx').textContent='See my path';$('nx').disabled=false;$('nx').onclick=()=>{INTRO=false;home()};return}
  const cur=curStep(),i=PSEL==null?cur:PSEL,p=PATH[i];frame('team','','',PATH.filter((x,k)=>pDone(k)).length/PATH.length*100);
  const d=pDone(i),o=pOpen(i);let body='';
- const o1=pOpen(1);
- if(true){body=`<button data-p="0" class="${pDone(0)?'done':''}"><span class="r">I</span><span class="t">My details</span><span class="s">${pDone(0)?'<b class="ck">✓</b>':'5 min'}</span></button>`+CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=o1&&unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
+ const o1=NAILS||pOpen(1);
+ if(true){body=(NAILS?'':`<button data-p="0" class="${pDone(0)?'done':''}"><span class="r">I</span><span class="t">My details</span><span class="s">${pDone(0)?'<b class="ck">✓</b>':'5 min'}</span></button>`)+CH.map((c,k)=>{if(c.soon)return '';const cd=chDone(c),u=o1&&unlocked(k);return `<button class="${cd?'done':''}" data-k="${k}" ${u?'':'disabled'}><span class="r">${c.n}</span><span class="t">${c.title}</span><span class="s">${cd?'<b class="ck">✓</b>':c.pol&&u?POL.filter((q,j)=>pSigned(j)).length+' / '+POL.length:u?(c.min||'')+' min':`<img src="${LOCK}" alt="">`}</span></button>`}).join('')}
  else{const st=d?'<b class="ck">✓</b>':p.soon?'Soon':o?p.m:'Waiting for approval';body=`<button data-p="${i}" class="${d?'done':''}" ${o&&!p.soon&&!(d&&!isPrev())?'':'disabled'}><span class="r">${i+1}</span><span class="t">${p.t}</span><span class="s">${st}</span></button>`}
  $('main').innerHTML=`<h1>${first?esc(first)+',<br>your <em>path</em>':'Your <em>path</em>'}</h1><div class="chap path">${body}</div>`;
  $('bk').style.visibility=ADMIN?'visible':'hidden';
@@ -507,6 +565,12 @@ function screen(){$('nx').dataset.hint='Answer to continue';
  if(s.t=='open'){h+=`<h1>${nm(s.h)}</h1><p class="lede">${s.lede}</p>${s.meta?`<div class="meta">${s.meta}</div>`:''}`;label='Begin'}
  else if(s.t=='done'){h=`<div class="num">Chapter ${C.n} · Complete</div><h1>${nm(s.h)}</h1><p class="lede">${s.lede}</p>${s.sign?'<div class="sign">Ligia<small>Founder</small></div>':''}`;{const nxc=CH.find((x,k)=>k>ci&&!x.soon&&!chDone(x));label=REFRESH?'Finish':nxc?'Next: '+nxc.title:'Back to my path'}}
  else if(s.t=='mag'){const p=s._p||1,u='https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/mag/p-'+String(p).padStart(2,'0')+'.jpg';h+=`<h1>${s.h}</h1><a class="magp" href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="Page ${p}"></a><div class="magn"><button id="mgp" ${p>1?'':'disabled'}>‹</button><span>${p} / ${s.pages}</span><button id="mgn" ${p<s.pages?'':'disabled'}>›</button><small>Tap the page to zoom</small></div>`;if(p<s.pages)label='Next page';if(p<s.pages){const im=new Image();im.src='https://raw.githubusercontent.com/brazilian-soul-beauty/bsb-landing/onboarding-assets/onboarding/mag/p-'+String(p+1).padStart(2,'0')+'.jpg'}}
+ else if(s.t=='menu'||s.t=='steps'){if(!SVC){h+=`<h1>${s.h}</h1><p class="lede">Loading…</p>`;ready=false;loadSvc().then(()=>screen())}
+  else if(s.t=='menu'){const it=menuItems(s),ok=st.v||{},p=Math.min(s._p||0,Math.max(0,it.length-1)),x=it[p];
+   if(!x){h+=`<h1>${s.h}</h1><p class="lede">Could not load the menu. Check your internet and try again.</p>`;ready=false}
+   else{const pr=String(x.body||'').split(' | ');h+=`<h1>${s.h}</h1><div class="tcard"><div class="tch"><b>${esc(x.title)}</b><span>${x.minutes?x.minutes+' min · ':''}${esc(x.price||'')}</span></div><p class="tho">${esc(pr[0]||'')}</p><p>${esc(pr[1]||'').replace(/\n/g,'<br>')}</p></div><div class="tdots">${it.map((y,k)=>`<button data-tp="${k}" class="${ok[y.title]?'d':''} ${k==p?'c':''}">${ok[y.title]?'✓':k+1}</button>`).join('')}</div>`;
+    label=ok[x.title]?(p<it.length-1?'Next':'Continue'):'Got it';ready=true}}
+  else{const L=SVC.steps[s.cat]||[],ok=st.v||[];h+=`<h1>${s.h}</h1><p class="q" style="font-size:16px;margin-bottom:6px">Read each step and tap Got it.</p><div class="tsteps">${L.map((t,k)=>`<button data-ts="${k}" class="${ok.includes(k)?'d':''}"><span class="n">${ok.includes(k)?'✓':k+1}</span><span class="t">${esc(t)}</span><span class="g">${ok.includes(k)?'Got it':'Tap'}</span></button>`).join('')}</div>`;ready=L.length>0&&L.every((t,k)=>ok.includes(k))}}
  else if(s.t=='read'){const shown=s._n||1;h+=`<h1>${s.h}</h1><div class="lines">${s.lines.slice(0,shown).map(l=>`<p>${l}</p>`).join('')}</div>`;if(shown<s.lines.length)label='Next line';else if(s.link)h+=`<a class="golink" href="${s.link[1]}" target="_blank" rel="noopener">${s.link[0]}</a>`}
  else if(s.t=='week'){h+=`<h1>${s.h}</h1><div class="wk"><div class="hd"><span></span><span>Team</span><span>Clients</span></div><div><b>Tue to Fri</b><span>9:45 to 19:15</span><span>from 10:00</span></div><div><b>Saturday</b><span>9:45 to 17:15</span><span>10:00 to 17:00</span></div><div class="off"><b>Sun · Mon</b><span>Closed</span><span>Closed</span></div></div>`}
  else if(s.t=='key'){h+=`<h1>${s.h}</h1><div class="key">${['fechado_ferias','fechado_compensado','janela_verao','bloqueado','off'].map(k=>`<div><i class="${KEY4[k][0]}"></i><span>${KEY4[k][1]}<small>${KEY4[k][2]}</small></span></div>`).join('')}</div>`}
@@ -535,7 +599,7 @@ function screen(){$('nx').dataset.hint='Answer to continue';
  else if(s.t=='case'){h+=`<h1>${s.h}</h1><p class="q">${s.q}</p><div class="fl"><label>Your answer</label><textarea data-w="1" placeholder="Write here…">${esc(st.v)}</textarea></div>`;
   if(st.seen)h+=`<div class="why"><b>Our answer</b>${s.a}</div>`;ready=!!(st.v||'').trim();if(!st.seen)label='See our answer'}
  $('main').innerHTML=h;
- $('nx').dataset.hint={choose:(st.v!=null?'Tap I was sure or I guessed':'Tap one answer'),write:'Write your answer',case:'Write your answer',form:'Fill in every box',match:'Choose every answer',sign:'Sign to continue'}[s.t]||'Answer to continue';
+ $('nx').dataset.hint={choose:(st.v!=null?'Tap I was sure or I guessed':'Tap one answer'),write:'Write your answer',case:'Write your answer',form:'Fill in every box',match:'Choose every answer',steps:'Tap Got it on every step',menu:'Tap Got it',sign:'Sign to continue'}[s.t]||'Answer to continue';
  $('bk').style.visibility='visible';$('nx').textContent=label;$('nx').disabled=!ready&&(!isPrev()||s.t=='case'||s.t=='write');
  wire(s,c,id,st);
 }
@@ -553,6 +617,8 @@ function wire(s,c,id,st){
  document.querySelectorAll('[data-cf]').forEach(b=>b.onclick=()=>{st.conf=b.dataset.cf;setv(c,id,st);screen()});
  document.querySelectorAll('[data-m]').forEach(e=>e.onchange=()=>{st.sel=st.sel||{};st.sel[e.dataset.m]=e.value;setv(c,id,st);$('nx').disabled=!s.pairs.every((p,i)=>st.sel[i])});
  document.querySelectorAll('[data-up],[data-dn]').forEach(b=>b.onclick=()=>{const k=+(b.dataset.up??b.dataset.dn),j=b.dataset.up!=null?k-1:k+1;if(j<0||j>=st.ord.length)return;[st.ord[k],st.ord[j]]=[st.ord[j],st.ord[k]];setv(c,id,st);screen()});
+ document.querySelectorAll('[data-tp]').forEach(b=>b.onclick=()=>{s._p=+b.dataset.tp;screen()});
+ document.querySelectorAll('[data-ts]').forEach(b=>b.onclick=()=>{const k=+b.dataset.ts;st.v=st.v||[];if(!st.v.includes(k))st.v.push(k);const L=SVC.steps[s.cat]||[];st.done=L.every((t,j)=>st.v.includes(j));setv(c,id,st);screen()});
  document.querySelectorAll('[data-w]').forEach(e=>e.oninput=()=>{st.v=e.value;setv(c,id,st);$('nx').disabled=!e.value.trim()});
 }
 document.addEventListener('click',e=>{const b=e.target.closest('#mgp,#mgn');if(!b||view!='ch')return;const s=CH[ci].S[si];if(s.t!='mag')return;s._p=Math.max(1,Math.min(s.pages,(s._p||1)+(b.id=='mgn'?1:-1)));screen()});
@@ -561,6 +627,8 @@ async function next(){
  const C=CH[ci],s=C.S[si],c=C.id,id=s.id,st=id?(get(c,id)||{}):{};
  if(s.t=='read'&&(s._n||1)<s.lines.length){s._n=(s._n||1)+1;return screen()}
  if(s.t=='mag'&&(s._p||1)<s.pages){s._p=(s._p||1)+1;return screen()}
+ if(s.t=='menu'){const it=menuItems(s);if(!it.length)return;const p=Math.min(s._p||0,it.length-1);st.v=st.v||{};if(!st.v[it[p].title]){st.v[it[p].title]=new Date().toISOString();st.done=it.every(y=>st.v[y.title]);setv(c,id,st);$('nx').disabled=true;const ok=await save(c,[id]);$('nx').disabled=false;if(!ok)return}
+  const nx=it.findIndex((y,k)=>k>p&&!st.v[y.title]),nf=it.findIndex(y=>!st.v[y.title]);const go=nx>=0?nx:nf;if(go>=0){s._p=go;return screen()}if(p<it.length-1&&!isPrev()){s._p=p+1;return screen()}}
  if(s.t=='match'&&!st.checked){st.sel=st.sel||{};st.checked=1;st.ok=s.pairs.every((p,i)=>st.sel[i]==p[1]);setv(c,id,st);await save(c,[id]);return screen()}
  if(s.t=='order'&&!st.checked){st.checked=1;st.ok=st.ord.every((ix,k)=>ix==k);setv(c,id,st);await save(c,[id]);return screen()}
  if(s.t=='case'&&!st.seen){st.seen=1;setv(c,id,st);await save(c,[id]);return screen()}
@@ -602,7 +670,7 @@ const _render=render;render=function(){bindNext();_render()};
 const _screen=screen;screen=function(){bindNext();_screen()};
 function stepDone(C,s){if(!s.id)return true;const v=get(C.id,s.id);
  if(s.t=='form')return ff(s).every(x=>(get(C.id,x.id)||'').trim());
- if(!v)return false;if(s.t=='choose')return v.v!=null&&!!v.conf;if(s.t=='match'||s.t=='order')return !!v.checked;if(s.t=='case')return !!v.seen;if(s.t=='write')return !!(v.v||'').trim();if(s.t=='sign')return !!v.at;return true}
+ if(!v)return false;if(s.t=='choose')return v.v!=null&&!!v.conf;if(s.t=='match'||s.t=='order')return !!v.checked;if(s.t=='case')return !!v.seen;if(s.t=='write')return !!(v.v||'').trim();if(s.t=='sign')return !!v.at;if(s.t=='menu'||s.t=='steps')return !!v.done;return true}
 function resumeAt(C){if(chDone(C))return 0;const k=C.S.findIndex(s=>!stepDone(C,s));if(k<=C.S.findIndex(s=>s.id))return 0;const prev=C.S[k-1];return (prev.t=='read'||prev.t=='vals')?k-1:k}
 
 /* ---------- REFRESH (one chapter link for the salon team) ---------- */
