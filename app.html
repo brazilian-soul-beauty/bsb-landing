@@ -419,6 +419,7 @@ main>*{flex:0 0 100%;min-width:0;height:100%;scroll-snap-align:start;padding:0 1
 .pwbtn{margin-left:6px;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;font:700 14px Inter,sans-serif;cursor:pointer}.pwin{margin-top:16px;width:100%;min-height:52px;border-radius:14px;border:1px solid var(--line);padding:0 16px;font:600 18px Inter,sans-serif;text-align:center}
 .pinin{width:100%;min-height:56px;border-radius:16px;border:1px solid var(--line);background:#F7F6FB;text-align:center;font:700 22px Inter,sans-serif;letter-spacing:.2em;margin-bottom:12px}.pingo{width:100%;min-height:54px;border-radius:999px;background:var(--p);color:#fff;font:700 17px Inter,sans-serif}
 .phqr{display:block;margin:14px auto 4px;width:200px;height:200px;border-radius:16px;border:1px solid var(--line)}.phb{margin-right:6px}.isapp .phb{display:none}
+.dtk.rdy{margin:0 0 2px}.tds.t3{grid-template-columns:repeat(3,1fr)!important}@media(min-width:700px){.tds.t5.t3 .nd2 .seal{width:84px!important;height:84px!important}.tds.t5.t3 .nd2 .pcn{font-size:28px}.tds.t5.t3 .nd2 .pcn small{font-size:14px}.tds.t5.t3 .nd2 .ck{transform:translate(35%,-35%) scale(.72)}.tdm:has(.t3){gap:6px;padding-top:14px;padding-bottom:14px}}.dtk.rdy span{justify-content:center;padding:8px 6px;white-space:nowrap}.dtk u{text-decoration:none}.dtk span.bad{background:#FDECEC;border-color:#F6C9C9;color:#B42318}@media(max-width:560px){.dtk.rdy>b{display:none}.dtk.rdy span u{display:none}.dtk.rdy span.bad u{display:inline}}
 </style>
 </head>
 <body>
@@ -1031,7 +1032,6 @@ function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+
   var pin=function(a,b){return '<span class="pcn">'+a+'<small>/'+b+'</small></span>'},pc=function(a,b){return b?Math.round(100*a/b)+'%':'–'};
   var vd=n(d._vd),xs0=d._st||{},wkd=!!(xs0.worked||cl);
   var SE=[{ic:cl?pin(dk>cl?cl:dk,cl):'🥂',t:'🥂 Drinks',p:dk>0,w:cl&&dk>=cl,ok:cl&&dk>=cl?true:null,g:'100%',m:cl?pc(Math.min(dk,cl),cl)+' with a drink':'No clients today'},
-   {ic:cl?'<span class="pcn">–<small>/'+cl+'</small></span>':'<span class="pcn">–</span>',t:'🌟 Experience',ok:null,g:'100%',m:'exceptional'},
    {ic:ls?pin(lb,ls):'📲',t:'📲 Last minute',p:lb>0,w:ls&&lb/ls>=0.2,ok:ls&&lb/ls>=0.2?true:null,g:'20%',m:ls?pc(lb,ls)+' booked':'None sent yet'},
    {ic:pin(vd>1?1:vd,1),t:'🎬 Content',w:vd>=1,ok:vd>=1?true:null,g:'1',m:vd?'Thank you':'1 today'}];
   var won=SE.filter(function(q){return q.ok}).length;
@@ -1041,14 +1041,14 @@ function renderDesk(M){var td=today(),day=S.tday||ymd(td),key='desk|'+S.who+'|'+
   var tv=d.tips_pct==null?null:+d.tips_pct,ta=d.tips_avg==null?null:+d.tips_avg,tar=tv==null||ta==null?'':tv>ta?' ↑':tv<ta?' ↓':'';
   var rn=n(d.reviews_n),r5=n(d.reviews_5);
   var C=[['⭐','Reviews',rn,(rn?'Tap to read · ':'')+(n(d.new_n)?'for '+n(d.new_n)+' new client'+(n(d.new_n)>1?'s':''):'no new clients')+(rn?' · '+r5+' with 5★':''),rn>0&&rn>=n(d.new_n)],['🔁','Rebook',cl?pc(rb,cl):'–',cl?rb+' of '+cl+' rebooked':'no clients yet',cl&&rb/cl>=0.4],['🥂','Paid drinks',n(d.drinks_paid),'your commission',n(d.drinks_paid)>=1],['💛','Tips',tv==null?'–':tv+'%'+tar,(d.tips_n?n(d.tips_q)+' of '+n(d.tips_n)+' gave a tip':'clients who tipped')+(ta==null?'':' · usual '+ta+'%'),tv!=null&&ta!=null&&tv>=ta]];
-  var xs=d._st||{},TK=[['☀️','Morning',xs.t_morning>0],['☑️','Day',xs.t_day>0],['🌙','Close',xs.t_close>0]];
+  var xs=d._st||{},lt=+xs.late_min||0,RD=[['💄','Look',xs.look_marked?xs.look_ok!==false:null],['⏰',lt>0?lt+' min late':'On time',xs.first_in?!(lt>0):null],['☀️','Morning',xs.t_morning>0?true:null],['☑️','Day',xs.t_day>0?true:null],['🌙','Close',xs.t_close>0?true:null]];var RDH='<div class="bh">🧍 Ready</div><div class="dtk rdy">'+RD.map(function(t){return '<span class="'+(t[2]===true?'on':t[2]===false?'bad':'')+'"><em>'+t[0]+'</em><u>'+t[1]+'</u>'+(t[2]===true?' ✓':'')+'</span>'}).join('')+'</div>';
   var DB=deskBat(d,vd),BT=DB.bt||0,BS=Math.round(BT/10);deskHist(M,td);var HH=S.dkh||{},stk=0;
   (function(){var x=new Date(pd(day));if(BT<100)x.setDate(x.getDate()-1);for(var q=0;q<30;q++){var k=ymd(x),v=k===day?BT:HH[k];if(v===undefined)break;if(v===null){x.setDate(x.getDate()-1);continue}if(v>=100){stk++;x.setDate(x.getDate()-1)}else break}})();
   var BM=BT>=100?'Full day ⚡':BT>=80?'Almost full':BT>=40?'Halfway there':BT>0?'Charging…':'Let\'s start';
-  h+='<div class="tdm"><div class="bh">👑 What I do today</div><div class="bat"><div class="bat-b">'+Array.apply(null,{length:10}).map(function(_,i){return '<i class="'+(i<BS?(BT>=100?'f':BT>=60?'g':'y'):'')+'" style="animation-delay:'+(i*70)+'ms"></i>'}).join('')+'</div><span class="bat-t"></span><div class="bat-l"><b>'+BT+'%</b><span>'+BM+'</span></div></div>'+(DB.nd||stk>=2?'<div class="bat-n">'+(DB.nd?'<span>'+DB.nd+'</span>':'')+(stk>=2?'<em>🔥 '+stk+' full days in a row</em>':'')+'</div>':'')+'<div class="tds t5 t4">'+SE.map(function(q,k){var st=q.w?'ok win':q.ok||q.p?'ok':'na';
+  h+='<div class="tdm">'+RDH+'<div class="bh">🤝 My actions</div><div class="bat"><div class="bat-b">'+Array.apply(null,{length:10}).map(function(_,i){return '<i class="'+(i<BS?(BT>=100?'f':BT>=60?'g':'y'):'')+'" style="animation-delay:'+(i*70)+'ms"></i>'}).join('')+'</div><span class="bat-t"></span><div class="bat-l"><b>'+BT+'%</b><span>'+BM+'</span></div></div>'+(DB.nd||stk>=2?'<div class="bat-n">'+(DB.nd?'<span>'+DB.nd+'</span>':'')+(stk>=2?'<em>🔥 '+stk+' full days in a row</em>':'')+'</div>':'')+'<div class="tds t5 t3">'+SE.map(function(q,k){var st=q.w?'ok win':q.ok||q.p?'ok':'na';
     return '<div class="nd2 '+st+'" style="animation-delay:'+(k*120)+'ms"><div class="seal"><div class="ic">'+q.ic+'</div>'+(q.ok?'<i class="ck">✓</i>':'')+'</div><b>'+q.t+'</b><span>'+esc(q.m)+'</span>'+(q.g?'<em class="gl">🎯 '+q.g+'</em>':'')+'</div>'}).join('')+'</div>'+
     '<div class="bh" style="margin-top:4px">📈 My results</div><div class="dcs d4">'+C.map(function(c){return '<div class="'+(c[4]?'good':'')+'"'+(c[1]==='Reviews'?' onclick="revOpen(\''+day+'\',\''+day+'\')" style="cursor:pointer"':'')+'><em>'+c[0]+'</em><b>'+c[2]+'</b><span>'+c[1]+'</span><small>'+c[3]+'</small></div>'}).join('')+'</div>'+
-    '<div class="dtk"><b>Tasks</b>'+TK.map(function(t){return '<span class="'+(t[2]?'on':'')+'"><em>'+t[0]+'</em>'+t[1]+(t[2]?' ✓':'')+'</span>'}).join('')+'</div></div>';
+    '</div>';
   M.innerHTML=h}
 function thBat(t,ex,day){t=t||{};var ap=t.appts||[],nc=ap.length,pe=Math.min((t.pers&&+t.pers.pe)||0,nc),exp=Math.floor((t.free_min||0)/60),vd=t.videos||0;
   var E=ex&&ex.up?(ex.up.days||[]).filter(function(q){return q.d===day})[0]:null,eu=E?+E.u:0,ev=E?+E.v:0,en=Math.max(1,Math.ceil(0.15*ev));
