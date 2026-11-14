@@ -9,11 +9,16 @@ const BLOCK="<!--BSB-RVW418-INICIO-->\n<style>\n#rvw{margin:0 0 22px}\n#rvw .rv-
   if(!h.includes('Welcome offers')||!h.includes('id="kpis"')) throw new Error('pagina inesperada');
   if(h.split('</body>').length!==2) throw new Error('esperava 1 </body>');
   if(h.includes('BSB-RVW418-INICIO')) h=h.replace(/<!--BSB-RVW418-INICIO-->[\s\S]*?<!--BSB-RVW418-FIM-->\n?/,'');
+  if(h.includes('BSB-WWK419-INICIO')) h=h.replace(/<!--BSB-WWK419-INICIO-->[\s\S]*?<!--BSB-WWK419-FIM-->\n?/,'');
   const antes=h.length;
   h=h.replace('</body>',BLOCK+'\n</body>');
   if(h.length!==antes+BLOCK.length+1) throw new Error('tamanho nao bate');
   if((h.match(/BSB-RVW418-INICIO/g)||[]).length!==1) throw new Error('bloco duplicado');
   if(/localStorage\.setItem/.test(BLOCK)) throw new Error('nada de localStorage');
+  const WWK=fs.readFileSync(__dirname+'/wwk.html','utf8').trim();
+  if(/localStorage/.test(WWK)) throw new Error('nada de localStorage');
+  h=h.replace('</body>',WWK+'\n</body>');
+  if((h.match(/BSB-WWK419-INICIO/g)||[]).length!==1) throw new Error('bloco WWK duplicado');
   fs.mkdirSync('public',{recursive:true}); fs.writeFileSync('public/index.html',h);
   console.log('ok',antes,'->',h.length);
 })().catch(e=>{console.error(e);process.exit(1)});

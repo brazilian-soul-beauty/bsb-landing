@@ -1,0 +1,59 @@
+<!--BSB-WWK419-INICIO-->
+<style>
+#wwk{margin:0 0 22px}
+#wwk .wk-card{background:#fff;border:1px solid #ECECF4;border-radius:16px;padding:16px 18px}
+#wwk .wk-tabs{display:flex;gap:6px;margin-bottom:12px}
+#wwk .wk-tabs button{border:0;background:#F6F5FB;color:#585A75;border-radius:999px;padding:6px 12px;font:600 12px Inter,system-ui,sans-serif;cursor:pointer}
+#wwk .wk-tabs button.on{background:#5B47E0;color:#fff}
+#wwk .wk-k{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+#wwk .wk-k div{background:#F6F5FB;border-radius:12px;padding:10px 12px}
+#wwk .wk-k b{display:block;font-size:24px;font-weight:800;color:#1F2235;line-height:1.1}
+#wwk .wk-k span{font-size:12px;color:#585A75;font-weight:600}
+#wwk table{width:100%;border-collapse:collapse;font-size:13px}
+#wwk th{text-align:right;font-size:11px;color:#9A9BB4;font-weight:700;padding:4px 8px;text-transform:uppercase;letter-spacing:.4px}
+#wwk td{text-align:right;padding:8px;border-top:1px solid #ECECF4;font-variant-numeric:tabular-nums}
+#wwk th:first-child,#wwk td:first-child{text-align:left;font-weight:700;color:#1F2235}
+#wwk th:last-child,#wwk td:last-child{text-align:left}
+#wwk td small{font-weight:400;color:#9A9BB4;margin-left:4px}
+#wwk .p{border-radius:999px;padding:3px 9px;font-weight:700;font-size:12px;white-space:nowrap}
+#wwk .g{background:#EAF7F0;color:#1B7A4A}#wwk .y{background:#FFF6E5;color:#B45309}#wwk .r{background:#FDECEC;color:#B42318}
+#wwk .wk-src{margin-top:10px;font-size:11px;color:#9A9BB4}
+@media(max-width:640px){#wwk .wk-k{grid-template-columns:repeat(2,1fr)}#wwk td small{display:none}#wwk th:nth-child(5),#wwk td:nth-child(5){display:none}}
+</style>
+<script>
+/* BSB-WWK419 (14/11/2026, Ligia): "juntar tudo num lugar so" - todas as ofertas, codigos e acoes com o mesmo jeito de ler.
+   Fonte: Hub, funcao bsb_what_working(p_days) (so contagens, sem nome de cliente). */
+(function(){
+  var kpis=document.getElementById('kpis'); if(!kpis||document.getElementById('wwk')) return;
+  var box=document.createElement('div'); box.id='wwk';
+  box.innerHTML='<h2>✨ What is working <small>every offer in one place</small></h2><div class="wk-card"><div class="wk-tabs"><button data-d="7">7 days</button><button data-d="30" class="on">30 days</button><button data-d="90">90 days</button></div><div id="wwkBody">Loading…</div></div>';
+  kpis.parentNode.insertBefore(box,kpis.nextSibling);
+  var body=document.getElementById('wwkBody'), key='', days=30;
+  [].slice.call(document.scripts).some(function(s){var m=/KEY\s*=\s*'([^']+)'/.exec(s.textContent||''); if(m){key=m[1];return true}});
+  var NM={'MYESSENTIALSOUL-B2S7B':'💎 Essential Soul','WELCOMEBACK15':'🔁 We miss you','BSB-WELCOME10':'👋 Welcome · Circle','BDAY15':'🎂 Birthday','BSBMEMBER10':'💜 Members','REVIEW20':''};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function n(v){return v==null?'–':v}
+  function dt(s){if(!s)return '';var d=new Date(s);return isNaN(d)?'':d.toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+  function draw(p){
+    var rows=p.rows||[], red=rows.filter(function(r){return (r.status||'').charAt(0)==='r'}).length;
+    var fr=rows.filter(function(r){return /friend/i.test(r.nome)})[0];
+    var tr=rows.map(function(r){
+      var s=(r.status||'y:').split(':'), cl=s[0], tx=s.slice(1).join(':'), ic=cl==='g'?'🟢 ':cl==='r'?'🔴 ':'🟡 ';
+      var nm=NM[r.sub]?NM[r.sub]:r.nome, sub=(r.sub&&nm.indexOf(r.sub)<0)?r.sub:'';
+      return '<tr title="'+esc(r.fonte)+'"><td>'+esc(nm)+(sub?'<small>'+esc(sub)+'</small>':'')+'</td><td>'+n(r.sent)+'</td><td>'+n(r.yes)+'</td><td>'+n(r.came)+'</td><td>'+(r.off?'£'+r.off:'–')+'</td><td><span class="p '+cl+'">'+ic+esc(tx)+'</span></td></tr>';
+    }).join('');
+    body.innerHTML='<div class="wk-k"><div><b>'+(p.codes||0)+'</b><span>codes used</span></div><div><b>£'+(p.off||0)+'</b><span>discount given</span></div><div><b>'+(fr?fr.came:0)+'</b><span>friends came</span></div><div><b>'+red+(red?' 🔴':'')+'</b><span>need action</span></div></div>'+
+      (tr?'<table><tr><th>Action</th><th>Sent</th><th>Said yes</th><th>Came</th><th>£ off</th><th>Status</th></tr>'+tr+'</table>':'<p class="wk-src">Nothing recorded in these days.</p>')+
+      '<div class="wk-src">Source: Hub · codes from Salonized invoices (last code '+esc(p.last_code||'none')+') · updated '+dt(p.at)+' · refresh every 5 min</div>';
+  }
+  function load(){
+    if(!key){body.textContent='Could not read the Hub key.';return}
+    fetch('https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/rpc/bsb_what_working',{method:'POST',headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({p_days:days})})
+      .then(function(r){if(!r.ok)throw r.status;return r.json()}).then(draw)
+      .catch(function(){body.innerHTML='<span class="p y">The Hub did not answer. Numbers hidden.</span>'});
+  }
+  box.querySelectorAll('.wk-tabs button').forEach(function(b){b.onclick=function(){box.querySelectorAll('.wk-tabs button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');days=+b.dataset.d;body.innerHTML='Loading…';load()}});
+  load(); setInterval(load,300000);
+})();
+</script>
+<!--BSB-WWK419-FIM-->
