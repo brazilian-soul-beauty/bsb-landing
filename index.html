@@ -59,6 +59,16 @@ function claimBlock(d){
    '<button class="btn" id="cb" type="submit">Claim my £20</button><p class="small" id="cerr"></p>'+
    '<p class="small">Joins our Clapham Circle: one care note a month, never more.</p></form></div>';
 }
+/* 14/11/2026 Ligia: o review vem primeiro (botao unico no e-mail), o Circle vem depois e sozinho. */
+var SOLO=false;
+function circleBlock(d){
+  var fn=d&&d.first?esc(d.first):'', em=d&&d.email?esc(d.email):'';
+  return '<div id="cw"><div class="gift"><b>£10 off</b><span>Your next visit</span></div>'+
+   '<form id="cf" class="cf" novalidate><label>First name</label><input id="cn" type="text" value="'+fn+'" autocomplete="given-name">'+
+   '<label>Email</label><input id="ce" type="email" value="'+em+'" autocomplete="email" inputmode="email">'+
+   '<button class="btn" id="cb" type="submit">Join and get £10</button><p class="small" id="cerr"></p>'+
+   '<p class="small">Joins our Clapham Circle: one care note a month, never more.</p></form></div>';
+}
 /* 07/11: quem ja assina o newsletter ganha so o £10 do review (sem formulario do Circle) */
 function reviewBlock(){
   return '<div class="gift"><b>£10 off</b><span>Your next visit</span></div>'+
@@ -68,7 +78,7 @@ function reviewBlock(){
 function offerBlock(d){ return (d&&d.nl) ? reviewBlock() : claimBlock(d); }
 function wireClaim(){
   var f=document.getElementById('cf'); if(!f) return;
-  var b=document.getElementById('cb'), er=document.getElementById('cerr');
+  var b=document.getElementById('cb'), er=document.getElementById('cerr'), LBL=b.textContent;
   f.onsubmit=function(e){e.preventDefault(); er.textContent='';
     var n=document.getElementById('cn').value.trim(), m=document.getElementById('ce').value.trim();
     if(!n){er.textContent='Please add your first name.';return}
@@ -77,6 +87,9 @@ function wireClaim(){
     rpc('bsb_feedback_claim_info',{p_token:T});
     var cb='mc'+Date.now(), sc=document.createElement('script'), to;
     function ok(){ rpc('bsb_feedback_claimed',{p_token:T});
+      if(SOLO){ document.getElementById('cw').innerHTML='<p class="lbl">Welcome in, '+esc(n)+' 🤍</p>'+
+        '<p style="margin:0 0 6px">Your £10 code</p><div class="code">'+CODE+'</div>'+
+        '<p class="small">Use it on your next visit of £60 or more, within 30 days. We also sent it to your inbox.</p>'; return; }
       document.getElementById('cw').innerHTML='<p class="lbl">Welcome in, '+esc(n)+' 🤍</p>'+
         '<p style="margin:0 0 6px">Your £10 code</p><div class="code">'+CODE+'</div>'+
         '<p class="small">Use it on your next visit of £60 or more, within 30 days. We also sent it to your inbox.</p>'+
@@ -86,10 +99,10 @@ function wireClaim(){
     }
     window[cb]=function(r){clearTimeout(to); delete window[cb]; sc.remove();
       if(r&&(r.result==='success'||/already subscribed/i.test(r.msg||''))) ok();
-      else { b.disabled=false; b.textContent='Claim my £20'; er.textContent=(String(r&&r.msg||'Something went wrong. Please try again.')).replace(/<[^>]+>/g,'').replace(/^\d+\s*-\s*/,''); } };
+      else { b.disabled=false; b.textContent=LBL; er.textContent=(String(r&&r.msg||'Something went wrong. Please try again.')).replace(/<[^>]+>/g,'').replace(/^\d+\s*-\s*/,''); } };
     sc.src=MC+'&EMAIL='+encodeURIComponent(m)+'&FNAME='+encodeURIComponent(n)+'&tags=40243209&b_945a42f70df1284122909cecd_937bbcba51=&c='+cb;
-    sc.onerror=function(){clearTimeout(to); b.disabled=false; b.textContent='Claim my £20'; er.textContent='We could not connect. Please try again.'};
-    to=setTimeout(function(){b.disabled=false; b.textContent='Claim my £20'; er.textContent='This is taking longer than usual. Please try again.'},12000);
+    sc.onerror=function(){clearTimeout(to); b.disabled=false; b.textContent=LBL; er.textContent='We could not connect. Please try again.'};
+    to=setTimeout(function(){b.disabled=false; b.textContent=LBL; er.textContent='This is taking longer than usual. Please try again.'},12000);
     document.body.appendChild(sc);
   };
 }
@@ -113,6 +126,15 @@ function draw(d){
   }
   wireClaim(); wireComment();
 }
+/* 14/11: r=review grava o toque e leva direto ao Google; r=circle abre so o convite do Circle */
+if(T&&R==='review'){
+  V.innerHTML='<h1>Thank you 🤍</h1><p>Taking you to Google…</p>'+rvBtn('Leave my review')+
+    '<p class="small" style="margin-top:18px">Your 20% code arrives by email as soon as your review is live.</p>';
+  var go=function(){ location.href=REVIEW; };
+  rpc('bsb_feedback_click',{p_token:T,p_what:'review'}).then(go); setTimeout(go,1500);
+}
+else if(T&&R==='circle'){ SOLO=true; rpc('bsb_feedback_claim_info',{p_token:T}).then(function(d){ V.innerHTML='<h1>Want £10 more?</h1><p>Join our Clapham Circle for offers and news.</p>'+circleBlock(d); wireClaim(); }); }
+else
 /* links antigos (&r=claim) continuam abrindo: viram a mesma pagina unica */
 if(T&&R==='claim'){ rpc('bsb_feedback_claim_info',{p_token:T}).then(function(d){ V.innerHTML='<h1>Your £20 is waiting 🎁</h1>'+claimBlock(d); wireClaim(); }); }
 else if(!T||['loved','good','better'].indexOf(R)<0){ V.innerHTML='<h1>Thank you 🤍</h1><p>See you soon at Brazilian Soul.</p>'; }
