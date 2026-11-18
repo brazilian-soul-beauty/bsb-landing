@@ -308,7 +308,7 @@ if(NAILS){
  const NC=[
  {id:'n1-manicures',title:'Manicures',min:15,S:[
   {pic:'nails',cap:'Manicures',t:'open',h:'Our <em>manicures</em>',lede:'Every manicure on our menu, what is included, and our step by step. Tap Got it on each one.',meta:'About 15 minutes'},{...rule},
-  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'Manicures',cats:['Manicures'],names:["Men's Soul Manicure",'Brazilian Soul Manicure (Classic Polish) + Caipirinha']},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'Manicures',cats:['Manicures'],names:["Men's Soul Manicure",'Brazilian Soul Manicure (Classic Polish) + Caipirinha'],extra:[{title:'Gel Removal Only',min:15,cat:'Manicures'}]},
   {id:'steps',pic:'stations',cap:'Step by step',t:'steps',h:'Manicure <em>step by step</em>',cat:'Manicures'},
   {pic:'stations',cap:'What you use',t:'kit',h:'What you <em>use</em>',k:['qualquer mani/pedi','mani/pedi incl. extensoes/biab','mani/pedi com cuticulagem','mani/pedi esmalte normal','mani/pedi esmalte gel','remocao esmalte mani/pedi','esterilizacao mao/pe','pedicure e manicure','gloves']},
   {id:'q_lux',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What does the Luxury Soul Manicure add to the Brazilian Soul Manicure?',o:['Gel only','A 20-minute hand and arm massage','Nothing, same treatment'],c:1,why:'Everything in the Brazilian Soul Manicure, plus a 20-minute hand and arm massage.'},
@@ -352,7 +352,7 @@ const KITL={'qualquer mani/pedi':'Every manicure and pedicure','qualquer pedicur
 async function loadSvc(){if(SVC)return;try{const j=u=>fetch(SBU+u,{headers:H}).then(r=>r.json());const [a,b,t,k]=await Promise.all([j('bsb_services?select=name,category,duration_min,is_addon,patch_required,active'),j('bsb_service_steps?select=category,ord,step&order=ord'),j('bsb_service_tech?select=title,notes'),fetch(SBU+'rpc/bsb_service_kit',{method:'POST',headers:H,body:'{}'}).then(r=>r.json())]);
  SVC={svc:a.filter(x=>x.active!==false),steps:{},tech:{},kit:{}};b.forEach(x=>(SVC.steps[x.category]=SVC.steps[x.category]||[]).push(x.step));t.forEach(x=>SVC.tech[x.title]=x.notes||'');
  k.forEach(x=>{let key=String(x.used_for||'').toLowerCase().trim();if(key.startsWith('todos menos massagem/facial'))key='gloves';const set=SVC.kit[key]=SVC.kit[key]||new Set();String(x.products||'').split(' ; ').forEach(p=>p&&set.add(p))})}catch(e){SVC={svc:[],steps:{},tech:{},kit:{},err:1}}}
-function menuItems(s){if(!SVC)return[];return SVC.svc.filter(x=>s.cats.includes(x.category)||s.names.includes(x.name)).map(x=>({title:x.name,min:x.duration_min,add:x.is_addon,patch:x.patch_required,cat:x.category})).sort((a,b)=>{const ia=s.cats.indexOf(a.cat),ib=s.cats.indexOf(b.cat);return (ia<0?99:ia)-(ib<0?99:ib)||(a.min||0)-(b.min||0)})}
+function menuItems(s){if(!SVC)return[];return SVC.svc.filter(x=>s.cats.includes(x.category)||s.names.includes(x.name)).map(x=>({title:x.name,min:x.duration_min,add:x.is_addon,patch:x.patch_required,cat:x.category})).concat((s.extra||[]).filter(e=>!SVC.svc.some(x=>x.name==e.title))).sort((a,b)=>{const ia=s.cats.indexOf(a.cat),ib=s.cats.indexOf(b.cat);return (ia<0?99:ia)-(ib<0?99:ib)||(a.min||0)-(b.min||0)})}
 const canEdit=()=>isPrev()||(typeof ADMIN!='undefined'&&ADMIN);
 async function saveTech(title,notes){try{const r=await fetch(SBU+'rpc/bsb_service_tech_save',{method:'POST',headers:H,body:JSON.stringify({p_pin:TPIN,p_title:title,p_notes:notes})});const ok=await r.json();if(ok!==true)return false;SVC.tech[title]=notes;return true}catch(e){alert('Not saved. Check your internet.');return false}}
 
