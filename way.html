@@ -354,7 +354,7 @@ async function loadSvc(){if(SVC)return;try{const j=u=>fetch(SBU+u,{headers:H}).t
  k.forEach(x=>{let key=String(x.used_for||'').toLowerCase().trim();if(key.startsWith('todos menos massagem/facial'))key='gloves';const set=SVC.kit[key]=SVC.kit[key]||new Set();String(x.products||'').split(' ; ').forEach(p=>p&&set.add(p))})}catch(e){SVC={svc:[],steps:{},tech:{},kit:{},err:1}}}
 function menuItems(s){if(!SVC)return[];return SVC.svc.filter(x=>s.cats.includes(x.category)||s.names.includes(x.name)).map(x=>({title:x.name,min:x.duration_min,add:x.is_addon,patch:x.patch_required,cat:x.category})).sort((a,b)=>{const ia=s.cats.indexOf(a.cat),ib=s.cats.indexOf(b.cat);return (ia<0?99:ia)-(ib<0?99:ib)||(a.min||0)-(b.min||0)})}
 const canEdit=()=>isPrev()||(typeof ADMIN!='undefined'&&ADMIN);
-async function saveTech(title,notes){if(!TPIN){TPIN=prompt('PIN');if(!TPIN)return false}try{const r=await fetch(SBU+'rpc/bsb_service_tech_save',{method:'POST',headers:H,body:JSON.stringify({p_pin:TPIN,p_title:title,p_notes:notes})});const ok=await r.json();if(ok!==true){TPIN=null;alert('Wrong PIN');return false}SVC.tech[title]=notes;return true}catch(e){alert('Not saved. Check your internet.');return false}}
+async function saveTech(title,notes){try{const r=await fetch(SBU+'rpc/bsb_service_tech_save',{method:'POST',headers:H,body:JSON.stringify({p_pin:TPIN,p_title:title,p_notes:notes})});const ok=await r.json();if(ok!==true)return false;SVC.tech[title]=notes;return true}catch(e){alert('Not saved. Check your internet.');return false}}
 
 /* ---------- STATE ---------- */
 let A={};let view='home',ci=0,si=0,T0=Date.now(),WI={rows:[],area:'All',qq:'',pg:0,open:null};
