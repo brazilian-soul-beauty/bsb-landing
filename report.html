@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Training record · Brazilian Soul Beauty</title>
+<style>
+@page{size:A4;margin:16mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;color:#2E2A25;background:#F4F1EC}
+.pg{max-width:780px;margin:24px auto;background:#fff;padding:40px 48px;border:1px solid #E4DDD2}
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #E4DDD2;padding-bottom:14px;margin-bottom:22px}
+.top b{font-family:Georgia,serif;font-weight:400;font-size:26px}
+.top span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#A17A60}
+.meta{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:14px;margin-bottom:22px}
+.meta i{font-style:normal;color:#8A7F72}
+.meta a{color:#2E2A25;word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:24px}
+th{text-align:left;font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#A17A60;border-bottom:1px solid #E4DDD2;padding:6px 4px}
+td{border-bottom:1px solid #F0EBE3;padding:7px 4px}
+td.ok{color:#5E7A45}td.no{color:#A4553F}
+.decl{border-left:2px solid #A17A60;padding:6px 0 6px 14px;font-size:14.5px;margin-bottom:14px}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:14px;margin-bottom:8px}
+.sig i{display:block;font-style:normal;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A7F72;margin-bottom:3px}
+.box{border:1px solid #E4DDD2;height:140px;margin-top:6px}.box svg{width:100%;height:100%}
+.bar{max-width:780px;margin:16px auto 0;display:flex;gap:10px;justify-content:flex-end}
+.bar button{border:1px solid #2E2A25;background:#2E2A25;color:#fff;padding:9px 20px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.msg{padding:60px;text-align:center;color:#8A7F72}
+@media print{body{background:#fff}.bar{display:none}.pg{border:0;margin:0;padding:0;max-width:none}}
+</style></head><body>
+<div class="bar"><button onclick="window.print()">Save as PDF</button></div>
+<div class="pg" id="pg"><div class="msg">Loading…</div></div>
+<script>
+const SBU='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/',KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+const QS=new URLSearchParams(location.search),person=(QS.get('p')||'').trim(),CODE=(QS.get('c')||'').trim();
+const NAILS=person==='Riya';
+const CH=NAILS?[['01-welcome','I · Welcome'],['02-this-house','II · This House'],['03-words','III · The Words of the House'],['07-etiquette','IV · Etiquette'],['08-image','V · Image & Uniform'],['n1-manicures','VI · Manicures'],['n2-pedicures','VII · Pedicures']]
+ :[['00-details','I · My details'],['01-welcome','II · Welcome'],['02-this-house','III · This House'],['03-words','IV · The Words of the House'],['04-calendar','V · Calendar'],['05-policies','VI · Policies'],['07-etiquette','VII · Etiquette'],['08-image','VIII · Image & Uniform']];
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const day=t=>t?new Date(t).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'';
+function sigSvg(sg){const d=(sg.pts||'').split('|').filter(Boolean).map(st=>st.split(';').map((q,k)=>(k?'L':'M')+q.replace(',',' ')).join(' ')).join(' ');
+ return `<svg viewBox="0 0 ${sg.w||400} ${sg.h||140}" preserveAspectRatio="xMidYMid meet"><path d="${d}" fill="none" stroke="#2E2A25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+(async()=>{const pg=document.getElementById('pg');
+ try{const r=await fetch(SBU+'rpc/onb_load',{method:'POST',headers:H,body:JSON.stringify({p_person:person,p_code:CODE})});if(!r.ok)throw 0;
+  const A={};(await r.json()).forEach(x=>{let v=x.answer;try{if(v&&v[0]=='{')v=JSON.parse(v)}catch(e){}A[x.module+'|'+x.field]=v});
+  const g=(m,f)=>A[m+'|'+f];
+  const sg=NAILS?g('n2-pedicures','sign_end'):g('08-image','sign_image');
+  let tot=0;const rows=CH.map(([m,t])=>{const d=g(m,'__done'),mn=+(g(m,'__minutes')||0);if(d)tot+=mn;return `<tr><td>${t}</td><td class="${d?'ok':'no'}">${d?'Completed':'Not yet'}</td><td>${d?day(d):''}</td><td>${d&&mn?mn+' min':''}</td></tr>`}).join('');
+  const all=CH.every(([m])=>g(m,'__done'));
+  const link=location.origin+location.pathname.replace(/[^/]*$/,'')+'way.html?p='+encodeURIComponent(person)+'&c='+encodeURIComponent(CODE);
+  pg.innerHTML=`<div class="top"><b>Training record</b><span>Brazilian Soul Beauty</span></div>
+  <div class="meta"><i>Name</i><span>${esc(sg&&sg.name||person)}</span><i>Training</i><span>${NAILS?'Introduction to Brazilian Soul Beauty · Nails':'The BSB Way'}</span><i>Status</i><span>${all?'Completed':'In progress'}</span><i>Time recorded</i><span>${tot} min</span><i>Link</i><a href="${link}">${esc(link)}</a></div>
+  <table><tr><th>Chapter</th><th>Status</th><th>Date</th><th>Time</th></tr>${rows}</table>
+  ${sg&&sg.at?`<p class="decl">${NAILS?'I have completed this introduction to Brazilian Soul Beauty.':'I declare I have received the uniform and personal image standard of Brazilian Soul Beauty, and I will follow it.'}</p>
+  <div class="sig"><div><i>Full name</i>${esc(sg.name)}</div><div><i>Date</i>${day(sg.at)}</div></div><div class="box">${sigSvg(sg)}</div>`:`<p class="decl">Not signed yet.</p>`}`;
+  document.title='Training record · '+(sg&&sg.name||person);
+ }catch(e){pg.innerHTML='<div class="msg">Could not load. Check the link and your internet.</div>'}})();
+</script></body></html>

@@ -362,7 +362,7 @@ function wayPage(p){
   const msg=L?'Hello '+(p.name||'').split(' ')[0]+'! Welcome to Brazilian Soul Beauty. Please open this link: '+L:'';
   const left=`<div class="card big"><div class="ico">📖</div><h3>The BSB Way</h3><p>Her link</p>${L?`<div class="lk" style="justify-content:center"><button class="btn lg" onclick="navigator.clipboard.writeText('${L}').then(()=>toast('Link copied'))">🔗 Copy link</button><a class="btn lg" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank">WhatsApp</a><a class="btn g lg" href="${L}" target="_blank">Open ↗</a></div>`:'<p>Loading…</p>'}</div>`;
   const rows=wayOf(p).map(([id,t])=>{const x=w[id]||{};const k=x.done?'ok':x.n?'w':'no';const lab=x.done?'✓ Done '+fmtDay(x.last):id==='05-policies'&&x.signs?x.signs+' signed':x.n?'In progress':'Not yet';return `<div class="r"><b>${t}</b><span class="pill ${k}">${lab}</span></div>`}).join('');
-  return `<div class="two">${left}<div class="card fr" style="display:flex;grid-template-columns:none"><h4>Her progress</h4>${rows}</div></div>`;
+  return `<div class="two">${left}<div class="card fr" style="display:flex;grid-template-columns:none"><h4>Her progress</h4>${rows}${L?`<a class="btn" style="margin-top:10px;align-self:flex-start" href="${L.replace('way.html','report.html')}" target="_blank">📄 Signed report (PDF)</a>`:''}</div></div>`;
 }
 function pick(){document.getElementById('file').click()}
 document.getElementById('file').onchange=async e=>{
