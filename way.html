@@ -51,7 +51,7 @@ h1 em{font-style:italic}
 .tnote{width:100%;min-height:170px;border:1px solid var(--line);background:#fff;padding:10px 12px;font:inherit;font-size:14.5px;line-height:1.5;color:var(--ink);resize:none}
 .tsave{align-self:flex-start;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:7px 18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}.tmsg{font-size:12px;color:var(--bronze)}
 .tlines p{font-size:15px;line-height:1.55;color:var(--ink2)}.tempty{font-size:14px;color:var(--bronze);font-style:italic}
-.tst{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}.tst li{font-size:15px;line-height:1.45;color:var(--ink);padding-left:4px}.tst li::marker{color:var(--bronze)}
+.tst{margin:0;padding-left:20px;list-style:disc;display:flex;flex-direction:column;gap:4px}.tst li{font-size:15px;line-height:1.45;color:var(--ink);padding-left:4px}.tst li::marker{color:var(--bronze)}
 .trows{display:flex;flex-direction:column;gap:8px}.trows div{display:flex;flex-direction:column;gap:1px}.trows b{font-weight:400;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--bronze)}.trows span{font-size:15px;color:var(--ink)}
 .trem{display:flex;flex-direction:column;gap:3px;border-left:2px solid var(--bronze);padding:4px 0 4px 14px;margin-top:4px}.trem b{font-weight:400;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);margin-bottom:2px}.trem span{font-size:14.5px;color:var(--ink2)}
 .tlink{align-self:flex-start;background:none;border:0;padding:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze);cursor:pointer;text-decoration:underline}
@@ -360,7 +360,7 @@ const nrm=t=>String(t||'').toLowerCase().replace(/[’']/g,"'").replace(/\bonly\
 function menuItems(s){if(!SVC)return[];return s.site.map(t=>{const x=SVC.svc.find(y=>nrm(y.name)==nrm(t))||SVC.svc.find(y=>nrm(t).startsWith(nrm(y.name))||nrm(y.name).startsWith(nrm(t)))||{};return{title:t,min:x.duration_min,add:x.is_addon,patch:x.patch_required}})}
 function fmtTech(t){const L=String(t).split('\n').map(x=>x.trim()).filter(Boolean);let st=[],rows=[],rem=[],inRem=false;
  L.forEach(l=>{if(/^always remember/i.test(l)){inRem=true;return}if(inRem)rem.push(l);else if(/^\d+[.)]\s*/.test(l))st.push(l.replace(/^\d+[.)]\s*/,''));else{const m=l.match(/^([^:]{2,70}):\s*(.+)$/);rows.push(m?[m[1],m[2]]:['',l])}});
- return (st.length?`<ol class="tst">${st.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:'')+(rows.length?`<div class="trows">${rows.map(r=>`<div>${r[0]?`<b>${esc(r[0])}</b>`:''}<span>${esc(r[1].charAt(0).toUpperCase()+r[1].slice(1))}</span></div>`).join('')}</div>`:'')+(rem.length?`<div class="trem"><b>Always remember</b>${rem.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:'')}
+ return (st.length?`<ul class="tst">${st.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'')+(rows.length?`<div class="trows">${rows.map(r=>`<div>${r[0]?`<b>${esc(r[0])}</b>`:''}<span>${esc(r[1].charAt(0).toUpperCase()+r[1].slice(1))}</span></div>`).join('')}</div>`:'')+(rem.length?`<div class="trem"><b>Always remember</b>${rem.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:'')}
 const canEdit=()=>false;
 async function saveTech(title,notes){try{const r=await fetch(SBU+'rpc/bsb_service_tech_save',{method:'POST',headers:H,body:JSON.stringify({p_pin:TPIN,p_title:title,p_notes:notes})});const ok=await r.json();if(ok!==true)return false;SVC.tech[title]=notes;return true}catch(e){alert('Not saved. Check your internet.');return false}}
 
