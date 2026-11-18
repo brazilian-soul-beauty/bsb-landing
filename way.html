@@ -308,7 +308,7 @@ if(NAILS){
  const NC=[
  {id:'n1-manicures',title:'Manicures',min:15,S:[
   {pic:'nails',cap:'Manicures',t:'open',h:'Our <em>manicures</em>',lede:'Every manicure on our menu, what is included, and our step by step. Tap Got it on each one.',meta:'About 15 minutes'},{...rule},
-  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'Manicures',cats:['Manicures'],names:["Men's Soul Manicure",'Brazilian Soul Manicure (Classic Polish) + Caipirinha'],extra:[{title:'Gel Removal Only',min:15,cat:'Manicures'}]},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'Manicures',site:['Gel Removal Manicure Only','Essential Soul Manicure','Brazilian Soul Manicure','Luxury Soul Manicure','Men’s Soul Manicure']},
   {id:'steps',pic:'stations',cap:'Step by step',t:'steps',h:'Manicure <em>step by step</em>',cat:'Manicures'},
   {pic:'stations',cap:'What you use',t:'kit',h:'What you <em>use</em>',k:['qualquer mani/pedi','mani/pedi incl. extensoes/biab','mani/pedi com cuticulagem','mani/pedi esmalte normal','mani/pedi esmalte gel','remocao esmalte mani/pedi','esterilizacao mao/pe','pedicure e manicure','gloves']},
   {id:'q_lux',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What does the Luxury Soul Manicure add to the Brazilian Soul Manicure?',o:['Gel only','A 20-minute hand and arm massage','Nothing, same treatment'],c:1,why:'Everything in the Brazilian Soul Manicure, plus a 20-minute hand and arm massage.'},
@@ -317,7 +317,7 @@ if(NAILS){
   {pic:'hall',cap:'Chapter complete',t:'done',h:'Manicures, <em>done</em>@@FIRST@@.',lede:'Next: our pedicures.'}]},
  {id:'n2-pedicures',title:'Pedicures',min:15,S:[
   {pic:'room',cap:'Pedicures',t:'open',h:'Our <em>pedicures</em>',lede:'Every pedicure on our menu, what is included, and our step by step. Tap Got it on each one.',meta:'About 15 minutes'},{...rule},
-  {id:'menu',pic:'room',cap:'The menu',t:'menu',h:'Pedicures',cats:['Pedicures'],names:["Men's Soul Pedicure"]},
+  {id:'menu',pic:'room',cap:'The menu',t:'menu',h:'Pedicures',site:['Gel Removal Pedicure','Essential Soul Pedicure','Brazilian Soul Pedicure','Luxury Soul Pedicure','Footlogix Callus Renewal','Footlogix Plus Care','Footlogix Supreme Care','Men’s Soul Pedicure']},
   {id:'steps',pic:'room',cap:'Step by step',t:'steps',h:'Pedicure <em>step by step</em>',cat:'Pedicures'},
   {pic:'room',cap:'What you use',t:'kit',h:'What you <em>use</em>',k:['qualquer mani/pedi','qualquer pedicure','pedicure','pedicure menos footlogix','tratamentos footlogix','esterilizacao mao/pe','pedicure e manicure','gloves']},
   {id:'q_soles',pic:'room',cap:'Quiz',t:'choose',h:'Quiz',q:'Which treatment covers only the hard skin on the soles, not the toenails?',o:['Essential Soul Pedicure','Footlogix Callus Renewal','Luxury Soul Pedicure'],c:1,why:'Footlogix Callus Renewal covers the soles only, not the toenails.'},
@@ -326,7 +326,7 @@ if(NAILS){
   {pic:'hall',cap:'Chapter complete',t:'done',h:'Pedicures, <em>done</em>@@FIRST@@.',lede:'Next: BIAB and extensions.'}]},
  {id:'n3-biab',title:'BIAB & Extensions',min:12,S:[
   {pic:'nails',cap:'BIAB & Extensions',t:'open',h:'BIAB and <em>extensions</em>',lede:'Our BIAB, infills and Gel-X, what is included, and our step by step. Tap Got it on each one.',meta:'About 12 minutes'},{...rule},
-  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'BIAB & Extensions',cats:['Gel Extensions & Enhancements'],names:[]},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'BIAB & Extensions',site:['Essential Soul BIAB','Brazilian Soul BIAB','Essential Soul BIAB Infill','Brazilian Soul BIAB Infill','Apres Gel-X Refined Extensions']},
   {id:'steps',pic:'stations',cap:'Step by step',t:'steps',h:'Extensions <em>step by step</em>',cat:'Gel Extensions & Enhancements'},
   {pic:'stations',cap:'What you use',t:'kit',h:'What you <em>use</em>',k:['mani/pedi incl. extensoes/biab','extensao / apres','extensao apres','extensao (single nail ext)','mani/pedi esmalte gel','esterilizacao mao/pe','gloves']},
   {id:'q_biab',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What is BIAB?',o:['A soft gel tip that covers the whole nail','A builder gel that strengthens her own nail','A polish that lasts a week'],c:1,why:'BIAB is a builder gel that strengthens her own nail. The soft gel tip is Aprés Gel-X.'},
@@ -335,7 +335,7 @@ if(NAILS){
   {pic:'hall',cap:'Chapter complete',t:'done',h:'BIAB, <em>done</em>@@FIRST@@.',lede:'Next: IBX and nail art.'}]},
  {id:'n4-ibx-art',title:'IBX & Nail Art',min:10,S:[
   {pic:'nails',cap:'IBX & Nail Art',t:'open',h:'IBX and <em>nail art</em>',lede:'Our nail care treatment and our nail art add-ons. Tap Got it on each one.',meta:'About 10 minutes'},{...rule},
-  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'IBX & Nail Art',cats:['IBX Nail Care','Nail Art'],names:[]},
+  {id:'menu',pic:'nails',cap:'The menu',t:'menu',h:'IBX & Nail Art',site:['IBX - additional to a manicure','IBX Nail Revival','Classic French Nail Art','Cat Eye & Glass Cat Eye Effect','Chrome Shine Effect','Minimal Nail Art Design','Intricate Nail Art Design','Bespoke Nail Art Design']},
   {pic:'stations',cap:'What you use',t:'kit',h:'What you <em>use</em>',k:['tratamento ibx','qualquer mani/pedi','mani/pedi esmalte gel','esterilizacao mao/pe','gloves']},
   {id:'q_ibx',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'What does IBX do?',o:['Adds colour','Soaks into the nail and hardens inside it, making weak nails stronger','Removes gel'],c:1,why:'IBX soaks into the nail and hardens inside it, filling ridges and creating a protective shield.'},
   {id:'q_cat',pic:'nails',cap:'Quiz',t:'choose',h:'Quiz',q:'Cat Eye and Chrome are add-ons to which manicure?',o:['Classic polish','Gel manicure','Any pedicure'],c:1,why:'Both are add-ons to a gel manicure.'},
@@ -352,7 +352,8 @@ const KITL={'qualquer mani/pedi':'Every manicure and pedicure','qualquer pedicur
 async function loadSvc(){if(SVC)return;try{const j=u=>fetch(SBU+u,{headers:H}).then(r=>r.json());const [a,b,t,k]=await Promise.all([j('bsb_services?select=name,category,duration_min,is_addon,patch_required,active'),j('bsb_service_steps?select=category,ord,step&order=ord'),j('bsb_service_tech?select=title,notes'),fetch(SBU+'rpc/bsb_service_kit',{method:'POST',headers:H,body:'{}'}).then(r=>r.json())]);
  SVC={svc:a.filter(x=>x.active!==false),steps:{},tech:{},kit:{}};b.forEach(x=>(SVC.steps[x.category]=SVC.steps[x.category]||[]).push(x.step));t.forEach(x=>SVC.tech[x.title]=x.notes||'');
  k.forEach(x=>{let key=String(x.used_for||'').toLowerCase().trim();if(key.startsWith('todos menos massagem/facial'))key='gloves';const set=SVC.kit[key]=SVC.kit[key]||new Set();String(x.products||'').split(' ; ').forEach(p=>p&&set.add(p))})}catch(e){SVC={svc:[],steps:{},tech:{},kit:{},err:1}}}
-function menuItems(s){if(!SVC)return[];return SVC.svc.filter(x=>s.cats.includes(x.category)||s.names.includes(x.name)).map(x=>({title:x.name,min:x.duration_min,add:x.is_addon,patch:x.patch_required,cat:x.category})).concat((s.extra||[]).filter(e=>!SVC.svc.some(x=>x.name==e.title))).sort((a,b)=>{const ia=s.cats.indexOf(a.cat),ib=s.cats.indexOf(b.cat);return (ia<0?99:ia)-(ib<0?99:ib)||(a.min||0)-(b.min||0)})}
+const nrm=t=>String(t||'').toLowerCase().replace(/[’']/g,"'").replace(/\bonly\b/,'').replace(/[^a-z0-9]+/g,' ').trim();
+function menuItems(s){if(!SVC)return[];return s.site.map(t=>{const x=SVC.svc.find(y=>nrm(y.name)==nrm(t))||SVC.svc.find(y=>nrm(t).startsWith(nrm(y.name))||nrm(y.name).startsWith(nrm(t)))||{};return{title:t,min:x.duration_min,add:x.is_addon,patch:x.patch_required}})}
 const canEdit=()=>isPrev()||(typeof ADMIN!='undefined'&&ADMIN);
 async function saveTech(title,notes){try{const r=await fetch(SBU+'rpc/bsb_service_tech_save',{method:'POST',headers:H,body:JSON.stringify({p_pin:TPIN,p_title:title,p_notes:notes})});const ok=await r.json();if(ok!==true)return false;SVC.tech[title]=notes;return true}catch(e){alert('Not saved. Check your internet.');return false}}
 
