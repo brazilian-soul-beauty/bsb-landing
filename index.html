@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Extras</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:#f6f5fb;color:#1f1d2b;display:flex;flex-direction:column;padding:18px 24px;gap:14px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:22px;font-weight:700}
+.tabs,.stages{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:999px;padding:7px 14px;font:600 13px Inter,sans-serif;cursor:pointer}
+.tabs button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.tabs b,.stages b{margin-left:6px}
+.stages button{border:1px solid #e5e2ef;background:#fff;color:#4b4860;border-radius:10px;padding:7px 12px;font:600 13px Inter,sans-serif;cursor:pointer}
+.stages button.on{background:#1f1d2b;color:#fff;border-color:#1f1d2b}
+.stages b{color:#7c3aed}.stages button.on b{color:#c4b5fd}
+.right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:999px;padding:7px 12px;font:600 13px Inter,sans-serif;cursor:pointer}
+.upd{font-size:12px;color:#6b6880;font-weight:600}
+.pager{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;color:#6d28d9}
+.pager button{border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:999px;width:32px;height:32px;font:700 14px Inter,sans-serif;cursor:pointer}
+.pager button:disabled{opacity:.35;cursor:default}
+.band{display:none;background:#fef3c7;color:#92400e;border-radius:10px;padding:8px 12px;font:600 13px Inter,sans-serif}
+.band.on{display:block}.band.red{background:#fee2e2;color:#991b1b}
+.grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:14px;min-height:0}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:14px;display:flex;flex-direction:column;gap:7px;border:2px solid transparent;min-height:0;overflow:hidden}
+.card.next{border-color:#7c3aed}
+.n{font-size:12px;font-weight:700;color:#a78bfa}
+.tag{display:inline-block;background:#7c3aed;color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;margin-left:6px}
+.name{font-size:17px;font-weight:700;cursor:pointer}.name:hover{color:#7c3aed}
+.svc{font-size:13px;color:#6b6880;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.offer{font-size:12.5px;font-weight:600;color:#6d28d9;background:#ede9fe;border-radius:999px;padding:3px 10px;align-self:flex-start;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.when{font-size:12px;font-weight:600;color:#4b4860}
+.msg{font-size:12.5px;line-height:1.4;color:#4b4860;background:#efeae2;border-radius:8px;padding:8px;white-space:pre-line;overflow:hidden;flex:1;min-height:36px;cursor:pointer;position:relative}
+.msg:after{content:'🔍 Read';position:absolute;right:6px;bottom:6px;background:#ede9fe;color:#6d28d9;font-weight:600;font-size:11px;padding:2px 8px;border-radius:999px}
+.btn{border:0;border-radius:10px;padding:11px;font:600 15px Inter,sans-serif;cursor:pointer;background:#7c3aed;color:#fff}
+.btn:hover{background:#6d28d9}.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:6px}
+.sm{flex:1;border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:8px;padding:7px;font:600 12px Inter,sans-serif;cursor:pointer;white-space:nowrap}
+.sm.ok{border-color:#f59e0b;color:#92400e;background:#fffbeb}
+.empty{grid-column:1/-1;grid-row:1/-1;display:flex;align-items:center;justify-content:center;font-size:18px;color:#6b6880;text-align:center}
+.ov{position:fixed;inset:0;background:rgba(31,29,43,.45);display:none;align-items:center;justify-content:center;z-index:9}
+.ov.on{display:flex}
+.mbox{background:#fff;border-radius:16px;padding:24px;width:min(580px,92vw);max-height:90vh;display:flex;flex-direction:column;gap:14px}
+.mhead{display:flex;align-items:center;gap:10px}
+.mname{font-size:20px;font-weight:700}.mphone{font-size:13px;color:#6b6880}
+.x{border:0;background:#f6f5fb;border-radius:999px;width:34px;height:34px;font-size:18px;cursor:pointer;margin-left:auto}
+.mtxt{background:#efeae2;border-radius:12px;padding:14px;font-size:15px;line-height:1.5;white-space:pre-line;overflow:auto}
+.src{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.src div{display:flex;gap:10px;align-items:center;background:#f6f5fb;border-radius:10px;padding:10px 12px}
+.src b{flex:1}.src span{color:#6b6880;font-size:12.5px}
+.gate{position:fixed;inset:0;background:#f6f5fb;display:flex;align-items:center;justify-content:center;z-index:20}
+.gbox{background:#fff;border-radius:16px;padding:28px;width:min(340px,90vw);display:flex;flex-direction:column;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.gbox h2{font-size:20px}
+.gbox input{border:1px solid #ddd6fe;border-radius:10px;padding:12px;font:600 18px Inter,sans-serif;text-align:center;letter-spacing:.15em}
+.gerr{color:#b42318;font-size:13px;font-weight:600;min-height:16px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f1d2b;color:#fff;border-radius:999px;padding:9px 16px;font:600 13px Inter,sans-serif;display:none;z-index:30}
+.toast.on{display:block}.toast.bad{background:#b42318}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){body{padding:12px}.grid{grid-template-columns:1fr;grid-template-rows:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate"><div class="gbox">
+  <h2>✨ Extras</h2>
+  <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN">
+  <div class="gerr" id="gerr"></div>
+  <button class="btn" id="go">Enter</button>
+</div></div>
+<div class="top">
+  <h1>✨ Extras</h1>
+  <div class="tabs" id="tabs"></div>
+  <div class="pager" id="pager"></div>
+  <div class="right"><span class="upd" id="upd"></span><button class="pill" id="rf">↻</button><button class="pill" id="srcb">🔌 Sources</button><button class="pill" id="out">Log out</button></div>
+</div>
+<div class="band" id="band"></div>
+<div class="stages" id="stages"></div>
+<div class="grid" id="grid"></div>
+<div class="ov" id="ov"><div class="mbox">
+  <div class="mhead"><div><div class="mname" id="mname"></div><div class="mphone" id="mphone"></div></div><button class="x" id="mx">✕</button></div>
+  <div class="mtxt" id="mtxt"></div>
+  <button class="btn" id="mwa">💬 Send on WhatsApp</button>
+  <div class="row"><button class="sm" id="mcp">📋 Copy</button></div>
+</div></div>
+<div class="ov" id="sv"><div class="mbox">
+  <div class="mhead"><div class="mname">🔌 Sources</div><button class="x" id="sx">✕</button></div>
+  <div class="src" id="srcl"></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const BASE='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/';
+const KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
+const PER=8,$=id=>document.getElementById(id);
+let tok=null,data={},day=0,stg='send',page=0,openRow=null,busy=false,lastOk=0;
+try{tok=sessionStorage.getItem('bsb_extras_tok');}catch(e){}
+async function rpc(fn,body){const r=await fetch(BASE+'rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(body)});if(!r.ok)throw new Error('http '+r.status);return r.json();}
+function toast(t,bad){const el=$('toast');el.textContent=t;el.className='toast on'+(bad?' bad':'');setTimeout(()=>el.className='toast',2200);}
+function addDays(iso,n){const t=iso.split('-').map(Number);return new Date(Date.UTC(t[0],t[1]-1,t[2]+n)).toISOString().slice(0,10);}
+function wa(p){return String(p||'').replace(/[^0-9]/g,'').replace(/^0/,'44');}
+function waLink(r){return 'https://api.whatsapp.com/send?phone='+wa(r.phone)+'&text='+encodeURIComponent(r.msg);}
+function ago(ts){return new Date(ts).toLocaleString('en-GB',{timeZone:'Europe/London',weekday:'short',hour:'2-digit',minute:'2-digit'});}
+function stageOf(r){if(!r.touch_id)return 'send';if(r.outcome==='booked')return 'booked';if(r.outcome==='declined')return 'no';if(r.outcome==='skipped')return 'skip';return 'wait';}
+const STAGES=[['send','📤 To send'],['wait','⏳ Sent'],['booked','✅ Booked'],['no','🙅 Declined'],['skip','⏭ Skipped']];
+async function login(){
+  const v=$('pin').value.trim();if(!v)return;$('go').disabled=true;$('gerr').textContent='';
+  try{const j=await rpc('bsb_extras_login',{p_code:v});
+    if(j&&j.ok){tok=j.token;try{sessionStorage.setItem('bsb_extras_tok',tok);}catch(e){}$('pin').value='';$('gate').style.display='none';load(true);}
+    else $('gerr').textContent=j&&j.locked?'Too many tries. Wait 15 min':'Wrong PIN';
+  }catch(e){$('gerr').textContent='No connection. Try again';}
+  $('go').disabled=false;
+}
+$('go').onclick=login;$('pin').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+$('out').onclick=()=>{tok=null;try{sessionStorage.removeItem('bsb_extras_tok');}catch(e){}data={};$('gate').style.display='flex';};
+async function load(first){
+  if(!tok)return;
+  try{
+    const a=await rpc('bsb_extras_list',{p_token:tok,p_day:null});
+    if(!a||!a.ok){$('out').onclick();return;}
+    const b=await rpc('bsb_extras_list',{p_token:tok,p_day:a.next||addDays(a.today,1)});
+    data={0:a,1:b};lastOk=Date.now();
+    $('gate').style.display='none';
+    if(first&&!a.rows.filter(r=>stageOf(r)==='send').length&&b.rows.length)day=1;
+    band();render();
+  }catch(e){band(true);}
+}
+function band(err){
+  const el=$('band');const mins=lastOk?Math.round((Date.now()-lastOk)/6e4):null;
+  if(err||(mins!==null&&mins>10)){el.className='band on'+(err&&!lastOk?' red':'');el.textContent=lastOk?'⚠️ Updated '+mins+' min ago. Tap ↻':'⚠️ No connection. Tap ↻';}
+  else el.className='band';
+  $('upd').textContent=lastOk?'Updated '+new Date(lastOk).toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit'}):'';
+}
+function nextLabel(){const a=data[0],b=data[1];if(!a||!b||b.day===addDays(a.today,1))return 'Tomorrow';const t=b.day.split('-').map(Number);return new Date(Date.UTC(t[0],t[1]-1,t[2])).toLocaleDateString('en-GB',{weekday:'long',timeZone:'UTC'});}
+function render(){
+  const d=data[day];if(!d)return;
+  const tb=$('tabs');tb.innerHTML='';
+  [['Today',0],[nextLabel(),1]].forEach(([l,k])=>{const n=(data[k]?data[k].rows:[]).filter(r=>stageOf(r)==='send').length;const b=document.createElement('button');b.className=k===day?'on':'';b.innerHTML=l+'<b>'+n+'</b>';b.onclick=()=>{day=k;page=0;stg='send';render();};tb.appendChild(b);});
+  const sg=$('stages');sg.innerHTML='';
+  STAGES.forEach(([k,l])=>{const n=d.rows.filter(r=>stageOf(r)===k).length;const b=document.createElement('button');b.className=k===stg?'on':'';b.innerHTML=l+'<b>'+n+'</b>';b.onclick=()=>{stg=k;page=0;render();};sg.appendChild(b);});
+  const rows=d.rows.filter(r=>stageOf(r)===stg);
+  const g=$('grid'),pg=$('pager');pg.innerHTML='';
+  if(!rows.length){g.innerHTML='<div class="empty">'+(stg==='send'?(d.rows.length?'All done ✓':'No extras to offer'):'Nobody here')+'</div>';return;}
+  const pages=Math.ceil(rows.length/PER);if(page>pages-1)page=pages-1;
+  if(pages>1){const pv=document.createElement('button');pv.textContent='◀';pv.disabled=page===0;pv.onclick=()=>{page--;render();};const lb=document.createElement('span');lb.textContent=(page+1)+' / '+pages;const nx=document.createElement('button');nx.textContent='▶';nx.disabled=page>=pages-1;nx.onclick=()=>{page++;render();};pg.append(pv,lb,nx);}
+  g.innerHTML='';
+  rows.slice(page*PER,page*PER+PER).forEach((r,k)=>{
+    const i=page*PER+k,st=stageOf(r),c=document.createElement('div');c.className='card'+(st==='send'&&i===0?' next':'');
+    let foot='';
+    if(st==='send')foot='<button class="btn wab">💬 Send on WhatsApp</button><div class="row"><button class="sm mk">Mark sent</button><button class="sm sk">⏭ Skip</button></div>';
+    else if(st==='wait')foot='<div class="row"><button class="sm ok bk">✅ Booked</button><button class="sm dc">🙅 Declined</button></div><div class="row"><button class="sm wab2">💬 Open WhatsApp</button><button class="sm un">↩ Undo</button></div>';
+    else foot='<div class="row"><button class="sm back">↩ Back to Sent</button></div>';
+    c.innerHTML='<div class="n">'+(i+1)+(st==='send'&&i===0?'<span class="tag">Next</span>':'')+'</div><div class="name"></div><div class="svc"></div><div class="offer"></div>'+(st!=='send'?'<div class="when"></div>':'')+'<div class="msg"></div>'+foot;
+    c.querySelector('.name').textContent=r.client;
+    c.querySelector('.svc').textContent='🕐 '+r.time+' · '+r.services;
+    c.querySelector('.offer').textContent='+ '+r.addon+' · '+r.addon_th+' · £'+r.price;
+    if(st!=='send')c.querySelector('.when').textContent=(st==='wait'?'📤 ':st==='booked'?'✅ ':st==='no'?'🙅 ':'⏭ ')+ago(r.touch_at)+(r.touch_by?' · '+r.touch_by:'');
+    c.querySelector('.msg').textContent=r.msg;
+    c.querySelector('.name').onclick=()=>openMsg(r);c.querySelector('.msg').onclick=()=>openMsg(r);
+    const q=s=>c.querySelector(s);
+    if(q('.wab'))q('.wab').onclick=()=>send(r,true);
+    if(q('.mk'))q('.mk').onclick=()=>send(r,false);
+    if(q('.sk'))q('.sk').onclick=()=>mark(r,'skipped',null);
+    if(q('.bk'))q('.bk').onclick=()=>mark(r,'booked',r.touch_id);
+    if(q('.dc'))q('.dc').onclick=()=>mark(r,'declined',r.touch_id);
+    if(q('.wab2'))q('.wab2').onclick=()=>window.open(waLink(r),'bsb_whatsapp');
+    if(q('.un'))q('.un').onclick=()=>undo(r);
+    if(q('.back'))q('.back').onclick=()=>st==='skip'?undo(r):mark(r,'sent',r.touch_id);
+    g.appendChild(c);
+  });
+}
+async function mark(r,outcome,touchId){
+  if(busy)return false;busy=true;let ok=false;
+  try{const j=await rpc('bsb_extras_mark',{p_token:tok,p_client_id:r.client_id,p_client:r.client,p_target:r.target,p_message:r.msg,p_outcome:outcome,p_touch_id:touchId});
+    ok=j&&j.ok;if(ok){toast('Saved ✓');}else toast('Not saved. Try again',true);
+  }catch(e){toast('No connection. Not saved',true);}
+  busy=false;if(ok){closeMsg();await load();}return ok;
+}
+async function send(r,open){
+  if(!r.phone){toast('No phone number',true);return;}
+  if(open)window.open(waLink(r),'bsb_whatsapp');
+  await mark(r,'sent',null);
+}
+async function undo(r){
+  if(busy)return;busy=true;
+  try{const j=await rpc('bsb_extras_undo',{p_token:tok,p_touch_id:r.touch_id});if(j&&j.ok)toast('Undone ✓');else toast('Not undone',true);}catch(e){toast('No connection',true);}
+  busy=false;await load();
+}
+function openMsg(r){openRow=r;$('mname').textContent=r.client;$('mphone').textContent=(r.phone||'No phone')+'   🕐 '+r.time;$('mtxt').textContent=r.msg;$('mwa').style.display=stageOf(r)==='send'?'':'none';$('ov').classList.add('on');}
+function closeMsg(){$('ov').classList.remove('on');openRow=null;}
+$('mwa').onclick=()=>{if(openRow)send(openRow,true);};
+$('mx').onclick=closeMsg;$('ov').onclick=e=>{if(e.target.id==='ov')closeMsg();};
+$('mcp').onclick=()=>{if(!openRow)return;navigator.clipboard.writeText(openRow.msg).then(()=>{$('mcp').textContent='✓ Copied';setTimeout(()=>$('mcp').textContent='📋 Copy',1500);});};
+$('srcb').onclick=()=>{
+  const mins=lastOk?Math.round((Date.now()-lastOk)/6e4):null,dot=mins===null?'🔴':mins>30?'🔴':mins>10?'🟡':'🟢';
+  const n=k=>data[k]?data[k].rows.length:0;
+  $('srcl').innerHTML='<div>'+dot+'<b>Salon diary</b><span>'+(mins===null?'no data':'read '+mins+' min ago')+' · every 1 min</span></div><div>'+dot+'<b>Extras rules</b><span>Marketing Hub</span></div><div>'+dot+'<b>Clients found</b><span>today '+n(0)+' · next day '+n(1)+'</span></div><div>🟢<b>Saved in</b><span>BSB Hub</span></div>';
+  $('sv').classList.add('on');};
+$('sx').onclick=()=>$('sv').classList.remove('on');$('sv').onclick=e=>{if(e.target.id==='sv')$('sv').classList.remove('on');};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMsg();$('sv').classList.remove('on');}});
+$('rf').onclick=()=>load();
+if(tok)load(true);
+setInterval(()=>{if(tok&&!openRow&&!busy)load();else band();},60000);
+</script>
+</body>
+</html>
