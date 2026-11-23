@@ -594,21 +594,36 @@ main{padding-top:18px}
 .took{font-style:normal;font-size:12px;color:var(--ink3);margin-left:auto;white-space:nowrap;padding-left:8px}
 .dnav{display:flex;align-items:center;gap:10px;margin-bottom:12px}.dnav b{font-size:16px;min-width:190px;text-align:center}.dnav .btn:disabled{opacity:.35;cursor:default}
 .dfull.dclick:hover{background:var(--bg)}
+.h2big{display:flex;flex-direction:column;gap:22px;max-width:640px;margin:40px auto 0}
+.bigb{display:flex;align-items:center;gap:24px;background:#fff;border:1px solid var(--line);border-left:8px solid #94A3B8;border-radius:22px;padding:34px 34px;box-shadow:var(--sh);cursor:pointer;min-height:130px}
+.bigb.rb{border-left-color:var(--acc)}
+.bigb:hover{border-color:var(--acc);transform:translateY(-1px)}
+.bigb .bi{font-size:52px;line-height:1}.bigb .bn{font-size:26px;font-weight:700}.bigb .bs{font-size:14px;color:var(--ink3);margin-top:4px}
 /*BSB-HUB2-FIM*/</style>
 <script>/*BSB-HUB2-INICIO*/
 (function(){
 const FAV=['My tasks','Reception Dash','Performance','Marketing dash','Soul Path','Square takings'];
 const FSUB={'My tasks':'Your list for today','Reception Dash':'Joana · front desk','Performance':'The team, month by month','Marketing dash':'Content and posts','Soul Path':'The girls’ path and bonus','Square takings':'Card money by day'};
 const TP=PEOPLE.filter(P=>P.k!=='Joana'||S.all.some(t=>t.assignee==='Joana'));
-const H2={view:'open',pg:0,day:''};
+const H2={view:'open',pg:0,day:'',home:''};
 const PER=6;
 const pl=c=>c+'14';
 document.querySelector('.tab[data-t="areas"]').textContent='🏠 Home';
 const visible=l=>!!l.url||S.edit;
+const isRb=l=>l.area==='management'&&/Refazendo/.test(l.sub||'');
 function home(){
   const ls=S.links;
+  if(!H2.home&&!S.edit){
+    const nr=ls.filter(l=>isRb(l)&&l.url).length,na=ls.filter(l=>!isRb(l)&&l.url).length;
+    return `<div class="h2big"><div class="bigb rb" data-h2home="rebuild"><div class="bi">🔨</div><div><div class="bn">Refazendo agora</div><div class="bs">${nr} dashes</div></div></div><div class="bigb" data-h2home="all"><div class="bi">📦</div><div><div class="bn">Tudo o resto</div><div class="bs">Favourites · ${na} dashes</div></div></div></div>`;
+  }
+  const bk=S.edit?'':`<div class="crumb"><span class="back" data-h2home="">‹ Home</span></div>`;
+  if(H2.home==='rebuild'&&!S.edit){
+    const rl=ls.filter(l=>isRb(l)&&l.url);
+    return bk+`<div class="crumb" style="margin-bottom:14px"><span style="font-size:30px">🔨</span><span class="title">Refazendo agora</span></div><div class="grid">${rl.map(dashCard).join('')}</div>`;
+  }
   const fav=FAV.map(n=>n==='My tasks'?{name:n,icon:'✅',my:1}:ls.find(l=>l.name===n&&l.url)).filter(Boolean);
-  let h=`<div class="h2t">⭐ Favourites</div><div class="favs">${fav.map(l=>l.my
+  let h=bk+`<div class="h2t">⭐ Favourites</div><div class="favs">${fav.map(l=>l.my
     ?`<div class="fav" data-h2go="tasks"><div class="fi">${l.icon}</div><div><div class="fn">${esc(l.name)}</div><div class="fs">${FSUB[l.name]}</div></div></div>`
     :`<a class="fav" href="${esc(l.url)}" target="_blank" rel="noopener"><div class="fi">${esc(l.icon||'📄')}</div><div><div class="fn">${esc(l.name)}</div><div class="fs">${esc(FSUB[l.name]||l.sub)}</div></div></a>`).join('')}</div>`;
   const ars=AREAS.filter(A=>A.k!=='tasks').map(A=>({A,n:ls.filter(l=>l.area===A.k&&visible(l)).length})).filter(x=>x.n||S.edit);
@@ -736,6 +751,8 @@ render=function(){
   app.innerHTML=S.area?areaPage():home();
 };
 document.addEventListener('click',e=>{
+  const tb=e.target.closest('.tab[data-t="areas"]');if(tb){H2.home=''}
+  const hb=e.target.closest('[data-h2home]');if(hb){H2.home=hb.dataset.h2home;S.area=null;render();scrollTo(0,0);return}
   const t=e.target.closest('[data-h2go],[data-h2v],[data-h2pg],[data-person],[data-h2dd],[data-h2pp],[data-h2ppd],[data-h2open],[data-h2to],[data-h2fin],[data-h2ipad],.orow [data-done]');if(!t)return;
   if(t.dataset.done){e.stopPropagation();taskPanel(t.dataset.done);return}
   if(t.dataset.person){H2.pg=0;H2.dd='';return}
