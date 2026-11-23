@@ -610,17 +610,17 @@ const PER=6;
 const pl=c=>c+'14';
 document.querySelector('.tab[data-t="areas"]').textContent='🏠 Home';
 const visible=l=>!!l.url||S.edit;
-const isRb=l=>l.area==='management'&&/Refazendo/.test(l.sub||'');
+const isRb=l=>l.area==='management'&&/In progress|Refazendo/.test(l.sub||'');
 function home(){
   const ls=S.links;
-  if(!H2.home&&!S.edit){
+  if(!H2.home&&!S.edit&&!(LOCK&&LOCK!=='Ligia')){
     const nr=ls.filter(l=>isRb(l)&&l.url).length,na=ls.filter(l=>!isRb(l)&&l.url).length;
-    return `<div class="h2big"><div class="bigb rb" data-h2home="rebuild"><div class="bi">🔨</div><div><div class="bn">Refazendo agora</div><div class="bs">${nr} dashes</div></div></div><div class="bigb" data-h2home="all"><div class="bi">📦</div><div><div class="bn">Tudo o resto</div><div class="bs">Favourites · ${na} dashes</div></div></div></div>`;
+    return `<div class="h2big"><div class="bigb rb" data-h2home="rebuild"><div class="bi">🔨</div><div><div class="bn">In progress</div><div class="bs">${nr} dashes</div></div></div><div class="bigb" data-h2home="all"><div class="bi">📦</div><div><div class="bn">Everything else</div><div class="bs">Favourites · ${na} dashes</div></div></div></div>`;
   }
-  const bk=S.edit?'':`<div class="crumb"><span class="back" data-h2home="">‹ Home</span></div>`;
+  const bk=S.edit||(LOCK&&LOCK!=='Ligia')?'':`<div class="crumb"><span class="back" data-h2home="">‹ Home</span></div>`;
   if(H2.home==='rebuild'&&!S.edit){
     const rl=ls.filter(l=>isRb(l)&&l.url);
-    return bk+`<div class="crumb" style="margin-bottom:14px"><span style="font-size:30px">🔨</span><span class="title">Refazendo agora</span></div><div class="grid">${rl.map(dashCard).join('')}</div>`;
+    return bk+`<div class="crumb" style="margin-bottom:14px"><span style="font-size:30px">🔨</span><span class="title">In progress</span></div><div class="grid">${rl.map(dashCard).join('')}</div>`;
   }
   const fav=FAV.map(n=>n==='My tasks'?{name:n,icon:'✅',my:1}:ls.find(l=>l.name===n&&l.url)).filter(Boolean);
   let h=bk+`<div class="h2t">⭐ Favourites</div><div class="favs">${fav.map(l=>l.my
