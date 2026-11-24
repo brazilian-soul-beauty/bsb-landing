@@ -156,7 +156,7 @@ function render(){
     c.innerHTML='<div class="n">'+(i+1)+(st==='send'&&i===0?'<span class="tag">Next</span>':'')+'</div><div class="name"></div><div class="svc"></div><div class="offer"></div>'+(st!=='send'?'<div class="when"></div>':'')+'<div class="msg"></div>'+foot;
     c.querySelector('.name').textContent=r.client;
     c.querySelector('.svc').textContent='🕐 '+r.time+' · '+r.services;
-    c.querySelector('.offer').textContent='+ '+r.addon+' · '+r.addon_th+' · £'+r.price;
+    c.querySelector('.offer').innerHTML='';c.querySelector('.offer').append('+ '+r.addon+' · '+r.addon_th+' · £'+r.price);if(r.normal&&+r.normal>+r.price){const w=document.createElement('s');w.textContent='£'+r.normal;w.style.cssText='opacity:.55;margin-left:6px;font-weight:500';c.querySelector('.offer').append(w);}
     if(st!=='send')c.querySelector('.when').textContent=(st==='wait'?'📤 ':st==='booked'?'✅ ':st==='no'?'🙅 ':'⏭ ')+ago(r.touch_at)+(r.touch_by?' · '+r.touch_by:'');
     c.querySelector('.msg').textContent=r.msg;
     c.querySelector('.name').onclick=()=>openMsg(r);c.querySelector('.msg').onclick=()=>openMsg(r);
@@ -197,7 +197,7 @@ $('mcp').onclick=()=>{if(!openRow)return;navigator.clipboard.writeText(openRow.m
 $('srcb').onclick=()=>{
   const mins=lastOk?Math.round((Date.now()-lastOk)/6e4):null,dot=mins===null?'🔴':mins>30?'🔴':mins>10?'🟡':'🟢';
   const n=k=>data[k]?data[k].rows.length:0;
-  $('srcl').innerHTML='<div>'+dot+'<b>Salon diary</b><span>'+(mins===null?'no data':'read '+mins+' min ago')+' · every 1 min</span></div><div>'+dot+'<b>Extras rules</b><span>Marketing Hub</span></div><div>'+dot+'<b>Clients found</b><span>today '+n(0)+' · next day '+n(1)+'</span></div><div>🟢<b>Saved in</b><span>BSB Hub</span></div>';
+  $('srcl').innerHTML='<div>'+dot+'<b>Salon diary</b><span>'+(mins===null?'no data':'read '+mins+' min ago')+' · every 1 min</span></div><div>'+dot+'<b>Extras rules</b><span>Marketing Hub</span></div><div>'+dot+'<b>Deals</b><span>BSB Hub · extras deals</span></div><div>'+dot+'<b>Clients found</b><span>today '+n(0)+' · next day '+n(1)+'</span></div><div>🟢<b>Saved in</b><span>BSB Hub</span></div>';
   $('sv').classList.add('on');};
 $('sx').onclick=()=>$('sv').classList.remove('on');$('sv').onclick=e=>{if(e.target.id==='sv')$('sv').classList.remove('on');};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMsg();$('sv').classList.remove('on');}});
