@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:#f6f5fb;color:#1f1d2b;display:flex;flex-direction:column;padding:16px 22px;gap:12px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:21px;font-weight:700}
+.nav,.tabs,.stages{display:flex;gap:6px;flex-wrap:wrap}
+.nav button{border:0;background:#fff;color:#4b4860;border-radius:10px;padding:8px 13px;font:600 13.5px Inter,sans-serif;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.nav button.on{background:#7c3aed;color:#fff}
+.tabs button{border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:999px;padding:6px 13px;font:600 13px Inter,sans-serif;cursor:pointer}
+.tabs button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.stages button{border:1px solid #e5e2ef;background:#fff;color:#4b4860;border-radius:10px;padding:6px 11px;font:600 12.5px Inter,sans-serif;cursor:pointer}
+.stages button.on{background:#1f1d2b;color:#fff;border-color:#1f1d2b}
+.tabs b,.stages b{margin-left:6px}.stages b{color:#7c3aed}.stages button.on b{color:#c4b5fd}
+.right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.pill{border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:999px;padding:6px 12px;font:600 13px Inter,sans-serif;cursor:pointer;text-decoration:none}
+.upd{font-size:12px;color:#6b6880;font-weight:600}
+.band{display:none;background:#fef3c7;color:#92400e;border-radius:10px;padding:8px 12px;font:600 13px Inter,sans-serif;cursor:pointer}
+.band.on{display:block}.band.red{background:#fee2e2;color:#991b1b}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pager{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;color:#6d28d9;margin-left:auto}
+.pager button{border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:999px;width:30px;height:30px;font:700 13px Inter,sans-serif;cursor:pointer}
+.pager button:disabled{opacity:.35;cursor:default}
+.pg{flex:1;min-height:0;display:none;flex-direction:column;gap:10px}.pg.on{display:flex}
+.grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:12px;min-height:0}
+.card{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:13px;display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.n{font-size:12px;font-weight:700;color:#a78bfa}
+.name{font-size:16.5px;font-weight:700;cursor:pointer}.name:hover{color:#7c3aed}
+.svc{font-size:12.5px;color:#6b6880;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{font-size:12px;font-weight:600;color:#6d28d9;background:#ede9fe;border-radius:999px;padding:3px 9px;align-self:flex-start;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.when{font-size:12px;font-weight:600;color:#4b4860}
+.msg{font-size:12.5px;line-height:1.4;color:#4b4860;background:#efeae2;border-radius:8px;padding:8px;white-space:pre-line;overflow:hidden;flex:1;min-height:34px;cursor:pointer}
+.btn{border:0;border-radius:10px;padding:10px;font:600 14.5px Inter,sans-serif;cursor:pointer;background:#7c3aed;color:#fff;text-decoration:none;text-align:center}
+.btn:disabled{opacity:.5}
+.row{display:flex;gap:6px}
+.sm{flex:1;border:1px solid #ddd6fe;background:#fff;color:#6d28d9;border-radius:8px;padding:6px 3px;font:600 11.5px Inter,sans-serif;cursor:pointer;white-space:nowrap}
+.sm.ok{border-color:#f59e0b;color:#92400e;background:#fffbeb}
+.empty{grid-column:1/-1;grid-row:1/-1;display:flex;align-items:center;justify-content:center;font-size:17px;color:#6b6880}
+.week{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:8px;min-height:0}
+.dcol{background:#fff;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dcol.today{outline:2px solid #7c3aed}
+.dh{font-weight:700;font-size:13px}.dh span{color:#6b6880;font-weight:600;margin-left:4px}
+.slot{font-size:11.5px;color:#6d28d9;background:#ede9fe;border-radius:8px;padding:4px 6px;font-weight:600}
+.pc{font-size:11.5px;border-left:3px solid #c4b5fd;padding:3px 6px;background:#f6f5fb;border-radius:6px;line-height:1.3}
+.pc.live{border-color:#22c55e}.pc.ok{border-color:#f59e0b}
+.pc small{display:block;color:#6b6880;font-weight:600}
+.more{font-size:11.5px;color:#6b6880;font-weight:600}
+.two{flex:1;display:grid;grid-template-columns:2fr 1fr;gap:12px;min-height:0}
+.box{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px;min-height:0;overflow:hidden}
+.box h3{font-size:12px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:.04em}
+.li{display:flex;gap:10px;align-items:center;background:#f6f5fb;border-radius:10px;padding:8px 10px;font-size:13px}
+.li b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.li span{color:#6b6880;font-size:12px;white-space:nowrap}
+.cgrid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:10px;min-height:0}
+.cc{background:#f6f5fb;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;overflow:hidden}
+.cc b{font-size:14.5px}.cc .st{align-self:flex-start;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:#ede9fe;color:#6d28d9}
+.cc .st.live{background:#dcfce7;color:#166534}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tile{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.tile .l{font-size:12px;font-weight:700;color:#6b6880}.tile .v{font-size:26px;font-weight:700;color:#6d28d9}.tile .s{font-size:12px;color:#4b4860;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th{text-align:left;color:#6b6880;font-weight:600;padding:4px 6px}td{padding:5px 6px;border-top:1px solid #f0eef7;font-weight:600}
+.ov{position:fixed;inset:0;background:rgba(31,29,43,.45);display:none;align-items:center;justify-content:center;z-index:9}.ov.on{display:flex}
+.mbox{background:#fff;border-radius:16px;padding:22px;width:min(580px,92vw);max-height:90vh;display:flex;flex-direction:column;gap:12px}
+.mhead{display:flex;align-items:center;gap:10px}.mname{font-size:19px;font-weight:700}.mphone{font-size:13px;color:#6b6880}
+.x{border:0;background:#f6f5fb;border-radius:999px;width:34px;height:34px;font-size:18px;cursor:pointer;margin-left:auto}
+.mtxt{background:#efeae2;border-radius:12px;padding:14px;font-size:15px;line-height:1.5;white-space:pre-line;overflow:auto}
+.gate{position:fixed;inset:0;background:#f6f5fb;display:flex;align-items:center;justify-content:center;z-index:20}
+.gbox{background:#fff;border-radius:16px;padding:28px;width:min(340px,90vw);display:flex;flex-direction:column;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.gbox input{border:1px solid #ddd6fe;border-radius:10px;padding:12px;font:600 16px Inter,sans-serif;text-align:center}
+.gerr{color:#b42318;font-size:13px;font-weight:600;min-height:16px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f1d2b;color:#fff;border-radius:999px;padding:9px 16px;font:600 13px Inter,sans-serif;display:none;z-index:30}.toast.on{display:block}.toast.bad{background:#b42318}
+.links{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-content:start}
+.lk{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);text-decoration:none;color:#1f1d2b;display:flex;flex-direction:column;gap:6px}
+.lk b{font-size:17px}.lk span{font-size:13px;color:#6b6880;font-weight:600}.lk i{font-style:normal;font-size:28px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.week{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}.cgrid{grid-template-columns:repeat(2,1fr)}.links{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate"><div class="gbox">
+  <h2>🗂️ Marketing Hub</h2>
+  <input id="pin" type="password" autocomplete="off" placeholder="Password">
+  <div class="gerr" id="gerr"></div>
+  <button class="btn" id="go">Enter</button>
+</div></div>
+<div class="top">
+  <h1>🗂️ Marketing Hub</h1>
+  <div class="nav" id="nav"></div>
+  <div class="right"><span class="upd" id="upd"></span><button class="pill" id="rf">↻</button><button class="pill" id="out">Log out</button></div>
+</div>
+<div class="band" id="band"></div>
+
+<section class="pg" id="p-week">
+  <div class="bar"><div class="tabs" id="wtabs"></div></div>
+  <div class="week" id="week"></div>
+</section>
+
+<section class="pg" id="p-clients">
+  <div class="bar"><div class="tabs" id="ctabs"></div><div class="tabs" id="ntabs"></div><a class="pill" href="https://bsb-lastminute.vercel.app" target="bsb_lastmin">⚡ Last minute</a><div class="pager" id="cpager"></div></div>
+  <div class="stages" id="cstages"></div>
+  <div class="grid" id="cgrid"></div>
+</section>
+
+<section class="pg" id="p-camp">
+  <div class="two">
+    <div class="box"><div class="bar"><h3>Calendar</h3><div class="pager" id="kpager"></div></div><div class="cgrid" id="kgrid"></div></div>
+    <div class="box"><h3>Email automations</h3><div id="jl" style="display:flex;flex-direction:column;gap:6px"></div><h3 style="margin-top:6px">Launched</h3><div id="ll" style="display:flex;flex-direction:column;gap:6px"></div></div>
+  </div>
+</section>
+
+<section class="pg" id="p-create">
+  <div class="links">
+    <a class="lk" href="https://bsb-lab-studio.vercel.app" target="_blank"><i>✍️</i><b>Studio</b><span>Carousel · Post · Reels · Email</span></a>
+    <a class="lk" href="https://bsb-marketing.vercel.app" target="_blank"><i>📱</i><b>Content planner</b><span>Week · Approve · Team takes</span></a>
+    <a class="lk" href="https://bsb-codes.vercel.app" target="_blank"><i>🏷️</i><b>Discount codes</b><span>Salonized codes</span></a>
+    <a class="lk" href="https://bsb-marketing-hub.vercel.app" target="_blank"><i>🗂️</i><b>Old Marketing Hub</b><span>Plan · Lists · Daily report</span></a>
+  </div>
+</section>
+
+<section class="pg" id="p-num">
+  <div class="tiles" id="tiles"></div>
+  <div class="two" style="grid-template-columns:1fr 1fr">
+    <div class="box"><h3>Extras by week</h3><div id="xt"></div></div>
+    <div class="box"><h3>Instagram by month</h3><div id="it"></div></div>
+  </div>
+</section>
+
+<section class="pg" id="p-src">
+  <div class="box" style="flex:1"><h3>Sources</h3><div id="sl" style="display:flex;flex-direction:column;gap:8px"></div></div>
+</section>
+
+<div class="ov" id="ov"><div class="mbox">
+  <div class="mhead"><div><div class="mname" id="mname"></div><div class="mphone" id="mphone"></div></div><button class="x" id="mx">✕</button></div>
+  <div class="mtxt" id="mtxt"></div>
+  <button class="btn" id="mwa">💬 Send on WhatsApp</button>
+  <div class="row"><button class="sm" id="mcp">📋 Copy</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const BASE='https://qwumncqcyurojhuyazuj.supabase.co/rest/v1/';
+const KEY='sb_publishable_7Oa5ZKlo09avfl-ZwZ876w_dgVwlO4R';
+const H={apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'};
+const $=id=>document.getElementById(id),PER=8;
+const NAV=[['week','📅 Week'],['clients','👥 Clients'],['camp','🎯 Campaigns'],['create','✍️ Create'],['num','📊 Numbers'],['src','🔌 Sources']];
+let tok=null,hub=null,cl=null,cur='clients',wk=0,seg='quiet',near=true,stg='send',page=0,kpage=0,openRow=null,busy=false,lastOk=0;
+try{tok=sessionStorage.getItem('bsb_mkt_tok');}catch(e){}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+async function rpc(fn,body){const r=await fetch(BASE+'rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(body)});if(!r.ok)throw new Error('http '+r.status);return r.json();}
+function toast(t,bad){const el=$('toast');el.textContent=t;el.className='toast on'+(bad?' bad':'');setTimeout(()=>el.className='toast',2200);}
+function addDays(iso,n){const t=iso.split('-').map(Number);return new Date(Date.UTC(t[0],t[1]-1,t[2]+n)).toISOString().slice(0,10);}
+function dfmt(iso){if(!iso)return '';const t=String(iso).slice(0,10).split('-').map(Number);return new Date(Date.UTC(t[0],t[1]-1,t[2])).toLocaleDateString('en-GB',{timeZone:'UTC',day:'numeric',month:'short'});}
+function ago(ts){return new Date(ts).toLocaleString('en-GB',{timeZone:'Europe/London',weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}
+function hoursAgo(ts){return ts?(Date.now()-new Date(ts).getTime())/36e5:null;}
+function wa(p){return String(p||'').replace(/[^0-9]/g,'').replace(/^0/,'44');}
+function waLink(r){return 'https://api.whatsapp.com/send?phone='+wa(r.phone)+'&text='+encodeURIComponent(r.msg);}
+async function login(){
+  const v=$('pin').value;if(!v)return;$('go').disabled=true;$('gerr').textContent='';
+  try{const j=await rpc('hub_login',{p_pw:v});
+    if(j&&j.ok&&['Ligia','Manu'].includes(j.person)){tok=j.token;try{sessionStorage.setItem('bsb_mkt_tok',tok);}catch(e){}$('pin').value='';load();}
+    else $('gerr').textContent=j&&j.ok?'No access':'Wrong password';
+  }catch(e){$('gerr').textContent='No connection. Try again';}
+  $('go').disabled=false;
+}
+$('go').onclick=login;$('pin').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+function logout(){tok=null;hub=null;cl=null;try{sessionStorage.removeItem('bsb_mkt_tok');}catch(e){}$('gate').style.display='flex';}
+$('out').onclick=logout;
+async function load(){
+  if(!tok)return;
+  try{
+    const [h,c]=await Promise.all([rpc('bsb_mkt_hub_data',{p_token:tok}),rpc('bsb_mkt_noappt_list',{p_token:tok})]);
+    if(!h||!h.ok||!c||!c.ok){logout();return;}
+    hub=h;cl=c;lastOk=Date.now();$('gate').style.display='none';draw();
+  }catch(e){band(true);}
+}
+function srcState(s){const h=hoursAgo(s.at);if(h===null)return '🔴';return h>s.bad_h?'🔴':h>s.warn_h?'🟡':'🟢';}
+function band(err){
+  const el=$('band');let t='',red=false;
+  if(err){t=lastOk?'⚠️ No connection. Showing the last update':'⚠️ No connection. Tap ↻';red=!lastOk;}
+  else if(hub){const bad=hub.sources.filter(s=>srcState(s)!=='🟢');if(bad.length){t='⚠️ Late: '+bad.map(s=>s.name).join(', ');red=bad.some(s=>srcState(s)==='🔴');}}
+  el.textContent=t;el.className='band'+(t?' on':'')+(red?' red':'');
+  $('upd').textContent=lastOk?'Updated '+new Date(lastOk).toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit'}):'';
+}
+$('band').onclick=()=>{cur='src';draw();};
+function draw(){
+  const nv=$('nav');nv.innerHTML='';
+  NAV.forEach(([k,l])=>{const b=document.createElement('button');b.className=k===cur?'on':'';b.textContent=l;b.onclick=()=>{cur=k;draw();};nv.appendChild(b);});
+  document.querySelectorAll('.pg').forEach(p=>p.classList.toggle('on',p.id==='p-'+cur));
+  band();if(!hub)return;
+  ({week:dWeek,clients:dClients,camp:dCamp,create:()=>{},num:dNum,src:dSrc})[cur]();
+}
+function dWeek(){
+  const tb=$('wtabs');tb.innerHTML='';
+  [['This week',0],['Next week',1]].forEach(([l,k])=>{const b=document.createElement('button');b.className=k===wk?'on':'';b.textContent=l;b.onclick=()=>{wk=k;dWeek();};tb.appendChild(b);});
+  const start=addDays(hub.week,wk*7),w=$('week');w.innerHTML='';
+  const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  for(let i=0;i<7;i++){
+    const d=addDays(start,i),dow=(i+1)%7,col=document.createElement('div');col.className='dcol'+(d===hub.today?' today':'');
+    let h='<div class="dh">'+names[i]+'<span>'+dfmt(d)+'</span></div>';
+    hub.slots.filter(s=>s.dow===dow).forEach(s=>{h+='<div class="slot">'+esc(s.icon||'')+' '+esc(s.tema_en||s.tema)+'</div>';});
+    const ps=hub.pieces.filter(p=>p.date===d);
+    ps.slice(0,4).forEach(p=>{const st=p.live?'live':(/ok|approved|final|sched/i.test(p.status||'')?'ok':'');h+='<div class="pc '+st+'"><small>'+esc((p.time||'')+' '+(p.channel||''))+' · '+esc(p.status||'')+'</small>'+esc(p.title||'')+'</div>';});
+    if(ps.length>4)h+='<div class="more">+'+(ps.length-4)+' more</div>';
+    if(!ps.length)h+='<div class="more">Nothing planned</div>';
+    col.innerHTML=h;w.appendChild(col);
+  }
+}
+function stageOf(r){if(!r.touch_id)return 'send';if(r.outcome==='booked')return 'booked';if(r.outcome==='declined')return 'no';if(r.outcome==='no_reply')return 'noreply';return 'wait';}
+const STAGES=[['send','📤 To send'],['wait','⏳ Waiting'],['booked','✅ Booked'],['no','🙅 Said no'],['noreply','💤 No reply']];
+function dClients(){
+  const ct=$('ctabs');ct.innerHTML='';
+  const base=cl.rows.filter(r=>!near||r.near);
+  [['quiet','2 to 6 months'],['gone','6 to 24 months']].forEach(([k,l])=>{const n=base.filter(r=>r.seg===k&&stageOf(r)==='send').length;const b=document.createElement('button');b.className=k===seg?'on':'';b.innerHTML=l+'<b>'+n+'</b>';b.onclick=()=>{seg=k;page=0;dClients();};ct.appendChild(b);});
+  const nt=$('ntabs');nt.innerHTML='';
+  [['📍 Near',true],['All London',false]].forEach(([l,k])=>{const b=document.createElement('button');b.className=k===near?'on':'';b.textContent=l;b.onclick=()=>{near=k;page=0;dClients();};nt.appendChild(b);});
+  const mine=base.filter(r=>r.seg===seg),sg=$('cstages');sg.innerHTML='';
+  STAGES.forEach(([k,l])=>{const n=mine.filter(r=>stageOf(r)===k).length;const b=document.createElement('button');b.className=k===stg?'on':'';b.innerHTML=l+'<b>'+n+'</b>';b.onclick=()=>{stg=k;page=0;dClients();};sg.appendChild(b);});
+  const rows=mine.filter(r=>stageOf(r)===stg),g=$('cgrid'),pg=$('cpager');pg.innerHTML='';
+  if(!rows.length){g.innerHTML='<div class="empty">Nobody here</div>';return;}
+  const pages=Math.ceil(rows.length/PER);if(page>pages-1)page=pages-1;
+  if(pages>1){const pv=document.createElement('button');pv.textContent='◀';pv.disabled=page===0;pv.onclick=()=>{page--;dClients();};const lb=document.createElement('span');lb.textContent=(page+1)+' / '+pages;const nx=document.createElement('button');nx.textContent='▶';nx.disabled=page>=pages-1;nx.onclick=()=>{page++;dClients();};pg.append(pv,lb,nx);}
+  g.innerHTML='';
+  rows.slice(page*PER,page*PER+PER).forEach((r,k)=>{
+    const st=stageOf(r),c=document.createElement('div');c.className='card';
+    let foot='';
+    if(st==='send')foot='<button class="btn wab">💬 Send on WhatsApp</button>';
+    else if(st==='wait')foot='<div class="row"><button class="sm ok" data-k="booked">✅ Booked</button><button class="sm" data-k="declined">🙅 No</button><button class="sm" data-k="no_reply">💤 No reply</button></div><div class="row"><button class="sm wa2">💬 WhatsApp</button><button class="sm" data-k="undo">↩ Undo</button></div>';
+    else foot=r.auto_booked?'<div class="when">📅 Seen in the diary</div>':'<div class="row"><button class="sm" data-k="sent">↩ Back to Waiting</button></div>';
+    c.innerHTML='<div class="n">'+(page*PER+k+1)+'</div><div class="name"></div><div class="svc"></div><div class="chip"></div>'+(st!=='send'?'<div class="when w2"></div>':'')+'<div class="msg"></div>'+foot;
+    c.querySelector('.name').textContent=r.client;
+    c.querySelector('.svc').textContent=(r.last_svc||'')+' · '+dfmt(r.last_visit);
+    c.querySelector('.chip').textContent='📍 '+(r.area||'No postcode')+' · '+r.visits+' visits'+(r.th?' · '+r.th:'');
+    if(st!=='send')c.querySelector('.w2').textContent='📤 '+ago(r.touch_at)+(r.touch_by?' · '+r.touch_by:'');
+    c.querySelector('.msg').textContent=r.msg;
+    c.querySelector('.name').onclick=()=>openMsg(r);c.querySelector('.msg').onclick=()=>openMsg(r);
+    const wb=c.querySelector('.wab');if(wb)wb.onclick=()=>send(r);
+    const w2=c.querySelector('.wa2');if(w2)w2.onclick=()=>window.open(waLink(r),'bsb_whatsapp');
+    c.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>mark(r,b.dataset.k,r.touch_id));
+    g.appendChild(c);
+  });
+}
+async function mark(r,outcome,touchId){
+  if(busy)return;busy=true;let ok=false;
+  try{const j=await rpc('bsb_mkt_noappt_mark',{p_token:tok,p_client_id:r.client_id,p_client:r.client,p_message:r.msg,p_outcome:outcome,p_touch_id:touchId});ok=j&&j.ok;toast(ok?'Saved ✓':'Not saved. Try again',!ok);}
+  catch(e){toast('No connection. Not saved',true);}
+  busy=false;if(ok){closeMsg();await load();}
+}
+async function send(r){window.open(waLink(r),'bsb_whatsapp');await mark(r,'sent',null);}
+function openMsg(r){openRow=r;$('mname').textContent=r.client;$('mphone').textContent=r.phone+'   📍 '+(r.area||'');$('mtxt').textContent=r.msg;$('mwa').style.display=stageOf(r)==='send'?'':'none';$('ov').classList.add('on');}
+function closeMsg(){$('ov').classList.remove('on');openRow=null;}
+$('mwa').onclick=()=>{if(openRow)send(openRow);};$('mx').onclick=closeMsg;$('ov').onclick=e=>{if(e.target.id==='ov')closeMsg();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMsg();});
+$('mcp').onclick=()=>{if(!openRow)return;navigator.clipboard.writeText(openRow.msg).then(()=>{$('mcp').textContent='✓ Copied';setTimeout(()=>$('mcp').textContent='📋 Copy',1500);});};
+function dCamp(){
+  const rows=hub.calendar,g=$('kgrid'),pg=$('kpager'),per=6;pg.innerHTML='';
+  const pages=Math.max(1,Math.ceil(rows.length/per));if(kpage>pages-1)kpage=pages-1;
+  if(pages>1){const pv=document.createElement('button');pv.textContent='◀';pv.disabled=kpage===0;pv.onclick=()=>{kpage--;dCamp();};const lb=document.createElement('span');lb.textContent=(kpage+1)+' / '+pages;const nx=document.createElement('button');nx.textContent='▶';nx.disabled=kpage>=pages-1;nx.onclick=()=>{kpage++;dCamp();};pg.append(pv,lb,nx);}
+  g.innerHTML=rows.length?'':'<div class="empty">No campaigns planned</div>';
+  rows.slice(kpage*per,kpage*per+per).forEach(c=>{const on=c.ini<=hub.today&&c.fim>=hub.today;g.insertAdjacentHTML('beforeend','<div class="cc"><span class="st '+(on?'live':'')+'">'+(on?'● Now':esc(c.status||''))+'</span><b>'+esc(c.nome)+'</b><div>📅 '+dfmt(c.ini)+' to '+dfmt(c.fim)+'</div><div>👥 '+esc(c.publico||'')+'</div><div>📣 '+esc(c.canal||'')+'</div><div>🎁 '+esc(c.oferta||'')+'</div></div>');});
+  $('jl').innerHTML=hub.journeys.map(j=>'<div class="li">'+(j.status==='sending'?'🟢':'⚪')+'<b>'+esc(j.name)+'</b><span>'+esc(j.started)+' in</span></div>').join('')||'<div class="more">None</div>';
+  $('ll').innerHTML=hub.launches.slice(0,3).map(l=>'<div class="li">🚀<b>'+esc(l.title)+'</b><span>'+dfmt(l.at)+'</span></div>').join('')||'<div class="more">None</div>';
+}
+function dNum(){
+  const x=hub.extras_weeks,xs=x.reduce((a,w)=>a+(+w.enviados||0),0),xv=x.reduce((a,w)=>a+(+w.vendidos||0),0),xg=x.reduce((a,w)=>a+(+w.vendido_gbp||0),0),w=hub.winback,l=hub.lastmin,jc=hub.journey_counts||{};
+  $('tiles').innerHTML=
+   '<div class="tile"><div class="l">✨ Extras · 8 weeks</div><div class="v">'+xv+' / '+xs+'</div><div class="s">sold / sent · £'+xg.toFixed(0)+'</div></div>'+
+   '<div class="tile"><div class="l">👥 Clients back</div><div class="v">'+w.booked+' / '+w.sent+'</div><div class="s">booked / sent</div></div>'+
+   '<div class="tile"><div class="l">⚡ Last minute</div><div class="v">'+l.booked+' / '+l.sent+'</div><div class="s">booked / sent</div></div>'+
+   '<div class="tile"><div class="l">💤 Gone quiet</div><div class="v">'+(jc.sumida==null?'–':jc.sumida)+'</div><div class="s">clients</div></div>';
+  $('xt').innerHTML='<table><tr><th>Week</th><th>Sent</th><th>Sold</th><th>%</th><th>£</th></tr>'+x.map(r=>'<tr><td>'+dfmt(r.semana)+'</td><td>'+r.enviados+'</td><td>'+r.vendidos+'</td><td>'+(r.pct==null?0:r.pct)+'%</td><td>£'+(+r.vendido_gbp).toFixed(0)+'</td></tr>').join('')+'</table>';
+  $('it').innerHTML='<table><tr><th>Month</th><th>Reels</th><th>Posts</th><th>Reel reach</th><th>Saves</th><th>Shares</th></tr>'+hub.ig.map(r=>'<tr><td>'+new Date(r.month).toLocaleDateString('en-GB',{month:'short',year:'2-digit',timeZone:'UTC'})+'</td><td>'+r.reels+'</td><td>'+r.feed_posts+'</td><td>'+(r.avg_reel_reach==null?'–':Math.round(r.avg_reel_reach))+'</td><td>'+(r.saves==null?'–':r.saves)+'</td><td>'+(r.shares==null?'–':r.shares)+'</td></tr>').join('')+'</table>';
+}
+function dSrc(){
+  $('sl').innerHTML=hub.sources.map(s=>{const h=hoursAgo(s.at);return '<div class="li">'+srcState(s)+'<b>'+esc(s.name)+'</b><span>'+(s.at?ago(s.at):'no data')+' · '+(h===null?'':h<1?Math.round(h*60)+' min ago':Math.round(h)+' h ago')+' · feeds '+esc(s.feeds)+'</span></div>';}).join('');
+}
+$('rf').onclick=()=>load();
+draw();if(tok)load();
+setInterval(()=>{if(tok&&!openRow&&!busy)load();},120000);
+</script>
+</body>
+</html>
